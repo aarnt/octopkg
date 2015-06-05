@@ -46,44 +46,6 @@
         <file>resources/images/show_groups.png</file>
         <file>resources/images/mirror-check.png</file>
         <file>resources/images/cachecleaner.png</file>
-        <file>resources/translations/octopi_pt_BR.qm</file>
-        <file>resources/translations/octopi_fr_FR.qm</file>
-        <file>resources/translations/octopi_es_ES.qm</file>
-        <file>resources/translations/octopi_el.qm</file>
-        <file>resources/translations/octopi_de.qm</file>
-        <file>resources/translations/octopi_it.qm</file>
-        <file>resources/translations/octopi_ro.qm</file>
-        <file>resources/translations/octopi_tr_TR.qm</file>
-        <file>resources/translations/octopi_ar.qm</file>
-        <file>resources/translations/octopi_ca.qm</file>
-        <file>resources/translations/octopi_bg.qm</file>
-        <file>resources/translations/octopi_pl.qm</file>
-        <file>resources/translations/octopi_id.qm</file>
-        <file>resources/translations/octopi_da.qm</file>
-        <file>resources/translations/octopi_cs.qm</file>
-        <file>resources/translations/octopi_he.qm</file>
-        <file>resources/translations/octopi_lt.qm</file>
-        <file>resources/translations/octopi_nb.qm</file>
-        <file>resources/translations/octopi_sr@latin.qm</file>
-        <file>resources/translations/octopi_nl.qm</file>
-        <file>resources/translations/octopi_ru.qm</file>
-        <file>resources/translations/octopi_uz.qm</file>
-        <file>resources/translations/octopi_fi.qm</file>
-        <file>resources/translations/octopi_vi.qm</file>
-        <file>resources/translations/octopi_es_419.qm</file>
-        <file>resources/translations/octopi_en_GB.qm</file>
-        <file>resources/translations/octopi_pt_PT.qm</file>
-        <file>resources/translations/octopi_sv.qm</file>
-        <file>resources/translations/octopi_sr_RS.qm</file>
-        <file>resources/translations/octopi_hu.qm</file>
-        <file>resources/translations/octopi_zh_TW.qm</file>
-        <file>resources/translations/octopi_ms_MY.qm</file>
-        <file>resources/translations/octopi_uk.qm</file>
-        <file>resources/translations/octopi_sk.qm</file>
-        <file>resources/translations/octopi_ast.qm</file>
-        <file>resources/translations/octopi_es_AR.qm</file>
-        <file>resources/translations/octopi_ja.qm</file>
-        <file>resources/translations/octopi_eu.qm</file>
         <file>resources/qml/chooseterminal.qml</file>
     </qresource>
 </RCC>

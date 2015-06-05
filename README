@@ -1,0 +1,10 @@
+This is OctoPkg, a powerful pkgng front-end using Qt libs. 
+================================================================
+
+The project's source code is hosted at 
+	https://github.com/aarnt/octopkg.
+
+You'll need a privilege escalation tool to use it, once running as 
+root will ONLY work in KDE. OctoPkg supports kdesu and gksu for that.
+
+Enjoy!

@@ -6,7 +6,7 @@
 
 QT += core gui network xml dbus widgets quick quickwidgets
 
-DEFINES += OCTOPI_EXTENSIONS
+DEFINES += OCTOPKG_EXTENSIONS
 CONFIG += qt warn_on debug
 LIBS    += -L../libpcbsd -L/usr/local/lib -lpcbsd-ui -lpcbsd-utils
 INCLUDEPATH+= ../libpcbsd/utils ../libpcbsd/ui /usr/local/include
@@ -79,41 +79,4 @@ FORMS   += ui/mainwindow.ui \
 
 RESOURCES += resources.qrc
 
-TRANSLATIONS += resources/translations/octopi_pt_BR.ts \
-    resources/translations/octopi_fr_FR.ts \
-    resources/translations/octopi_es_ES.ts \
-    resources/translations/octopi_es_419.ts \
-    resources/translations/octopi_es_AR.ts \
-    resources/translations/octopi_el.ts \
-    resources/translations/octopi_de.ts \
-    resources/translations/octopi_it.ts \
-    resources/translations/octopi_ro.ts \
-    resources/translations/octopi_tr_TR.ts \
-    resources/translations/octopi_ar.ts \
-    resources/translations/octopi_ca.ts \
-    resources/translations/octopi_bg.ts \
-    resources/translations/octopi_pl.ts \
-    resources/translations/octopi_id.ts \
-    resources/translations/octopi_da.ts \
-    resources/translations/octopi_cs.ts \
-    resources/translations/octopi_he.ts \
-    resources/translations/octopi_lt.ts \
-    resources/translations/octopi_nb.ts \
-    resources/translations/octopi_sr@latin.ts \
-    resources/translations/octopi_sr_RS.ts \
-    resources/translations/octopi_nl.ts \
-    resources/translations/octopi_ru.ts \
-    resources/translations/octopi_uz.ts \
-    resources/translations/octopi_fi.ts \
-    resources/translations/octopi_vi.ts \
-    resources/translations/octopi_en_GB.ts \
-    resources/translations/octopi_pt_PT.ts \
-    resources/translations/octopi_sv.ts \
-    resources/translations/octopi_hu.ts \
-    resources/translations/octopi_zh_TW.ts \
-    resources/translations/octopi_ms_MY.ts \
-    resources/translations/octopi_uk.ts \
-    resources/translations/octopi_sk.ts \
-    resources/translations/octopi_ja.ts \
-    resources/translations/octopi_eu.ts \
-    resources/translations/octopi_ast.ts
+#TRANSLATIONS += resources/translations/octopkg_pt_BR.ts
