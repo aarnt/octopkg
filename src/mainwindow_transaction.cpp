@@ -259,12 +259,12 @@ void MainWindow::insertIntoRemovePackage()
     QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
     //First, let's see if we are dealing with a package group
-    if(!isAllGroupsSelected())
+    if(!isAllCategoriesSelected())
     {
       //If we are trying to remove all the group's packages, why not remove the entire group?
       if(selectedRows.count() == m_packageModel->getPackageCount())
       {
-        insertRemovePackageIntoTransaction(getSelectedGroup());
+        insertRemovePackageIntoTransaction(getSelectedCategory());
         return;
       }
     }
@@ -313,10 +313,10 @@ void MainWindow::insertIntoRemovePackage()
       insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
     }
   }
-  else
+  /*else
   {
     doRemoveAURPackage();
-  }
+  }*/
 }
 
 /*
@@ -325,7 +325,7 @@ void MainWindow::insertIntoRemovePackage()
 void MainWindow::insertGroupIntoRemovePackage()
 {
   ensureTabVisible(ctn_TABINDEX_TRANSACTION);
-  insertRemovePackageIntoTransaction(getSelectedGroup());
+  insertRemovePackageIntoTransaction(getSelectedCategory());
 }
 
 /*
@@ -342,12 +342,12 @@ void MainWindow::insertIntoInstallPackage()
 
     QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
     //First, let's see if we are dealing with a package group
-    if(!isAllGroupsSelected())
+    if(!isAllCategoriesSelected())
     {
       //If we are trying to insert all the group's packages, why not insert the entire group?
       if(selectedRows.count() == m_packageModel->getPackageCount())
       {
-        insertInstallPackageIntoTransaction(getSelectedGroup());
+        insertInstallPackageIntoTransaction(getSelectedCategory());
         return;
       }
     }
@@ -365,10 +365,10 @@ void MainWindow::insertIntoInstallPackage()
       insertInstallPackageIntoTransaction(package->repository + "/" + package->name);
     }
   }
-  else
+  /*else
   {
     doInstallAURPackage();
-  }
+  }*/
 }
 
 /*
@@ -525,7 +525,7 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
 void MainWindow::insertGroupIntoInstallPackage()
 {
   ensureTabVisible(ctn_TABINDEX_TRANSACTION);
-  insertInstallPackageIntoTransaction(getSelectedGroup());
+  insertInstallPackageIntoTransaction(getSelectedCategory());
 }
 
 /*
@@ -674,7 +674,7 @@ bool MainWindow::isSUAvailable()
 /*
  * This is KaOS specific code which uses mirror-check tool.
  */
-void MainWindow::doMirrorCheck()
+/*void MainWindow::doMirrorCheck()
 {
   if (m_commandExecuting != ectn_NONE ||
       !UnixCommand::hasInternetConnection()) return;
@@ -697,7 +697,7 @@ void MainWindow::doMirrorCheck()
 
   QString command = ctn_MIRROR_CHECK_APP;
   m_unixCommand->executeCommandAsNormalUser(command);
-}
+}*/
 
 /*
  * Does a repository sync with "pacman -Sy" !
@@ -735,7 +735,7 @@ void MainWindow::doSyncDatabase()
 /*
  * Updates the outdated AUR packages with "yaourt -S <list>"
  */
-void MainWindow::doAURUpgrade()
+/*void MainWindow::doAURUpgrade()
 {
   QString listOfTargets;
   QString auxPkg;
@@ -773,6 +773,7 @@ void MainWindow::doAURUpgrade()
   m_commandExecuting = ectn_RUN_IN_TERMINAL;
   m_unixCommand->runCommandInTerminalAsNormalUser(m_lastCommandList);
 }
+*/
 
 /*
  * doSystemUpgrade shared code ...
@@ -1162,7 +1163,7 @@ bool MainWindow::doRemovePacmanLockFile()
 /*
  * Installs the selected package with "yaourt -S"
  */
-void MainWindow::doInstallAURPackage()
+/*void MainWindow::doInstallAURPackage()
 {
   const QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
   if (selectionModel == NULL || selectionModel->selectedRows().count() < 1 || m_hasAURTool == false) {
@@ -1189,6 +1190,8 @@ void MainWindow::doInstallAURPackage()
       listOfTargets += StrConstants::getForeignRepositoryTargetPrefix() + package->name + " ";
     else
       listOfTargets += package->name + " ";
+
+    listOfTargets += package->name + " ";
   }
 
   if (listOfTargets.isEmpty()) {
@@ -1220,11 +1223,12 @@ void MainWindow::doInstallAURPackage()
   m_commandExecuting = ectn_RUN_IN_TERMINAL;
   m_unixCommand->runCommandInTerminalAsNormalUser(m_lastCommandList);
 }
+*/
 
 /*
  * Removes the selected package with "yaourt -R"
  */
-void MainWindow::doRemoveAURPackage()
+/*void MainWindow::doRemoveAURPackage()
 {
   //If there are no means to run the actions, we must warn!
   if (!isSUAvailable()) return;
@@ -1272,6 +1276,7 @@ void MainWindow::doRemoveAURPackage()
   m_commandExecuting = ectn_RUN_IN_TERMINAL;
   m_unixCommand->runCommandInTerminal(m_lastCommandList);
 }
+*/
 
 /*
  * Installs ALL the packages selected by the user with "pacman -S (INCLUDING DEPENDENCIES)" !
@@ -1521,9 +1526,9 @@ void MainWindow::toggleTransactionActions(const bool value)
 
   ui->actionInstall->setEnabled(value);
   ui->actionInstallGroup->setEnabled(value);
-  ui->actionInstallAUR->setEnabled(value);
+  //ui->actionInstallAUR->setEnabled(value);
   m_actionInstallPacmanUpdates->setEnabled(value);
-  m_actionInstallAURUpdates->setEnabled(value);
+  //m_actionInstallAURUpdates->setEnabled(value);
 
   ui->actionRemoveTransactionItem->setEnabled(value);
   ui->actionRemoveTransactionItems->setEnabled(value);
@@ -1791,7 +1796,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
     refreshGroupsWidget();
 
-  refreshMenuTools(); //Maybe some of octopi tools were added/removed...
+  //refreshMenuTools(); //Maybe some of octopi tools were added/removed...
 
   m_unixCommand->removeTemporaryFile();
 

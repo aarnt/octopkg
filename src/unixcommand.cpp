@@ -30,6 +30,7 @@
 #include <QByteArray>
 #include <QTextStream>
 #include <QtNetwork/QNetworkInterface>
+#include <QDebug>
 
 /*
  * Collection of methods to execute many Unix commands
@@ -145,7 +146,7 @@ QByteArray UnixCommand::performQuery(const QStringList args)
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
 
-  pacman.start("pacman", args);
+  pacman.start("pkg", args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
   pacman.close();
@@ -168,9 +169,10 @@ QByteArray UnixCommand::performQuery(const QString &args)
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
 
-  pacman.start("pacman " + args);
+  pacman.start("pkg " + args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
+
   pacman.close();
   return result;
 }
@@ -238,7 +240,8 @@ QByteArray UnixCommand::getAURPackageList(const QString &searchString)
  */
 QByteArray UnixCommand::getUnrequiredPackageList()
 {
-  QByteArray result = performQuery(QStringList("-Qt"));
+  //pkg query -e '%a = 0' '%n'
+  QByteArray result = performQuery("query -e \"%a = 0\" \"%n\"");
   return result;
 }
 
@@ -290,13 +293,12 @@ QByteArray UnixCommand::getPackageList(const QString &pkgName)
   QByteArray result;
 
   if (pkgName.isEmpty())
-    result = performQuery(QStringList("-Ss"));
+  {
+    result = performQuery("query \"%n %v %o %sh %c\"");
+  }
   else
   {
-    QStringList sl;
-    sl << "-Ss";
-    sl << pkgName;
-    result = performQuery(sl);
+
   }
 
   return result;

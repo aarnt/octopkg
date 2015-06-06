@@ -67,7 +67,7 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
   for (TListOfPackages::const_iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
     if (*it != NULL) delete *it;
   }
-  m_listOfAURPackages.clear();
+  //m_listOfAURPackages.clear();
   m_listOfPackages.clear();
 
   for (QList<PackageListData>::const_iterator it = listOfPackages->begin(); it != listOfPackages->end(); ++it) {
@@ -77,35 +77,6 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
   qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
   std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 }
-
-/*void PackageRepository::setAURData(const QList<PackageListData>*const listOfForeignPackages,
-                                   const QSet<QString>& unrequiredPackages)
-{
-  //  std::cout << "received new foreign package list" << std::endl;
-
-    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), BeginResetModel());
-
-    // delete AUR items in list
-    for (TListOfPackages::iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
-      if (*it != NULL && (*it)->managedByAUR) {
-        delete *it;
-        it = m_listOfPackages.erase(it);
-      }
-    }
-    m_listOfAURPackages.clear();
-
-    for (QList<PackageListData>::const_iterator it = listOfForeignPackages->begin();
-         it != listOfForeignPackages->end(); ++it)
-    {
-      PackageData*const pkg = new PackageData(*it, unrequiredPackages.contains(it->name) == false, true);
-      m_listOfPackages.push_back(pkg);
-      m_listOfAURPackages.push_back(pkg);
-    }
-
-    qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
-    qSort(m_listOfAURPackages.begin(), m_listOfAURPackages.end(), TSort());
-    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
-}*/
 
 /**
  * @brief if the repository groups differ from %listOfGroups they will be reset
@@ -162,12 +133,12 @@ void PackageRepository::checkAndSetMembersOfGroup(const QString& groupName, cons
         typedef TListOfPackages::const_iterator TIter;
         std::pair<TIter, TIter> packageIt =  std::equal_range(m_listOfPackages.begin(), m_listOfPackages.end(), *it, TComp());
 
-        /*for (TIter iter = packageIt.first; iter != packageIt.second; ++iter) {
-          if ((*iter)->managedByAUR == false) {
+        for (TIter iter = packageIt.first; iter != packageIt.second; ++iter) {
+          //if ((*iter)->managedByAUR == false) {
             group.addPackage(**iter);
             break;
-          }
-        }*/
+          //}
+        }
       }
       std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 
@@ -202,8 +173,8 @@ const QList<PackageRepository::PackageData*>& PackageRepository::getPackageList(
     }
 
     // Workaround for AUR filter -> pre-built AUR packageList
-    if (group == StrConstants::getForeignToolGroup())
-      return m_listOfAURPackages;
+    //if (group == StrConstants::getForeignToolGroup())
+    //  return m_listOfAURPackages;
   }
 
   // if no group found or not loaded yet. default to all packages
@@ -246,6 +217,7 @@ bool PackageRepository::memberListOfGroupsEquals(const QStringList& listOfGroups
 PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bool isRequired)
   : required(isRequired), name(pkg.name),
     repository(pkg.repository.isEmpty() ? StrConstants::getForeignRepositoryName() : pkg.repository),
+    origin(pkg.origin),
     version(pkg.version), description(pkg.description.toLatin1()), // octopi wants it converted to utf8
     outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize), installedSize(pkg.installedSize),
     status(pkg.status != ectn_OUTDATED ?

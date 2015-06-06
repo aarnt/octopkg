@@ -151,12 +151,6 @@ void MainWindow::savePackageColumnWidths()
 void MainWindow::initAppIcon()
 {
   m_outdatedStringList = Package::getOutdatedStringList();
-
-  if (m_hasAURTool)
-  {
-    m_outdatedAURStringList = Package::getOutdatedAURStringList();
-  }
-
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
   refreshAppIcon();
 }
@@ -192,7 +186,7 @@ void MainWindow::initPackageGroups()
 {
   //This is the twGroups init code
   ui->twGroups->setColumnCount(1);
-  ui->twGroups->setHeaderLabel(StrConstants::getGroups());
+  ui->twGroups->setHeaderLabel(StrConstants::getCategories());
   ui->twGroups->header()->setSortIndicatorShown(false);
 
   #if QT_VERSION < 0x050000
@@ -218,7 +212,7 @@ void MainWindow::initPackageGroups()
  */
 void MainWindow::onPackageGroupChanged()
 {
-  if (isAllGroupsSelected())
+  if (isAllCategoriesSelected())
   {
     ui->actionSearchByName->setChecked(true);
     tvPackagesSearchColumnChanged(ui->actionSearchByName);
@@ -360,7 +354,7 @@ void MainWindow::initToolButtonPacman()
 /*
  * Inits the AUR toolbutton, which warns the user about outdated foreign packages
  */
-void MainWindow::initToolButtonAUR()
+/*void MainWindow::initToolButtonAUR()
 {
   m_toolButtonAUR = new QToolButton(this);
   m_toolButtonAUR->setIconSize(QSize(16, 16));
@@ -373,7 +367,7 @@ void MainWindow::initToolButtonAUR()
   m_toolButtonAUR->setPopupMode(QToolButton::MenuButtonPopup);
   m_toolButtonAUR->setMenu(m_menuToolButtonAUR);
   connect(m_toolButtonAUR, SIGNAL(clicked()), this, SLOT(outputOutdatedAURPackageList()));
-}
+}*/
 
 /*
  * Sets the TabWidget Properties to the given index/tab and change app focus to its child widget
@@ -717,15 +711,15 @@ void MainWindow::initActions()
   m_actionInstallPacmanUpdates->setIconVisibleInMenu(true);
   connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
 
-  m_actionInstallAURUpdates = new QAction(this);
+  /*m_actionInstallAURUpdates = new QAction(this);
   m_actionInstallAURUpdates->setIcon(IconHelper::getIconToInstall());
   m_actionInstallAURUpdates->setText(ui->actionInstall->text());
   m_actionInstallAURUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallAURUpdates, SIGNAL(triggered()), this, SLOT(doAURUpgrade()));
+  connect(m_actionInstallAURUpdates, SIGNAL(triggered()), this, SLOT(doAURUpgrade()));*/
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());
-  m_actionShowGroups->setText(StrConstants::getGroups());
+  m_actionShowGroups->setText(StrConstants::getCategories());
   m_actionShowGroups->setCheckable(true);
   m_actionShowGroups->setChecked(true);
   m_actionShowGroups->setShortcut(QKeySequence(Qt::Key_F9));
@@ -762,7 +756,7 @@ void MainWindow::initActions()
   connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
   connect(ui->actionRemove, SIGNAL(triggered()), this, SLOT(insertIntoRemovePackage()));
   connect(ui->actionInstall, SIGNAL(triggered()), this, SLOT(insertIntoInstallPackage()));
-  connect(ui->actionInstallAUR, SIGNAL(triggered()), this, SLOT(doInstallAURPackage()));
+  //connect(ui->actionInstallAUR, SIGNAL(triggered()), this, SLOT(doInstallAURPackage()));
   connect(ui->actionFindFileInPackage, SIGNAL(triggered()), this, SLOT(findFileInPackage()));
   connect(ui->actionRemoveGroup, SIGNAL(triggered()), this, SLOT(insertGroupIntoRemovePackage()));
   connect(ui->actionInstallGroup, SIGNAL(triggered()), this, SLOT(insertGroupIntoInstallPackage()));
@@ -823,7 +817,7 @@ void MainWindow::initActions()
 
   // Populate Tools menu
   ui->menuTools->menuAction()->setVisible(false);
-  refreshMenuTools();
+  //refreshMenuTools();
 
   if (WMHelper::isXFCERunning())
   {

@@ -256,7 +256,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   else if(ke->key() == Qt::Key_G && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
     //The user wants to go to "Display All groups"
-    if (!isAllGroupsSelected())
+    if (!isAllCategoriesSelected())
     {
       ui->twGroups->setCurrentItem(m_AllGroupsItem);
     }

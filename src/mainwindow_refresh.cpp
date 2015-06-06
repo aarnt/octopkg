@@ -186,7 +186,7 @@ void MainWindow::refreshGroupsWidget()
   QList<QTreeWidgetItem *> items;
   ui->twGroups->clear();
 
-  items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList("<" + StrConstants::getDisplayAllGroups() + ">")));
+  items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList("<" + StrConstants::getDisplayAllCategories() + ">")));
   m_AllGroupsItem = items.at(0);
   const QStringList*const packageGroups = Package::getPackageGroups();
   foreach(QString group, *packageGroups)
@@ -236,7 +236,7 @@ void MainWindow::groupItemSelected()
   m_selectedRepository = "";
   m_actionRepositoryAll->setChecked(true);
 
-  if (isAllGroupsSelected())
+  if (isAllCategoriesSelected())
   {
     m_refreshPackageLists = false;
   }
@@ -312,7 +312,7 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
   m_progressWidget->close();
 
   m_packageRepo.checkAndSetMembersOfGroup(group, *list);
-  m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, isAllGroups(group) ? "" : group);
+  m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, isAllCategories(group) ? "" : group);
 
   //Refresh counters
   m_numberOfInstalledPackages = installedCount;
@@ -396,28 +396,12 @@ void MainWindow::preBuildUnrequiredPackageList()
  */
 void MainWindow::preBuildPackageList()
 {
-  //Just a flag to keep the last "if" from executing twice...
-  static bool secondTime=false;
-  bool hasToCallSysUpgrade = (m_callSystemUpgrade || m_callSystemUpgradeNoConfirm);
-
   m_listOfPackages.reset(g_fwPacman.result());
 
   if(m_debugInfo)
     std::cout << "Time elapsed obtaining pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
 
   buildPackageList();
-
-  if(!hasToCallSysUpgrade && !secondTime && m_hasMirrorCheck)
-  {
-#ifdef OCTOPI_DEV_CODE
-    if (!SettingsManager::getSkipMirrorCheckAtStartup())
-      doMirrorCheck();
-#else
-    doMirrorCheck();
-#endif
-
-    secondTime=true;
-  }
 
   toggleSystemActions(true);
 
@@ -459,7 +443,7 @@ void MainWindow::metaBuildPackageList()
   ui->twGroups->setEnabled(false);
   ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-  if (ui->twGroups->topLevelItemCount() == 0 || isAllGroupsSelected())
+  if (ui->twGroups->topLevelItemCount() == 0 || isAllCategoriesSelected())
   {        
     ui->actionSearchByFile->setEnabled(true);
     ui->actionSearchByName->setChecked(true);
@@ -497,7 +481,7 @@ void MainWindow::metaBuildPackageList()
 
     QEventLoop el;
     QFuture<GroupMemberPair> f;
-    f = QtConcurrent::run(searchPacmanPackagesFromGroup, getSelectedGroup());
+    f = QtConcurrent::run(searchPacmanPackagesFromGroup, getSelectedCategory());
     connect(&g_fwPacmanGroup, SIGNAL(finished()), this, SLOT(preBuildPackagesFromGroupList()));
     disconnect(this, SIGNAL(buildPackagesFromGroupListDone()), &el, SLOT(quit()));
     connect(this, SIGNAL(buildPackagesFromGroupListDone()), &el, SLOT(quit()));
@@ -507,7 +491,7 @@ void MainWindow::metaBuildPackageList()
 
     if(m_debugInfo)
       std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
-                 "Time elapsed building pkgs from '" << getSelectedGroup().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
+                 "Time elapsed building pkgs from '" << getSelectedCategory().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
   }
 
   firstTime = false;
@@ -562,16 +546,10 @@ void MainWindow::buildPackageList()
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     m_numberOfOutdatedPackages = m_outdatedStringList->count();
 
-    if (m_hasAURTool)
-    {
-      m_outdatedAURStringList = Package::getOutdatedAURStringList();
-      qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    }
-
     delete m_unrequiredPackageList;
     m_unrequiredPackageList = NULL;
 
-    m_unrequiredPackageList = Package::getUnrequiredPackageList();
+    m_unrequiredPackageList = Package::getUnrequiredPackageList();   
 
     if(m_debugInfo)
       std::cout << "Time elapsed obtaining unrequired pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
@@ -583,6 +561,7 @@ void MainWindow::buildPackageList()
   QList<PackageListData> *list;
   list = m_listOfPackages.release();
 
+  /*
   if (!isSearchByFileSelected())
   {
     if (!m_refreshPackageLists)
@@ -619,6 +598,7 @@ void MainWindow::buildPackageList()
       qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
   }
+  */
 
   m_progressWidget->setRange(0, list->count());
   m_progressWidget->setValue(0);
@@ -656,7 +636,7 @@ void MainWindow::buildPackageList()
     m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_NAME_COLUMN);
   }
 
-  if (isAllGroupsSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
+  if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
   if (m_leFilterPackage->text() != "") reapplyPackageFilter();
 
   if (m_refreshPackageLists) qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -722,7 +702,7 @@ void MainWindow::buildPackageList()
 /*
  * Repopulates the list of available packages (installed [+ non-installed])
  */
-void MainWindow::refreshPackageList()
+/*void MainWindow::refreshPackageList()
 {
   CPUIntensiveComputing cic;
   const std::unique_ptr<const QSet<QString> > unrequiredPackageList(Package::getUnrequiredPackageList());
@@ -761,12 +741,13 @@ void MainWindow::refreshPackageList()
   delete list;
   list = NULL;
 }
+*/
 
 /*
  * Prints the AUR toolButton at the left of the statusbar.
  * It warns the user about outdated AUR packages!
  */
-void MainWindow::showToolButtonAUR()
+/*void MainWindow::showToolButtonAUR()
 {
   m_outdatedAURPackagesNameVersion = &g_fwOutdatedAURPackages.result()->content;
 
@@ -798,7 +779,7 @@ void MainWindow::showToolButtonAUR()
   }
 
   ui->statusBar->addWidget(m_toolButtonAUR);
-}
+}*/
 
 /*
  * Refreshes toolbar in order to insert/remove AUR tool button
@@ -840,13 +821,13 @@ void MainWindow::refreshToolBar()
  */
 void MainWindow::refreshStatusBarToolButtons()
 {
-  if (m_hasAURTool)
+  /*if (m_hasAURTool)
   {
     QFuture<AUROutdatedPackages *> f;
     f = QtConcurrent::run(getOutdatedAURPackages);
     g_fwOutdatedAURPackages.setFuture(f);
     connect(&g_fwOutdatedAURPackages, SIGNAL(finished()), this, SLOT(showToolButtonAUR()));
-  }
+  }*/
 
   if (!isSearchByFileSelected() && !m_actionSwitchToAURTool->isChecked())
     ui->twGroups->setEnabled(true);

@@ -27,6 +27,7 @@
 #include <QTextStream>
 #include <QList>
 #include <QFile>
+#include <QDebug>
 
 /*
  * This class abstracts all the relevant package information and services
@@ -153,6 +154,39 @@ QString Package::kbytesToSize( float Bytes )
 }
 
 /*
+ * Converts the size in String type to double
+ */
+double Package::strToKBytes(QString size)
+{
+  double res;
+  if (size == "0.00B") res = 0;
+  if (size.contains("kB"))
+  {
+    bool *ok=nullptr;
+    int p = size.indexOf("kB");
+    double value = size.left(p).toDouble(ok);
+    if (ok)
+    {
+      res = value;
+    }
+    else res = 0;
+  }
+  else if (size.contains("MB"))
+  {
+    bool *ok=nullptr;
+    int p = size.indexOf("MB");
+    double value = size.left(p).toDouble(ok);
+    if (ok)
+    {
+      res = value/1024;
+    }
+    else res = 0;
+  }
+
+  return res;
+}
+
+/*
  * Retrieves the list of unrequired packages (those no other packages depends on)
  */
 QSet<QString>* Package::getUnrequiredPackageList()
@@ -163,11 +197,10 @@ QSet<QString>* Package::getUnrequiredPackageList()
 
   foreach(QString packageTuple, packageTuples)
   {
-    QStringList parts = packageTuple.split(' ');
-    {
-      res->insert(parts[0]); //We only need the package name!
-    }
+    res->insert(packageTuple);
+    //qDebug() << packageTuple;
   }
+
   return res;
 }
 
@@ -204,7 +237,7 @@ QStringList *Package::getOutdatedStringList()
  * Retrieves the list of outdated Yaourt (AUR) packages
  * (those which have newer versions available to download)
  */
-QStringList *Package::getOutdatedAURStringList()
+/*QStringList *Package::getOutdatedAURStringList()
 {
   QStringList * res = new QStringList();
 
@@ -273,6 +306,7 @@ QStringList *Package::getOutdatedAURStringList()
   res->sort();
   return res;
 }
+*/
 
 /*
  * Retrieves the list of all package groups available
@@ -400,7 +434,8 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
   //    A pacman wrapper with extended features and AUR support
   //community/libfm 1.1.0-4 (lxde) [installed: 1.1.0-3]
 
-  QString pkgName, pkgRepository, pkgVersion, pkgDescription, pkgOutVersion;
+  QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription, pkgOutVersion;
+  double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
   QString pkgList = UnixCommand::getPackageList(packageName);
   QStringList packageTuples = pkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
@@ -411,71 +446,27 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
     pkgDescription = "";
     foreach(QString packageTuple, packageTuples)
     {
-      if (!packageTuple[0].isSpace())
+      QStringList parts = packageTuple.split(' ');
+      pkgName = parts[0];
+      pkgVersion = parts[1];
+
+      int bar = parts[2].indexOf("/");
+      pkgOrigin = parts[2].left(bar);
+      pkgStatus = ectn_INSTALLED;
+      pkgDownloadedSize = 0;
+      pkgInstalledSize = strToKBytes(parts[3]);
+      pkgDescription = pkgName + " " + pkgComment;
+
+      for(int c=4; c<parts.count(); c++)
       {
-        //Do we already have a description?
-        if (pkgDescription != "")
-        {
-          pkgDescription = pkgName + " " + pkgDescription;
-
-          PackageListData pld =
-              PackageListData(pkgName, pkgRepository, pkgVersion, pkgDescription, pkgStatus, pkgOutVersion);
-
-          if (packageName.isEmpty() || pkgName == packageName)
-          {
-            res->append(pld);
-          }
-
-          pkgDescription = "";
-        }
-
-        //First we get repository and name!
-        QStringList parts = packageTuple.split(' ');
-        QString repoName = parts[0];
-        int a = repoName.indexOf("/");
-        pkgRepository = repoName.left(a);
-        pkgName = repoName.mid(a+1);
-        pkgVersion = parts[1];
-
-        if(packageTuple.indexOf("[installed]") != -1)
-        {
-          //This is an installed package
-          pkgStatus = ectn_INSTALLED;
-          pkgOutVersion = "";
-        }
-        else if (packageTuple.indexOf("[installed:") != -1)
-        {
-          //This is an outdated installed package
-          pkgStatus = ectn_OUTDATED;
-
-          int i = packageTuple.indexOf("[installed:");
-          pkgOutVersion = packageTuple.mid(i+11);
-          pkgOutVersion = pkgOutVersion.remove(']').trimmed();
-        }
-        else
-        {
-          //This is an uninstalled package
-          pkgStatus = ectn_NON_INSTALLED;
-          pkgOutVersion = "";
-        }
+        pkgComment += " " + parts[c];
       }
-      else
-      {
-        //This is a description!
-        if (!packageTuple.trimmed().isEmpty())
-          pkgDescription += packageTuple.trimmed();
-        else
-          pkgDescription += " "; //StrConstants::getNoDescriptionAvailabe();
-      }
-    }
 
-    //And adds the very last package...
-    pkgDescription = pkgName + " " + pkgDescription;
-    PackageListData pld =
-        PackageListData(pkgName, pkgRepository, pkgVersion, pkgDescription, pkgStatus, pkgOutVersion);
+      pkgComment = pkgComment.trimmed();
 
-    if (packageName.isEmpty() || pkgName == packageName)
-    {
+      PackageListData pld =
+          PackageListData(pkgName, pkgOrigin, pkgVersion, pkgComment, pkgStatus, pkgInstalledSize, pkgDownloadedSize);
+
       res->append(pld);
     }
   }
@@ -1070,6 +1061,7 @@ QString Package::getInformationInstalledSize(const QString &pkgName, bool foreig
 /*
  * Helper to get only the Version field of AUR package information
  */
+/*
 QHash<QString, QString> Package::getAUROutdatedPackagesNameVersion()
 {
   QHash<QString, QString> hash;
@@ -1136,6 +1128,7 @@ QHash<QString, QString> Package::getAUROutdatedPackagesNameVersion()
 
   return hash;
 }
+*/
 
 /*
  * Retrieves the file list content of the given package

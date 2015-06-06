@@ -94,7 +94,7 @@ public:
     return ret;
   }
 
-  static QString getForeignRepositoryGroupName()
+  /*static QString getForeignRepositoryGroupName()
   {
     if( UnixCommand::getLinuxDistro() == ectn_CHAKRA )
       return QLatin1String( "Ccr" );
@@ -112,7 +112,7 @@ public:
       return "kcp/";
 
     return QLatin1String( "aur/" );
-  }
+  }*/
 
   static QString getAntergosNews(){
     return QObject::tr("Antergos news");
@@ -158,16 +158,16 @@ public:
     return QObject::tr("Internet seems unavailable!");
   }
 
-  static QString getDisplayAllGroups(){
-    return QObject::tr("Display all groups");
+  static QString getDisplayAllCategories(){
+    return QObject::tr("Display all categories");
   }
 
-  static QString getForeignToolGroup(){
+  /*static QString getForeignToolGroup(){
     QString tool = getForeignRepositoryToolName();
     tool[0] = tool[0].toUpper();
     tool = "<" + tool + ">";
     return tool.toLatin1();
-  }
+  }*/
 
   static QString getHelpUsage(){
     return QObject::tr("Usage");
@@ -209,12 +209,12 @@ public:
     return QObject::tr("Licenses");
   }
 
-  static QString getGroup(){
-    return QObject::tr("Group");
+  static QString getCategory(){
+    return QObject::tr("Category");
   }
 
-  static QString getGroups(){
-    return QObject::tr("Groups");
+  static QString getCategories(){
+    return QObject::tr("Categories");
   }
 
   static QString getProvides(){

@@ -148,13 +148,13 @@ QList<PackageListData> * searchAURPackages(QString searchString)
  * Starts the non blocking retrive of AUR outdated package versions...
  * Results in a hash: [key] AUR pkg name / [value] AUR pkg version available
  */
-AUROutdatedPackages * getOutdatedAURPackages()
+/*AUROutdatedPackages * getOutdatedAURPackages()
 {
   AUROutdatedPackages * res = new AUROutdatedPackages();
   res->content = Package::getAUROutdatedPackagesNameVersion();
 
   return res;
-}
+}*/
 
 /*
  * Starts the non blocking search for RSS distro news...

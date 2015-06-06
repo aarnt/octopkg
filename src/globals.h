@@ -55,7 +55,7 @@ QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringLi
 QList<PackageListData> * searchAURPackages(QString searchString);
 QString searchPacmanPackagesByFile(const QString &file);
 GroupMemberPair          searchPacmanPackagesFromGroup(QString groupName);
-AUROutdatedPackages * getOutdatedAURPackages();
+//AUROutdatedPackages * getOutdatedAURPackages();
 QString getLatestDistroNews();
 
 #endif // MAINWINDOW_GLOBALS_H

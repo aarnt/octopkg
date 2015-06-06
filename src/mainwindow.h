@@ -177,7 +177,7 @@ private:
 
   QAction *m_dummyAction;
   QAction *m_actionInstallPacmanUpdates;
-  QAction *m_actionInstallAURUpdates;
+  //QAction *m_actionInstallAURUpdates;
   QAction *m_actionShowGroups;
   QAction *m_actionMirrorCheck;
   QAction *m_actionMenuRepository;
@@ -222,9 +222,9 @@ private:
   void initStatusBar();
   void initLineEditFilterPackages();
 
-  QString getSelectedGroup();
-  bool isAllGroupsSelected();
-  bool isAllGroups(const QString& group);
+  QString getSelectedCategory();
+  bool isAllCategoriesSelected();
+  bool isAllCategories(const QString& group);
 
   bool isPackageInstalled(const QString &pkgName);
   bool isPackageTreeViewVisible();
@@ -300,8 +300,8 @@ private:
 
 private slots:
   void initToolButtonPacman();
-  void initToolButtonAUR();
-  void showToolButtonAUR();
+  //void initToolButtonAUR();
+  //void showToolButtonAUR();
 
   //TreeView methods
   void copyFullPathToClipboard();
@@ -327,7 +327,7 @@ private slots:
 
   void buildPackagesFromGroupList(const QString group);
   void buildPackageList();
-  void refreshPackageList();
+  //void refreshPackageList();
 
   void metaBuildPackageList();
   void onPackageGroupChanged();
@@ -365,10 +365,10 @@ private slots:
   void doInstall();
   void doCleanCache();
   void doSyncDatabase();
-  void doMirrorCheck();
-  void doAURUpgrade();
-  void doInstallAURPackage();
-  void doRemoveAURPackage();
+  //void doMirrorCheck();
+  //void doAURUpgrade();
+  //void doInstallAURPackage();
+  //void doRemoveAURPackage();
 
   void disableTransactionActions();
   void enableTransactionActions();

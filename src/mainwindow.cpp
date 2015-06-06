@@ -124,7 +124,7 @@ void MainWindow::show()
     loadPanelSettings();
     initStatusBar();
     initToolButtonPacman();
-    initToolButtonAUR();
+    //initToolButtonAUR();
     initAppIcon();
     initMenuBar();
     initToolBar();
@@ -356,25 +356,25 @@ void MainWindow::clearTabOutput()
 /*
  * Retrieves the selected package group from the treeWidget
  */
-QString MainWindow::getSelectedGroup()
+QString MainWindow::getSelectedCategory()
 {
   return ui->twGroups->currentItem()->text(0);
 }
 
 /*
- * Helper to analyse if <Display All Groups> is selected
+ * Helper to analyse if <Display All Categories> is selected
  */
-bool MainWindow::isAllGroupsSelected()
+bool MainWindow::isAllCategoriesSelected()
 {
   QModelIndex index = ui->twGroups->currentIndex();
   QString group = ui->twGroups->model()->data(index).toString();
 
-  return isAllGroups(group);
+  return isAllCategories(group);
 }
 
-bool MainWindow::isAllGroups(const QString& group)
+bool MainWindow::isAllCategories(const QString& category)
 {
-  return ((group == "<" + StrConstants::getDisplayAllGroups() + ">") && !(m_actionSwitchToAURTool->isChecked()));
+  return ((category == "<" + StrConstants::getDisplayAllCategories() + ">") && !(m_actionSwitchToAURTool->isChecked()));
 }
 
 /*
@@ -507,10 +507,14 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
  */
 void MainWindow::changePackageListModel(ViewOptions viewOptions, QString selectedRepo)
 {  
+  /*
   if (m_actionSwitchToAURTool->isChecked())
     m_packageModel->applyFilter(viewOptions, "", StrConstants::getForeignToolGroup());
   else
-    m_packageModel->applyFilter(viewOptions, selectedRepo, isAllGroupsSelected() ? "" : getSelectedGroup());
+    m_packageModel->applyFilter(viewOptions, selectedRepo, isAllCategoriesSelected() ? "" : getSelectedCategory());
+  */
+
+  m_packageModel->applyFilter(viewOptions, selectedRepo, isAllCategoriesSelected() ? "" : getSelectedCategory());
 
   if (m_leFilterPackage->text() != "") reapplyPackageFilter();
 
@@ -573,13 +577,13 @@ void MainWindow::execContextMenuPackages(QPoint point)
 
     if (allInstallable) // implicitly foreign packages == 0
     {
-      if (!isAllGroupsSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
+      if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
       menu->addAction(ui->actionInstall);
 
-      if (!isAllGroupsSelected() && !isAURGroupSelected()) //&& numberOfSelPkgs > 1)
+      if (!isAllCategoriesSelected() && !isAURGroupSelected()) //&& numberOfSelPkgs > 1)
       {
         //Is this group already installed?
-        const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedGroup());
+        const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());
         if (packageList.size() == numberOfSelPkgs)
         {
           //If we select all packages, let's subtract the install action...
@@ -596,10 +600,10 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       menu->addAction(ui->actionRemove);
 
-      if (!isAllGroupsSelected() && !isAURGroupSelected())
+      if (!isAllCategoriesSelected() && !isAURGroupSelected())
       {
         //Is this group already installed?
-        const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedGroup());
+        const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());
         if (packageList.size() == numberOfSelPkgs)
         {
           //If we select all packages, let's subtract the remove action...

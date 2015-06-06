@@ -55,7 +55,7 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString version = StrConstants::getVersion();
   QString url = StrConstants::getURL();
   QString licenses = StrConstants::getLicenses();
-  QString groups = StrConstants::getGroups();
+  QString groups = StrConstants::getCategories();
   QString provides = StrConstants::getProvides();
   QString dependsOn = StrConstants::getDependsOn();
   QString requiredBy = StrConstants::getRequiredBy();

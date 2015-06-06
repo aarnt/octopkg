@@ -43,7 +43,9 @@ enum ViewOptions { ectn_ALL_PKGS, ectn_INSTALLED_PKGS, ectn_NON_INSTALLED_PKGS }
 struct PackageListData{
   QString name;
   QString repository;
+  QString origin;
   QString version;
+  QString comment;
   QString description;
   QString outatedVersion;
   double  downloadSize;
@@ -83,6 +85,16 @@ struct PackageListData{
                                     outatedVersion(outVersion.trimmed()),
                                     downloadSize(0.0),
                                     popularity(0),
+                                    status(pkgStatus){
+  }
+
+  PackageListData(QString n, QString o, QString v, QString c, PackageStatus pkgStatus, double iSize, double dSize)
+                                    : name(n),
+                                    origin(o),
+                                    version(v),
+                                    comment(c),
+                                    downloadSize(dSize),
+                                    installedSize(iSize),
                                     status(pkgStatus){
   }
 };
@@ -125,7 +137,7 @@ class Package{
     static int rpmvercmp(const char *a, const char *b);
     static QSet<QString>* getUnrequiredPackageList();
     static QStringList * getOutdatedStringList();
-    static QStringList * getOutdatedAURStringList();
+    //static QStringList * getOutdatedAURStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
     static QList<PackageListData> * getTargetUpgradeList(const QString &pkgName = "");
@@ -142,7 +154,7 @@ class Package{
     static QString getInformationDescription(const QString &pkgName, bool foreignPackage = false);
     static QString getInformationInstalledSize(const QString &pkgName, bool foreignPackage = false);
 
-    static QHash<QString, QString> getAUROutdatedPackagesNameVersion();
+    //static QHash<QString, QString> getAUROutdatedPackagesNameVersion();
     static QStringList getContents(const QString &pkgName, bool isInstalled);
     static QStringList getOptionalDeps(const QString &pkgName);
 
@@ -169,6 +181,7 @@ class Package{
     static QString getInstalledSizeAsString(const QString &pkgInfo);
 
     static QString kbytesToSize(float Bytes );
+    static double strToKBytes(QString size);
     static QString makeURLClickable(const QString &information);
     static QString getBaseName( const QString& pkgName );
     static QString parseSearchString( QString searchStr, bool exactMatch = false );

@@ -100,7 +100,7 @@ QVariant PackageModel::data(const QModelIndex &index, int role) const
           case ctn_PACKAGE_VERSION_COLUMN:
             return QVariant(package->version);
           case ctn_PACKAGE_ORIGIN_COLUMN:
-            return QVariant(package->repository);
+            return QVariant(package->origin);
           case ctn_PACKAGE_SIZE_COLUMN:
             /*if (package->popularity >= 0)
               return QVariant(package->popularityString);*/
@@ -372,7 +372,7 @@ struct TSort0 {
     if (a->status < b->status) return true;
     if (a->status == b->status) {
 
-      if (a->repository == b->repository && (a->repository == StrConstants::getForeignRepositoryName()))
+      if (a->origin == b->origin)
       {
         return (a->name < b->name);
       }
@@ -410,9 +410,9 @@ struct TSort2 {
 
 struct TSort3 {
   bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {
-    if (a->repository < b->repository) return true;
+    if (a->origin < b->origin) return true;
 
-    if (a->repository == b->repository)
+    if (a->origin == b->origin)
     {
       return a->name < b->name;
     }
