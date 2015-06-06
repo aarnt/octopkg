@@ -1239,14 +1239,14 @@ QString Package::parseSearchString(QString searchStr, bool exactMatch)
 /*
  * Checks if this system has the core.db
  */
-bool Package::hasPacmanDatabase()
+bool Package::hasPkgNGDatabase()
 {
   static bool done = false;
   static bool answer = false;
 
   if (!done)
   {
-    QFile f(ctn_PACMAN_CORE_DB_FILE);
+    QFile f(ctn_PKGNG_CORE_DB_FILE);
     answer = f.exists();
     done = true;
   }

@@ -28,6 +28,7 @@
 #include <QApplication>
 #include <QProcess>
 #include <QMessageBox>
+#include <QDebug>
 
 /*
  * This class is a helper to abstract some Desktop Environments services for Octopi.
@@ -54,8 +55,8 @@ bool WMHelper::isKDERunning(){
     for (constIterator = kdeDesktops.constBegin(); constIterator != kdeDesktops.constEnd(); ++constIterator) {
       QString desktop = (*constIterator).toLocal8Bit().constData();
       slParam.clear();
-      slParam << "-C";
-      slParam << desktop;
+      slParam << "-A";
+      slParam << "-o command";
       proc.start("ps", slParam);
       proc.waitForStarted();
       proc.waitForFinished();
@@ -79,8 +80,8 @@ bool WMHelper::isKDERunning(){
 bool WMHelper::isTDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_TDE_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -101,8 +102,8 @@ bool WMHelper::isTDERunning(){
 bool WMHelper::isXFCERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_XFCE_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -122,8 +123,8 @@ bool WMHelper::isXFCERunning(){
 bool WMHelper::isLXDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_LXDE_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -144,8 +145,8 @@ bool WMHelper::isLXQTRunning()
 {
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_LXQT_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -165,8 +166,8 @@ bool WMHelper::isLXQTRunning()
 bool WMHelper::isOPENBOXRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_OPENBOX_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -186,8 +187,8 @@ bool WMHelper::isOPENBOXRunning(){
 bool WMHelper::isMATERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_MATE_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -207,8 +208,8 @@ bool WMHelper::isMATERunning(){
 bool WMHelper::isCinnamonRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_CINNAMON_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -229,8 +230,8 @@ bool WMHelper::isRazorQtRunning()
 {
   QStringList slParam;
   QProcess proc;
-  slParam << "-C";
-  slParam << ctn_RAZORQT_DESKTOP;
+  slParam << "-A";
+  slParam << "-o command";
 
   proc.start("ps", slParam);
   proc.waitForStarted();
@@ -269,6 +270,16 @@ QString WMHelper::getKDESUCommand(){
 }
 
 /*
+ * Retrieves the QSUDO command...
+ */
+QString WMHelper::getQSUDOCommand()
+{
+  QString result = ctn_QSUDO;
+
+  return result;
+}
+
+/*
  * Retrieves the TDESU command...
  */
 QString WMHelper::getTDESUCommand(){
@@ -301,8 +312,13 @@ QString WMHelper::getSUCommand(){
   if (isXFCERunning() && (UnixCommand::hasTheExecutable(ctn_GKSU_2))){
     result = getGKSUCommand();
   }
-  else if (isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDESU)){
-    result = getKDESUCommand();
+  else if (isKDERunning()){
+    if ((UnixCommand::getLinuxDistro() == ectn_PCBSD) && UnixCommand::hasTheExecutable(ctn_QSUDO)){
+      result = getQSUDOCommand();
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_KDESU)){
+      result = getKDESUCommand();
+    }
   }
   else if (isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDESU)){
     result = getTDESUCommand();

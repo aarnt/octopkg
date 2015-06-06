@@ -33,7 +33,7 @@
 
 const QString ctn_TEMP_ACTIONS_FILE ( QDir::tempPath() + QDir::separator() + ".qt_temp_" );
 const QString ctn_PACMAN_DATABASE_DIR = "/var/lib/pacman";
-const QString ctn_PACMAN_CORE_DB_FILE = "/var/lib/pacman/sync/core.db";
+const QString ctn_PKGNG_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
 
 enum PackageStatus { ectn_INSTALLED, ectn_NON_INSTALLED, ectn_OUTDATED, ectn_NEWER,
                      ectn_FOREIGN, ectn_FOREIGN_OUTDATED };
@@ -172,7 +172,7 @@ class Package{
     static QString getBaseName( const QString& pkgName );
     static QString parseSearchString( QString searchStr, bool exactMatch = false );
 
-    static bool hasPacmanDatabase();
+    static bool hasPkgNGDatabase();
 };
 
 #endif

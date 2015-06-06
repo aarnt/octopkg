@@ -26,6 +26,8 @@
 const QString ctn_NO_SU_COMMAND("none");
 const QString ctn_ROOT_SH("/bin/sh -c ");
 
+const QString ctn_QSUDO("qsudo");
+
 const QString ctn_KDESU("kdesu");
 
 const QString ctn_KDE_DESKTOP("kwin");
@@ -106,6 +108,8 @@ public:
   static bool isRazorQtRunning();
 
   static QString getKDEOpenHelper();
+
+  static QString getQSUDOCommand();
 
   static QString getKDESUCommand();
   static QString getTDESUCommand();

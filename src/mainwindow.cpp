@@ -131,14 +131,14 @@ void MainWindow::show()
     initTabWidgetPropertiesIndex();
     refreshDistroNews(false);
 
-    if (Package::hasPacmanDatabase())
+    if (Package::hasPkgNGDatabase())
     {
       refreshGroupsWidget();
     }        
 
     QMainWindow::show();
 
-    if (Package::hasPacmanDatabase())
+    if (Package::hasPkgNGDatabase())
     {
       metaBuildPackageList();
     }
