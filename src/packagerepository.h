@@ -57,7 +57,7 @@ public:
      * @param package    = parsed data from pacman (e.g.)
      * @param isRequired = false if package is not required by other packages installed, or true otherwise
      */
-    PackageData(const PackageListData& package, const bool isRequired, const bool isManagedByAUR);
+    PackageData(const PackageListData& package, const bool isRequired /*, const bool isManagedByAUR*/);
 
     inline bool installed() const {
       return status != ectn_NON_INSTALLED;
@@ -69,16 +69,17 @@ public:
 
   public:
     const bool    required;
-    const bool    managedByAUR; // AUR packages must not be in any group
+    //const bool    managedByAUR; // AUR packages must not be in any group
     const QString name;
     const QString repository;
     const QString version;
     const QString description;
     const QString outdatedVersion;
     const double  downloadSize;
+    const double  installedSize;
     const PackageStatus status;
-    const int     popularity; // -1 for non AUR
-    const QString popularityString;
+    //const int     popularity; // -1 for non AUR
+    //const QString popularityString;
   };
 
   ////////////////////////
@@ -106,7 +107,7 @@ public:
 
   void registerDependency(IDependency& depends);
   void setData(const QList<PackageListData>*const listOfPackages, const QSet<QString>& unrequiredPackages);
-  void setAURData(const QList<PackageListData>*const listOfForeignPackages, const QSet<QString>& unrequiredPackages);
+  //void setAURData(const QList<PackageListData>*const listOfForeignPackages, const QSet<QString>& unrequiredPackages);
   void checkAndSetGroups(const QStringList& listOfGroups);
   void checkAndSetMembersOfGroup(const QString& group, const QStringList& members);
 

@@ -215,7 +215,7 @@ void MainWindow::AURToolSelected()
   {
     m_actionMenuRepository->setEnabled(true);
     ui->twGroups->setEnabled(true);
-    ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, false);
+    ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, false);
   }
 
   switchToViewAllPackages();
@@ -335,54 +335,6 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
   refreshStatusBarToolButtons();
 
   tvPackagesSelectionChanged(QItemSelection(),QItemSelection());
-}
-
-/*
- * Helper method to deal with the QFutureWatcher result before calling
- * AUR package list building method
- */
-void MainWindow::preBuildAURPackageList()
-{
-  m_listOfAURPackages = g_fwAUR.result();
-  buildAURPackageList();
-
-  if (m_cic) {
-    delete m_cic;
-    m_cic = NULL;
-  }
-
-  if (m_packageModel->getPackageCount() == 0)
-  {
-    m_leFilterPackage->setFocus();
-  }
-
-  emit buildAURPackageListDone();
-}
-
-/*
- * Helper method to deal with the QFutureWatcher result before calling
- * AUR package list building method
- */
-void MainWindow::preBuildAURPackageListMeta()
-{
-  m_listOfAURPackages = g_fwAURMeta.result();
-  buildAURPackageList();
-
-  if (m_cic) {
-    delete m_cic;
-    m_cic = 0;
-  }
-
-  if (m_packageModel->getPackageCount() == 0)
-  {
-    m_leFilterPackage->setFocus();
-  }
-
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-  {
-    connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    reapplyPackageFilter();
-  }
 }
 
 /*
@@ -533,69 +485,6 @@ void MainWindow::metaBuildPackageList()
     if(m_debugInfo)
       std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
                  "Time elapsed building pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
-  }
-  else if (isAURGroupSelected())
-  {
-    m_toolButtonPacman->hide();
-    m_toolButtonAUR->hide();
-    switchToViewAllPackages();
-    ui->actionSearchByFile->setEnabled(false);
-    m_packageModel->setShowColumnPopularity(true);
-
-    if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-    {
-      m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
-      ui->tvPackages->setSelectionMode(QAbstractItemView::SingleSelection);
-
-      toggleSystemActions(false);
-      clearStatusBar();
-      m_listOfAURPackages = new QList<PackageListData>();
-      m_leFilterPackage->setFocus();
-      ui->twGroups->setEnabled(false);
-
-      QEventLoop el;
-      QFuture<QList<PackageListData> *> f;
-      disconnect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildAURPackageList()));
-      m_cic = new CPUIntensiveComputing();
-      f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
-      connect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildAURPackageList()));
-      disconnect(this, SIGNAL(buildAURPackageListDone()), &el, SLOT(quit()));
-      connect(this, SIGNAL(buildAURPackageListDone()), &el, SLOT(quit()));
-
-      g_fwAUR.setFuture(f);
-      el.exec();
-
-      if(m_debugInfo)
-        std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
-                   "Time elapsed building pkgs from '" << StrConstants::getForeignPkgRepositoryName().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
-
-      return;
-    }
-
-    toggleSystemActions(false);
-    disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    clearStatusBar();
-
-    m_cic = new CPUIntensiveComputing();       
-
-    if(!m_leFilterPackage->text().isEmpty())
-    {
-      m_toolButtonPacman->hide();
-      disconnect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
-
-      QFuture<QList<PackageListData> *> f;
-      f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
-      connect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
-      g_fwAURMeta.setFuture(f);
-    }
-    else
-    {
-      m_listOfAURPackages = new QList<PackageListData>();
-      buildAURPackageList();
-      delete m_cic;
-      m_cic = 0;
-      m_leFilterPackage->setFocus();
-    }
   }
   else
   {
@@ -824,7 +713,7 @@ void MainWindow::buildPackageList()
     }
   }
 
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, 10);
+  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, 10);
   refreshToolBar();
   refreshStatusBarToolButtons();
   m_refreshPackageLists = true;
@@ -871,73 +760,6 @@ void MainWindow::refreshPackageList()
   m_packageRepo.setData(list, *unrequiredPackageList);
   delete list;
   list = NULL;
-}
-
-/*
- * Populates the list of found AUR packages (installed [+ non-installed])
- * given the searchString parameter passed.
- *
- */
-void MainWindow::buildAURPackageList()
-{
-  ui->actionSearchByDescription->setChecked(true);
-  m_progressWidget->show();
-
-  const QSet<QString>*const unrequiredPackageList = Package::getUnrequiredPackageList();
-  QList<PackageListData> *list = m_listOfAURPackages;
-
-  m_progressWidget->setRange(0, list->count());
-  m_progressWidget->setValue(0);
-  int counter=0;
-  int installedCount = 0;
-  QList<PackageListData>::const_iterator it = list->begin();
-
-  while(it != list->end())
-  {
-    if (isPackageInstalled(it->name)) {
-      ++installedCount;
-    }
-    counter++;
-    m_progressWidget->setValue(counter);
-    ++it;
-  }
-
-  m_packageRepo.setAURData(list, *unrequiredPackageList);
-  m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, StrConstants::getForeignToolGroup());
-  m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
-
-  QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
-  ui->tvPackages->setCurrentIndex(maux);
-  ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
-  ui->tvPackages->setCurrentIndex(maux);
-
-  list->clear();
-  refreshTabInfo();
-  refreshTabFiles();
-
-  if (isPackageTreeViewVisible())
-  {
-    ui->tvPackages->setFocus();
-  }
-
-  //Refresh counters
-  m_numberOfInstalledPackages = installedCount;
-
-  //Refresh statusbar widget
-  refreshStatusBar();
-
-  //Refresh application icon
-  refreshAppIcon();
-  reapplyPackageFilter();
-
-  counter = list->count();
-  m_progressWidget->setValue(counter);
-  m_progressWidget->close();
-
-  ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, true);
-
-  refreshToolBar();
-  refreshStatusBarToolButtons();
 }
 
 /*
@@ -1012,7 +834,6 @@ void MainWindow::refreshToolBar()
     }
   }
 }
-
 
 /*
  * Refreshes the toolButtons which indicate outdated packages

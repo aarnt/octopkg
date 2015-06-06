@@ -240,7 +240,7 @@ void MainWindow::initMenuBar()
   actionGroupPackages->addAction(ui->actionViewNonInstalledPackages);
   actionGroupPackages->setExclusive(true);
 
-  m_actionMenuRepository = ui->menuView->addAction(StrConstants::getRepository());
+  m_actionMenuRepository = ui->menuView->addAction(StrConstants::getOrigin());
   QMenu *subMenu = new QMenu(ui->menuView);
   connect(subMenu, SIGNAL(triggered(QAction*)), this, SLOT(selectedRepositoryMenu(QAction*)));
 

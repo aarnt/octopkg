@@ -201,8 +201,8 @@ public:
     return QObject::tr("URL");
   }
 
-  static QString getRepository(){
-    return QObject::tr("Repository");
+  static QString getOrigin(){
+    return QObject::tr("Origin");
   }
 
   static QString getLicenses(){

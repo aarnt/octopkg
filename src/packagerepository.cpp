@@ -71,14 +71,14 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
   m_listOfPackages.clear();
 
   for (QList<PackageListData>::const_iterator it = listOfPackages->begin(); it != listOfPackages->end(); ++it) {
-    m_listOfPackages.push_back(new PackageData(*it, unrequiredPackages.contains(it->name) == false, false));
+    m_listOfPackages.push_back(new PackageData(*it, unrequiredPackages.contains(it->name) == false));
   }
 
   qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
   std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 }
 
-void PackageRepository::setAURData(const QList<PackageListData>*const listOfForeignPackages,
+/*void PackageRepository::setAURData(const QList<PackageListData>*const listOfForeignPackages,
                                    const QSet<QString>& unrequiredPackages)
 {
   //  std::cout << "received new foreign package list" << std::endl;
@@ -105,7 +105,7 @@ void PackageRepository::setAURData(const QList<PackageListData>*const listOfFore
     qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
     qSort(m_listOfAURPackages.begin(), m_listOfAURPackages.end(), TSort());
     std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
-}
+}*/
 
 /**
  * @brief if the repository groups differ from %listOfGroups they will be reset
@@ -161,12 +161,13 @@ void PackageRepository::checkAndSetMembersOfGroup(const QString& groupName, cons
       for (QStringList::const_iterator it = members.begin(); it != members.end(); ++it) {
         typedef TListOfPackages::const_iterator TIter;
         std::pair<TIter, TIter> packageIt =  std::equal_range(m_listOfPackages.begin(), m_listOfPackages.end(), *it, TComp());
-        for (TIter iter = packageIt.first; iter != packageIt.second; ++iter) {
+
+        /*for (TIter iter = packageIt.first; iter != packageIt.second; ++iter) {
           if ((*iter)->managedByAUR == false) {
             group.addPackage(**iter);
             break;
           }
-        }
+        }*/
       }
       std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 
@@ -242,17 +243,17 @@ bool PackageRepository::memberListOfGroupsEquals(const QStringList& listOfGroups
 /**
  * @brief conversion from pkg will default the repository to the foreign repo name
  */
-PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bool isRequired, const bool isManagedByAUR)
-  : required(isRequired), managedByAUR(isManagedByAUR), name(pkg.name),
+PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bool isRequired)
+  : required(isRequired), name(pkg.name),
     repository(pkg.repository.isEmpty() ? StrConstants::getForeignRepositoryName() : pkg.repository),
     version(pkg.version), description(pkg.description.toLatin1()), // octopi wants it converted to utf8
-    outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize),
+    outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize), installedSize(pkg.installedSize),
     status(pkg.status != ectn_OUTDATED ?
            pkg.status :
            (Package::rpmvercmp(pkg.outatedVersion.toLatin1().data(), pkg.version.toLatin1().data()) == 1 ?
-             ectn_NEWER : ectn_OUTDATED)),
-    popularity(isManagedByAUR ? pkg.popularity : -1),
-    popularityString(isManagedByAUR ? QString::number(pkg.popularity) + " " + StrConstants::getVotes() : QString())
+             ectn_NEWER : ectn_OUTDATED))
+    //popularity(isManagedByAUR ? pkg.popularity : -1),
+    //popularityString(isManagedByAUR ? QString::number(pkg.popularity) + " " + StrConstants::getVotes() : QString())
 {
 }
 

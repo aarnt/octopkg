@@ -99,11 +99,12 @@ QVariant PackageModel::data(const QModelIndex &index, int role) const
             return QVariant(package->name);
           case ctn_PACKAGE_VERSION_COLUMN:
             return QVariant(package->version);
-          case ctn_PACKAGE_REPOSITORY_COLUMN:
+          case ctn_PACKAGE_ORIGIN_COLUMN:
             return QVariant(package->repository);
-          case ctn_PACKAGE_POPULARITY_COLUMN:
-            if (package->popularity >= 0)
-              return QVariant(package->popularityString);
+          case ctn_PACKAGE_SIZE_COLUMN:
+            /*if (package->popularity >= 0)
+              return QVariant(package->popularityString);*/
+            return QVariant(package->installedSize);
             break;
           default:
             assert(false);
@@ -142,9 +143,9 @@ QVariant PackageModel::headerData(int section, Qt::Orientation orientation, int 
         return QVariant(StrConstants::getName());
       case ctn_PACKAGE_VERSION_COLUMN:
         return QVariant(StrConstants::getVersion());
-      case ctn_PACKAGE_REPOSITORY_COLUMN:
-        return QVariant(StrConstants::getRepository());
-      case ctn_PACKAGE_POPULARITY_COLUMN:
+      case ctn_PACKAGE_ORIGIN_COLUMN:
+        return QVariant(StrConstants::getOrigin());
+      case ctn_PACKAGE_SIZE_COLUMN:
         return QVariant(StrConstants::getPopularityHeader());
       default:
         break;
@@ -420,7 +421,7 @@ struct TSort3 {
   }
 };
 
-struct TSort4 {
+/*struct TSort4 {
   bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {
     if (a->popularity < b->popularity) return true;
     if (a->popularity == b->popularity) {
@@ -428,7 +429,7 @@ struct TSort4 {
     }
     return false;
   }
-};
+};*/
 
 void PackageModel::sort()
 {
@@ -442,12 +443,12 @@ void PackageModel::sort()
   case ctn_PACKAGE_VERSION_COLUMN:
     qSort(m_columnSortedlistOfPackages.begin(), m_columnSortedlistOfPackages.end(), TSort2());
     return;
-  case ctn_PACKAGE_REPOSITORY_COLUMN:
+  case ctn_PACKAGE_ORIGIN_COLUMN:
     qSort(m_columnSortedlistOfPackages.begin(), m_columnSortedlistOfPackages.end(), TSort3());
     return;
-  case ctn_PACKAGE_POPULARITY_COLUMN:
+  /*case ctn_PACKAGE_SIZE_COLUMN:
     qSort(m_columnSortedlistOfPackages.begin(), m_columnSortedlistOfPackages.end(), TSort4());
-    return;
+    return;*/
   default:
     return;
   }

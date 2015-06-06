@@ -339,9 +339,6 @@ private slots:
   void preBuildUnrequiredPackageList();
   void preBuildPackageList();
   void preBuildPackagesFromGroupList();
-  void preBuildAURPackageList();
-  void preBuildAURPackageListMeta();
-  void buildAURPackageList();
 
   void headerViewPackageListSortIndicatorClicked(int col, Qt::SortOrder order);
   void changePackageListModel(ViewOptions viewOptions, QString selectedRepo);
