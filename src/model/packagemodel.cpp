@@ -214,7 +214,7 @@ void PackageModel::endResetRepository()
         }
         break;
       case ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN:
-        if (m_filterRegExp.indexIn((*it)->description) != -1)
+        if (m_filterRegExp.indexIn((*it)->comment) != -1)
         {
           m_listOfPackages.push_back(*it);
           if ((*it)->installed()) m_installedPackagesCount++;

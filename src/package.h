@@ -114,13 +114,16 @@ struct PackageInfoData{
   QString conflictsWith;
   QString replaces;
   QString packager;
+  QString maintainer;
   QString arch;
   QString description;
-  QDateTime buildDate;
+  QString comment;
+  QString installedOn;
   double downloadSize;
   double installedSize;
   QString downloadSizeAsString;
   QString installedSizeAsString;
+  QString options;
 };
 
 class Result;
@@ -137,7 +140,6 @@ class Package{
     static int rpmvercmp(const char *a, const char *b);
     static QSet<QString>* getUnrequiredPackageList();
     static QStringList * getOutdatedStringList();
-    //static QStringList * getOutdatedAURStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
     static QList<PackageListData> * getTargetUpgradeList(const QString &pkgName = "");
@@ -172,14 +174,16 @@ class Package{
     static QString getRequiredBy(const QString &pkgInfo);
     static QString getOptionalFor(const QString &pkgInfo);
     static QString getPackager(const QString &pkgInfo);
+    static QString getMaintainer(const QString &pkgInfo);
     static QString getArch(const QString &pkgInfo);
     static QString getDescription(const QString &pkgInfo);
     static QString getComment(const QString &pkgInfo);
-    static QDateTime getBuildDate(const QString &pkgInfo);
+    static QString getInstalledOn(const QString &pkgInfo);
     static double getDownloadSize(const QString &pkgInfo);
     static QString getDownloadSizeAsString(const QString &pkgInfo);
     static double getInstalledSize(const QString &pkgInfo);
     static QString getInstalledSizeAsString(const QString &pkgInfo);
+    static QString getOptions(const QString &pkgInfo);
 
     static QString kbytesToSize(float Bytes );
     static double strToKBytes(QString size);

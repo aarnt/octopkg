@@ -76,6 +76,15 @@ QString showPackageInfo(QString pkgName)
 
   QString installedSize = Package::kbytesToSize(package->installedSize);
 
+  if (installedSize.contains("KiB"))
+  {
+    installedSize.replace("KiB", "KB");
+  }
+  else if (installedSize.contains("MiB"))
+  {
+    installedSize.replace("MiB", "MB");
+  }
+
   if (!installedSize.isEmpty() && installedSize != "0.00 Bytes")
     return desc + " -> " + installedSize;
   else

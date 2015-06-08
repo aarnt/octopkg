@@ -628,16 +628,17 @@ QString Package::extractFieldFromInfo(const QString &field, const QString &pkgIn
 
   if (fieldPos > 0)
   {
-    if(field == "Optional Deps")
+    if(field == "Options")
     {
       fieldPos = pkgInfo.indexOf(":", fieldPos+1);
       fieldPos+=2;
       aux = pkgInfo.mid(fieldPos);
 
-      fieldEnd = aux.indexOf("Conflicts With");
-      fieldEnd2 = aux.indexOf("Required By");
+      fieldEnd = aux.indexOf("Shared Libs required");
+      fieldEnd2 = aux.indexOf("Annotations");
 
-      if(fieldEnd > fieldEnd2 && fieldEnd2 != -1) fieldEnd = fieldEnd2;
+      if((fieldEnd > fieldEnd2 && fieldEnd2 != -1) ||
+         (fieldEnd == -1 && fieldEnd2 != -1)) fieldEnd = fieldEnd2;
 
       aux = aux.left(fieldEnd).trimmed();
       aux = aux.replace("\n", "<br>");
@@ -684,7 +685,7 @@ QString Package::getRepository(const QString &pkgInfo)
  */
 QString Package::getURL(const QString &pkgInfo)
 {
-  QString URL = extractFieldFromInfo("\nURL", pkgInfo);
+  QString URL = extractFieldFromInfo("WWW", pkgInfo);
   if (!URL.isEmpty())
     return makeURLClickable(URL);
   else
@@ -704,7 +705,7 @@ QString Package::getLicense(const QString &pkgInfo)
  */
 QString Package::getGroup(const QString &pkgInfo)
 {
-  return extractFieldFromInfo("Groups", pkgInfo);
+  return extractFieldFromInfo("Categories", pkgInfo);
 }
 
 /*
@@ -772,6 +773,14 @@ QString Package::getPackager(const QString &pkgInfo)
 }
 
 /*
+ * Retrieves "Maintainer" field of the given package information string represented by pkgInfo
+ */
+QString Package::getMaintainer(const QString &pkgInfo)
+{
+  return extractFieldFromInfo("Maintainer", pkgInfo);
+}
+
+/*
  * Retrieves "Architecture" field of the given package information string represented by pkgInfo
  */
 QString Package::getArch(const QString &pkgInfo)
@@ -782,10 +791,11 @@ QString Package::getArch(const QString &pkgInfo)
 /*
  * Retrieves "Build Date" field of the given package information string represented by pkgInfo
  */
-QDateTime Package::getBuildDate(const QString &pkgInfo)
+QString Package::getInstalledOn(const QString &pkgInfo)
 {
-  QString aux = extractFieldFromInfo("Build Date", pkgInfo);
-  return QDateTime::fromString(aux); //"ddd MMM d hh:mm:ss yyyy");
+  return extractFieldFromInfo("Installed on", pkgInfo);
+  //qDebug() << aux;
+  //return QDateTime::fromString(aux); //"ddd MMM d hh:mm:ss yyyy");
 }
 
 /*
@@ -823,10 +833,9 @@ QString Package::getDownloadSizeAsString(const QString &pkgInfo)
  */
 double Package::getInstalledSize(const QString &pkgInfo)
 {
-  QString aux = extractFieldFromInfo("Installed Size", pkgInfo);
+  QString aux = extractFieldFromInfo("Flat size", pkgInfo);
   bool isMega = (aux.indexOf("MiB", Qt::CaseInsensitive) != -1);
   aux = aux.section(QRegExp("\\s"), 0, 0);
-
   bool ok;
   double res = aux.toDouble(&ok);
 
@@ -844,7 +853,16 @@ double Package::getInstalledSize(const QString &pkgInfo)
  */
 QString Package::getInstalledSizeAsString(const QString &pkgInfo)
 {
-  QString aux = extractFieldFromInfo("Installed Size", pkgInfo);
+  QString aux = extractFieldFromInfo("Flat size", pkgInfo);
+  return aux;
+}
+
+/*
+ * Retrieves "Options" field of the given package information string represented by pkgInfo
+ */
+QString Package::getOptions(const QString &pkgInfo)
+{
+  QString aux = extractFieldFromInfo("Options", pkgInfo);
   return aux;
 }
 
@@ -1027,13 +1045,16 @@ PackageInfoData Package::getInformation(const QString &pkgName, bool foreignPack
   res.optionalFor = getOptionalFor(pkgInfo);
   res.conflictsWith = getConflictsWith(pkgInfo);
   res.packager = getPackager(pkgInfo);
+  res.maintainer = getMaintainer(pkgInfo);
   res.arch = getArch(pkgInfo);
-  res.buildDate = getBuildDate(pkgInfo);
+  res.installedOn = getInstalledOn(pkgInfo);
   res.description = getDescription(pkgInfo);
+  res.comment = getComment(pkgInfo);
   res.downloadSize = getDownloadSize(pkgInfo);
-  res.installedSize = getInstalledSize(pkgInfo);
+  res.installedSize = getInstalledSize(pkgInfo);  
   res.downloadSizeAsString = getDownloadSizeAsString(pkgInfo);
   res.installedSizeAsString = getInstalledSizeAsString(pkgInfo);
+  res.options = getOptions(pkgInfo);
 
   return res;
 }

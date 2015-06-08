@@ -22,6 +22,8 @@
 #include "src/strconstants.h"
 #include "src/package.h"
 
+#include <QDebug>
+
 /*
  * The OctopiTabInfo class provides functionality for the Tab "Info"
  */
@@ -43,14 +45,16 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
 {
   PackageInfoData pid;
 
-  if (package.repository != StrConstants::getForeignRepositoryName() &&
+  /*if (package.repository != StrConstants::getForeignRepositoryName() &&
       (package.installed() == false || package.outdated() == true)) {
     pid = Package::getInformation(package.name);
   }
   else
   {
     pid = Package::getInformation(package.name, true); //This is a foreign package!!!
-  }
+  }*/
+
+  pid = Package::getInformation(package.name);
 
   QString version = StrConstants::getVersion();
   QString url = StrConstants::getURL();
@@ -65,12 +69,13 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString replaces = StrConstants::getReplaces();
   QString downloadSize = StrConstants::getDownloadSize();
   QString installedSize = StrConstants::getInstalledSize();
-  QString packager = StrConstants::getPackager();
+  QString maintainer = StrConstants::getMaintainer();
   QString architecture = StrConstants::getArchitecture();
-  QString buildDate = StrConstants::getBuildDate();
+  QString installedOn = StrConstants::getInstalledOn();
+  QString options = StrConstants::getOptions();
 
   //Let's put package description in UTF-8 format
-  QString pkgDescription = pid.description;
+  QString pkgDescription = pid.comment;
 
 #if QT_VERSION < 0x050000
   pkgDescription = pkgDescription.fromUtf8(pkgDescription.toLatin1().data());
@@ -79,14 +84,13 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString html;
   html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
   html += "<a id=\"" + anchorBegin + "\"></a>";
-
   html += "<h2>" + package.name + "</h2>";
   html += "<a style=\"font-size:16px;\">" + pkgDescription + "</a>";
-
   html += "<table border=\"0\">";
-
   html += "<tr><th width=\"20%\"></th><th width=\"80%\"></th></tr>";
-  html += "<tr><td>" + url + "</td><td style=\"font-size:14px;\">" + pid.url + "</td></tr>";
+
+  if (pid.url != "<a href=\"http://\"></a>UNKNOWN")
+    html += "<tr><td>" + url + "</td><td style=\"font-size:14px;\">" + pid.url + "</td></tr>";
 
   if (package.outdated())
   {
@@ -132,7 +136,7 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   }
 
   //This is needed as packager names could be encoded in different charsets, resulting in an error
-  QString packagerName = pid.packager;
+  QString packagerName = pid.maintainer;
   packagerName = packagerName.replace("<", "&lt;");
   packagerName = packagerName.replace(">", "&gt;");
 
@@ -140,17 +144,20 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   packagerName = packagerName.fromUtf8(packagerName.toLatin1().data());
 #endif
 
-  QString strConflictsWith = pid.conflictsWith;
+  /*QString strConflictsWith = pid.conflictsWith;
   strConflictsWith = strConflictsWith.replace("<", "&lt;");
   strConflictsWith = strConflictsWith.replace(">", "&gt;");
-  strConflictsWith = strConflictsWith.replace("&lt;br&gt;", "<br>");
+  strConflictsWith = strConflictsWith.replace("&lt;br&gt;", "<br>");*/
 
-  html += "<tr><td>" + licenses + "</td><td>" + pid.license + "</td></tr>";
+  if(! pid.license.isEmpty())
+    html += "<tr><td>" + licenses + "</td><td>" + pid.license + "</td></tr>";
+
+  html += "<tr><td>" + installedOn + "</td><td>" + pid.installedOn;
 
   //Show this info only if there's something to show
   if(! pid.group.contains("None"))
     html += "<tr><td>" + groups + "</td><td>" + pid.group + "</td></tr>";
-  if(! pid.provides.contains("None"))
+  /*if(! pid.provides.contains("None"))
     html += "<tr><td>" + provides + "</td><td>" + pid.provides + "</td></tr>";
   if(! pid.dependsOn.contains("None"))
     html += "<tr><td>" + dependsOn + "</td><td>" + pid.dependsOn + "</td></tr>";
@@ -163,16 +170,19 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   if(! pid.conflictsWith.contains("None"))
     html += "<tr><td><b>" + conflictsWith + "</b></td><td><b>" + strConflictsWith +
         "</b></font></td></tr>";
-
   if(! pid.replaces.contains("None"))
     html += "<tr><td>" + replaces + "</td><td>" + pid.replaces + "</td></tr>";
+  */
 
-  html += "<tr><td>" + downloadSize + "</td><td>" + Package::kbytesToSize(pid.downloadSize) + "</td></tr>";
-  html += "<tr><td>" + installedSize + "</td><td>" + Package::kbytesToSize(pid.installedSize) + "</td></tr>";
-  html += "<tr><td>" + packager + "</td><td>" + packagerName + "</td></tr>";
+  if(! pid.downloadSizeAsString.isEmpty())
+    html += "<tr><td>" + downloadSize + "</td><td>" + pid.downloadSizeAsString + "</td></tr>";
+
+  html += "<tr><td>" + installedSize + "</td><td>" + pid.installedSizeAsString + "</td></tr>";
+  html += "<tr><td>" + maintainer + "</td><td>" + packagerName + "</td></tr>";
   html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
-  html += "<tr><td>" + buildDate + "</td><td>" +
-      pid.buildDate.toString("ddd - dd/MM/yyyy hh:mm:ss") + "</td></tr>";
+
+  if(! pid.options.isEmpty())
+    html += "<tr><td>" + options + "</td><td>" + pid.options + "</td></tr>";
 
   html += "</table>";
   return html;

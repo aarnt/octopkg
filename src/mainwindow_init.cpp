@@ -224,7 +224,7 @@ void MainWindow::onPackageGroupChanged()
  */
 void MainWindow::initMenuBar()
 {
-  QActionGroup *actionGroupPackages = new QActionGroup(this);
+  /*QActionGroup *actionGroupPackages = new QActionGroup(this);
   QActionGroup *actionGroupRepositories = new QActionGroup(this);
 
   ui->actionViewAllPackages->setText(StrConstants::getAll());
@@ -256,6 +256,9 @@ void MainWindow::initMenuBar()
   actionGroupRepositories->addAction(m_actionRepositoryAll);
   actionGroupRepositories->setExclusive(true);
   m_actionMenuRepository->setMenu(subMenu);
+  */
+
+  ui->menuView->menuAction()->setVisible(false);
 
 #if QT_VERSION >= 0x050000
   foreach (QAction * act,  ui->menuBar->actions())

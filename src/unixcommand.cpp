@@ -401,19 +401,21 @@ QByteArray UnixCommand::getPackageContentsUsingPkgfile(const QString &pkgName)
  */
 QString UnixCommand::getPackageByFilePath(const QString &filePath)
 {
-  QStringList sl;
-  sl << "-Qo";
-  sl << filePath;
+  QString pkgName="";
+  QString out = performQuery("which -o " + filePath);
 
-  QString out = performQuery(sl);
-  QStringList s = out.split("\n", QString::SkipEmptyParts);
-
-  if (s.count() >= 1)
+  if (!out.isEmpty() && !out.contains("was not found in the database"))
   {
-    QStringList res = s.at(0).split(" ", QString::SkipEmptyParts);
-    return res.at(res.count()-2);
+    int pos = out.indexOf("was installed by package");
+    if (pos != -1)
+    {
+      int pos2 = out.indexOf("/", pos+25);
+      pkgName = out.right(out.size()-(pos2+1));
+      pkgName.remove('\n');
+    }
   }
-  else return "";
+
+  return pkgName;
 }
 
 /*

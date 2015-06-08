@@ -460,10 +460,7 @@ void MainWindow::metaBuildPackageList()
     connect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
     disconnect(this, SIGNAL(buildPackageListDone()), &el, SLOT(quit()));
     connect(this, SIGNAL(buildPackageListDone()), &el, SLOT(quit()));
-
     g_fwPacman.setFuture(f);
-    //std::cout << "Start local event loop..." << std::endl;
-
     el.exec(QEventLoop::ExcludeUserInputEvents);
 
     if(m_debugInfo)

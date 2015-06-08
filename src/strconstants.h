@@ -249,6 +249,10 @@ public:
     return QObject::tr("Popularity");
   }
 
+  static QString getOptions(){
+    return QObject::tr("Options");
+  }
+
   static QString getVotes(){
     return QObject::tr("votes");
   }
@@ -265,6 +269,10 @@ public:
     return QObject::tr("Packager");
   }
 
+  static QString getMaintainer(){
+    return QObject::tr("Maintainer");
+  }
+
   static QString getPackage(){
     return QObject::tr("Package");
   }
@@ -277,8 +285,8 @@ public:
     return QObject::tr("Architecture");
   }
 
-  static QString getBuildDate(){
-    return QObject::tr("Build Date");
+  static QString getInstalledOn(){
+    return QObject::tr("Installed on");
   }
 
   static QString getDescription(){

@@ -569,7 +569,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
         allInstallable = false;
         numberOfAUR++;
       }
-      if (package->installed() == false)
+      if (package->installed() == false || package->required)
       {
         allRemovable = false;
       }
