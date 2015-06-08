@@ -1139,11 +1139,8 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
       navigateThroughDirs(parts, auxList, 0);
     }
 
-    //qDebug() << auxList;
     fileList = fileList + auxList;
     fileList.sort();
-
-    //qDebug() << fileList;
 
     if (fileList.count() > 0) CPUIntensiveComputing cic;
 
