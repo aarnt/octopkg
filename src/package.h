@@ -192,6 +192,7 @@ class Package{
     static QString parseSearchString( QString searchStr, bool exactMatch = false );
 
     static bool hasPkgNGDatabase();
+    static bool isForbidden(const QString pkgName);
 };
 
 #endif

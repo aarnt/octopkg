@@ -1279,3 +1279,13 @@ bool Package::hasPkgNGDatabase()
 
   return answer;
 }
+
+/*
+ * Returns true if the package is included in the forbidden removal list
+ */
+bool Package::isForbidden(const QString pkgName)
+{
+  QStringList forbiddenPkgs = { "pcbsd-base", "pcbsd-meta-kde", "pcbsd-meta-virtualboxguest", "pkg" };
+
+  return forbiddenPkgs.contains(pkgName);
+}
