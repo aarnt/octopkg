@@ -79,6 +79,7 @@ public:
     const double  downloadSize;
     const double  installedSize;
     const PackageStatus status;
+    const QString comment;
     //const int     popularity; // -1 for non AUR
     //const QString popularityString;
   };

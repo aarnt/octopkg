@@ -57,16 +57,11 @@ QString showPackageInfo(QString pkgName)
     return "";
   }
 
-  bool isForeignPkg = (package->status == ectn_FOREIGN || package->status == ectn_FOREIGN_OUTDATED);
-  QString description = package->description;
+  QString description = package->comment;
 
   if (description.trimmed().isEmpty())
   {
-    if (isForeignPkg)
-    {
-      description = pkgName + " " + Package::getInformationDescription(pkgName, true);
-    }
-    else return "";
+    return "";
   }
 
   int space = description.indexOf(" ");
@@ -79,7 +74,7 @@ QString showPackageInfo(QString pkgName)
     desc = desc + " ...";
   }
 
-  QString installedSize = Package::getInformationInstalledSize(pkgName, isForeignPkg);
+  QString installedSize = Package::kbytesToSize(package->installedSize);
 
   if (!installedSize.isEmpty() && installedSize != "0.00 Bytes")
     return desc + " -> " + installedSize;

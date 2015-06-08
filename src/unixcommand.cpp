@@ -311,15 +311,19 @@ QByteArray UnixCommand::getPackageList(const QString &pkgName)
  */
 QByteArray UnixCommand::getPackageInformation(const QString &pkgName, bool foreignPackage = false)
 {
-  QStringList args;
+  QString args;
 
   if(foreignPackage)
-    args << "-Qi";
-  else
-    args << "-Si";
+  {
 
-  if (pkgName.isEmpty() == false) // enables get for all ("")
-    args << pkgName;
+  }
+  else
+  {
+    args = "info " + pkgName;
+  }
+
+  //if (pkgName.isEmpty() == false) // enables get for all ("")
+  //  args << pkgName;
 
   QByteArray result = performQuery(args);
   return result;
@@ -350,11 +354,8 @@ QByteArray UnixCommand::getAURPackageVersionInformation()
  */
 QByteArray UnixCommand::getPackageContentsUsingPacman(const QString& pkgName)
 {
-  QStringList args;
-  args << "-Ql";
-  args << pkgName;
-
-  QByteArray res = performQuery(args);
+  QByteArray res = performQuery("query \"%Fp\" " + pkgName);
+  //qDebug() << res;
   return res;
 }
 

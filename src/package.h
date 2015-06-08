@@ -48,8 +48,8 @@ struct PackageListData{
   QString comment;
   QString description;
   QString outatedVersion;
-  double  downloadSize;
   double  installedSize;
+  double  downloadSize;
   int     popularity; //votes
   PackageStatus status;
 
@@ -93,8 +93,8 @@ struct PackageListData{
                                     origin(o),
                                     version(v),
                                     comment(c),
-                                    downloadSize(dSize),
                                     installedSize(iSize),
+                                    downloadSize(dSize),
                                     status(pkgStatus){
   }
 };
@@ -174,6 +174,7 @@ class Package{
     static QString getPackager(const QString &pkgInfo);
     static QString getArch(const QString &pkgInfo);
     static QString getDescription(const QString &pkgInfo);
+    static QString getComment(const QString &pkgInfo);
     static QDateTime getBuildDate(const QString &pkgInfo);
     static double getDownloadSize(const QString &pkgInfo);
     static QString getDownloadSizeAsString(const QString &pkgInfo);

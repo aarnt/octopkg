@@ -158,29 +158,27 @@ QString Package::kbytesToSize( float Bytes )
  */
 double Package::strToKBytes(QString size)
 {
-  double res;
+  double res=0;
   if (size == "0.00B") res = 0;
-  if (size.contains("kB"))
+  else if (size.contains("kB"))
   {
-    bool *ok=nullptr;
+    bool ok;
     int p = size.indexOf("kB");
-    double value = size.left(p).toDouble(ok);
+    double value = size.left(p).toDouble(&ok);
     if (ok)
     {
       res = value;
     }
-    else res = 0;
   }
   else if (size.contains("MB"))
   {
-    bool *ok=nullptr;
+    bool ok;
     int p = size.indexOf("MB");
-    double value = size.left(p).toDouble(ok);
+    double value = size.left(p).toDouble(&ok);
     if (ok)
     {
-      res = value/1024;
+      res = value * 1024;
     }
-    else res = 0;
   }
 
   return res;
@@ -434,7 +432,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
   //    A pacman wrapper with extended features and AUR support
   //community/libfm 1.1.0-4 (lxde) [installed: 1.1.0-3]
 
-  QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription, pkgOutVersion;
+  QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription;
   double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
   QString pkgList = UnixCommand::getPackageList(packageName);
@@ -446,6 +444,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
     pkgDescription = "";
     foreach(QString packageTuple, packageTuples)
     {
+      pkgComment = "";
       QStringList parts = packageTuple.split(' ');
       pkgName = parts[0];
       pkgVersion = parts[1];
@@ -455,14 +454,14 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
       pkgStatus = ectn_INSTALLED;
       pkgDownloadedSize = 0;
       pkgInstalledSize = strToKBytes(parts[3]);
-      pkgDescription = pkgName + " " + pkgComment;
 
       for(int c=4; c<parts.count(); c++)
       {
         pkgComment += " " + parts[c];
       }
 
-      pkgComment = pkgComment.trimmed();
+      pkgComment = pkgName + " " + pkgComment.trimmed();
+      //pkgDescription = pkgName + " " + pkgComment;
 
       PackageListData pld =
           PackageListData(pkgName, pkgOrigin, pkgVersion, pkgComment, pkgStatus, pkgInstalledSize, pkgDownloadedSize);
@@ -1000,6 +999,14 @@ QString Package::getDescription(const QString &pkgInfo)
 }
 
 /*
+ * Retrieves "Comment" field of the given package information string represented by pkgInfo
+ */
+QString Package::getComment(const QString &pkgInfo)
+{
+  return extractFieldFromInfo("Comment", pkgInfo);
+}
+
+/*
  * Retrieves all information for a given package name
  */
 PackageInfoData Package::getInformation(const QString &pkgName, bool foreignPackage)
@@ -1135,6 +1142,8 @@ QHash<QString, QString> Package::getAUROutdatedPackagesNameVersion()
  */
 QStringList Package::getContents(const QString& pkgName, bool isInstalled)
 {
+  //qDebug() << pkgName << ":" << isInstalled;
+
   QStringList slResult;
   QByteArray result;
 
@@ -1153,7 +1162,8 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
   QString aux(result);
   QStringList rsl = aux.split("\n", QString::SkipEmptyParts);
 
-  if ( !rsl.isEmpty() ){
+  /*if ( !rsl.isEmpty() )
+  {
     if (rsl.at(0) == "./"){
       rsl.removeFirst();
     }
@@ -1163,8 +1173,8 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
       rsl.sort();
       slResult = rsl;
     }
-    /* If the filelist came from pkgfile, it's something like this:
-       apps/kdemultimedia-juk  /usr/share/doc/kde/html/en/juk/search-playlist.png */
+    // If the filelist came from pkgfile, it's something like this:
+    // apps/kdemultimedia-juk  /usr/share/doc/kde/html/en/juk/search-playlist.png
     else
     {
       QStringList rsl2;
@@ -1179,7 +1189,9 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
     }
   }
 
-  return slResult;
+  return slResult;*/
+
+  return rsl;
 }
 
 /*
