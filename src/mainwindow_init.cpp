@@ -309,12 +309,12 @@ void MainWindow::initToolBar()
   m_leFilterPackage->setMinimumHeight(24);
   ui->mainToolBar->addWidget(m_leFilterPackage);
 
-  QWidget * hSpacer = new QWidget(this);
+  /*QWidget * hSpacer = new QWidget(this);
   hSpacer->setMinimumHeight(22);
   hSpacer->setMinimumWidth(3);
   hSpacer->setVisible(true);
   ui->mainToolBar->addWidget(hSpacer);
-  ui->mainToolBar->addAction(m_actionShowGroups);
+  ui->mainToolBar->addAction(m_actionShowGroups);*/
   ui->mainToolBar->toggleViewAction()->setEnabled(false);
   ui->mainToolBar->toggleViewAction()->setVisible(false);
 }
@@ -695,12 +695,6 @@ void MainWindow::initActions()
   m_actionInstallPacmanUpdates->setText(ui->actionInstall->text());
   m_actionInstallPacmanUpdates->setIconVisibleInMenu(true);
   connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
-
-  /*m_actionInstallAURUpdates = new QAction(this);
-  m_actionInstallAURUpdates->setIcon(IconHelper::getIconToInstall());
-  m_actionInstallAURUpdates->setText(ui->actionInstall->text());
-  m_actionInstallAURUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallAURUpdates, SIGNAL(triggered()), this, SLOT(doAURUpgrade()));*/
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());
