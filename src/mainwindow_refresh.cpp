@@ -741,44 +741,6 @@ void MainWindow::buildPackageList()
 */
 
 /*
- * Prints the AUR toolButton at the left of the statusbar.
- * It warns the user about outdated AUR packages!
- */
-/*void MainWindow::showToolButtonAUR()
-{
-  m_outdatedAURPackagesNameVersion = &g_fwOutdatedAURPackages.result()->content;
-
-  if(m_outdatedAURStringList->count() > 0)
-  {
-    if (m_outdatedAURStringList->count() == 1)
-    {
-      m_toolButtonAUR->setText("(1)");
-      m_toolButtonAUR->setToolTip(StrConstants::getOneNewUpdate());
-    }
-    else
-    {
-      m_toolButtonAUR->setText("(" + QString::number(m_outdatedAURPackagesNameVersion->count()) + ")");
-      m_toolButtonAUR->setToolTip(
-          StrConstants::getNewUpdates(m_outdatedAURPackagesNameVersion->count()));
-    }
-
-    m_toolButtonAUR->show();
-
-    //Let's disable menu for AUR packages updating if KaOS is running
-    if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-      m_menuToolButtonAUR->setEnabled(false);
-  }
-  else
-  {
-    m_toolButtonAUR->setText("");
-    m_toolButtonAUR->setToolTip("");
-    m_toolButtonAUR->hide();
-  }
-
-  ui->statusBar->addWidget(m_toolButtonAUR);
-}*/
-
-/*
  * Refreshes toolbar in order to insert/remove AUR tool button
  */
 void MainWindow::refreshToolBar()
@@ -818,14 +780,6 @@ void MainWindow::refreshToolBar()
  */
 void MainWindow::refreshStatusBarToolButtons()
 {
-  /*if (m_hasAURTool)
-  {
-    QFuture<AUROutdatedPackages *> f;
-    f = QtConcurrent::run(getOutdatedAURPackages);
-    g_fwOutdatedAURPackages.setFuture(f);
-    connect(&g_fwOutdatedAURPackages, SIGNAL(finished()), this, SLOT(showToolButtonAUR()));
-  }*/
-
   if (!isSearchByFileSelected() && !m_actionSwitchToAURTool->isChecked())
     ui->twGroups->setEnabled(true);
 }

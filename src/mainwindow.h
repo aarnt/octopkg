@@ -301,8 +301,6 @@ private:
 
 private slots:
   void initToolButtonPacman();
-  //void initToolButtonAUR();
-  //void showToolButtonAUR();
 
   //TreeView methods
   void copyFullPathToClipboard();

@@ -355,24 +355,6 @@ void MainWindow::initToolButtonPacman()
 }
 
 /*
- * Inits the AUR toolbutton, which warns the user about outdated foreign packages
- */
-/*void MainWindow::initToolButtonAUR()
-{
-  m_toolButtonAUR = new QToolButton(this);
-  m_toolButtonAUR->setIconSize(QSize(16, 16));
-  m_toolButtonAUR->setIcon(IconHelper::getIconForeignRed());
-  m_toolButtonAUR->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-  m_toolButtonAUR->setAutoRaise(true);
-  m_toolButtonAUR->hide();
-  m_menuToolButtonAUR = new QMenu(this);
-  m_menuToolButtonAUR->addAction(m_actionInstallAURUpdates);
-  m_toolButtonAUR->setPopupMode(QToolButton::MenuButtonPopup);
-  m_toolButtonAUR->setMenu(m_menuToolButtonAUR);
-  connect(m_toolButtonAUR, SIGNAL(clicked()), this, SLOT(outputOutdatedAURPackageList()));
-}*/
-
-/*
  * Sets the TabWidget Properties to the given index/tab and change app focus to its child widget
  */
 void MainWindow::changeTabWidgetPropertiesIndex(const int newIndex)
