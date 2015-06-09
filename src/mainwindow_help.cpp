@@ -81,8 +81,8 @@ void MainWindow::initTabHelpUsage()
   QString("<li>") + iconPath + "unrequired.png\"/> " +
      tr("An installed package (not required by others)") +
   QString("</li>") +
-  QString("<li>" + iconPath + "foreign_green.png\"/> ") +
-     tr("A foreign package, installed from") + " " + StrConstants::getForeignRepositoryName() +
+  //QString("<li>" + iconPath + "foreign_green.png\"/> ") +
+  //   tr("A foreign package, installed from") + " " + StrConstants::getForeignRepositoryName() +
   QString("</li>") +
   QString("<li>") + iconPath + "noninstalled.png\"/> " +
      tr("A non installed package") +
@@ -90,8 +90,8 @@ void MainWindow::initTabHelpUsage()
   QString("<li>") + iconPath + "outdated.png\"/> " +
      tr("An outdated package") +
   QString("</li>") +
-  QString("<li>") + iconPath + "foreign_red.png\"/> " +
-     tr("An outdated foreign package") +
+  //QString("<li>") + iconPath + "foreign_red.png\"/> " +
+  //   tr("An outdated foreign package") +
   QString("</li>") +
   QString("<li>") + iconPath + "newer.png\"/> " +
            tr("A newer than repository package") +
