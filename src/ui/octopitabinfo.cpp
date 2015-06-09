@@ -177,7 +177,9 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   if(! pid.downloadSizeAsString.isEmpty())
     html += "<tr><td>" + downloadSize + "</td><td>" + pid.downloadSizeAsString + "</td></tr>";
 
-  html += "<tr><td>" + installedSize + "</td><td>" + pid.installedSizeAsString + "</td></tr>";
+  if(pid.installedSizeAsString != "0.00B")
+    html += "<tr><td>" + installedSize + "</td><td>" + pid.installedSizeAsString + "</td></tr>";
+
   html += "<tr><td>" + maintainer + "</td><td>" + packagerName + "</td></tr>";
   html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
 
