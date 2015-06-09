@@ -840,5 +840,6 @@ void MainWindow::initActions()
   }
 #endif
 
+  ui->actionInstallLocalPackage->setVisible(false);
   toggleTransactionActions(true);
 }
