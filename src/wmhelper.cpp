@@ -314,7 +314,7 @@ QString WMHelper::getSUCommand(){
   }
   else if (isKDERunning()){
     if ((UnixCommand::getLinuxDistro() == ectn_PCBSD) && UnixCommand::hasTheExecutable(ctn_QSUDO)){
-      result = getQSUDOCommand();
+      result = getQSUDOCommand() + " ";
     }
     else if (UnixCommand::hasTheExecutable(ctn_KDESU)){
       result = getKDESUCommand();
@@ -431,28 +431,8 @@ void WMHelper::editFile( const QString& fileName, EditOptions opt ){
   QProcess *process = new QProcess(qApp->activeWindow());
   QString p;
 
-  LinuxDistro distro = UnixCommand::getLinuxDistro();
-  if (distro == ectn_ARCHBANGLINUX && UnixCommand::hasTheExecutable(ctn_ARCHBANG_EDITOR))
-  {
-    p = ctn_ARCHBANG_EDITOR + " " + fileName;
-  }
-  else if (distro == ectn_MOOOSLINUX && UnixCommand::hasTheExecutable(ctn_MOOOS_EDITOR))
-  {
-    p = ctn_MOOOS_EDITOR + " " + fileName;
-  }
-  else if (isXFCERunning() && (UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR) ||
-                               UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR_ALT))){
-
-    p = getXFCEEditor() + " " + fileName;
-  }
-  else if (isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_EDITOR)){
-    p += ctn_KDE_EDITOR + " " + fileName;
-  }
-  else if (isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE4_EDITOR)){
+  if (isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE4_EDITOR)){
     p += ctn_KDE4_EDITOR + " " + fileName;
-  }
-  else if (isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_EDITOR)){
-    p += ctn_TDE_EDITOR + " " + fileName;
   }
   else if (isMATERunning() && UnixCommand::hasTheExecutable(ctn_MATE_EDITOR)){
     p = ctn_MATE_EDITOR + " " + fileName;
@@ -460,12 +440,24 @@ void WMHelper::editFile( const QString& fileName, EditOptions opt ){
   else if (isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_EDITOR)){
     p = ctn_LXQT_EDITOR + " " + fileName;
   }
-  if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_EDITOR))
+  else if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_EDITOR))
   {
     p = ctn_ARCHBANG_EDITOR + " " + fileName;
   }
   else if (UnixCommand::hasTheExecutable(ctn_CINNAMON_EDITOR)){
     p = ctn_CINNAMON_EDITOR + " " + fileName;
+  }
+  else if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_EDITOR))
+  {
+    p = ctn_ARCHBANG_EDITOR + " " + fileName;
+  }
+  else if (isXFCERunning() && (UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR) ||
+                               UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR_ALT))){
+
+    p = getXFCEEditor() + " " + fileName;
+  }
+  else if (isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_EDITOR)){
+    p += ctn_TDE_EDITOR + " " + fileName;
   }
   else if (UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR) || UnixCommand::hasTheExecutable(ctn_XFCE_EDITOR_ALT)){
     p = getXFCEEditor() + " " + fileName;

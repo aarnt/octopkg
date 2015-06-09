@@ -94,7 +94,7 @@ QString UnixCommand::discoverBinaryPath(const QString& binary){
   env.insert("LC_MESSAGES", "C");
   proc.setProcessEnvironment(env);
 
-  proc.start("/bin/sh -c \"which " + binary + "\"");
+  proc.start("/usr/local/bin/bash -c \"which " + binary + "\"");
   proc.waitForFinished();
   QString res = proc.readAllStandardOutput();
 
@@ -579,7 +579,7 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
   QProcess proc;
   proc.setProcessChannelMode(QProcess::MergedChannels);
   QString sParam = "\"which " + exeName + "\"";
-  proc.start("/bin/sh -c " + sParam);
+  proc.start("/usr/local/bin/bash -c " + sParam);
   proc.waitForFinished();
 
   QString out = proc.readAllStandardOutput();

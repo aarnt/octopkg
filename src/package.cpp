@@ -635,7 +635,10 @@ QString Package::extractFieldFromInfo(const QString &field, const QString &pkgIn
       aux = pkgInfo.mid(fieldPos);
 
       fieldEnd = aux.indexOf("Shared Libs required");
-      fieldEnd2 = aux.indexOf("Annotations");
+
+      fieldEnd2 = aux.indexOf("Shared Libs provided");
+      if (fieldEnd2 == -1)
+        fieldEnd2 = aux.indexOf("Annotations");
 
       if((fieldEnd > fieldEnd2 && fieldEnd2 != -1) ||
          (fieldEnd == -1 && fieldEnd2 != -1)) fieldEnd = fieldEnd2;
