@@ -25,6 +25,8 @@
 #include "src/uihelper.h"
 #include "src/strconstants.h"
 
+#include <QRegularExpression>
+
 /*
  * The specific model which abstracts the package list data seem in the main treeview
  */
@@ -272,7 +274,7 @@ void PackageModel::applyFilter(ViewOptions pkgViewOptions, const QString& repo, 
   m_filterPackagesNotInThisGroup = group;
 
   QString r = repo;
-  r = r.remove(QRegExp("&"));
+  r = r.remove(QRegularExpression("&"));
   if (r == StrConstants::getAll()) r = "";
 
   m_filterPackagesNotInThisRepo = r;

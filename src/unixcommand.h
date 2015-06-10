@@ -103,6 +103,8 @@ public:
 
   static QByteArray getPackageGroups();
   static QByteArray getPackagesFromGroup(const QString &groupName);
+
+  static QByteArray getInstalledPackages();
   static QByteArray getTargetUpgradeList(const QString &pkgName = "");
   static QByteArray getTargetRemovalList(const QString &pkgName, const QString &removeCommand);
 

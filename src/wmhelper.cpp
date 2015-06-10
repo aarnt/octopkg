@@ -259,7 +259,12 @@ QString WMHelper::getXFCEEditor(){
  * Retrieves the KDESU command...
  */
 QString WMHelper::getKDESUCommand(){
-  QString result = ctn_KDESU;
+  QString result = "";
+
+  if (UnixCommand::getLinuxDistro() == ectn_PCBSD)
+    result = "/usr/local/lib/kde4/libexec/kdesu";
+  else
+    result = ctn_KDESU;
 
   result += " -d ";
   result += " -t ";
@@ -312,12 +317,15 @@ QString WMHelper::getSUCommand(){
   if (isXFCERunning() && (UnixCommand::hasTheExecutable(ctn_GKSU_2))){
     result = getGKSUCommand();
   }
-  else if (isKDERunning()){
-    if ((UnixCommand::getLinuxDistro() == ectn_PCBSD) && UnixCommand::hasTheExecutable(ctn_QSUDO)){
-      result = getQSUDOCommand() + " ";
-    }
-    else if (UnixCommand::hasTheExecutable(ctn_KDESU)){
-      result = getKDESUCommand();
+  else if (isKDERunning()){        
+    if (UnixCommand::getLinuxDistro() == ectn_PCBSD){
+      QFile kdesu("/usr/local/lib/kde4/libexec/kdesu");
+      if (kdesu.exists()){
+        result = getKDESUCommand();
+      }
+      else if (UnixCommand::hasTheExecutable(ctn_QSUDO)){
+        result = getQSUDOCommand() + " ";
+      }
     }
   }
   else if (isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDESU)){

@@ -54,13 +54,7 @@ public:
   }
 
   static QString getForeignRepositoryName(){
-    if (UnixCommand::getLinuxDistro() == ectn_CHAKRA)
-      return QLatin1String( "CCR" );
-
-    if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-      return QLatin1String( "KCP" );
-
-    return QLatin1String( "AUR" );
+    return "ALL";
   }
 
   static QString getForeignPkgRepositoryName(){

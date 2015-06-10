@@ -30,6 +30,7 @@
 #include <QByteArray>
 #include <QTextStream>
 #include <QtNetwork/QNetworkInterface>
+#include <QRegularExpression>
 #include <QDebug>
 
 /*
@@ -456,6 +457,16 @@ QByteArray UnixCommand::getPackagesFromGroup(const QString &groupName)
 }
 
 /*
+ * Retrieves the list of installed packages in a special format for TargetList
+ */
+QByteArray UnixCommand::getInstalledPackages()
+{
+  QString args = "query '%n-%v %n#%v";
+  QByteArray res = performQuery(args);
+  return res;
+}
+
+/*
  * Retrieves the list of targets needed to update the entire system or a given package
  */
 QByteArray UnixCommand::getTargetUpgradeList(const QString &pkgName)
@@ -464,12 +475,12 @@ QByteArray UnixCommand::getTargetUpgradeList(const QString &pkgName)
 
   if(!pkgName.isEmpty())
   {
-    args = "--print-format \"%n %v %s\" -Sp " + pkgName;
+    args = "install -n -f " + pkgName;
   }
-  else
+  /*else
   {
     args = "--print-format \"%n %v %s\" -Spu";
-  }
+  }*/
 
   QByteArray res = performQuery(args);
   return res;
@@ -731,7 +742,7 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
   }
   else
   {
-    command = WMHelper::getSUCommand() + "\"" + pCommand + "\"";
+    command = WMHelper::getSUCommand() + /*"\"" +*/ pCommand /*+ "\""*/;
   }
 
   m_process->start(command);
@@ -937,7 +948,7 @@ QStringList UnixCommand::getFieldFromPacmanConf(const QString &fieldName)
         int newLine = ignorePkg.indexOf("\n");
 
         ignorePkg = ignorePkg.mid(equal+1, newLine-(equal+1)).trimmed();
-        result = ignorePkg.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+        result = ignorePkg.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
         break;
       }
       else if (str != "#")

@@ -185,7 +185,9 @@ void MainWindow::execSystemTrayActivated(QSystemTrayIcon::ActivationReason ar)
 void MainWindow::initPackageGroups()
 {
   //This is the twGroups init code
-  ui->twGroups->setColumnCount(1);
+  ui->twGroups->setVisible(false);
+
+  /*ui->twGroups->setColumnCount(1);
   ui->twGroups->setHeaderLabel(StrConstants::getCategories());
   ui->twGroups->header()->setSortIndicatorShown(false);
 
@@ -204,7 +206,7 @@ void MainWindow::initPackageGroups()
   ui->twGroups->setStyleSheet(StrConstants::getTreeViewCSS());
   ui->twGroups->setSelectionMode(QAbstractItemView::SingleSelection);
 
-  connect(ui->twGroups, SIGNAL(itemSelectionChanged()), this, SLOT(onPackageGroupChanged()));
+  connect(ui->twGroups, SIGNAL(itemSelectionChanged()), this, SLOT(onPackageGroupChanged()));*/
 }
 
 /*
@@ -735,10 +737,7 @@ void MainWindow::initActions()
   connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
   connect(ui->actionRemove, SIGNAL(triggered()), this, SLOT(insertIntoRemovePackage()));
   connect(ui->actionInstall, SIGNAL(triggered()), this, SLOT(insertIntoInstallPackage()));
-  //connect(ui->actionInstallAUR, SIGNAL(triggered()), this, SLOT(doInstallAURPackage()));
   connect(ui->actionFindFileInPackage, SIGNAL(triggered()), this, SLOT(findFileInPackage()));
-  connect(ui->actionRemoveGroup, SIGNAL(triggered()), this, SLOT(insertGroupIntoRemovePackage()));
-  connect(ui->actionInstallGroup, SIGNAL(triggered()), this, SLOT(insertGroupIntoInstallPackage()));
   connect(ui->actionCommit, SIGNAL(triggered()), this, SLOT(commitTransaction()));
   connect(ui->actionCancel, SIGNAL(triggered()), this, SLOT(cancelTransaction()));
   connect(ui->actionGetNews, SIGNAL(triggered()), this, SLOT(refreshDistroNews()));
@@ -766,8 +765,6 @@ void MainWindow::initActions()
   ui->actionInstall->setIcon(IconHelper::getIconInstallItem());
   ui->actionRemove->setIcon(IconHelper::getIconRemoveItem());
   ui->actionGetNews->setIcon(IconHelper::getIconGetNews());
-  ui->actionRemoveGroup->setIcon(IconHelper::getIconRemoveItem());
-  ui->actionInstallGroup->setIcon(IconHelper::getIconInstallItem());
   ui->actionCollapseItem->setIcon(IconHelper::getIconCollapse());
   ui->actionExpandItem->setIcon(IconHelper::getIconExpand());
   ui->actionCollapseAllItems->setIcon(IconHelper::getIconCollapse());
@@ -780,7 +777,6 @@ void MainWindow::initActions()
   ui->actionRemoveTransactionItems->setIcon(IconHelper::getIconClose());
   ui->actionFindFileInPackage->setIcon(IconHelper::getIconFindFileInPackage());
   ui->actionOpenRootTerminal->setIcon(IconHelper::getIconTerminal());
-  ui->actionInstallAUR->setIcon(IconHelper::getIconInstallItem());
 
   //Actions for the View menu
   connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
@@ -801,7 +797,7 @@ void MainWindow::initActions()
   if (WMHelper::isXFCERunning())
   {
     //Loop through all actions and set their icons (if any) visible to menus.
-    foreach(QAction* ac, this->findChildren<QAction*>(QRegExp("(m_a|a)ction\\S*")))
+    foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
     {
       if (ac) ac->setIconVisibleInMenu(true);
     }
@@ -809,7 +805,7 @@ void MainWindow::initActions()
 
 #if QT_VERSION >= 0x050000
   QString text;
-  foreach(QAction* ac, this->findChildren<QAction*>(QRegExp("(m_a|a)ction\\S*")))
+  foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
   {
     text = ac->text().remove("&");
     ac->setText(qApp->translate("MainWindow", text.toUtf8(), 0));

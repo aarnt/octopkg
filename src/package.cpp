@@ -28,6 +28,7 @@
 #include <QList>
 #include <QFile>
 #include <QDebug>
+#include <QRegularExpression>
 
 /*
  * This class abstracts all the relevant package information and services
@@ -62,8 +63,8 @@ QString Package::getBaseName( const QString& p )
 QString Package::makeURLClickable( const QString &s )
 {
 	QString sb = s;
-	QRegExp rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
-	QRegExp rx1("^|[\\s]+(www\\.)(\\S)+[^\"|)|(|.|\\s|\\n]"); 
+  QRegExp rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
+  QRegExp rx1("^|[\\s]+(www\\.)(\\S)+[^\"|)|(|.|\\s|\\n]");
 
   rx.setCaseSensitivity( Qt::CaseInsensitive );
 	rx1.setCaseSensitivity( Qt::CaseInsensitive );
@@ -94,16 +95,10 @@ QString Package::makeURLClickable( const QString &s )
 		QString ns;
 		if (s1[0] == '\n') ns += "\n";
 
-		int blanks = s1.count(	QRegExp("^|[\\s]+") );
+    int blanks = s1.count(QRegExp("^|[\\s]+"));
 		for (int i=0; i<blanks; i++) ns += " ";
 
-    if (UnixCommand::getLinuxDistro() == ectn_MANJAROLINUX)
-    {
-      ns += "<a style=\"color:\'#425823\'\" href=\"http://" +
-          s1.trimmed() + "\">" + s1.trimmed() + "</a>";
-    }
-    else
-      ns += "<a href=\"http://" + s1.trimmed() + "\">" + s1.trimmed() + "</a>";
+    ns += "<a href=\"http://" + s1.trimmed() + "\">" + s1.trimmed() + "</a>";
 
 		sb.replace( ini, s1.length(), ns);
 		search = ini + (2*s1.length()) + 15;	
@@ -190,7 +185,7 @@ double Package::strToKBytes(QString size)
 QSet<QString>* Package::getUnrequiredPackageList()
 {
   QString unrequiredPkgList = UnixCommand::getUnrequiredPackageList();
-  QStringList packageTuples = unrequiredPkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = unrequiredPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QSet<QString>* res = new QSet<QString>();
 
   foreach(QString packageTuple, packageTuples)
@@ -208,7 +203,7 @@ QSet<QString>* Package::getUnrequiredPackageList()
 QStringList *Package::getOutdatedStringList()
 {
   QString outPkgList = UnixCommand::getOutdatedPackageList();
-  QStringList packageTuples = outPkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
   QStringList ignorePkgList = UnixCommand::getIgnorePkgsFromPacmanConf();
 
@@ -245,7 +240,7 @@ QStringList *Package::getOutdatedStringList()
     return res;
 
   QString outPkgList = UnixCommand::getOutdatedAURPackageList();
-  QStringList packageTuples = outPkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList ignorePkgList = UnixCommand::getIgnorePkgsFromPacmanConf();
 
   foreach(QString packageTuple, packageTuples)
@@ -312,7 +307,7 @@ QStringList *Package::getOutdatedStringList()
 QStringList *Package::getPackageGroups()
 {
   QString packagesFromGroup = UnixCommand::getPackageGroups();
-  QStringList packageTuples = packagesFromGroup.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
   foreach(QString packageTuple, packageTuples)
@@ -335,7 +330,7 @@ QStringList *Package::getPackageGroups()
 QStringList *Package::getPackagesOfGroup(const QString &groupName)
 {
   QString packagesFromGroup = UnixCommand::getPackagesFromGroup(groupName);
-  QStringList packageTuples = packagesFromGroup.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
   foreach(QString packageTuple, packageTuples)
@@ -351,34 +346,25 @@ QStringList *Package::getPackagesOfGroup(const QString &groupName)
  * Retrieves the list of targets needed to upgrade the entire system OR
  * to install/reinstall/upgrade a given package
  */
-QList<PackageListData> *Package::getTargetUpgradeList(const QString &pkgName)
+TransactionInfo Package::getTargetUpgradeList(const QString &pkgName)
 {
   QString targets = UnixCommand::getTargetUpgradeList(pkgName);
-  QStringList packageTuples = targets.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList infoTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  TransactionInfo res;
+  res.packages = new QStringList();
 
-  QList<PackageListData> *res = new QList<PackageListData>();
-  packageTuples.sort();
-
-  foreach(QString packageTuple, packageTuples)
+  foreach(QString infoTuple, infoTuples)
   {
-    //TODO: Need to handle when this list has "::" conflict items!
-    if(packageTuple.indexOf("::")!=-1)
+    int pos = infoTuple.indexOf("to be downloaded");
+    int tab = infoTuple.indexOf("\t");
+    if (pos != -1)
     {
-      continue;
+      res.sizeToDownload = infoTuple.left(pos).trimmed();
     }
-
-    PackageListData ld;
-    QStringList data = packageTuple.split(" ");
-    if (data.count() == 3)
+    if (tab != -1) //We are dealing with packages HERE!
     {
-      ld = PackageListData(data.at(0), data.at(1), data.at(2));
+      res.packages->append(infoTuple.remove(QRegularExpression("\t")).trimmed());
     }
-    else if (data.count() == 1)
-    {
-      ld = PackageListData(data.at(0), "", 0);
-    }
-
-    res->append(ld);
   }
 
   return res;
@@ -390,7 +376,7 @@ QList<PackageListData> *Package::getTargetUpgradeList(const QString &pkgName)
 QStringList *Package::getTargetRemovalList(const QString &pkgName, const QString &removeCommand)
 {
   QString targets = UnixCommand::getTargetRemovalList(pkgName, removeCommand);
-  QStringList packageTuples = targets.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
   foreach(QString packageTuple, packageTuples)
@@ -408,7 +394,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName, const QString
 QList<PackageListData> *Package::getForeignPackageList()
 {
   QString foreignPkgList = UnixCommand::getForeignPackageList();
-  QStringList packageTuples = foreignPkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = foreignPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QList<PackageListData> * res = new QList<PackageListData>();
 
   foreach(QString packageTuple, packageTuples)
@@ -436,7 +422,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
   double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
   QString pkgList = UnixCommand::getPackageList(packageName);
-  QStringList packageTuples = pkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QList<PackageListData> * res = new QList<PackageListData>();
 
   if(!pkgList.isEmpty())
@@ -492,7 +478,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
     return res;
 
   QString pkgList = UnixCommand::getAURPackageList(searchString);
-  QStringList packageTuples = pkgList.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
 
   pkgDescription = "";
   foreach(QString packageTuple, packageTuples)
@@ -567,7 +553,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
 
         int i = packageTuple.indexOf("[installed:");
         pkgOutVersion = packageTuple.mid(i+11);
-        pkgOutVersion = pkgOutVersion.remove(QRegExp("\\].*")).trimmed();
+        pkgOutVersion = pkgOutVersion.remove(QRegularExpression("\\].*")).trimmed();
       }
       else
       {
@@ -808,7 +794,7 @@ double Package::getDownloadSize(const QString &pkgInfo)
 {
   QString aux = extractFieldFromInfo("Download Size", pkgInfo);
   bool isMega = (aux.indexOf("MiB", Qt::CaseInsensitive) != -1);
-  aux = aux.section(QRegExp("\\s"), 0, 0);
+  aux = aux.section(QRegularExpression("\\s"), 0, 0);
 
   bool ok;
   double res = aux.toDouble(&ok);
@@ -838,7 +824,7 @@ double Package::getInstalledSize(const QString &pkgInfo)
 {
   QString aux = extractFieldFromInfo("Flat size", pkgInfo);
   bool isMega = (aux.indexOf("MiB", Qt::CaseInsensitive) != -1);
-  aux = aux.section(QRegExp("\\s"), 0, 0);
+  aux = aux.section(QRegularExpression("\\s"), 0, 0);
   bool ok;
   double res = aux.toDouble(&ok);
 
@@ -1193,7 +1179,7 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
     }
     if (isInstalled)
     {
-      rsl.replaceInStrings(QRegExp(pkgName + " "), "");
+      rsl.replaceInStrings(QRegularExpression(pkgName + " "), "");
       rsl.sort();
       slResult = rsl;
     }
@@ -1289,6 +1275,5 @@ bool Package::hasPkgNGDatabase()
 bool Package::isForbidden(const QString pkgName)
 {
   QStringList forbiddenPkgs = { "pcbsd-base", "pcbsd-meta-kde", "pcbsd-meta-virtualboxguest", "pkg" };
-
   return forbiddenPkgs.contains(pkgName);
 }

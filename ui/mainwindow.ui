@@ -344,24 +344,6 @@
     <string>Ctrl+G</string>
    </property>
   </action>
-  <action name="actionRemoveGroup">
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/resources/images/toremove.png</normaloff>:/resources/images/toremove.png</iconset>
-   </property>
-   <property name="text">
-    <string>Remove group</string>
-   </property>
-  </action>
-  <action name="actionInstallGroup">
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/resources/images/toinstall.png</normaloff>:/resources/images/toinstall.png</iconset>
-   </property>
-   <property name="text">
-    <string>Install group</string>
-   </property>
-  </action>
   <action name="actionCollapseItem">
    <property name="icon">
     <iconset resource="../resources.qrc">
@@ -506,15 +488,6 @@
   <action name="actionInstallLocalPackage">
    <property name="text">
     <string>&amp;Install local package...</string>
-   </property>
-  </action>
-  <action name="actionInstallAUR">
-   <property name="icon">
-    <iconset resource="../resources.qrc">
-     <normaloff>:/resources/images/toinstall.png</normaloff>:/resources/images/toinstall.png</iconset>
-   </property>
-   <property name="text">
-    <string>Install</string>
    </property>
   </action>
   <action name="actionPacmanLogViewer">

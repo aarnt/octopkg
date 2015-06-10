@@ -26,10 +26,10 @@
 #include <iostream>
 
 #include "QtSolutions/qtsingleapplication.h"
-//#include <QtGui>
 #include <QMessageBox>
 #include <QTranslator>
 #include <QResource>
+
 
 #define NO_GTK_STYLE
 
@@ -47,10 +47,10 @@ int main(int argc, char *argv[])
   for (int c=1; c<argc; c++)
   {
     arg = argv[c];
-    if (arg.contains(QRegExp("pkg.tar.[gz|xz]")))
+    /*if (arg.contains(QRegularExpression("pkg.tar.[gz|xz]")))
     {
       packagesToInstall += arg + ",";
-    }
+    }*/
   }
 
   QtSingleApplication app( StrConstants::getApplicationName(), argc, argv );

@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QTextStream>
 #include <iostream>
+#include <QDebug>
 
 /*
  * This class abstracts all the relevant terminal related code
@@ -378,8 +379,9 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
         cmd = "dbus-launch " + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName();
       }
       else
-      {
+      {        
         cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
+        //qDebug() << cmd;
       }
 
       m_process->start(cmd);

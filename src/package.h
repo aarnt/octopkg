@@ -31,7 +31,7 @@
 #include <QHash>
 #include <QSet>
 
-const QString ctn_TEMP_ACTIONS_FILE ( QDir::tempPath() + QDir::separator() + ".qt_temp_" );
+const QString ctn_TEMP_ACTIONS_FILE ( QDir::homePath() + QDir::separator() + ".config/octopkg" + QDir::separator() + ".qt_temp_" );
 const QString ctn_PACMAN_DATABASE_DIR = "/var/lib/pacman";
 const QString ctn_PKGNG_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
 
@@ -59,7 +59,15 @@ struct PackageListData{
                     status(ectn_NON_INSTALLED){
   }
 
-  PackageListData(QString n, QString v, QString dSize) 
+  PackageListData(QString n, QString v)
+    : name(n),
+      version(v),
+      downloadSize(0.0),
+      popularity(0),
+      status(ectn_NON_INSTALLED){
+  }
+
+  PackageListData(QString n, QString v, QString dSize)
                                     : name(n), 
                                     version(v), 
                                     downloadSize(QString(dSize).toDouble()),
@@ -90,6 +98,7 @@ struct PackageListData{
 
   PackageListData(QString n, QString o, QString v, QString c, PackageStatus pkgStatus, double iSize, double dSize)
                                     : name(n),
+                                    repository(""),
                                     origin(o),
                                     version(v),
                                     comment(c),
@@ -97,6 +106,12 @@ struct PackageListData{
                                     downloadSize(dSize),
                                     status(pkgStatus){
   }
+};
+
+struct TransactionInfo{
+  QStringList *packages;
+  QString sizeToInstall;
+  QString sizeToDownload;
 };
 
 struct PackageInfoData{
@@ -142,7 +157,7 @@ class Package{
     static QStringList * getOutdatedStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
-    static QList<PackageListData> * getTargetUpgradeList(const QString &pkgName = "");
+    static TransactionInfo getTargetUpgradeList(const QString &pkgName = "");
     static QStringList * getTargetRemovalList(const QString &pkgName, const QString &removeCommand);
 
     static QList<PackageListData> *getForeignPackageList();

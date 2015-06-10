@@ -216,7 +216,7 @@ bool PackageRepository::memberListOfGroupsEquals(const QStringList& listOfGroups
  */
 PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bool isRequired)
   : required(isRequired), name(pkg.name),
-    repository(pkg.repository.isEmpty() ? StrConstants::getForeignRepositoryName() : pkg.repository),
+    repository(""),
     origin(pkg.origin),
     version(pkg.version), description(pkg.description.toLatin1()), // octopi wants it converted to utf8
     outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize), installedSize(pkg.installedSize),

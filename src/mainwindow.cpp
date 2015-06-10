@@ -558,17 +558,11 @@ void MainWindow::execContextMenuPackages(QPoint point)
     bool allInstallable = true;
     bool allRemovable = true;    
     int numberOfSelPkgs = selectedRows.count();
-    int numberOfAUR = 0;
 
     foreach(QModelIndex item, selectedRows)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
-      if (package->repository == StrConstants::getForeignRepositoryName())
-      {
-        allInstallable = false;
-        numberOfAUR++;
-      }
       if (package->installed() == false || package->required || Package::isForbidden(package->name))
       {
         allRemovable = false;
@@ -577,7 +571,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
 
     if (allInstallable) // implicitly foreign packages == 0
     {
-      if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
+      //if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
       menu->addAction(ui->actionInstall);
 
       if (!isAllCategoriesSelected() && !isAURGroupSelected()) //&& numberOfSelPkgs > 1)
@@ -591,10 +585,10 @@ void MainWindow::execContextMenuPackages(QPoint point)
         }
       }
     }
-    else if (allInstallable == false && numberOfAUR == numberOfSelPkgs)
+    /*else if (allInstallable == false && numberOfAUR == numberOfSelPkgs)
     {
       menu->addAction(ui->actionInstallAUR); // installs directly
-    }
+    }*/
 
     if (allRemovable)
     {
@@ -608,7 +602,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
         {
           //If we select all packages, let's subtract the remove action...
           menu->removeAction(ui->actionRemove);
-          menu->addAction(ui->actionRemoveGroup);
+          //menu->addAction(ui->actionRemoveGroup);
         }
       }
     }

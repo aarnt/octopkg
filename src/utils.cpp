@@ -35,6 +35,7 @@
 #include <QDomDocument>
 #include <QProcess>
 #include <QTimer>
+#include <QRegularExpression>
 
 /*
  * The needed constructor
@@ -475,7 +476,7 @@ QString utils::parseDistroNews()
             else if (eText.tagName() == "pubDate")
             {
               itemPubDate = eText.text();
-              itemPubDate = itemPubDate.remove(QRegExp("\\n"));
+              itemPubDate = itemPubDate.remove(QRegularExpression("\\n"));
               int pos = itemPubDate.indexOf("+");
 
               if (pos > -1)

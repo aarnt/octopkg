@@ -37,6 +37,7 @@
 #include <QMessageBox>
 #include <QStandardItem>
 #include <QTextBrowser>
+#include <QDebug>
 
 /*
  * Watches the state of tvTransaction treeview to see if Commit/Cancel actions must be activated/deactivated
@@ -313,10 +314,6 @@ void MainWindow::insertIntoRemovePackage()
       insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
     }
   }
-  /*else
-  {
-    doRemoveAURPackage();
-  }*/
 }
 
 /*
@@ -342,7 +339,7 @@ void MainWindow::insertIntoInstallPackage()
 
     QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
     //First, let's see if we are dealing with a package group
-    if(!isAllCategoriesSelected())
+    /*if(!isAllCategoriesSelected())
     {
       //If we are trying to insert all the group's packages, why not insert the entire group?
       if(selectedRows.count() == m_packageModel->getPackageCount())
@@ -350,25 +347,21 @@ void MainWindow::insertIntoInstallPackage()
         insertInstallPackageIntoTransaction(getSelectedCategory());
         return;
       }
-    }
+    }*/
 
     foreach(QModelIndex item, selectedRows)
-    {
+    {            
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
       if (package == NULL) {
         assert(false);
         continue;
       }
 
-      insertIntoInstallPackageOptDeps(package->name); //Do we have any deps???
-
-      insertInstallPackageIntoTransaction(package->repository + "/" + package->name);
+      //insertIntoInstallPackageOptDeps(package->name); //Do we have any deps???
+      //insertInstallPackageIntoTransaction(package->repository + "/" + package->name);
+      insertInstallPackageIntoTransaction(package->name);
     }
   }
-  /*else
-  {
-    doInstallAURPackage();
-  }*/
 }
 
 /*
@@ -672,43 +665,11 @@ bool MainWindow::isSUAvailable()
 }
 
 /*
- * This is KaOS specific code which uses mirror-check tool.
- */
-/*void MainWindow::doMirrorCheck()
-{
-  if (m_commandExecuting != ectn_NONE ||
-      !UnixCommand::hasInternetConnection()) return;
-
-  m_commandExecuting = ectn_MIRROR_CHECK;
-  disableTransactionActions();
-
-  m_unixCommand = new UnixCommand(this);
-
-  clearTabOutput();
-  writeToTabOutput("<b>" + StrConstants::getSyncMirror() + "</b><br><br>");
-
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError()),
-                   this, SLOT( actionsProcessReadOutputErrorMirrorCheck()));
-
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                   this, SLOT( actionsProcessReadOutputMirrorCheck()));
-  QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-
-  QString command = ctn_MIRROR_CHECK_APP;
-  m_unixCommand->executeCommandAsNormalUser(command);
-}*/
-
-/*
- * Does a repository sync with "pacman -Sy" !
+ * Does a repository sync with "pkg update -f" !
  */
 void MainWindow::doSyncDatabase()
 {
   if (!doRemovePacmanLockFile()) return;
-
-  //Let's synchronize kcp database too...
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS && UnixCommand::hasTheExecutable("kcp"))
-    UnixCommand::execCommandAsNormalUser("kcp -u");
 
   m_commandExecuting = ectn_SYNC_DATABASE;
   disableTransactionActions();
@@ -722,58 +683,9 @@ void MainWindow::doSyncDatabase()
   QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
                    this, SLOT( actionsProcessRaisedError() ));
 
-  QString command;
-
-  if (UnixCommand::isRootRunning())
-    command = "pacman -Sy";
-  else
-    command = "pacman -Syy";
-
+  QString command = "pkg update -f";
   m_unixCommand->executeCommand(command);
 }
-
-/*
- * Updates the outdated AUR packages with "yaourt -S <list>"
- */
-/*void MainWindow::doAURUpgrade()
-{
-  QString listOfTargets;
-  QString auxPkg;
-
-  foreach(QString pkg, *m_outdatedAURStringList)
-  {
-    auxPkg = pkg;
-    auxPkg.remove("[1;39m");
-    auxPkg.remove("[0m");
-    auxPkg.remove("");
-    listOfTargets += auxPkg + " ";
-  }
-
-  m_lastCommandList.clear();
-
-  if (StrConstants::getForeignRepositoryToolName() == "pacaur")
-  {
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() + " -Sa " + listOfTargets + ";");
-  }
-  else if (StrConstants::getForeignRepositoryToolName() == "yaourt")
-  {
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() + " -S " + listOfTargets + ";");
-  }
-
-  m_lastCommandList.append("echo -e;");
-  m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
-
-  disableTransactionActions();
-  m_unixCommand = new UnixCommand(this);
-
-  QObject::connect(m_unixCommand, SIGNAL( startedTerminal() ), this, SLOT( actionsProcessStarted()));
-  QObject::connect(m_unixCommand, SIGNAL( finishedTerminal ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-
-  m_commandExecuting = ectn_RUN_IN_TERMINAL;
-  m_unixCommand->runCommandInTerminalAsNormalUser(m_lastCommandList);
-}
-*/
 
 /*
  * doSystemUpgrade shared code ...
@@ -806,6 +718,7 @@ void MainWindow::prepareSystemUpgrade()
  */
 void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 {
+/*
   if (isAURGroupSelected() || m_systemUpgradeDialog) return;
 
   if(m_callSystemUpgrade && m_numberOfOutdatedPackages == 0)
@@ -921,6 +834,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       }
     }
   }
+*/
 }
 
 /*
@@ -929,6 +843,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
  */
 void MainWindow::doRemoveAndInstall()
 {
+/*
   QString listOfRemoveTargets = getTobeRemovedPackages();
   QStringList *pRemoveTargets = Package::getTargetRemovalList(listOfRemoveTargets, m_removeCommand);
   QString removeList;
@@ -1021,7 +936,7 @@ void MainWindow::doRemoveAndInstall()
         "; pacman -S --noconfirm " + listOfInstallTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pacman -R " /*+ m_removeCommand + " "*/ + listOfRemoveTargets + ";");
+    m_lastCommandList.append("pacman -R " + listOfRemoveTargets + ";");
     m_lastCommandList.append("pacman -S " + listOfInstallTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
@@ -1049,6 +964,7 @@ void MainWindow::doRemoveAndInstall()
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
+*/
 }
 
 /*
@@ -1137,7 +1053,7 @@ bool MainWindow::doRemovePacmanLockFile()
   //If there are no means to run the actions, we must warn!
   if (!isSUAvailable()) return false;
 
-  QString lockFilePath("/var/lib/pacman/db.lck");
+  /*QString lockFilePath("/var/lib/pacman/db.lck");
   QFile lockFile(lockFilePath);
 
   if (lockFile.exists())
@@ -1155,128 +1071,10 @@ bool MainWindow::doRemovePacmanLockFile()
       UnixCommand::execCommand("rm " + lockFilePath);
       writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedOK() + "</b>");
     }
-  }
+  }*/
 
   return true;
 }
-
-/*
- * Installs the selected package with "yaourt -S"
- */
-/*void MainWindow::doInstallAURPackage()
-{
-  const QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
-  if (selectionModel == NULL || selectionModel->selectedRows().count() < 1 || m_hasAURTool == false) {
-    std::cerr << "Octopi could not install selection using AUR tool" << std::endl;
-    return;
-  }
-  QString listOfTargets;
-  QModelIndexList selectedRows = selectionModel->selectedRows();
-  foreach(QModelIndex item, selectedRows)
-  {
-    const PackageRepository::PackageData*const package = m_packageModel->getData(item);
-    if (package == NULL) {
-      assert(false);
-      continue;
-    }
-    if (package->repository != StrConstants::getForeignRepositoryName()) {
-      std::cerr << "Octopi could not install selection using " <<
-                   StrConstants::getForeignRepositoryToolName().toLatin1().data() << std::endl;
-      return;
-    }
-
-    if (StrConstants::getForeignRepositoryToolName() != "pacaur" &&
-        StrConstants::getForeignRepositoryToolName() != "kcp")
-      listOfTargets += StrConstants::getForeignRepositoryTargetPrefix() + package->name + " ";
-    else
-      listOfTargets += package->name + " ";
-
-    listOfTargets += package->name + " ";
-  }
-
-  if (listOfTargets.isEmpty()) {
-    std::cerr << "Octopi could not install selection using " <<
-                 StrConstants::getForeignRepositoryToolName().toLatin1().data() << std::endl;
-    return;
-  }
-
-  m_lastCommandList.clear();
-
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() + " -i " + listOfTargets + ";");
-  else if (StrConstants::getForeignRepositoryToolName() == "pacaur")
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() + " -Sa " + listOfTargets + ";");
-  else if (StrConstants::getForeignRepositoryToolName() == "yaourt" ||
-           StrConstants::getForeignRepositoryToolName() == "ccr")
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() + " -S " + listOfTargets + ";");
-
-  m_lastCommandList.append("echo -e;");
-  m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
-
-  disableTransactionActions();
-  m_unixCommand = new UnixCommand(this);
-
-  QObject::connect(m_unixCommand, SIGNAL( startedTerminal() ), this, SLOT( actionsProcessStarted()));
-  QObject::connect(m_unixCommand, SIGNAL( finishedTerminal ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-
-  m_commandExecuting = ectn_RUN_IN_TERMINAL;
-  m_unixCommand->runCommandInTerminalAsNormalUser(m_lastCommandList);
-}
-*/
-
-/*
- * Removes the selected package with "yaourt -R"
- */
-/*void MainWindow::doRemoveAURPackage()
-{
-  //If there are no means to run the actions, we must warn!
-  if (!isSUAvailable()) return;
-
-  QString listOfTargets;
-  QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
-  foreach(QModelIndex item, selectedRows)
-  {
-    const PackageRepository::PackageData*const package = m_packageModel->getData(item);
-    if (package == NULL) {
-      assert(false);
-      continue;
-    }
-
-    listOfTargets += package->name + " ";
-  }
-
-  m_lastCommandList.clear();
-
-  if (StrConstants::getForeignRepositoryToolName() == "ccr" ||
-      StrConstants::getForeignRepositoryToolName() == "kcp")
-  {
-    m_lastCommandList.append("pacman -" + m_removeCommand + " " + listOfTargets + ";");
-  }
-  else
-  {
-    m_lastCommandList.append(StrConstants::getForeignRepositoryToolName() +
-                             " -" + m_removeCommand + " " + listOfTargets + ";");
-  }
-
-  m_lastCommandList.append("echo -e;");
-  m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
-
-  disableTransactionActions();
-  m_unixCommand = new UnixCommand(this);
-
-  QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                   this, SLOT( actionsProcessReadOutput() ));
-  QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                   this, SLOT( actionsProcessRaisedError() ));
-
-  m_commandExecuting = ectn_RUN_IN_TERMINAL;
-  m_unixCommand->runCommandInTerminal(m_lastCommandList);
-}
-*/
 
 /*
  * Installs ALL the packages selected by the user with "pacman -S (INCLUDING DEPENDENCIES)" !
@@ -1284,37 +1082,20 @@ bool MainWindow::doRemovePacmanLockFile()
 void MainWindow::doInstall()
 {
   QString listOfTargets = getTobeInstalledPackages();
-  QList<PackageListData> *targets = Package::getTargetUpgradeList(listOfTargets);
+  TransactionInfo ti = Package::getTargetUpgradeList(listOfTargets);
+  QStringList *targets = ti.packages;
   QString list;
-
-  double totalDownloadSize = 0;
-  foreach(PackageListData target, *targets)
-  {
-    totalDownloadSize += target.downloadSize;
-    list = list + target.name + "-" + target.version + "\n";
-  }
-  list.remove(list.size()-1, 1);
-
-  totalDownloadSize = totalDownloadSize / 1024;
-  QString ds = Package::kbytesToSize(totalDownloadSize);
-
-  if (list.count() == 0)
-  {
-    targets->append(PackageListData(listOfTargets, "", 0));
-    list.append(listOfTargets);
-  }
-
+  QString ds = ti.sizeToDownload;
   TransactionDialog question(this);
+
+  foreach(QString target, *targets)
+  {
+    list = list + target + "\n";
+  }
 
   if(targets->count()==1)
   {
-    if (targets->at(0).name.indexOf("HoldPkg was found in") != -1)
-    {
-      QMessageBox::warning(
-            this, StrConstants::getAttention(), StrConstants::getWarnHoldPkgFound(), QMessageBox::Ok);
-      return;
-    }
-    else question.setText(StrConstants::getRetrievePackage() +
+    question.setText(StrConstants::getRetrievePackage() +
                           "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
   }
   else
@@ -1331,10 +1112,10 @@ void MainWindow::doInstall()
     if (!doRemovePacmanLockFile()) return;
 
     QString command;
-    command = "pacman -S --noconfirm " + listOfTargets;
+    command = "pkg install -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pacman -S " + listOfTargets + ";");
+    m_lastCommandList.append("pkg install -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1356,7 +1137,7 @@ void MainWindow::doInstall()
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {
-      m_commandExecuting = ectn_RUN_IN_TERMINAL;
+      m_commandExecuting = ectn_RUN_IN_TERMINAL;      
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
@@ -1525,11 +1306,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   }
 
   ui->actionInstall->setEnabled(value);
-  ui->actionInstallGroup->setEnabled(value);
-  //ui->actionInstallAUR->setEnabled(value);
   m_actionInstallPacmanUpdates->setEnabled(value);
-  //m_actionInstallAURUpdates->setEnabled(value);
-
   ui->actionRemoveTransactionItem->setEnabled(value);
   ui->actionRemoveTransactionItems->setEnabled(value);
   ui->actionRemove->setEnabled(value);
@@ -1718,26 +1495,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       {
         //Retrieves the RSS News from respective Distro site...
         refreshDistroNews(true, false);
-
-        //Did it synchronize any repo? If so, let's refresh some things...
-        if (UnixCommand::isAppRunning("octopi-notifier", true) ||
-            (IsSyncingRepoInTabOutput()))
-        {
-          bool aurGroup = isAURGroupSelected();
-
-          if (!aurGroup)
-          {
-            metaBuildPackageList();
-          }
-          else if (StrConstants::getForeignRepositoryToolName() == "kcp")
-          {
-            metaBuildPackageList();
-            delete m_unixCommand;
-            m_commandExecuting = ectn_NONE;
-            enableTransactionActions();
-            return;
-          }
-        }
+        metaBuildPackageList();
       }
       else if (m_commandExecuting == ectn_SYSTEM_UPGRADE ||
                m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
@@ -1854,7 +1612,12 @@ void MainWindow::actionsProcessReadOutputMirrorCheck()
  */
 void MainWindow::actionsProcessReadOutput()
 {
-  if (WMHelper::getSUCommand().contains("kdesu"))
+  if (WMHelper::getSUCommand().contains("qsudo"))
+  {
+    QString msg = m_unixCommand->readAllStandardOutput();
+    splitOutputStrings(msg);
+  }
+  else if (WMHelper::getSUCommand().contains("kdesu"))
   {
     QString msg = m_unixCommand->readAllStandardOutput();
     splitOutputStrings(msg);
@@ -1878,14 +1641,9 @@ void MainWindow::actionsProcessReadOutput()
  */
 bool MainWindow::searchForKeyVerbs(const QString &msg)
 {
-  return (msg.contains(QRegExp("checking ")) ||
-          msg.contains(QRegExp("loading ")) ||
-          msg.contains(QRegExp("installing ")) ||
-          msg.contains(QRegExp("upgrading ")) ||
-          msg.contains(QRegExp("downgrading ")) ||
-          msg.contains(QRegExp("resolving ")) ||
-          msg.contains(QRegExp("looking ")) ||
-          msg.contains(QRegExp("removing ")));
+  return (msg.contains(QRegularExpression("Fetching ")) ||
+          msg.contains(QRegularExpression("Updating ")) ||
+          msg.contains(QRegularExpression("Processing ")));
 }
 
 /*
@@ -1902,7 +1660,7 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
 
   QString progressRun;
   QString progressEnd;
-  msg.remove(QRegExp(".+\\[Y/n\\].+"));
+  msg.remove(QRegularExpression(".+\\[Y/n\\].+"));
 
   //Let's remove color codes from strings...
   msg.remove("\033[0;1m");
@@ -1911,7 +1669,6 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
   msg.remove("[00;31m");
   msg.remove("\033[1;34m");
   msg.remove("\033[0;1m");
-
   msg.remove("c");
   msg.remove("C");
   msg.remove("");
@@ -1922,20 +1679,10 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
   msg.remove("[c");
   msg.remove("[mo");
 
-  if (msg.contains("exists in filesystem")) return;
+  qDebug() << "_treat: " << msg;
 
-  //std::cout << "_treat: " << msg.toLatin1().data() << std::endl;
-
-  if (m_iLoveCandy)
-  {
-    progressRun = "m]";
-    progressEnd = "100%";
-  }
-  else
-  {
-    progressRun = "-]";
-    progressEnd = "#]";
-  }
+  progressRun = "%";
+  progressEnd = "100%";
 
   //If it is a percentage, we are talking about curl output...
   if(msg.indexOf(progressEnd) != -1)
@@ -1948,99 +1695,42 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
 
   if (msg.indexOf(progressRun) != -1 || continueTesting)
   {
-    if (!continueTesting){
-      perc = msg.right(4).trimmed();
-      //std::cout << "percentage is: " << perc.toLatin1().data() << std::endl;
+    //if (!continueTesting){
+    {
+      int p = msg.indexOf("%");
+
+      if (msg.at(p-3).isSpace())
+        perc = msg.mid(p-2, 3).trimmed();
+
+      //qDebug() << "percentage is: " << perc;
     }
 
-    continueTesting = false;
-
-    int aux = msg.indexOf("[");
-    if (aux > 0 && !msg.at(aux-1).isSpace()) return;
-
+    //continueTesting = false;
     QString target;
-    if (m_commandExecuting == ectn_INSTALL ||
-        m_commandExecuting == ectn_SYSTEM_UPGRADE ||
-        m_commandExecuting == ectn_SYNC_DATABASE ||
-        m_commandExecuting == ectn_REMOVE ||
-        m_commandExecuting == ectn_REMOVE_INSTALL)
+    if (m_commandExecuting == ectn_SYNC_DATABASE)
     {
-      int ini = msg.indexOf(QRegExp("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "));
-      if (ini == 0)
+      /*
+        Updating pcbsd-major repository catalogue...
+        Fetching <>:
+        Processing entries:
+        pcbsd-major repository update completed. 24141 packages processed.
+      */
+
+      if (msg.contains("Fetching"))
       {
-        int rp = msg.indexOf(")");
-        msg = msg.remove(0, rp+2);
+        int p = msg.indexOf(":");
+        target = msg.left(p).remove("Fetching").trimmed();
 
-        if (searchForKeyVerbs(msg))
-        {
-          int end = msg.indexOf("[");
-          msg = msg.remove(end, msg.size()-end).trimmed() + " ";
-          writeToTabOutputExt(msg);
-        }
-        else
-        {
-          //std::cout << "test1: " << target.toLatin1().data() << std::endl;
-          int pos = msg.indexOf(" ");
-          if (pos >=0)
-          {
-            target = msg.left(pos);
-            target = target.trimmed() + " ";
-            //std::cout << "target: " << target.toLatin1().data() << std::endl;
-
-            if(!target.isEmpty())
-            {
-              writeToTabOutputExt("<b><font color=\"#b4ab58\">" + target + "</font></b>"); //#C9BE62
-            }
-          }
-          else
-          {
-            writeToTabOutputExt("<b><font color=\"#b4ab58\">" + msg + "</font></b>"); //#C9BE62
-          }
-        }
+        if(!textInTabOutput(target))
+          writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
       }
-      else if (ini == -1)
+      else if (msg.contains("Processing"))
       {
-        if (searchForKeyVerbs(msg))
-        {
-          //std::cout << "test2: " << msg.toLatin1().data() << std::endl;
+        int p = msg.indexOf(":");
+        target = msg.left(p).remove("Processing").trimmed();
 
-          int end = msg.indexOf("[");
-          msg = msg.remove(end, msg.size()-end);
-          msg = msg.trimmed() + " ";
-
-          writeToTabOutputExt(msg);
-        }
-        else
-        {
-          int pos = msg.indexOf(" ");
-          if (pos >=0)
-          {
-            target = msg.left(pos);
-            target = target.trimmed() + " ";
-            //std::cout << "target: " << target.toLatin1().data() << std::endl;
-
-            if(!target.isEmpty() && !textInTabOutput(target))
-            {
-              if (target.indexOf(QRegExp("[a-z]+")) != -1)
-              {
-                if(m_commandExecuting == ectn_SYNC_DATABASE && !target.contains("/"))
-                {
-                  writeToTabOutputExt("<b><font color=\"#FF8040\">" +
-                                      StrConstants::getSyncing() + " " + target + "</font></b>");
-                }
-                else if (m_commandExecuting != ectn_SYNC_DATABASE)
-                {
-                  writeToTabOutputExt("<b><font color=\"#b4ab58\">" +
-                                      target + "</font></b>"); //#C9BE62
-                }
-              }
-            }
-          }
-          else
-          {
-            writeToTabOutputExt("<b><font color=\"blue\">" + msg + "</font></b>");
-          }
-        }
+        if(!textInTabOutput(target))
+          writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>");
       }
     }
 
@@ -2055,30 +1745,38 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
   //It's another error, so we have to output it
   else
   {      
-    //Let's supress some annoying string bugs...
-    msg.remove(QRegExp("\\(process.+"));
-    msg.remove(QRegExp("Using the fallback.+"));
-    msg.remove(QRegExp("Gkr-Message:.+"));
-    msg.remove(QRegExp("kdesu.+"));
-    msg.remove(QRegExp("kbuildsycoca.+"));
-    msg.remove(QRegExp("Connecting to deprecated signal.+"));
-    msg.remove(QRegExp("QVariant.+"));
-    msg.remove(QRegExp("gksu-run.+"));
-    msg.remove(QRegExp("GConf Error:.+"));
-    msg.remove(QRegExp(":: Do you want.+"));
-    msg.remove(QRegExp("org\\.kde\\."));
-    msg.remove(QRegExp("QCommandLineParser"));
-    msg.remove(QRegExp("QCoreApplication.+"));
-    msg.remove(QRegExp("Fontconfig warning.+"));
-    msg.remove(QRegExp("reading configurations from.+"));
+    if (msg.contains(QRegularExpression("ETA")) ||
+      msg.contains(QRegularExpression("KiB")) ||
+      msg.contains(QRegularExpression("MiB")) ||
+      msg.contains(QRegularExpression("kB/s")) ||
+      msg.contains(QRegularExpression("MB/s")) ||
+      msg.contains(QRegularExpression("[0-9]{2}:[0-9]{2}"))) return;
 
-    msg.remove(QRegExp(".+annot load library.+"));
+    //Let's supress some annoying string bugs...
+    msg.remove(QRegularExpression("\\(process.+"));
+    msg.remove(QRegularExpression("Using the fallback.+"));
+    msg.remove(QRegularExpression("Gkr-Message:.+"));
+    msg.remove(QRegularExpression("kdesu.+"));
+    msg.remove(QRegularExpression("kbuildsycoca.+"));
+    msg.remove(QRegularExpression("Connecting to deprecated signal.+"));
+    msg.remove(QRegularExpression("QVariant.+"));
+    msg.remove(QRegularExpression("libGL.+"));
+    msg.remove(QRegularExpression("Password.+"));
+    msg.remove(QRegularExpression("gksu-run.+"));
+    msg.remove(QRegularExpression("GConf Error:.+"));
+    msg.remove(QRegularExpression(":: Do you want.+"));
+    msg.remove(QRegularExpression("org\\.kde\\."));
+    msg.remove(QRegularExpression("QCommandLineParser"));
+    msg.remove(QRegularExpression("QCoreApplication.+"));
+    msg.remove(QRegularExpression("Fontconfig warning.+"));
+    msg.remove(QRegularExpression("reading configurations from.+"));
+    msg.remove(QRegularExpression(".+annot load library.+"));
     msg = msg.trimmed();
 
     //std::cout << "debug: " << msg.toLatin1().data() << std::endl;
 
     QString order;
-    int ini = msg.indexOf(QRegExp("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "));
+    int ini = msg.indexOf(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "));
     if (ini == 0)
     {
       int rp = msg.indexOf(")");
@@ -2088,7 +1786,7 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
 
     if (!msg.isEmpty())
     {
-      if (msg.contains(QRegExp("removing ")) && !textInTabOutput(msg + " "))
+      if (msg.contains(QRegularExpression("removing ")) && !textInTabOutput(msg + " "))
       {
         //Does this package exist or is it a proccessOutput buggy string???
         QString pkgName = msg.mid(9).trimmed();
@@ -2110,7 +1808,7 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
           //std::cout << "Entered here: " << msg.toLatin1().data() << std::endl;
 
           if (m_commandExecuting == ectn_SYNC_DATABASE &&
-              msg.indexOf("is up to date"))
+              msg.indexOf("is up to date") != -1)
           {
             if (!m_progressWidget->isVisible()) m_progressWidget->show();
             m_progressWidget->setValue(100);
@@ -2147,16 +1845,16 @@ bool MainWindow::splitOutputStrings(const QString &output)
 {
   bool res = true;
   QString msg = output.trimmed();
-  QStringList msgs = msg.split(QRegExp("\\n"), QString::SkipEmptyParts);
+  QStringList msgs = msg.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
 
   foreach (QString m, msgs)
   {
-    QStringList m2 = m.split(QRegExp("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "), QString::SkipEmptyParts);
+    QStringList m2 = m.split(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "), QString::SkipEmptyParts);
 
     if (m2.count() == 1)
     {
       //Let's try another test... if it doesn't work, we give up.
-      QStringList maux = m.split(QRegExp("%"), QString::SkipEmptyParts);
+      QStringList maux = m.split(QRegularExpression("%"), QString::SkipEmptyParts);
       if (maux.count() > 1)
       {
         foreach (QString aux, maux)
@@ -2244,10 +1942,10 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
   if (text)
   {    
     //If the msg waiting to being print is from curl status OR any other unwanted string...
-    if ((msg.contains(QRegExp("\\(\\d")) &&
+    if ((msg.contains(QRegularExpression("\\(\\d")) &&
          (!msg.contains("target", Qt::CaseInsensitive)) &&
          (!msg.contains("package", Qt::CaseInsensitive))) ||
-       (msg.contains(QRegExp("\\d\\)")) &&
+       (msg.contains(QRegularExpression("\\d\\)")) &&
         (!msg.contains("target", Qt::CaseInsensitive)) &&
         (!msg.contains("package", Qt::CaseInsensitive))) ||
 
@@ -2271,7 +1969,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     ensureTabVisible(ctn_TABINDEX_OUTPUT);
     positionTextEditCursorAtEnd();
 
-    if(newMsg.contains(QRegExp("<font color")))
+    if(newMsg.contains(QRegularExpression("<font color")))
     {
       newMsg += "<br>";
     }
@@ -2311,7 +2009,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       newMsg = "<br><B>" + newMsg + "</B><br><br>";
     }
 
-    if (!newMsg.contains(QRegExp("<br"))) //It was an else!
+    if (!newMsg.contains(QRegularExpression("<br"))) //It was an else!
     {
       newMsg += "<br>";
     }
