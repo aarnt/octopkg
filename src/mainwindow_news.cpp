@@ -58,39 +58,17 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
 
   if (searchForLatestNews)
   {
-    LinuxDistro distro = UnixCommand::getLinuxDistro();
+    BSDFlavour distro = UnixCommand::getBSDFlavour();
 
     if (gotoNewsTab)
     {
       clearTabOutput();
     }
 
-    if (gotoNewsTab && (distro == ectn_ARCHLINUX ||
-                        distro == ectn_ARCHBANGLINUX ||
-                        distro == ectn_MOOOSLINUX))
+    if (gotoNewsTab && distro == ectn_FREEBSD)
     {
       writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("Arch Linux") + "</b>");
-    }
-    else if (gotoNewsTab && distro == ectn_CHAKRA)
-    {
-      writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("Chakra") + "</b>");
-    }
-    else if (gotoNewsTab && distro == ectn_KAOS)
-    {
-      writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("KaOS") + "</b>");
-    }
-    else if (gotoNewsTab && distro == ectn_MANJAROLINUX)
-    {
-      writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("Manjaro Linux") + "</b>");
-    }
-    else if (gotoNewsTab && distro == ectn_NETRUNNER)
-    {
-      writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("Netrunner Rolling") + "</b>");
+                          StrConstants::getSearchingForDistroNews().arg("FreeBSD") + "</b>");
     }
     else if (gotoNewsTab && distro == ectn_PCBSD)
     {

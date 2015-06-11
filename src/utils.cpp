@@ -89,7 +89,7 @@ void utils::ProcessWrapper::onProcessStarted()
  */
 void utils::ProcessWrapper::onSingleShot()
 {
-  QProcess proc;
+/*  QProcess proc;
   QProcess pAux;
   QString saux;
 
@@ -123,7 +123,7 @@ void utils::ProcessWrapper::onSingleShot()
     proc.waitForFinished(-1);
     QString out = proc.readAll();
 
-    if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+    if (UnixCommand::getBSDFlavour() == ectn_KAOS)
     {
       if (out.contains("kcp", Qt::CaseInsensitive))
       {
@@ -174,6 +174,7 @@ void utils::ProcessWrapper::onSingleShot()
   }
 
   emit finishedTerminal(0, QProcess::NormalExit);
+*/
 }
 
 /*
@@ -281,7 +282,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
   const QString ctn_NETRUNNER_RSS_URL = "http://www.netrunner-os.com/feed/";
   const QString ctn_PCBSD_RSS_URL = "http://blog.pcbsd.org/feed/";
 
-  LinuxDistro distro = UnixCommand::getLinuxDistro();
+  BSDFlavour distro = UnixCommand::getBSDFlavour();
   QString res;
   QString tmpRssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/.tmp_distro_rss.xml";
   QString rssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/distro_rss.xml";
@@ -386,37 +387,9 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
 QString utils::parseDistroNews()
 {
   QString html;
-  LinuxDistro distro = UnixCommand::getLinuxDistro();
+  BSDFlavour distro = UnixCommand::getBSDFlavour();
 
-  if (distro == ectn_ANTERGOS)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getAntergosNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_ARCHBSD)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getArchBSDNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_ARCHLINUX || distro == ectn_ARCHBANGLINUX || distro == ectn_MOOOSLINUX)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getArchLinuxNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_CHAKRA)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getChakraNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_KAOS)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getKaOSNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_MANJAROLINUX)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getManjaroLinuxNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_NETRUNNER)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getNetrunnerNews() + "</h2></p><ul>";
-  }
-  else if (distro == ectn_PCBSD)
+  if (distro == ectn_PCBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getPCBSDNews() + "</h2></p><ul>";
   }
@@ -466,7 +439,7 @@ QString utils::parseDistroNews()
             else if (eText.tagName() == "link")
             {
               itemLink = Package::makeURLClickable(eText.text());
-              if (UnixCommand::getLinuxDistro() == ectn_MANJAROLINUX) itemLink += "<br>";
+              //if (UnixCommand::getBSDFlavour() == ectn_MANJAROLINUX) itemLink += "<br>";
             }
             else if (eText.tagName() == "description")
             {

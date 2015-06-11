@@ -77,10 +77,7 @@ QString Package::makeURLClickable( const QString &s )
 		QString s1 = rx.cap();
     QString ns;
 
-    if (UnixCommand::getLinuxDistro() == ectn_MANJAROLINUX)
-      ns = "<a style=\"color:\'#425823\'\" href=\"" + s1 + "\">" + s1 + "</a>";
-    else
-      ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
+    ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
 
     sb.replace( ini, s1.length(), ns);
 		search = ini + (2*s1.length()) + 15;	
@@ -480,7 +477,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
  * Retrieves the list of all AUR packages in the database (installed + non-installed)
  * given the search parameter
  */
-QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
+/*QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
 {
   //aur/yaourt 1.2.2-1 [installed]
   //    A pacman wrapper with extended features and AUR support
@@ -491,7 +488,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
   PackageStatus pkgStatus;
   QList<PackageListData> * res = new QList<PackageListData>();
 
-  if (UnixCommand::getLinuxDistro() != ectn_KAOS && searchString.isEmpty())
+  if (searchString.isEmpty())
     return res;
 
   QString pkgList = UnixCommand::getAURPackageList(searchString);
@@ -506,8 +503,8 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
       packageTuple = packageTuple.mid(space+1);
     }
 
-    if ((UnixCommand::getLinuxDistro() != ectn_KAOS && !packageTuple[0].isSpace()) ||
-        (UnixCommand::getLinuxDistro() == ectn_KAOS && packageTuple[0] != '\t'))
+    if ((UnixCommand::getBSDFlavour() != ectn_KAOS && !packageTuple[0].isSpace()) ||
+        (UnixCommand::getBSDFlavour() == ectn_KAOS && packageTuple[0] != '\t'))
     {
       //Do we already have a description?
       if (pkgDescription != "")
@@ -526,7 +523,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
       //First we get repository and name!
       QStringList parts = packageTuple.split(' ');
 
-      if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+      if (UnixCommand::getBSDFlavour() == ectn_KAOS)
       {
         parts[0] = parts[0].remove("[1;35m");
       }
@@ -582,7 +579,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
     else
     {            
       //This is a description!
-      if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+      if (UnixCommand::getBSDFlavour() == ectn_KAOS)
       {        
         pkgDescription = packageTuple;
         pkgDescription.remove("\t");
@@ -617,7 +614,7 @@ QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
       StrConstants::getForeignPkgRepositoryName().toUpper()) res->removeAt(0);
 
   return res;
-}
+}*/
 
 /*
  * Given a QString containing the output of pacman -Si/Qi (pkgInfo),
@@ -1178,13 +1175,13 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
   {
     result = UnixCommand::getPackageContentsUsingPacman(pkgName);
   }
-  else if (UnixCommand::getLinuxDistro() == ectn_ARCHBANGLINUX ||
-           UnixCommand::getLinuxDistro() == ectn_ARCHLINUX ||
-           UnixCommand::getLinuxDistro() == ectn_KAOS ||
-           UnixCommand::getLinuxDistro() == ectn_MOOOSLINUX)
+  /*else if (UnixCommand::getBSDFlavour() == ectn_ARCHBANGLINUX ||
+           UnixCommand::getBSDFlavour() == ectn_ARCHLINUX ||
+           UnixCommand::getBSDFlavour() == ectn_KAOS ||
+           UnixCommand::getBSDFlavour() == ectn_MOOOSLINUX)
   {
     result = UnixCommand::getPackageContentsUsingPkgfile(pkgName);
-  }
+  }*/
 
   QString aux(result);
   QStringList rsl = aux.split("\n", QString::SkipEmptyParts);

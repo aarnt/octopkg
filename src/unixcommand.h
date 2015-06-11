@@ -36,8 +36,7 @@ enum CommandExecuting { ectn_NONE, ectn_MIRROR_CHECK, ectn_SYNC_DATABASE,
                         ectn_REMOVE_INSTALL, ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
                         ectn_RUN_IN_TERMINAL };
 
-enum LinuxDistro { ectn_ANTERGOS, ectn_ARCHBANGLINUX, ectn_ARCHBSD, ectn_ARCHLINUX, ectn_CHAKRA,
-                   ectn_KAOS, ectn_MANJAROLINUX, ectn_MOOOSLINUX, ectn_NETRUNNER, ectn_PCBSD, ectn_UNKNOWN };
+enum BSDFlavour { ectn_FREEBSD, ectn_PCBSD, ectn_UNKNOWN };
 
 enum Language { ectn_LANG_ENGLISH, ectn_LANG_USER_DEFINED };
 
@@ -70,8 +69,8 @@ public:
   //Returns the list of ignored packages in "/etc/pacman.conf"
   static QStringList getIgnorePkgsFromPacmanConf();
 
-  //Returns the Linux Distro where Octopi is running on
-  static LinuxDistro getLinuxDistro();
+  //Returns the BSD Flavour where OctoPkg is running on
+  static BSDFlavour getBSDFlavour();
 
   //Returns the PrettyName info from /etc/os-release
   static QString getLinuxDistroPrettyName();
@@ -86,7 +85,7 @@ public:
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
   static QByteArray performAURCommand(const QString &args);
-  static QByteArray getAURPackageList(const QString &searchString);
+  //static QByteArray getAURPackageList(const QString &searchString);
   static QByteArray getUnrequiredPackageList();
   static QByteArray getOutdatedPackageList();
   static QByteArray getOutdatedAURPackageList();
@@ -118,7 +117,7 @@ public:
 
   static bool isRootRunning(){
     int uid = geteuid();
-    return (uid == 0); //Returns TRUE if root is running Octopi
+    return (uid == 0); //Returns TRUE if root is running OctoPkg
   }
 
   static QFile* getTemporaryFile(){

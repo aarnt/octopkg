@@ -202,7 +202,7 @@ QByteArray UnixCommand::performAURCommand(const QString &args)
 /*
  * Returns a string containing all AUR packages given a searchString parameter
  */
-QByteArray UnixCommand::getAURPackageList(const QString &searchString)
+/*QByteArray UnixCommand::getAURPackageList(const QString &searchString)
 {
   QByteArray result("");
   QProcess aur;
@@ -212,7 +212,7 @@ QByteArray UnixCommand::getAURPackageList(const QString &searchString)
 
   aur.setProcessEnvironment(env);
 
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
     aur.start(StrConstants::getForeignRepositoryToolName() + " -l ");
   else
     aur.start(StrConstants::getForeignRepositoryToolName() + " -Ss " + searchString);
@@ -220,7 +220,7 @@ QByteArray UnixCommand::getAURPackageList(const QString &searchString)
   aur.waitForFinished(-1);
   result = aur.readAll();
 
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
   {
     QString res = result;
     res.remove("\033");
@@ -234,7 +234,7 @@ QByteArray UnixCommand::getAURPackageList(const QString &searchString)
   }
 
   return result;
-}
+}*/
 
 /*
  * Returns a string containing all packages no one depends on
@@ -568,11 +568,7 @@ bool UnixCommand::doInternetPingTest()
   env.insert("LANG", "C");
   env.insert("LC_MESSAGES", "C");
   ping.setProcessEnvironment(env);
-
-  if (UnixCommand::getLinuxDistro() == ectn_MOOOSLINUX)
-    ping.start("torsocks ping -c 1 -W 3 www.google.com");
-  else
-    ping.start("ping -c 1 -W 3 www.google.com");
+  ping.start("ping -c 1 -W 3 www.google.com");
 
   ping.waitForFinished();
 
@@ -1002,9 +998,9 @@ QStringList UnixCommand::getIgnorePkgsFromPacmanConf()
  * Retrieves the LinuxDistro where Octopi is running on!
  * Reads file "/etc/os-release" and searchs for compatible Octopi distros
  */
-LinuxDistro UnixCommand::getLinuxDistro()
+BSDFlavour UnixCommand::getBSDFlavour()
 {
-  static LinuxDistro ret;
+  static BSDFlavour ret;
   static bool firstTime = true;
 
   if (firstTime)

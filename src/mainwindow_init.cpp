@@ -783,7 +783,7 @@ void MainWindow::initActions()
   connect(ui->actionViewInstalledPackages, SIGNAL(triggered()), this, SLOT(selectedInstalledPackagesMenu()));
   connect(ui->actionViewNonInstalledPackages, SIGNAL(triggered()), this, SLOT(selectedNonInstalledPackagesMenu()));
 
-  if (WMHelper::isKDERunning() && UnixCommand::getLinuxDistro() != ectn_KAOS)
+  if (WMHelper::isKDERunning())
   {
     ui->actionHelpAbout->setIcon(IconHelper::getIconHelpAbout());
     ui->actionHelpUsage->setIcon(IconHelper::getIconHelpUsage());

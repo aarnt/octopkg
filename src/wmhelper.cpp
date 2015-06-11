@@ -261,7 +261,7 @@ QString WMHelper::getXFCEEditor(){
 QString WMHelper::getKDESUCommand(){
   QString result = "";
 
-  if (UnixCommand::getLinuxDistro() == ectn_PCBSD)
+  if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
     result = "/usr/local/lib/kde4/libexec/kdesu";
   else
     result = ctn_KDESU;
@@ -318,7 +318,7 @@ QString WMHelper::getSUCommand(){
     result = getGKSUCommand();
   }
   else if (isKDERunning()){        
-    if (UnixCommand::getLinuxDistro() == ectn_PCBSD){
+    if (UnixCommand::getBSDFlavour() == ectn_PCBSD){
       QFile kdesu("/usr/local/lib/kde4/libexec/kdesu");
       if (kdesu.exists()){
         result = getKDESUCommand();
@@ -374,13 +374,8 @@ void WMHelper::openFile(const QString& fileName){
   QProcess *p = new QProcess(qApp->activeWindow());
   QStringList s;
 
-  LinuxDistro distro = UnixCommand::getLinuxDistro();
-  if (distro == ectn_ARCHBANGLINUX && UnixCommand::hasTheExecutable(ctn_ARCHBANG_FILE_MANAGER))
-  {
-    s << fileToOpen;
-    p->startDetached( ctn_ARCHBANG_FILE_MANAGER, s );
-  }
-  else if (isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
+  //BSDFlavour distro = UnixCommand::getBSDFlavour();
+  if (isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
     s << fileToOpen;
     p->startDetached( ctn_XFCE_FILE_MANAGER, s );
   }
@@ -389,7 +384,7 @@ void WMHelper::openFile(const QString& fileName){
     s << "file:" + fileToOpen;
     p->startDetached( ctn_KDE_FILE_MANAGER, s );
   }
-  else if ((distro == ectn_MOOOSLINUX || isKDERunning()) && UnixCommand::hasTheExecutable(ctn_KDE4_FILE_MANAGER)){
+  else if (UnixCommand::hasTheExecutable(ctn_KDE4_FILE_MANAGER)){
     s << fileToOpen;
 
     if (UnixCommand::isRootRunning())
@@ -499,9 +494,9 @@ void WMHelper::openDirectory( const QString& dirName ){
 
   if (f.exists())
   {
-    LinuxDistro distro = UnixCommand::getLinuxDistro();
+    BSDFlavour distro = UnixCommand::getBSDFlavour();
 
-    if (distro == ectn_ARCHBANGLINUX && UnixCommand::hasTheExecutable(ctn_ARCHBANG_FILE_MANAGER))
+    if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_FILE_MANAGER))
     {
       s << dir;
       p->startDetached( ctn_ARCHBANG_FILE_MANAGER, s );
@@ -511,7 +506,7 @@ void WMHelper::openDirectory( const QString& dirName ){
       s << dir;
       p->startDetached( ctn_XFCE_FILE_MANAGER, s );
     }
-    else if (distro == ectn_MOOOSLINUX || isKDERunning())
+    else if (isKDERunning())
     {
       if (UnixCommand::hasTheExecutable(ctn_KDE4_FILE_MANAGER))
       {
@@ -547,7 +542,7 @@ void WMHelper::openDirectory( const QString& dirName ){
       s << dir;
       p->startDetached( ctn_MATE_FILE_MANAGER, s );
     }
-    else if (UnixCommand::getLinuxDistro() == ectn_ANTERGOS && UnixCommand::hasTheExecutable(ctn_ANTERGOS_FILE_MANAGER))
+    else if (UnixCommand::hasTheExecutable(ctn_ANTERGOS_FILE_MANAGER))
     {
       s << dir;
       p->startDetached( ctn_ANTERGOS_FILE_MANAGER, s );

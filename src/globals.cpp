@@ -145,7 +145,7 @@ GroupMemberPair searchPacmanPackagesFromGroup(QString groupName)
  */
 QList<PackageListData> * searchAURPackages(QString searchString)
 {
-  return Package::getAURPackageList(searchString);
+  //return Package::getAURPackageList(searchString);
 }
 
 /*

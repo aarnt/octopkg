@@ -102,7 +102,7 @@ void MainWindow::refreshMenuTools()
   else
     ui->actionPacmanLogViewer->setVisible(false);
 
-  if(UnixCommand::hasTheExecutable("octopi-repoeditor") && UnixCommand::getLinuxDistro() != ectn_KAOS)
+  /*if(UnixCommand::hasTheExecutable("octopi-repoeditor") && UnixCommand::getBSDFlavour() != ectn_KAOS)
   {
     availableTools++;
     ui->menuTools->menuAction()->setVisible(true);
@@ -116,6 +116,7 @@ void MainWindow::refreshMenuTools()
   }
   else
     ui->actionRepositoryEditor->setVisible(false);
+  */
 
   if(UnixCommand::hasTheExecutable("octopi-cachecleaner"))
   {

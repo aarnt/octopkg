@@ -164,7 +164,7 @@ class Package{
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
     //AUR methods
-    static QList<PackageListData> * getAURPackageList(const QString& searchString);
+    //static QList<PackageListData> * getAURPackageList(const QString& searchString);
 
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);

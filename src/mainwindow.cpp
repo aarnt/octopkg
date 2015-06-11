@@ -1323,6 +1323,7 @@ void MainWindow::launchCacheCleaner()
  */
 void MainWindow::gistSysInfo()
 {
+/*
   if (!UnixCommand::hasTheExecutable("gist") ||
       m_commandExecuting != ectn_NONE) return;
 
@@ -1336,7 +1337,7 @@ void MainWindow::gistSysInfo()
 
   QByteArray out;
 
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
   {
     tempFile->write("----------------------------------------------------------------------------------------------------------\n");
     tempFile->write("cat /etc/KaOS-release\n");
@@ -1405,7 +1406,7 @@ void MainWindow::gistSysInfo()
   tempFile->write(out);
   tempFile->write("\n\n");
 
-  if (UnixCommand::getLinuxDistro() == ectn_KAOS)
+  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
   {
     tempFile->write("----------------------------------------------------------------------------------------------------------\n");
     tempFile->write("cat /var/log/pacman.log\n");
@@ -1434,6 +1435,7 @@ void MainWindow::gistSysInfo()
 
   QString distroPrettyName = UnixCommand::getLinuxDistroPrettyName();
   QMessageBox::information(this, distroPrettyName + " SysInfo", Package::makeURLClickable(gist), QMessageBox::Ok);
+*/
 }
 
 /*

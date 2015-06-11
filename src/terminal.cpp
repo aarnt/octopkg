@@ -206,19 +206,14 @@ void Terminal::openRootTerminal()
 {
   if (m_selectedTerminal == ctn_AUTOMATIC)
   {
-    if (UnixCommand::getLinuxDistro() == ectn_MOOOSLINUX && UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
+    if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
     {
       QString cmd = WMHelper::getSUCommand() + " \"" + ctn_RXVT_TERMINAL +
           " -name Urxvt -title Urxvt \"";
 
       m_process->startDetached(cmd);
     }
-    else if (UnixCommand::getLinuxDistro() == ectn_ANTERGOS && UnixCommand::hasTheExecutable(ctn_XTERM)){
-      QString cmd = WMHelper::getSUCommand() + " \"" + ctn_XTERM +
-          " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm \"";
-      m_process->startDetached(cmd);
-    }
-    else if(WMHelper::isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
+    else if(UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
       QString cmd = WMHelper::getSUCommand() + " \"" + ctn_XFCE_TERMINAL + "\"";
       m_process->startDetached(cmd);
     }
@@ -360,7 +355,7 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
 
   if (m_selectedTerminal == ctn_AUTOMATIC)
   {
-    if (UnixCommand::getLinuxDistro() == ectn_MOOOSLINUX && UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
+    if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
     {
       QString cmd =
           suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pacman -name pacman -e bash -c " + ftemp->fileName() + "\"";
@@ -501,7 +496,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
 
   if (m_selectedTerminal == ctn_AUTOMATIC)
   {
-    if (UnixCommand::getLinuxDistro() == ectn_MOOOSLINUX && UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
+    if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
     {
       if (UnixCommand::isAppRunning("urxvtd"))
       {

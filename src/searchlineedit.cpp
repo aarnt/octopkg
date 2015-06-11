@@ -124,7 +124,7 @@ QString SearchLineEdit::styleSheetForCurrentState()
   QString style;
   style += "QLineEdit {";
 
-  if (this->text().isEmpty() && (UnixCommand::getLinuxDistro() != ectn_CHAKRA))
+  if (this->text().isEmpty())
   {
     style += "font-family: 'MS Sans Serif';";
     style += "font-style: italic;";
@@ -136,20 +136,12 @@ QString SearchLineEdit::styleSheetForCurrentState()
     setFont(font);
   }
 
-  if(UnixCommand::getLinuxDistro() != ectn_CHAKRA)
-  {
-    style += "padding-left: 20px;";
-    style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + frameWidth + 1);
-    style += "border-width: 3px;";
-    style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-    style += "background-color: rgba(255, 255, 255, 255);"; //204);";
-    style += "color: black;}";
-  }
-  else
-  {
-    style += "padding-left: 20px;}";
-    setPalette(QApplication::palette());
-  }
+  style += "padding-left: 20px;";
+  style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + frameWidth + 1);
+  style += "border-width: 3px;";
+  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  style += "background-color: rgba(255, 255, 255, 255);"; //204);";
+  style += "color: black;}";
 
   return style;
 }
@@ -158,20 +150,18 @@ void SearchLineEdit::setFoundStyle(){
   QString style;
   style += "QLineEdit {";
 
-  if (UnixCommand::getLinuxDistro() != ectn_CHAKRA)
-  {
-    style += "font-family: 'MS Sans Serif';";
-    style += "font-style: italic;";
-    style += "padding-left: 20px;";
-    style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
-    style += "border-width: 3px;";
-    style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-    style += "color: black; ";
-    style += "background-color: rgb(255, 255, 200);";
-    style += "border-color: rgb(206, 204, 197);}";
-    setStyleSheet(style);
-  }
-  else
+  style += "font-family: 'MS Sans Serif';";
+  style += "font-style: italic;";
+  style += "padding-left: 20px;";
+  style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
+  style += "border-width: 3px;";
+  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  style += "color: black; ";
+  style += "background-color: rgb(255, 255, 200);";
+  style += "border-color: rgb(206, 204, 197);}";
+  setStyleSheet(style);
+
+  /*else
   // setPalette() must be called after setStyleSheet()
   {
     style += "padding-left: 20px;}";
@@ -181,15 +171,15 @@ void SearchLineEdit::setFoundStyle(){
     palette.setColor(QPalette::Base, QColor(255, 255, 200));
     palette.setColor(QPalette::Text, Qt::darkGray); // give more contrast to text
     setPalette(palette);
-  }
+  }*/
 }
 
 void SearchLineEdit::setNotFoundStyle(){
   QString style;
   style += "QLineEdit {";
 
-  if (UnixCommand::getLinuxDistro() != ectn_CHAKRA)
-  {
+  //if (UnixCommand::getBSDFlavour() != ectn_CHAKRA)
+  //{
     style += "font-family: 'MS Sans Serif';";
     style += "font-style: italic;";
     style += "padding-left: 20px;";
@@ -200,9 +190,9 @@ void SearchLineEdit::setNotFoundStyle(){
     style += "background-color: lightgray;"; //rgb(255, 108, 108); //palette(mid);"; //rgb(207, 135, 142);";
     style += "border-color: rgb(206, 204, 197);}";
     setStyleSheet(style);
-  }
+  //}
   // setPalette() must be called after setStyleSheet()
-  else
+  /*else
   {
     style += "padding-left: 20px;}";
     setStyleSheet(style);
@@ -211,13 +201,13 @@ void SearchLineEdit::setNotFoundStyle(){
     palette.setColor(QPalette::Base, Qt::lightGray);
     palette.setColor(QPalette::Text, Qt::white);
     setPalette(palette);
-  }
+  }*/
 }
 
 QString SearchLineEdit::buttonStyleSheetForCurrentState() const
 {
   // When using KDE avoid stylesheet customization
-  if (WMHelper::isKDERunning() && UnixCommand::getLinuxDistro() != ectn_KAOS) {
+  if (WMHelper::isKDERunning()) {
     this->text().isEmpty() ? this->m_SearchButton->setIcon(IconHelper::getIconSearch())
                            : this->m_SearchButton->setIcon(IconHelper::getIconClear());
     this->m_SearchButton->setAutoRaise(true);

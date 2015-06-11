@@ -58,12 +58,7 @@ public:
   }
 
   static QString getForeignPkgRepositoryName(){
-    if (UnixCommand::getLinuxDistro() == ectn_CHAKRA)
-      return QLatin1String( "ccr" );
-    else if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-      return QLatin1String( "kcp" );
-
-    return QLatin1String( "aur" );
+    return QLatin1String( "NONE" );
   }
 
   static QString getForeignRepositoryToolName()
@@ -73,14 +68,7 @@ public:
 
     if (first)
     {
-      if( UnixCommand::getLinuxDistro() == ectn_CHAKRA )
-        ret = QLatin1String( "ccr" );
-      else if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-        ret = QLatin1String( "kcp" );
-      else if (UnixCommand::hasTheExecutable("pacaur"))
-        ret = QLatin1String( "pacaur" );
-      else
-        ret = QLatin1String( "yaourt" );
+      ret = QLatin1String( "NONE" );
 
       first = false;
     }

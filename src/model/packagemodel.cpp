@@ -73,14 +73,7 @@ int PackageModel::rowCount(const QModelIndex &parent) const
 int PackageModel::columnCount(const QModelIndex &parent) const
 {
   if (!parent.isValid()) {
-    if (UnixCommand::getLinuxDistro() == ectn_CHAKRA || !m_showColumnPopularity)
-    {
-      return 4;
-    }
-    else
-    {
-      return 5;
-    }
+    return 4;
   }
   else return 0;
 }
