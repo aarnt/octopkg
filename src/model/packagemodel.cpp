@@ -372,14 +372,16 @@ const QIcon& PackageModel::getIconFor(const PackageRepository::PackageData& pack
 struct TSort0 {
   bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {
     if (a->status < b->status) return true;
-    if (a->status == b->status) {
+    else if (a->status == b->status) {
 
-      if (a->origin == b->origin)
+      if (a->required < b->required) return true;
+
+      if (a->required == b->required)
       {
         return (a->name < b->name);
       }
 
-      if (a->outdated() == true && b->outdated() == true)
+      /*if (a->outdated() == true && b->outdated() == true)
       {
         return (a->name < b->name);
       }
@@ -390,7 +392,7 @@ struct TSort0 {
       {
         int cmp = QString::localeAwareCompare(a->name, b->name);
         if (cmp < 0) return true;
-      }    
+      }*/
     }
     return false;
   }

@@ -367,21 +367,28 @@ TransactionInfo Package::getTargetUpgradeList(const QString &pkgName)
     }
   }
 
+  res.packages->sort();
   return res;
 }
 
 /*
  * Retrieves the list of targets needed to be removed with the given package
  */
-QStringList *Package::getTargetRemovalList(const QString &pkgName, const QString &removeCommand)
+QStringList *Package::getTargetRemovalList(const QString &pkgName)
 {
-  QString targets = UnixCommand::getTargetRemovalList(pkgName, removeCommand);
-  QStringList packageTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
-  QStringList * res = new QStringList();
+  QString targets = UnixCommand::getTargetRemovalList(pkgName);
+  QStringList infoTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  QStringList *res = new QStringList();
 
-  foreach(QString packageTuple, packageTuples)
+  foreach(QString infoTuple, infoTuples)
   {
-    res->append(packageTuple);
+    int tab = infoTuple.indexOf("\t");
+    if (tab != -1) //We are dealing with packages HERE!
+    {
+      res->append(infoTuple.remove(QRegularExpression("\t")).trimmed());
+    }
+
+    res->append(infoTuple);
   }
 
   res->sort();

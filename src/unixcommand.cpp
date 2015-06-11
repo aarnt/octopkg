@@ -472,29 +472,31 @@ QByteArray UnixCommand::getInstalledPackages()
 QByteArray UnixCommand::getTargetUpgradeList(const QString &pkgName)
 {
   QString args;
+  QByteArray res = "";
 
   if(!pkgName.isEmpty())
   {
     args = "install -n -f " + pkgName;
+    res = performQuery(args);
   }
-  /*else
-  {
-    args = "--print-format \"%n %v %s\" -Spu";
-  }*/
 
-  QByteArray res = performQuery(args);
   return res;
 }
 
 /*
  * Given a package name, retrieves the list of all targets needed for its removal
  */
-QByteArray UnixCommand::getTargetRemovalList(const QString &pkgName, const QString &removeCommand)
+QByteArray UnixCommand::getTargetRemovalList(const QString &pkgName)
 {
   QString args;
-  args = "-" + removeCommand + "p " + pkgName;
+  QByteArray res = "";
 
-  QByteArray res = performQuery(args);
+  if(!pkgName.isEmpty())
+  {
+    args = "remove -n " + pkgName;
+    res = performQuery(args);
+  }
+
   return res;
 }
 

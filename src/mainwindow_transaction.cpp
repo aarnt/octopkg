@@ -251,8 +251,8 @@ QString MainWindow::getTobeInstalledPackages()
 void MainWindow::insertIntoRemovePackage()
 {
   qApp->processEvents();
-  bool checkDependencies=false;
-  QStringList dependencies;
+  //bool checkDependencies=false;
+  //QStringList dependencies;
 
   if (!isAURGroupSelected())
   {
@@ -270,11 +270,11 @@ void MainWindow::insertIntoRemovePackage()
       }
     }
 
-    QString removeCmd = m_removeCommand;
+    /*QString removeCmd = m_removeCommand;
     if (removeCmd == "Rcs" )
     {
       checkDependencies = true;
-    }
+    }*/
 
     foreach(QModelIndex item, selectedRows)
     {
@@ -284,9 +284,9 @@ void MainWindow::insertIntoRemovePackage()
         continue;
       }
 
-      if(checkDependencies)
+      /*if(checkDependencies)
       {
-        QStringList *targets = Package::getTargetRemovalList(package->name, removeCmd);
+        QStringList *targets = Package::getTargetRemovalList(package->name);
 
         foreach(QString target, *targets)
         {
@@ -309,7 +309,7 @@ void MainWindow::insertIntoRemovePackage()
               return;
           }
         }
-      }
+      }*/
 
       insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
     }
@@ -843,9 +843,8 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
  */
 void MainWindow::doRemoveAndInstall()
 {
-/*
   QString listOfRemoveTargets = getTobeRemovedPackages();
-  QStringList *pRemoveTargets = Package::getTargetRemovalList(listOfRemoveTargets, m_removeCommand);
+  //QStringList *pRemoveTargets = Package::getTargetRemovalList(listOfRemoveTargets);
   QString removeList;
   QString allLists;
 
@@ -859,48 +858,18 @@ void MainWindow::doRemoveAndInstall()
   }
 
   QString listOfInstallTargets = getTobeInstalledPackages();
-  QList<PackageListData> *installTargets = Package::getTargetUpgradeList(listOfInstallTargets);
+  TransactionInfo ti = Package::getTargetUpgradeList(listOfInstallTargets);
+  QStringList *installTargets = ti.packages;
+  QString ds = ti.sizeToDownload;
   QString installList;
 
-  double totalDownloadSize = 0;
-  foreach(PackageListData installTarget, *installTargets)
+  foreach(QString target, *installTargets)
   {
-    totalDownloadSize += installTarget.downloadSize;
-    installList.append(StrConstants::getInstall() + " " +
-                       installTarget.name + "-" + installTarget.version + "\n");
-  }
-  installList.remove(installList.size()-1, 1);
-
-  totalDownloadSize = totalDownloadSize / 1024;
-  QString ds = Package::kbytesToSize(totalDownloadSize);
-
-  if (installList.count() == 0)
-  {
-    installTargets->append(PackageListData(listOfInstallTargets, "", 0));
-    installList.append(StrConstants::getInstall() + " " + listOfInstallTargets);
+    installList = installList + StrConstants::getInstall() + " " + target + "\n";
   }
 
   allLists.append(removeList);
   allLists.append(installList);
-
-  if(removeTargets.count()==1)
-  {
-    if (pRemoveTargets->at(0).indexOf("HoldPkg was found in") != -1)
-    {
-      QMessageBox::warning(
-            this, StrConstants::getAttention(), StrConstants::getWarnHoldPkgFound(), QMessageBox::Ok);
-      return;
-    }
-  }
-  else if(installTargets->count()==1)
-  {
-    if (installTargets->at(0).name.indexOf("HoldPkg was found in") != -1)
-    {
-      QMessageBox::warning(
-            this, StrConstants::getAttention(), StrConstants::getWarnHoldPkgFound(), QMessageBox::Ok);
-      return;
-    }
-  }
 
   if (removeTargets.count() == 1)
   {
@@ -932,12 +901,12 @@ void MainWindow::doRemoveAndInstall()
     if (!doRemovePacmanLockFile()) return;
 
     QString command;
-    command = "pacman -R --noconfirm " + listOfRemoveTargets +
-        "; pacman -S --noconfirm " + listOfInstallTargets;
+    command = "pkg remove -f -y " + listOfRemoveTargets +
+        "; pkg install -f -y " + listOfInstallTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pacman -R " + listOfRemoveTargets + ";");
-    m_lastCommandList.append("pacman -S " + listOfInstallTargets + ";");
+    m_lastCommandList.append("pkg remove -f " + listOfRemoveTargets + ";");
+    m_lastCommandList.append("pkg install -f " + listOfInstallTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -964,7 +933,6 @@ void MainWindow::doRemoveAndInstall()
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
-*/
 }
 
 /*
@@ -973,7 +941,7 @@ void MainWindow::doRemoveAndInstall()
 void MainWindow::doRemove()
 {
   QString listOfTargets = getTobeRemovedPackages();
-  m_targets = Package::getTargetRemovalList(listOfTargets, m_removeCommand);
+  QStringList *_targets = Package::getTargetRemovalList(listOfTargets);
   QString list;
 
   QStringList targets = listOfTargets.split(" ", QString::SkipEmptyParts);
@@ -985,15 +953,9 @@ void MainWindow::doRemove()
   TransactionDialog question(this);
 
   //Shows a dialog indicating the targets which will be removed and asks for the user's permission.
-  if(targets.count()==1)
+  if(_targets->count()==1)
   {
-    if (m_targets->at(0).indexOf("HoldPkg was found in") != -1)
-    {
-      QMessageBox::warning(
-            this, StrConstants::getAttention(), StrConstants::getWarnHoldPkgFound(), QMessageBox::Ok);
-      return;
-    }
-    else question.setText(StrConstants::getRemovePackage());
+    question.setText(StrConstants::getRemovePackage());
   }
   else
     question.setText(StrConstants::getRemovePackages(targets.count()));
@@ -1012,10 +974,10 @@ void MainWindow::doRemove()
     if (!doRemovePacmanLockFile()) return;
 
     QString command;
-    command = "pacman -R --noconfirm " + listOfTargets;
+    command = "pkg remove -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pacman -R " + /*m_removeCommand +*/ listOfTargets + ";");
+    m_lastCommandList.append("pkg remove -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1043,37 +1005,6 @@ void MainWindow::doRemove()
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
-}
-
-/*
- * If the Pacman lock file exists ("/var/run/pacman.lck"), removes it!
- */
-bool MainWindow::doRemovePacmanLockFile()
-{
-  //If there are no means to run the actions, we must warn!
-  if (!isSUAvailable()) return false;
-
-  /*QString lockFilePath("/var/lib/pacman/db.lck");
-  QFile lockFile(lockFilePath);
-
-  if (lockFile.exists())
-  {
-    int res = QMessageBox::question(this, StrConstants::getConfirmation(),
-                                    StrConstants::getRemovePacmanTransactionLockFileConfirmation(),
-                                    QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
-
-    if (res == QMessageBox::Yes)
-    {
-      qApp->processEvents();
-
-      clearTabOutput();
-      writeToTabOutputExt("<b>" + StrConstants::getRemovingPacmanTransactionLockFile() + "</b>");
-      UnixCommand::execCommand("rm " + lockFilePath);
-      writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedOK() + "</b>");
-    }
-  }*/
-
-  return true;
 }
 
 /*
@@ -1137,10 +1068,41 @@ void MainWindow::doInstall()
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {
-      m_commandExecuting = ectn_RUN_IN_TERMINAL;      
+      m_commandExecuting = ectn_RUN_IN_TERMINAL;
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
+}
+
+/*
+ * If the Pacman lock file exists ("/var/run/pacman.lck"), removes it!
+ */
+bool MainWindow::doRemovePacmanLockFile()
+{
+  //If there are no means to run the actions, we must warn!
+  if (!isSUAvailable()) return false;
+
+  /*QString lockFilePath("/var/lib/pacman/db.lck");
+  QFile lockFile(lockFilePath);
+
+  if (lockFile.exists())
+  {
+    int res = QMessageBox::question(this, StrConstants::getConfirmation(),
+                                    StrConstants::getRemovePacmanTransactionLockFileConfirmation(),
+                                    QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
+
+    if (res == QMessageBox::Yes)
+    {
+      qApp->processEvents();
+
+      clearTabOutput();
+      writeToTabOutputExt("<b>" + StrConstants::getRemovingPacmanTransactionLockFile() + "</b>");
+      UnixCommand::execCommand("rm " + lockFilePath);
+      writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedOK() + "</b>");
+    }
+  }*/
+
+  return true;
 }
 
 /*
@@ -1679,7 +1641,7 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
   msg.remove("[c");
   msg.remove("[mo");
 
-  qDebug() << "_treat: " << msg;
+  //qDebug() << "_treat: " << msg;
 
   progressRun = "%";
   progressEnd = "100%";

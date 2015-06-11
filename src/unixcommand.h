@@ -106,7 +106,7 @@ public:
 
   static QByteArray getInstalledPackages();
   static QByteArray getTargetUpgradeList(const QString &pkgName = "");
-  static QByteArray getTargetRemovalList(const QString &pkgName, const QString &removeCommand);
+  static QByteArray getTargetRemovalList(const QString &pkgName);
 
   static QString getSystemArchitecture();
   static bool hasInternetConnection();

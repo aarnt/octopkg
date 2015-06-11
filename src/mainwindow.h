@@ -145,7 +145,7 @@ private:
   std::unique_ptr<QList<QString> > m_listOfPackagesFromGroup;
 
   //This member holds the target list retrieved by the pacman command which will be executed
-  QStringList *m_targets;
+  //QStringList *m_targets;
 
   //This member holds the list of packages to install with "pacman -U" command
   QStringList m_packagesToInstallList;
