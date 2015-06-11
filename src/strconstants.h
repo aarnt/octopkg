@@ -251,6 +251,10 @@ public:
     return QObject::tr("votes");
   }
 
+  static QString getSize(){
+    return QObject::tr("Size");
+  }
+
   static QString getDownloadSize(){
     return QObject::tr("Download Size");
   }

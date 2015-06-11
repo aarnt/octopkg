@@ -215,7 +215,7 @@ void MainWindow::AURToolSelected()
   {
     m_actionMenuRepository->setEnabled(true);
     ui->twGroups->setEnabled(true);
-    ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, false);
+    //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, false);
   }
 
   switchToViewAllPackages();
@@ -690,7 +690,7 @@ void MainWindow::buildPackageList()
     }
   }
 
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, 10);
+  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN, 10);
   refreshToolBar();
   refreshStatusBarToolButtons();
   m_refreshPackageLists = true;

@@ -133,13 +133,13 @@ QString Package::kbytesToSize( float Bytes )
   QString res;
 
   if( Bytes >= tb )
-    res = res.sprintf("%.2f TiB", (float)Bytes/tb);
+    res = res.sprintf("%.2f TB", (float)Bytes/tb);
   else if( Bytes >= gb && Bytes < tb )
-    res = res.sprintf("%.2f GiB", (float)Bytes/gb);
+    res = res.sprintf("%.2f GB", (float)Bytes/gb);
   else if( Bytes >= mb && Bytes < gb )
-    res = res.sprintf("%.2f MiB", (float)Bytes/mb);
+    res = res.sprintf("%.2f MB", (float)Bytes/mb);
   else if( Bytes >= kb && Bytes < mb )
-    res = res.sprintf("%.2f KiB", (float)Bytes/kb);
+    res = res.sprintf("%.2f KB", (float)Bytes/kb);
   else if ( Bytes < kb)
     res = res.sprintf("%.2f Bytes", Bytes);
   else
@@ -173,6 +173,16 @@ double Package::strToKBytes(QString size)
     if (ok)
     {
       res = value * 1024;
+    }
+  }
+  else if (size.contains("B"))
+  {
+    bool ok;
+    int p = size.indexOf("B");
+    double value = size.left(p).toDouble(&ok);
+    if (ok)
+    {
+      res = value;
     }
   }
 
