@@ -144,12 +144,14 @@ public:
     return QObject::tr("Display all categories");
   }
 
-  /*static QString getForeignToolGroup(){
-    QString tool = getForeignRepositoryToolName();
+  static QString getForeignToolGroup(){
+    /*QString tool = getForeignRepositoryToolName();
     tool[0] = tool[0].toUpper();
     tool = "<" + tool + ">";
-    return tool.toLatin1();
-  }*/
+    return tool.toLatin1();*/
+
+    return "NONE";
+  }
 
   static QString getHelpUsage(){
     return QObject::tr("Usage");
@@ -584,6 +586,10 @@ public:
 
   static QString getUseAURTool(){
     return QObject::tr("Use \"%1\" tool").arg(getForeignRepositoryToolName());
+  }
+
+  static QString getSearchForPackages(){
+    return QObject::tr("Search for packages...");
   }
 
   static QString getCopyFullPath(){

@@ -24,6 +24,7 @@
 #include <cassert>
 #include <iostream>
 #include <QSet>
+#include <QDebug>
 
 PackageRepository::PackageRepository()
 {
@@ -67,7 +68,7 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
   for (TListOfPackages::const_iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
     if (*it != NULL) delete *it;
   }
-  //m_listOfAURPackages.clear();
+  m_listOfAURPackages.clear();
   m_listOfPackages.clear();
 
   for (QList<PackageListData>::const_iterator it = listOfPackages->begin(); it != listOfPackages->end(); ++it) {
@@ -76,6 +77,37 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
 
   qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
   std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
+}
+
+void PackageRepository::setAURData(const QList<PackageListData>*const listOfForeignPackages,
+                                   const QSet<QString>& unrequiredPackages)
+{
+  //  std::cout << "received new foreign package list" << std::endl;
+
+    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), BeginResetModel());
+
+    // delete AUR items in list
+    /*for (TListOfPackages::iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
+      if (*it != NULL && (*it)->managedByAUR) {
+        delete *it;
+        it = m_listOfPackages.erase(it);
+      }
+    }*/
+    m_listOfAURPackages.clear();
+
+    for (QList<PackageListData>::const_iterator it = listOfForeignPackages->begin();
+         it != listOfForeignPackages->end(); ++it)
+    {
+      //qDebug() << "Status: " << (*it).status;
+
+      PackageData*const pkg = new PackageData(*it, unrequiredPackages.contains(it->name) == false);
+      m_listOfPackages.push_back(pkg);
+      m_listOfAURPackages.push_back(pkg);
+    }   
+
+    qSort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
+    qSort(m_listOfAURPackages.begin(), m_listOfAURPackages.end(), TSort());
+    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 }
 
 /**
@@ -159,7 +191,7 @@ const QList<PackageRepository::PackageData*>& PackageRepository::getPackageList(
 {
 //  std::cout << "get package list for group " << group.toStdString() << std::endl;
 
-  if (!group.isEmpty()) {
+  /*if (!group.isEmpty()) {
     QList<Group*>::const_iterator groupIt = m_listOfGroups.begin();
     for (; groupIt != m_listOfGroups.end(); ++groupIt) {
       if (*groupIt != NULL && (*groupIt)->getName() == group) {
@@ -171,14 +203,17 @@ const QList<PackageRepository::PackageData*>& PackageRepository::getPackageList(
       const TListOfPackages* list = group.getPackageList();
       if (list != NULL) return *list;
     }
+  }*/
 
-    // Workaround for AUR filter -> pre-built AUR packageList
-    //if (group == StrConstants::getForeignToolGroup())
-    //  return m_listOfAURPackages;
+  // Workaround for AUR filter -> pre-built AUR packageList
+  if (group == StrConstants::getForeignToolGroup())
+  {
+    //qDebug() << "Will return this list: " << m_listOfAURPackages.count();
+    return m_listOfAURPackages;
   }
 
   // if no group found or not loaded yet. default to all packages
-  return m_listOfPackages;
+  else return m_listOfPackages;
 }
 
 PackageRepository::PackageData* PackageRepository::getFirstPackageByName(const QString name) const

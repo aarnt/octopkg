@@ -61,7 +61,7 @@ void MainWindow::refreshAppIcon()
   if ((m_outdatedStringList->count() > 0))
   {
     setWindowIcon(IconHelper::getIconOctopiRed());
-    if(m_commandExecuting != ectn_MIRROR_CHECK && !isAURGroupSelected()) enableSystemUpgrade=true;
+    if(m_commandExecuting != ectn_MIRROR_CHECK && !isPkgSearchSelected()) enableSystemUpgrade=true;
   }
   else if(m_outdatedAURStringList->count() > 0)
   {
@@ -182,6 +182,7 @@ void MainWindow::refreshMenuTools()
  */
 void MainWindow::refreshGroupsWidget()
 {
+  /*
   disconnect(ui->twGroups, SIGNAL(itemSelectionChanged()), this, SLOT(groupItemSelected()));
 
   QList<QTreeWidgetItem *> items;
@@ -200,30 +201,32 @@ void MainWindow::refreshGroupsWidget()
   ui->twGroups->insertTopLevelItems(0, items);
   ui->twGroups->setCurrentItem(items.at(0));
   connect(ui->twGroups, SIGNAL(itemSelectionChanged()), this, SLOT(groupItemSelected()));
+  */
 }
 
 /*
  * User clicked AUR tool button in the toolbar
  */
-void MainWindow::AURToolSelected()
+void MainWindow::pkgSearchClicked()
 {
-  if (m_actionSwitchToAURTool->isChecked())
+  if (!m_actionSwitchToPkgSearch->isChecked())
   {
-    m_actionMenuRepository->setEnabled(false);
-    ui->twGroups->setEnabled(false);
+    m_leFilterPackage->clear();
+    //m_actionMenuRepository->setEnabled(false);
+    //ui->twGroups->setEnabled(false);
   }
-  else
+  /*else
   {
     m_actionMenuRepository->setEnabled(true);
     ui->twGroups->setEnabled(true);
     //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, false);
-  }
+  }*/
 
-  switchToViewAllPackages();
+  //switchToViewAllPackages();
   m_selectedRepository = "";
-  m_actionRepositoryAll->setChecked(true);
-  m_refreshPackageLists = false;
-  m_leFilterPackage->clear();
+  //m_actionRepositoryAll->setChecked(true);
+  //changePackageListModel(ectn_ALL_PKGS, "");
+  m_refreshPackageLists = true;
   metaBuildPackageList();
 }
 
@@ -429,23 +432,56 @@ void MainWindow::preBuildPackagesFromGroupList()
  */
 void MainWindow::metaBuildPackageList()
 {
-  static bool firstTime = false;
-
-  if (!firstTime) m_time->start();
+  //static bool firstTime = false;
+  //if (!firstTime) m_time->start();
 
   if (isSearchByFileSelected())
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
-  else if (isAURGroupSelected())
+  else if (isPkgSearchSelected())
     m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
   else
     m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
 
-  m_packageModel->setShowColumnPopularity(false);
-  ui->twGroups->setEnabled(false);
+  //m_packageModel->setShowColumnPopularity(false);
+  //ui->twGroups->setEnabled(false);
   ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-  if (ui->twGroups->topLevelItemCount() == 0 || isAllCategoriesSelected())
-  {        
+  //if (ui->twGroups->topLevelItemCount() == 0 || isAllCategoriesSelected())
+  if (m_actionSwitchToPkgSearch->isChecked())
+  {
+    //m_toolButtonPacman->hide();
+    //m_toolButtonAUR->hide();
+    //switchToViewAllPackages();
+    ui->actionSearchByFile->setEnabled(false);
+    //m_packageModel->setShowColumnPopularity(true);
+
+    toggleSystemActions(false);
+    disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
+    clearStatusBar();
+
+    m_cic = new CPUIntensiveComputing();
+
+    if(!m_leFilterPackage->text().isEmpty())
+    {
+      m_toolButtonPacman->hide();
+      disconnect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
+
+      QFuture<QList<PackageListData> *> f;
+      f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
+      connect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
+      g_fwAURMeta.setFuture(f);
+    }
+    else
+    {
+      m_listOfAURPackages = new QList<PackageListData>();
+      buildAURPackageList();
+      delete m_cic;
+      m_cic = 0;
+      m_leFilterPackage->setFocus();
+    }
+  }
+  else
+  {
     ui->actionSearchByFile->setEnabled(true);
     ui->actionSearchByName->setChecked(true);
 
@@ -468,7 +504,8 @@ void MainWindow::metaBuildPackageList()
       std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
                  "Time elapsed building pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
   }
-  else
+  /*
+  else //pkg category clicked!
   {
     ui->actionSearchByFile->setEnabled(false);
     toggleSystemActions(false);
@@ -491,8 +528,120 @@ void MainWindow::metaBuildPackageList()
       std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
                  "Time elapsed building pkgs from '" << getSelectedCategory().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
   }
+  */
 
-  firstTime = false;
+  //firstTime = false;
+}
+
+/*
+ * Helper method to deal with the QFutureWatcher result before calling
+ * AUR package list building method
+ */
+void MainWindow::preBuildAURPackageListMeta()
+{
+  m_listOfAURPackages = g_fwAURMeta.result();
+  buildAURPackageList();
+
+  if (m_cic) {
+    delete m_cic;
+    m_cic = 0;
+  }
+
+  if (m_packageModel->getPackageCount() == 0)
+  {
+    m_leFilterPackage->setFocus();
+  }
+}
+
+/*
+ * Helper method to deal with the QFutureWatcher result before calling
+ * AUR package list building method
+ */
+void MainWindow::preBuildAURPackageList()
+{
+  m_listOfAURPackages = g_fwAUR.result();
+  buildAURPackageList();
+
+  if (m_cic) {
+    delete m_cic;
+    m_cic = NULL;
+  }
+
+  if (m_packageModel->getPackageCount() == 0)
+  {
+    m_leFilterPackage->setFocus();
+  }
+
+  emit buildAURPackageListDone();
+}
+
+/*
+ * Populates the list of found AUR packages (installed [+ non-installed])
+ * given the searchString parameter passed.
+ *
+ */
+void MainWindow::buildAURPackageList()
+{
+  ui->actionSearchByDescription->setChecked(true);
+  m_progressWidget->show();
+
+  const QSet<QString>*const unrequiredPackageList = Package::getUnrequiredPackageList();
+  QList<PackageListData> *list = m_listOfAURPackages;
+
+  m_progressWidget->setRange(0, list->count());
+  m_progressWidget->setValue(0);
+  int counter=0;
+  int installedCount = 0;
+  QList<PackageListData>::const_iterator it = list->begin();
+
+  while(it != list->end())
+  {
+    if (isPackageInstalled(it->name)) {
+      ++installedCount;
+    }
+    counter++;
+    m_progressWidget->setValue(counter);
+    ++it;
+  }
+
+  m_packageRepo.setAURData(list, *unrequiredPackageList);
+  //qDebug() << "AUR count: " << list->count();
+
+  //m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
+  m_packageModel->applyFilter(ectn_ALL_PKGS, "", "NONE");
+
+  QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
+  ui->tvPackages->setCurrentIndex(maux);
+  ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
+  ui->tvPackages->setCurrentIndex(maux);
+
+  list->clear();
+  refreshTabInfo();
+  refreshTabFiles();
+
+  if (isPackageTreeViewVisible())
+  {
+    ui->tvPackages->setFocus();
+  }
+
+  //Refresh counters
+  m_numberOfInstalledPackages = installedCount;
+
+  //Refresh statusbar widget
+  refreshStatusBar();
+
+  //Refresh application icon
+  refreshAppIcon();
+  reapplyPackageFilter();
+
+  counter = list->count();
+  m_progressWidget->setValue(counter);
+  m_progressWidget->close();
+
+  //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, true);
+
+  refreshToolBar();
+  refreshStatusBarToolButtons();
 }
 
 /*
@@ -746,34 +895,34 @@ void MainWindow::buildPackageList()
  */
 void MainWindow::refreshToolBar()
 {
-  m_hasAURTool =
+  /*m_hasAURTool =
       UnixCommand::hasTheExecutable(StrConstants::getForeignRepositoryToolName()) && !UnixCommand::isRootRunning();
 
   if (m_hasAURTool)
   {
-    if (!ui->mainToolBar->actions().contains(m_actionSwitchToAURTool))
+    if (!ui->mainToolBar->actions().contains(m_actionSwitchToPkgSearch))
     {
-      ui->mainToolBar->insertAction(m_dummyAction, m_actionSwitchToAURTool);
-      m_separatorForActionAUR = ui->mainToolBar->insertSeparator(m_actionSwitchToAURTool);
+      ui->mainToolBar->insertAction(m_dummyAction, m_actionSwitchToPkgSearch);
+      m_separatorForActionPkgSearch = ui->mainToolBar->insertSeparator(m_actionSwitchToPkgSearch);
     }
   }
   else
   {
-    if (ui->mainToolBar->actions().contains(m_actionSwitchToAURTool))
+    if (ui->mainToolBar->actions().contains(m_actionSwitchToPkgSearch))
     {
-      bool wasChecked = (m_actionSwitchToAURTool->isChecked());
+      bool wasChecked = (m_actionSwitchToPkgSearch->isChecked());
 
-      ui->mainToolBar->removeAction(m_actionSwitchToAURTool);
-      ui->mainToolBar->removeAction(m_separatorForActionAUR);
+      ui->mainToolBar->removeAction(m_actionSwitchToPkgSearch);
+      ui->mainToolBar->removeAction(m_separatorForActionPkgSearch);
 
       if (wasChecked)
       {
-        m_actionSwitchToAURTool->setChecked(false);
+        m_actionSwitchToPkgSearch->setChecked(false);
         ui->twGroups->setEnabled(true);
         groupItemSelected();
       }
     }
-  }
+  }*/
 }
 
 /*
@@ -781,7 +930,7 @@ void MainWindow::refreshToolBar()
  */
 void MainWindow::refreshStatusBarToolButtons()
 {
-  if (!isSearchByFileSelected() && !m_actionSwitchToAURTool->isChecked())
+  if (!isSearchByFileSelected() && !m_actionSwitchToPkgSearch->isChecked())
     ui->twGroups->setEnabled(true);
 }
 
@@ -812,7 +961,7 @@ void MainWindow::refreshStatusBar()
   m_lblTotalCounters->setText(text);
   ui->statusBar->addWidget(m_lblTotalCounters);
 
-  if((m_numberOfOutdatedPackages > 0) && (!isAURGroupSelected()))
+  if((m_numberOfOutdatedPackages > 0) && (!isPkgSearchSelected()))
   {
     m_toolButtonPacman->show();
 
@@ -914,7 +1063,7 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
   /* Appends all info from the selected package! */
   QString pkgName=package->name;
 
-  if (isAURGroupSelected() && package->installed() == false)
+  if (isPkgSearchSelected() && package->installed() == false)
   {
     QString aux_desc = package->description;
     int space = aux_desc.indexOf(' ');

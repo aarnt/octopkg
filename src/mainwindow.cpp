@@ -134,7 +134,7 @@ void MainWindow::show()
     if (Package::hasPkgNGDatabase())
     {
       refreshGroupsWidget();
-    }        
+    }
 
     QMainWindow::show();
 
@@ -158,9 +158,9 @@ void MainWindow::show()
 void MainWindow::switchToViewAllPackages()
 {
   m_selectedViewOption = ectn_ALL_PKGS;
-  disconnect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
+  /*disconnect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
   ui->actionViewAllPackages->setChecked(true);
-  connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
+  connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));*/
 }
 
 /*
@@ -226,7 +226,7 @@ void MainWindow::outputOutdatedPackageList()
 {
   //We cannot output any list if there is a running transaction!
   if (m_commandExecuting != ectn_NONE ||
-      isAURGroupSelected())
+      isPkgSearchSelected())
     return;
 
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
@@ -374,15 +374,16 @@ bool MainWindow::isAllCategoriesSelected()
 
 bool MainWindow::isAllCategories(const QString& category)
 {
-  return ((category == "<" + StrConstants::getDisplayAllCategories() + ">") && !(m_actionSwitchToAURTool->isChecked()));
+  return true;
+  //return ((category == "<" + StrConstants::getDisplayAllCategories() + ">") && !(m_actionSwitchToPkgSearch->isChecked()));
 }
 
 /*
  * Helper to analyse if < AUR > is selected
  */
-bool MainWindow::isAURGroupSelected()
+bool MainWindow::isPkgSearchSelected()
 {
-  return (m_actionSwitchToAURTool->isChecked());
+  return (m_actionSwitchToPkgSearch->isChecked());
 }
 
 /*
@@ -440,6 +441,7 @@ void MainWindow::setRemoveCommand(const QString &removeCommand)
  */
 bool MainWindow::isPackageInstalled(const QString &pkgName)
 {
+  //qDebug() << "Is pkg " << pkgName << " installed?";
   const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkgName);
   return (package != NULL && package->installed());
 }
@@ -453,9 +455,9 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
   if (actionSelected->objectName() == ui->actionSearchByName->objectName())
   {
     ui->menuView->setEnabled(true);
-    if (!m_actionSwitchToAURTool->isChecked()) ui->twGroups->setEnabled(true);
+    //if (!m_actionSwitchToPkgSearch->isChecked()) ui->twGroups->setEnabled(true);
 
-    if (isAURGroupSelected())
+    if (isPkgSearchSelected())
       m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
@@ -466,9 +468,9 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
   else if (actionSelected->objectName() == ui->actionSearchByDescription->objectName())
   {
     ui->menuView->setEnabled(true);
-    if (!m_actionSwitchToAURTool->isChecked()) ui->twGroups->setEnabled(true);
+    //if (!m_actionSwitchToPkgSearch->isChecked()) ui->twGroups->setEnabled(true);
 
-    if (isAURGroupSelected())
+    if (isPkgSearchSelected())
       m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
@@ -574,7 +576,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
       //if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
       menu->addAction(ui->actionInstall);
 
-      if (!isAllCategoriesSelected() && !isAURGroupSelected()) //&& numberOfSelPkgs > 1)
+      if (!isAllCategoriesSelected() && !isPkgSearchSelected()) //&& numberOfSelPkgs > 1)
       {
         //Is this group already installed?
         const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());
@@ -594,7 +596,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       menu->addAction(ui->actionRemove);
 
-      if (!isAllCategoriesSelected() && !isAURGroupSelected())
+      if (!isAllCategoriesSelected() && !isPkgSearchSelected())
       {
         //Is this group already installed?
         const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());

@@ -26,6 +26,7 @@
 #include "src/strconstants.h"
 
 #include <QRegularExpression>
+#include <QDebug>
 
 /*
  * The specific model which abstracts the package list data seem in the main treeview
@@ -98,6 +99,8 @@ QVariant PackageModel::data(const QModelIndex &index, int role) const
           {
             if (package->installed())
               return QVariant(Package::kbytesToSize(package->installedSize));
+            else
+              return QVariant(Package::kbytesToSize(package->downloadSize));
           }
 
           break;
@@ -190,8 +193,8 @@ void PackageModel::endResetRepository()
 
   for (QList<PackageRepository::PackageData*>::const_iterator it = data.begin(); it != data.end(); ++it)
   {
-    if (m_filterPackagesNotInstalled && (*it)->installed()) continue;
-    else if (m_filterPackagesInstalled && !(*it)->installed()) continue;
+    //if (m_filterPackagesNotInstalled && (*it)->installed()) continue;
+    //else if (m_filterPackagesInstalled && !(*it)->installed()) continue;
 
     if (!m_filterPackagesNotInThisRepo.isEmpty() && (*it)->repository != m_filterPackagesNotInThisRepo) continue;
 
@@ -419,22 +422,47 @@ struct TSort3 {
 };
 
 struct TSort4 {
-  bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {
-    QString mag_a, mag_b, aux;
-    aux = Package::kbytesToSize(a->installedSize);
-    QStringList s = aux.split(" ");
+  bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {      
+    QString mag_a, mag_b, aux_a, aux_b;
+
+    bool installed = true;
+    aux_a = Package::kbytesToSize(a->installedSize);
+    aux_b = Package::kbytesToSize(b->installedSize);
+    qDebug() << "a is: " << aux_a;
+    qDebug() << "b is: " << aux_b;
+
+    if (a->installedSize == 0 && b->installedSize == 0)
+    {
+      aux_a = Package::kbytesToSize(a->downloadSize);
+      aux_b = Package::kbytesToSize(b->downloadSize);
+      //qDebug() << "a is: " << aux_a;
+      //qDebug() << "b is: " << aux_b;
+      installed = false;
+    }
+
+    QStringList s = aux_a.split(" ");
     mag_a = s.at(1);
 
-    aux = Package::kbytesToSize(b->installedSize);
-    s = aux.split(" ");
+    s = aux_b.split(" ");
     mag_b = s.at(1);
 
     if (mag_a == mag_b)
     {
-      if (a->installedSize < b->installedSize) return true;
+      if (installed)
+      {
+        if (a->installedSize < b->installedSize) return true;
 
-      if (a->installedSize == b->installedSize) {
-        return a->name < b->name;
+        if (a->installedSize == b->installedSize) {
+          return a->name < b->name;
+        }
+      }
+      else
+      {
+        if (a->downloadSize < b->downloadSize) return true;
+
+        if (a->downloadSize == b->downloadSize) {
+          return a->name < b->name;
+        }
       }
     }
     else

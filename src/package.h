@@ -45,6 +45,8 @@ struct PackageListData{
   QString repository;
   QString origin;
   QString version;
+  QString categories;
+  QString www;
   QString comment;
   QString description;
   QString outatedVersion;
@@ -106,6 +108,16 @@ struct PackageListData{
                                     downloadSize(dSize),
                                     status(pkgStatus){
   }
+
+  /*PackageListData(QString n, QString v, QString cat, QString w, QString c, PackageStatus pkgStatus, double dSize)
+                                    : name(n),
+                                      version(v),
+                                      categories(cat),
+                                      www(w),
+                                      comment(c),
+                                      downloadSize(dSize),
+                                      status(pkgStatus){
+  }*/
 };
 
 struct TransactionInfo{
@@ -164,7 +176,7 @@ class Package{
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
     //AUR methods
-    //static QList<PackageListData> * getAURPackageList(const QString& searchString);
+    static QList<PackageListData> * getPkgSearchPackageList(const QString& searchString);
 
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);
@@ -202,6 +214,7 @@ class Package{
 
     static QString kbytesToSize(float Bytes );
     static double strToKBytes(QString size);
+    static double strToKBytes2(QString size);
     static QString makeURLClickable(const QString &information);
     static QString getBaseName( const QString& pkgName );
     static QString parseSearchString( QString searchStr, bool exactMatch = false );

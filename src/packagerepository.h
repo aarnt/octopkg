@@ -108,6 +108,7 @@ public:
   PackageRepository();
 
   void registerDependency(IDependency& depends);
+  void setAURData(const QList<PackageListData>*const listOfForeignPackages, const QSet<QString>& unrequiredPackages);
   void setData(const QList<PackageListData>*const listOfPackages, const QSet<QString>& unrequiredPackages);
   void checkAndSetGroups(const QStringList& listOfGroups);
   void checkAndSetMembersOfGroup(const QString& group, const QStringList& members);

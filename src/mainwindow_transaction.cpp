@@ -49,8 +49,7 @@ void MainWindow::changeTransactionActionsState()
   ui->actionCancel->setEnabled(state);
   ui->actionSyncPackages->setEnabled(!state);
 
-  if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(!state);
-  if(m_hasAURTool) m_actionSwitchToAURTool->setEnabled(!state);
+  m_actionSwitchToPkgSearch->setEnabled(!state);
 
   if (state == false && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);
@@ -254,7 +253,7 @@ void MainWindow::insertIntoRemovePackage()
   //bool checkDependencies=false;
   //QStringList dependencies;
 
-  if (!isAURGroupSelected())
+  if (!isPkgSearchSelected())
   {
     ensureTabVisible(ctn_TABINDEX_TRANSACTION);
     QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
@@ -333,7 +332,7 @@ void MainWindow::insertIntoInstallPackage()
 {
   qApp->processEvents();
 
-  if (!isAURGroupSelected())
+  if (!isPkgSearchSelected())
   {
     ensureTabVisible(ctn_TABINDEX_TRANSACTION);
 
@@ -1240,8 +1239,8 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
 
-    if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
-    if(m_hasAURTool) m_actionSwitchToAURTool->setEnabled(false);
+    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
+    m_actionSwitchToPkgSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1251,8 +1250,8 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
 
-    if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(true);
-    if(m_hasAURTool) m_actionSwitchToAURTool->setEnabled(true);
+    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(true);
+    m_actionSwitchToPkgSearch->setEnabled(true);
 
     ui->actionSyncPackages->setEnabled(true);
     if (value == true && m_outdatedStringList->count() > 0)
@@ -1260,8 +1259,8 @@ void MainWindow::toggleTransactionActions(const bool value)
   }
   else if (value == false && state == false)
   {
-    if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
-    if(m_hasAURTool) m_actionSwitchToAURTool->setEnabled(false);
+    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
+    m_actionSwitchToPkgSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1278,7 +1277,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionRepositoryEditor->setEnabled(value);  
   m_actionSysInfo->setEnabled(value);
 
-  m_actionSwitchToAURTool->setEnabled(value);
+  m_actionSwitchToPkgSearch->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
 
   ui->actionGetNews->setEnabled(value);
@@ -1301,7 +1300,7 @@ void MainWindow::toggleSystemActions(const bool value)
     m_actionMirrorCheck->setEnabled(value);
   }
 
-  if (isAURGroupSelected() && StrConstants::getForeignRepositoryToolName() == "kcp")
+  if (isPkgSearchSelected() && StrConstants::getForeignRepositoryToolName() == "kcp")
   {
     ui->actionSyncPackages->setEnabled(true);
   }
@@ -1437,7 +1436,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     //Did it synchronize any repo? If so, let's refresh some things...
     if (textInTabOutput(StrConstants::getSyncing()))
     {
-      bool aurGroup = isAURGroupSelected();
+      bool aurGroup = isPkgSearchSelected();
 
       if (!aurGroup)
       {
@@ -1468,7 +1467,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       else if (m_commandExecuting != ectn_MIRROR_CHECK)
       {
         //If we are in a package group, maybe we have installed/removed something, so...
-        if (!isAURGroupSelected())
+        if (!isPkgSearchSelected())
         {
           metaBuildPackageList();
         }
@@ -1508,13 +1507,13 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   }
 
   enableTransactionActions();
-  if (isAURGroupSelected())
+  if (isPkgSearchSelected())
   {
     toggleSystemActions(false);
   }
 
-  if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
-    refreshGroupsWidget();
+  //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
+  //  refreshGroupsWidget();
 
   //refreshMenuTools(); //Maybe some of octopi tools were added/removed...
 

@@ -202,39 +202,12 @@ QByteArray UnixCommand::performAURCommand(const QString &args)
 /*
  * Returns a string containing all AUR packages given a searchString parameter
  */
-/*QByteArray UnixCommand::getAURPackageList(const QString &searchString)
+QByteArray UnixCommand::getPkgSearchPackageList(const QString &searchString)
 {
   QByteArray result("");
-  QProcess aur;
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-
-  aur.setProcessEnvironment(env);
-
-  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
-    aur.start(StrConstants::getForeignRepositoryToolName() + " -l ");
-  else
-    aur.start(StrConstants::getForeignRepositoryToolName() + " -Ss " + searchString);
-
-  aur.waitForFinished(-1);
-  result = aur.readAll();
-
-  if (UnixCommand::getBSDFlavour() == ectn_KAOS)
-  {
-    QString res = result;
-    res.remove("\033");
-    res.remove("[1m");
-    res.remove("[m");
-    res.remove("[1;32m");
-    res.remove("[1;34m");
-    res.remove("[1;36m");
-
-    return res.toLatin1();
-  }
-
+  result = performQuery("search -Q name -Q version -Q categories -Q www -Q comment -Q pkg-size " + searchString);
   return result;
-}*/
+}
 
 /*
  * Returns a string containing all packages no one depends on

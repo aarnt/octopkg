@@ -294,16 +294,13 @@ void MainWindow::initToolBar()
   ui->mainToolBar->addAction(ui->actionCommit);
   ui->mainToolBar->addAction(ui->actionCancel);
 
-  if(m_hasMirrorCheck)
+  /*if(m_hasMirrorCheck)
   {
     ui->mainToolBar->addAction(m_actionMirrorCheck);
-  }
+  }*/
 
-  if (m_hasAURTool)
-  {
-    m_separatorForActionAUR = ui->mainToolBar->addSeparator();
-    ui->mainToolBar->addAction(m_actionSwitchToAURTool);
-  }
+  m_separatorForActionPkgSearch = ui->mainToolBar->addSeparator();
+  ui->mainToolBar->addAction(m_actionSwitchToPkgSearch);
 
   m_dummyAction = new QAction(this);
   m_dummyAction->setVisible(false);
@@ -685,12 +682,12 @@ void MainWindow::initActions()
     connect(m_actionMirrorCheck, SIGNAL(triggered()), this, SLOT(doMirrorCheck()));
   }  
 
-  m_actionSwitchToAURTool = new QAction(this);
-  m_actionSwitchToAURTool->setIcon(IconHelper::getIconForeignGreen());
-  m_actionSwitchToAURTool->setText(StrConstants::getUseAURTool());
-  m_actionSwitchToAURTool->setCheckable(true);
-  m_actionSwitchToAURTool->setChecked(false);
-  connect(m_actionSwitchToAURTool, SIGNAL(triggered()), this, SLOT(AURToolSelected()));
+  m_actionSwitchToPkgSearch = new QAction(this);
+  m_actionSwitchToPkgSearch->setIcon(IconHelper::getIconInternet());
+  m_actionSwitchToPkgSearch->setText(StrConstants::getSearchForPackages());
+  m_actionSwitchToPkgSearch->setCheckable(true);
+  m_actionSwitchToPkgSearch->setChecked(false);
+  connect(m_actionSwitchToPkgSearch, SIGNAL(triggered()), this, SLOT(pkgSearchClicked()));
 
   m_actionInstallPacmanUpdates = new QAction(this);
   m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());

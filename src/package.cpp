@@ -130,15 +130,15 @@ QString Package::kbytesToSize( float Bytes )
   QString res;
 
   if( Bytes >= tb )
-    res = res.sprintf("%.2f TB", (float)Bytes/tb);
+    res = res.sprintf("%.2f TiB", (float)Bytes/tb);
   else if( Bytes >= gb && Bytes < tb )
-    res = res.sprintf("%.2f GB", (float)Bytes/gb);
+    res = res.sprintf("%.2f GiB", (float)Bytes/gb);
   else if( Bytes >= mb && Bytes < gb )
-    res = res.sprintf("%.2f MB", (float)Bytes/mb);
+    res = res.sprintf("%.2f MiB", (float)Bytes/mb);
   else if( Bytes >= kb && Bytes < mb )
-    res = res.sprintf("%.2f KB", (float)Bytes/kb);
+    res = res.sprintf("%.2f KiB", (float)Bytes/kb);
   else if ( Bytes < kb)
-    res = res.sprintf("%.2f Bytes", Bytes);
+    res = res.sprintf("%.2f Bytes", Bytes * 1024);
   else
     res = res.sprintf("%.2f Bytes", Bytes);
 
@@ -152,10 +152,10 @@ double Package::strToKBytes(QString size)
 {
   double res=0;
   if (size == "0.00B") res = 0;
-  else if (size.contains("kB"))
+  else if (size.contains("kB", Qt::CaseInsensitive))
   {
     bool ok;
-    int p = size.indexOf("kB");
+    int p = size.indexOf("kB", Qt::CaseInsensitive);
     double value = size.left(p).toDouble(&ok);
     if (ok)
     {
@@ -180,6 +180,47 @@ double Package::strToKBytes(QString size)
     if (ok)
     {
       res = value;
+    }
+  }
+
+  return res;
+}
+
+/*
+ * Converts the size in String type to double
+ */
+double Package::strToKBytes2(QString size)
+{
+  double res=0;
+  if (size == "0.00B") res = 0;
+  else if (size.contains("KiB", Qt::CaseInsensitive))
+  {
+    bool ok;
+    int p = size.indexOf("KiB", Qt::CaseInsensitive);
+    double value = size.left(p).toDouble(&ok);
+    if (ok)
+    {
+      res = value;
+    }
+  }
+  else if (size.contains("MiB"))
+  {
+    bool ok;
+    int p = size.indexOf("MiB");
+    double value = size.left(p).toDouble(&ok);
+    if (ok)
+    {
+      res = value * 1024;
+    }
+  }
+  else if (size.contains("B"))
+  {
+    bool ok;
+    int p = size.indexOf("B");
+    double value = size.left(p).toDouble(&ok);
+    if (ok)
+    {
+      res = value / 1024;
     }
   }
 
@@ -477,22 +518,92 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
  * Retrieves the list of all AUR packages in the database (installed + non-installed)
  * given the search parameter
  */
-/*QList<PackageListData> * Package::getAURPackageList(const QString& searchString)
+QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchString)
 {
-  //aur/yaourt 1.2.2-1 [installed]
-  //    A pacman wrapper with extended features and AUR support
-  //aur/libfm 1.1.0-4 (lxde) [installed: 1.1.0-3]
-
-  QString pkgName, pkgRepository, pkgVersion, pkgDescription, pkgOutVersion;
-  int pkgVotes;
+  QString pkgName, pkgVersion, pkgCategories, pkgWWW, pkgComment;
+  double pkgPkgSize;
+  int indName, indVersion, indCategories, indWWW, indComment, indPkgSize;
   PackageStatus pkgStatus;
   QList<PackageListData> * res = new QList<PackageListData>();
+  const int cSpaces = 16;
 
   if (searchString.isEmpty())
     return res;
 
-  QString pkgList = UnixCommand::getAURPackageList(searchString);
+  QString pkgList = UnixCommand::getPkgSearchPackageList(searchString);
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+
+  //TODO...
+  foreach(QString packageTuple, packageTuples)
+  {
+    if (packageTuple.at(0).isLower())
+    {
+      //TODO We have to search for the pkg to discover its status
+      PackageListData pld;
+
+      if (!pkgName.isEmpty())
+      {
+        pld.name = pkgName;
+        pld.version = pkgVersion;
+        pld.categories = pkgCategories;
+        pld.www = pkgWWW;
+        pld.comment = pkgComment;
+        pld.downloadSize = pkgPkgSize;
+        pld.status = ectn_NON_INSTALLED;
+
+        pkgName="";
+        pkgVersion="";
+        pkgCategories="";
+        pkgWWW="";
+        pkgComment="";
+        pkgPkgSize=0;
+        //qDebug() << pkgName;
+
+        res->append(pld);
+      }
+
+      continue;
+    }
+
+    indName = packageTuple.indexOf("Name           :");
+    indVersion = packageTuple.indexOf("Version        :");
+    indCategories = packageTuple.indexOf("Categories     :");
+    indWWW = packageTuple.indexOf("WWW            :");
+    indComment = packageTuple.indexOf("Comment        :");
+    indPkgSize = packageTuple.indexOf("Pkg size       :");
+
+    if (indName > -1)
+    {
+      indName += cSpaces;
+      pkgName = packageTuple.right(packageTuple.size()-(indName+1));
+    }
+    else if (indVersion > -1)
+    {
+      indVersion += cSpaces;
+      pkgVersion = packageTuple.right(packageTuple.size()-(indVersion+1));
+    }
+    else if (indCategories > -1)
+    {
+      indCategories += cSpaces;
+      pkgCategories = packageTuple.right(packageTuple.size()-(indCategories+1));
+    }
+    else if (indWWW > -1)
+    {
+      indWWW += cSpaces;
+      pkgWWW = packageTuple.right(packageTuple.size()-(indWWW+1));
+    }
+    else if (indPkgSize > -1)
+    {
+      indPkgSize += cSpaces;
+      pkgPkgSize = strToKBytes2(packageTuple.right(packageTuple.size()-(indPkgSize+1)));
+    }
+  }
+
+  return res;
+
+  /*
+
+  THIS IS THE OLD OCTOPI CODE!
 
   pkgDescription = "";
   foreach(QString packageTuple, packageTuples)
@@ -614,7 +725,8 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
       StrConstants::getForeignPkgRepositoryName().toUpper()) res->removeAt(0);
 
   return res;
-}*/
+  */
+}
 
 /*
  * Given a QString containing the output of pacman -Si/Qi (pkgInfo),

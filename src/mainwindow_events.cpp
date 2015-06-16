@@ -120,9 +120,9 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
   {
     //We are searching for AUR foreign packages...
-    if (isAURGroupSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
+    if (isPkgSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
-      ui->twGroups->setEnabled(false);
+      //ui->twGroups->setEnabled(false);
 
       QFuture<QList<PackageListData> *> f;
       disconnect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildAURPackageList()));
@@ -134,7 +134,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     //We are searching for packages that own some file typed by user...
     else if (isSearchByFileSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
-      ui->twGroups->setEnabled(false);
+      //ui->twGroups->setEnabled(false);
 
       QFuture<QString> f;
       disconnect(&g_fwPackageOwnsFile, SIGNAL(finished()), this, SLOT(positionInPkgListSearchByFile()));
@@ -258,13 +258,13 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       ui->twGroups->setCurrentItem(m_AllGroupsItem);
     }
   }
-  else if(ke->key() == Qt::Key_Y && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier)
+  /*else if(ke->key() == Qt::Key_Y && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier)
           && m_hasAURTool)
   {
     //The user wants to use "AUR tool" to search for pkgs
-    m_actionSwitchToAURTool->trigger();
+    m_actionSwitchToPkgSearch->trigger();
     m_leFilterPackage->setFocus();
-  }
+  }*/
   else if(ke->key() == Qt::Key_C && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
     if (m_commandExecuting == ectn_NONE)

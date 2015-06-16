@@ -187,8 +187,8 @@ private:
   QAction *m_actionSysInfo;
 
   //Toggles use of AUR tool
-  QAction *m_separatorForActionAUR;
-  QAction *m_actionSwitchToAURTool;
+  QAction *m_separatorForActionPkgSearch;
+  QAction *m_actionSwitchToPkgSearch;
 
   QByteArray m_horizontalSplit;
   QTreeWidgetItem *m_AllGroupsItem;
@@ -326,14 +326,17 @@ private slots:
 
   void buildPackagesFromGroupList(const QString group);
   void buildPackageList();
+  void buildAURPackageList();
   //void refreshPackageList();
 
   void metaBuildPackageList();
   void onPackageGroupChanged();
 
-  void AURToolSelected();
+  void pkgSearchClicked();
   void groupItemSelected();
 
+  void preBuildAURPackageList();
+  void preBuildAURPackageListMeta();
   void preBuildForeignPackageList();
   void preBuildUnrequiredPackageList();
   void preBuildPackageList();
@@ -448,7 +451,7 @@ public:
   }
 
   const PackageRepository::PackageData* getFirstPackageFromRepo(const QString pkgName);
-  bool isAURGroupSelected();
+  bool isPkgSearchSelected();
   bool isSearchByFileSelected();
 
   void turnDebugInfoOn();

@@ -225,6 +225,10 @@ public:
       return QIcon(":/resources/images/esf-clear.png");
   }
 
+  static QIcon getIconInternet(){
+    return QIcon::fromTheme("applications-internet", QIcon(":/resources/images/applications-internet.png"));
+  }
+
   //QActions without icons in Octopi does this works for gtk, too?
   static QIcon getIconHelpAbout(){ return QIcon::fromTheme("help-about"); }
   static QIcon getIconHelpUsage(){ return QIcon::fromTheme("help-contents"); }
