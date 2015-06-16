@@ -424,20 +424,25 @@ struct TSort3 {
 struct TSort4 {
   bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {      
     QString mag_a, mag_b, aux_a, aux_b;
-
     bool installed = true;
-    aux_a = Package::kbytesToSize(a->installedSize);
-    aux_b = Package::kbytesToSize(b->installedSize);
-    qDebug() << "a is: " << aux_a;
-    qDebug() << "b is: " << aux_b;
 
-    if (a->installedSize == 0 && b->installedSize == 0)
+    qDebug() << a->repository;
+
+    if (a->repository != ctn_PKGNG_FAKE_REPOSITORY)
+    {
+      aux_a = Package::kbytesToSize(a->installedSize);
+      aux_b = Package::kbytesToSize(b->installedSize);
+      installed = true;
+      //qDebug() << "a is: " << aux_a;
+      //qDebug() << "b is: " << aux_b;
+    }
+    else if (a->repository == ctn_PKGNG_FAKE_REPOSITORY)
     {
       aux_a = Package::kbytesToSize(a->downloadSize);
       aux_b = Package::kbytesToSize(b->downloadSize);
+      installed = false;
       //qDebug() << "a is: " << aux_a;
       //qDebug() << "b is: " << aux_b;
-      installed = false;
     }
 
     QStringList s = aux_a.split(" ");

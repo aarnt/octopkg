@@ -533,7 +533,6 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
   QString pkgList = UnixCommand::getPkgSearchPackageList(searchString);
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
 
-  //TODO...
   foreach(QString packageTuple, packageTuples)
   {
     if (packageTuple.at(0).isLower())
@@ -550,6 +549,7 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
         pld.comment = pkgComment;
         pld.downloadSize = pkgPkgSize;
         pld.status = ectn_NON_INSTALLED;
+        pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
 
         pkgName="";
         pkgVersion="";
@@ -557,7 +557,6 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
         pkgWWW="";
         pkgComment="";
         pkgPkgSize=0;
-        //qDebug() << pkgName;
 
         res->append(pld);
       }
@@ -600,132 +599,6 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
   }
 
   return res;
-
-  /*
-
-  THIS IS THE OLD OCTOPI CODE!
-
-  pkgDescription = "";
-  foreach(QString packageTuple, packageTuples)
-  {
-    if (packageTuple[0].isNumber())
-    {
-      int space=packageTuple.indexOf(" ");
-      packageTuple = packageTuple.mid(space+1);
-    }
-
-    if ((UnixCommand::getBSDFlavour() != ectn_KAOS && !packageTuple[0].isSpace()) ||
-        (UnixCommand::getBSDFlavour() == ectn_KAOS && packageTuple[0] != '\t'))
-    {
-      //Do we already have a description?
-      if (pkgDescription != "")
-      {
-        pkgDescription = pkgName + " " + pkgDescription;
-
-        PackageListData pld =
-            PackageListData(pkgName, pkgRepository, pkgVersion, pkgDescription, pkgStatus, pkgOutVersion);
-
-        pld.popularity = pkgVotes;
-
-        res->append(pld);
-        pkgDescription = "";
-      }
-
-      //First we get repository and name!
-      QStringList parts = packageTuple.split(' ');
-
-      if (UnixCommand::getBSDFlavour() == ectn_KAOS)
-      {
-        parts[0] = parts[0].remove("[1;35m");
-      }
-
-      QString repoName = parts[0];
-      int a = repoName.indexOf("/");
-      pkgRepository = repoName.left(a);
-
-      if (pkgRepository != StrConstants::getForeignPkgRepositoryName())
-      {
-        res->removeAt(res->count()-1);
-        continue;
-      }
-
-      pkgRepository = StrConstants::getForeignPkgRepositoryName().toUpper();
-      pkgName = repoName.mid(a+1);
-      pkgVersion = parts[1];
-
-      QStringList strVotes = parts.filter("(");
-      pkgVotes = 0;
-
-      //Chakra does not have popularity support in CCR
-      if (StrConstants::getForeignRepositoryToolName() != "ccr")
-      {
-        if (!strVotes.last().isEmpty())
-          pkgVotes = strVotes.last().replace('(', "").replace(')', "").toInt();
-        else
-          pkgVotes = 0;
-      }
-
-      if(packageTuple.indexOf("[installed]") != -1)
-      {
-        //This is an installed package
-        pkgStatus = ectn_INSTALLED;
-        pkgOutVersion = "";
-      }
-      else if (packageTuple.indexOf("[installed:") != -1)
-      {
-        //This is an outdated installed package
-        pkgStatus = ectn_OUTDATED;
-
-        int i = packageTuple.indexOf("[installed:");
-        pkgOutVersion = packageTuple.mid(i+11);
-        pkgOutVersion = pkgOutVersion.remove(QRegularExpression("\\].*")).trimmed();
-      }
-      else
-      {
-        //This is an uninstalled package
-        pkgStatus = ectn_NON_INSTALLED;
-        pkgOutVersion = "";
-      }
-    }
-    else
-    {            
-      //This is a description!
-      if (UnixCommand::getBSDFlavour() == ectn_KAOS)
-      {        
-        pkgDescription = packageTuple;
-        pkgDescription.remove("\t");
-
-        if (pkgDescription.isEmpty())
-          pkgDescription += " ";
-      }
-      else
-      {
-        if (!packageTuple.trimmed().isEmpty())
-          pkgDescription += packageTuple.trimmed();
-        else
-        {
-          pkgDescription += " ";
-        }
-      }
-    }
-  }
-
-  //And adds the very last package...
-  if (packageTuples.count() > 1)
-  {
-    pkgDescription = pkgName + " " + pkgDescription;
-    PackageListData pld =
-        PackageListData(pkgName, pkgRepository, pkgVersion, pkgDescription, pkgStatus, pkgOutVersion);
-    pld.popularity = pkgVotes;
-
-    res->append(pld);
-  }
-
-  if (res->count() > 0 && res->at(0).repository !=
-      StrConstants::getForeignPkgRepositoryName().toUpper()) res->removeAt(0);
-
-  return res;
-  */
 }
 
 /*
