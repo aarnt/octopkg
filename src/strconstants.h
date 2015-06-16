@@ -76,26 +76,6 @@ public:
     return ret;
   }
 
-  /*static QString getForeignRepositoryGroupName()
-  {
-    if( UnixCommand::getLinuxDistro() == ectn_CHAKRA )
-      return QLatin1String( "Ccr" );
-    else if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-      return QLatin1String( "KCP" );
-
-    return QLatin1String( "AUR" );
-  }
-
-  static QString getForeignRepositoryTargetPrefix()
-  {
-    if( UnixCommand::getLinuxDistro() == ectn_CHAKRA )
-      return QLatin1String( "ccr/" );
-    else if (UnixCommand::getLinuxDistro() == ectn_KAOS)
-      return "kcp/";
-
-    return QLatin1String( "aur/" );
-  }*/
-
   static QString getAntergosNews(){
     return QObject::tr("Antergos news");
   }
@@ -385,10 +365,6 @@ public:
     return QObject::tr("Press any key to continue...");
   }
 
-  static QString getSyncMirror(){
-    return "Mirror-check...";
-  }
-
   static QString getSyncDatabase(){
     return QObject::tr("Sync database");
   }
@@ -590,6 +566,10 @@ public:
 
   static QString getSearchForPackages(){
     return QObject::tr("Search for packages...");
+  }
+
+  static QString getSearchStringIsShort(){
+    return QObject::tr("Search string must have at least 2 characters.");
   }
 
   static QString getCopyFullPath(){

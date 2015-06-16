@@ -426,8 +426,6 @@ struct TSort4 {
     QString mag_a, mag_b, aux_a, aux_b;
     bool installed = true;
 
-    qDebug() << a->repository;
-
     if (a->repository != ctn_PKGNG_FAKE_REPOSITORY)
     {
       aux_a = Package::kbytesToSize(a->installedSize);

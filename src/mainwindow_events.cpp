@@ -122,6 +122,12 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     //We are searching for AUR foreign packages...
     if (isPkgSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
+      if (m_leFilterPackage->text().size() <= 2)
+      {
+        QMessageBox::information(this, StrConstants::getWarning(), StrConstants::getSearchStringIsShort(), QMessageBox::Ok);
+        return;
+      }
+
       //ui->twGroups->setEnabled(false);
 
       QFuture<QList<PackageListData> *> f;
@@ -258,13 +264,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       ui->twGroups->setCurrentItem(m_AllGroupsItem);
     }
   }
-  /*else if(ke->key() == Qt::Key_Y && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier)
-          && m_hasAURTool)
-  {
-    //The user wants to use "AUR tool" to search for pkgs
-    m_actionSwitchToPkgSearch->trigger();
-    m_leFilterPackage->setFocus();
-  }*/
   else if(ke->key() == Qt::Key_C && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
     if (m_commandExecuting == ectn_NONE)
@@ -331,81 +330,6 @@ int MainWindow::selectTerminal(const int initialTerminalIndex)
 }
 #endif
 
-//If we are using Qt5 libs, this method is native !
-#if QT_VERSION < 0x050000
-/*
- * This Event method is called whenever the user releases a key (useful to navigate in the packagelist)
- */
-void MainWindow::keyReleaseEvent(QKeyEvent *ke)
-{  
-  static int i=0;
-  static int k=-9999; //last key pressed
-  static int k_count=0;
-
-  if ((ui->tvPackages->hasFocus() && ke->modifiers() == Qt::NoModifier) &&
-      (((ke->key() >= Qt::Key_A) && (ke->key() <= Qt::Key_Z)) ||
-       ((ke->key() >= Qt::Key_0 && (ke->key() <= Qt::Key_9)))))
-  {
-    QModelIndex searchColumn = m_packageModel->index(0,
-                                                     PackageModel::ctn_PACKAGE_NAME_COLUMN,
-                                                     QModelIndex());
-    QModelIndexList fi = m_packageModel->match(searchColumn, Qt::DisplayRole,
-                                               ke->text(), -1);
-
-    if (fi.count() > 0) {
-      if ( (ke->key() != k) || (fi.count() != k_count) ) i=0;
-
-      QModelIndex currentIndex = ui->tvPackages->currentIndex();
-      QModelIndex firstIndex = fi.first();
-      QModelIndex lastIndex = fi.last();
-
-      if (currentIndex.row() < firstIndex.row() || currentIndex.row() > lastIndex.row())
-      {
-        i=0;
-      }
-      else
-      {
-        for(int ind=0; ind<fi.count(); ind++)
-        {
-          QModelIndex miAux = fi.at(ind);
-
-          if(miAux == ui->tvPackages->currentIndex() )
-          {
-            int newIndex = ind+1;
-            if(newIndex > fi.count()-1)
-            {
-              i=0;
-            }
-            else
-            {
-              i=newIndex;
-            }
-          }
-        }
-      }
-
-      if (ui->tvPackages->selectionModel() != NULL) {
-        ui->tvPackages->selectionModel()->clear();
-        QModelIndex mi = fi[i];
-        ui->tvPackages->scrollTo(mi);
-        ui->tvPackages->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::Select);
-        ui->tvPackages->setCurrentIndex(mi);
-      }
-
-      //If we happen to be over the last package of the list...
-      if (currentIndex.row() == lastIndex.row()-1)
-      {
-        i=0;
-      }
-    }
-
-    k = ke->key();
-    k_count = fi.count();
-  }
-
-  else ke->ignore();
-}
-#else
 /*
  * This Event method is called whenever the user releases a key
  */
@@ -423,4 +347,3 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
     }
   }
 }
-#endif
