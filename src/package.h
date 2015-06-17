@@ -52,6 +52,8 @@ struct PackageListData{
   QString outatedVersion;
   double  installedSize;
   double  downloadSize;
+  QString installedOn;
+  QString license;
   int     popularity; //votes
   PackageStatus status;
 

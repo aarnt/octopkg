@@ -175,7 +175,7 @@ int SettingsManager::getPackageIconColumnWidth()
 int SettingsManager::getPackageNameColumnWidth()
 {
   return instance()->getSYSsettings()->value(
-        ctn_KEY_PACKAGE_NAME_COLUMN_WIDTH, 400).toInt();
+        ctn_KEY_PACKAGE_NAME_COLUMN_WIDTH, 500).toInt();
 }
 
 int SettingsManager::getPackageVersionColumnWidth()

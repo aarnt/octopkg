@@ -122,7 +122,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     //We are searching for AUR foreign packages...
     if (isPkgSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
-      if (m_leFilterPackage->text().size() <= 2)
+      if (m_leFilterPackage->text().size() < 2)
       {
         QMessageBox::information(this, StrConstants::getWarning(), StrConstants::getSearchStringIsShort(), QMessageBox::Ok);
         return;

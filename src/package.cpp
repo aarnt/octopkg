@@ -78,7 +78,6 @@ QString Package::makeURLClickable( const QString &s )
     QString ns;
 
     ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
-
     sb.replace( ini, s1.length(), ns);
 		search = ini + (2*s1.length()) + 15;	
 	}
@@ -159,7 +158,7 @@ double Package::strToKBytes(QString size)
     double value = size.left(p).toDouble(&ok);
     if (ok)
     {
-      res = value;
+      res = value / 1.024;
     }
   }
   else if (size.contains("MB"))
@@ -169,7 +168,7 @@ double Package::strToKBytes(QString size)
     double value = size.left(p).toDouble(&ok);
     if (ok)
     {
-      res = value * 1024;
+      res = (value * 1024) / 1.048576;
     }
   }
   else if (size.contains("B"))
@@ -469,10 +468,6 @@ QList<PackageListData> *Package::getForeignPackageList()
  */
 QList<PackageListData> * Package::getPackageList(const QString &packageName)
 {
-  //archlinuxfr/yaourt 1.2.2-1 [installed]
-  //    A pacman wrapper with extended features and AUR support
-  //community/libfm 1.1.0-4 (lxde) [installed: 1.1.0-3]
-
   QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription;
   double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
@@ -501,7 +496,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
         pkgComment += " " + parts[c];
       }
 
-      pkgComment = pkgName + " " + pkgComment.trimmed();
+      pkgComment = pkgComment.trimmed();
       //pkgDescription = pkgName + " " + pkgComment;
 
       PackageListData pld =
@@ -546,7 +541,7 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
         pld.version = pkgVersion;
         pld.categories = pkgCategories;
         pld.www = pkgWWW;
-        pld.comment = pkgComment;
+        pld.comment = pkgName + " " + pkgComment;
         pld.downloadSize = pkgPkgSize;
         pld.status = ectn_NON_INSTALLED;
         pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
@@ -591,12 +586,36 @@ QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchS
       indWWW += cSpaces;
       pkgWWW = packageTuple.right(packageTuple.size()-(indWWW+1));
     }
+    else if (indComment > -1)
+    {
+      indComment += cSpaces;
+      pkgComment = packageTuple.right(packageTuple.size()-(indComment+1));
+    }
     else if (indPkgSize > -1)
     {
       indPkgSize += cSpaces;
       pkgPkgSize = strToKBytes2(packageTuple.right(packageTuple.size()-(indPkgSize+1)));
     }
   }
+
+  //Adds the last one...
+  PackageListData pld;
+  pld.name = pkgName;
+  pld.version = pkgVersion;
+  pld.categories = pkgCategories;
+  pld.www = pkgWWW;
+  pld.comment = pkgName + " " + pkgComment;
+  pld.downloadSize = pkgPkgSize;
+  pld.status = ectn_NON_INSTALLED;
+  pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
+
+  pkgName="";
+  pkgVersion="";
+  pkgCategories="";
+  pkgWWW="";
+  pkgComment="";
+  pkgPkgSize=0;
+  res->append(pld);
 
   return res;
 }
@@ -1024,15 +1043,7 @@ PackageInfoData Package::getInformation(const QString &pkgName, bool foreignPack
   res.version = getVersion(pkgInfo);
   res.url = getURL(pkgInfo);
   res.license = getLicense(pkgInfo);
-  res.dependsOn = getDependsOn(pkgInfo);
-  res.optDepends = getOptDepends(pkgInfo);
   res.group = getGroup(pkgInfo);
-  res.provides = getProvides(pkgInfo);
-  res.replaces = getReplaces(pkgInfo);
-  res.requiredBy = getRequiredBy(pkgInfo);
-  res.optionalFor = getOptionalFor(pkgInfo);
-  res.conflictsWith = getConflictsWith(pkgInfo);
-  res.packager = getPackager(pkgInfo);
   res.maintainer = getMaintainer(pkgInfo);
   res.arch = getArch(pkgInfo);
   res.installedOn = getInstalledOn(pkgInfo);

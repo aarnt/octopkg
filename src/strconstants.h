@@ -565,7 +565,7 @@ public:
   }
 
   static QString getSearchForPackages(){
-    return QObject::tr("Search for packages...");
+    return QObject::tr("Search for remote packages...");
   }
 
   static QString getSearchStringIsShort(){

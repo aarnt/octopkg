@@ -605,9 +605,10 @@ void MainWindow::buildAURPackageList()
   }
 
   m_packageRepo.setAURData(list, *unrequiredPackageList);
-  //qDebug() << "AUR count: " << list->count();
 
-  //m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
+  //qDebug() << list->count();
+
+  m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   m_packageModel->applyFilter(ectn_ALL_PKGS, "", "NONE");
 
   QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
@@ -1063,7 +1064,7 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
   /* Appends all info from the selected package! */
   QString pkgName=package->name;
 
-  if (isPkgSearchSelected() && package->installed() == false)
+  /*if (isPkgSearchSelected() && package->installed() == false)
   {
     QString aux_desc = package->description;
     int space = aux_desc.indexOf(' ');
@@ -1095,7 +1096,7 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
       text->scrollToAnchor(anchorBegin);
     }
   }
-  else //We are not in the AUR group
+  else //We are not in the AUR group*/
   {
     QTextBrowser *text = ui->twProperties->widget(
           ctn_TABINDEX_INFORMATION)->findChild<QTextBrowser*>("textBrowser");

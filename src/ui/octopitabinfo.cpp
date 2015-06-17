@@ -60,13 +60,6 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString url = StrConstants::getURL();
   QString licenses = StrConstants::getLicenses();
   QString groups = StrConstants::getCategories();
-  QString provides = StrConstants::getProvides();
-  QString dependsOn = StrConstants::getDependsOn();
-  QString requiredBy = StrConstants::getRequiredBy();
-  QString optionalFor = StrConstants::getOptionalFor();
-  QString optionalDeps = StrConstants::getOptionalDeps();
-  QString conflictsWith = StrConstants::getConflictsWith();
-  QString replaces = StrConstants::getReplaces();
   QString downloadSize = StrConstants::getDownloadSize();
   QString installedSize = StrConstants::getInstalledSize();
   QString maintainer = StrConstants::getMaintainer();
@@ -74,12 +67,16 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString installedOn = StrConstants::getInstalledOn();
   QString options = StrConstants::getOptions();
 
-  //Let's put package description in UTF-8 format
-  QString pkgDescription = pid.comment;
+  //Let's put package description in UTF-8 format  
+  QString pkgDescription;
 
-#if QT_VERSION < 0x050000
-  pkgDescription = pkgDescription.fromUtf8(pkgDescription.toLatin1().data());
-#endif
+  if (!pid.comment.isEmpty())
+    pkgDescription = pid.comment;
+  else
+  {
+    int ind = package.comment.indexOf(" ");
+    pkgDescription = package.comment.right(package.comment.size() - ind).trimmed();
+  }
 
   QString html;
   html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
@@ -89,10 +86,12 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   html += "<table border=\"0\">";
   html += "<tr><th width=\"20%\"></th><th width=\"80%\"></th></tr>";
 
-  if (pid.url != "<a href=\"http://\"></a>UNKNOWN")
+  if (package.repository.isEmpty() && pid.url != "<a href=\"http://\"></a>UNKNOWN")
     html += "<tr><td>" + url + "</td><td style=\"font-size:14px;\">" + pid.url + "</td></tr>";
+  else if (!package.repository.isEmpty())
+    html += "<tr><td>" + url + "</td><td style=\"font-size:14px;\">" + Package::makeURLClickable(package.www) + "</td></tr>";
 
-  if (package.outdated())
+  /*if (package.outdated())
   {
     if (package.status != ectn_NEWER)
     {
@@ -133,55 +132,42 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
         html += "<tr><td>" + version + "</td><td>" + package.version + "</td></tr>";
       }
     }
-  }
+  }*/
 
   //This is needed as packager names could be encoded in different charsets, resulting in an error
   QString packagerName = pid.maintainer;
   packagerName = packagerName.replace("<", "&lt;");
   packagerName = packagerName.replace(">", "&gt;");
 
-#if QT_VERSION < 0x050000
-  packagerName = packagerName.fromUtf8(packagerName.toLatin1().data());
-#endif
-
-  /*QString strConflictsWith = pid.conflictsWith;
-  strConflictsWith = strConflictsWith.replace("<", "&lt;");
-  strConflictsWith = strConflictsWith.replace(">", "&gt;");
-  strConflictsWith = strConflictsWith.replace("&lt;br&gt;", "<br>");*/
-
   if(! pid.license.isEmpty())
     html += "<tr><td>" + licenses + "</td><td>" + pid.license + "</td></tr>";
 
-  html += "<tr><td>" + installedOn + "</td><td>" + pid.installedOn;
+  if(! pid.installedOn.isEmpty())
+    html += "<tr><td>" + installedOn + "</td><td>" + pid.installedOn;
 
   //Show this info only if there's something to show
-  if(! pid.group.contains("None"))
-    html += "<tr><td>" + groups + "</td><td>" + pid.group + "</td></tr>";
-  /*if(! pid.provides.contains("None"))
-    html += "<tr><td>" + provides + "</td><td>" + pid.provides + "</td></tr>";
-  if(! pid.dependsOn.contains("None"))
-    html += "<tr><td>" + dependsOn + "</td><td>" + pid.dependsOn + "</td></tr>";
-  if(! pid.optDepends.contains("None"))
-    html += "<tr><td>" + optionalDeps + "</td><td>" + pid.optDepends + "</td></tr>";
-  if(!pid.requiredBy.isEmpty() && !pid.requiredBy.contains("None"))
-    html += "<tr><td>" + requiredBy + "</td><td>" + pid.requiredBy + "</td></tr>";
-  if(!pid.optionalFor.isEmpty() && !pid.optionalFor.contains("None"))
-    html += "<tr><td>" + optionalFor + "</td><td>" + pid.optionalFor + "</td></tr>";
-  if(! pid.conflictsWith.contains("None"))
-    html += "<tr><td><b>" + conflictsWith + "</b></td><td><b>" + strConflictsWith +
-        "</b></font></td></tr>";
-  if(! pid.replaces.contains("None"))
-    html += "<tr><td>" + replaces + "</td><td>" + pid.replaces + "</td></tr>";
-  */
+  if (package.repository.isEmpty())
+  {
+    if(! pid.group.contains("None"))
+      html += "<tr><td>" + groups + "</td><td>" + pid.group + "</td></tr>";
+  }
+  else
+  {
+    if(! package.categories.isEmpty())
+      html += "<tr><td>" + groups + "</td><td>" + package.categories + "</td></tr>";
+  }
 
-  if(! pid.downloadSizeAsString.isEmpty())
-    html += "<tr><td>" + downloadSize + "</td><td>" + pid.downloadSizeAsString + "</td></tr>";
+  if(package.downloadSize != 0)
+    html += "<tr><td>" + downloadSize + "</td><td>" + Package::kbytesToSize(package.downloadSize) + "</td></tr>";
 
-  if(pid.installedSizeAsString != "0.00B")
+  if(! pid.installedSizeAsString.isEmpty() && pid.installedSizeAsString != "0.00B")
     html += "<tr><td>" + installedSize + "</td><td>" + pid.installedSizeAsString + "</td></tr>";
 
-  html += "<tr><td>" + maintainer + "</td><td>" + packagerName + "</td></tr>";
-  html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
+  if (!packagerName.isEmpty())
+    html += "<tr><td>" + maintainer + "</td><td>" + packagerName + "</td></tr>";
+
+  if (!pid.arch.isEmpty())
+    html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
 
   if(! pid.options.isEmpty())
     html += "<tr><td>" + options + "</td><td>" + pid.options + "</td></tr>";

@@ -475,7 +475,8 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
 
-    m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
+    if (!isPkgSearchSelected())
+      m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   }
   else if (actionSelected->objectName() == ui->actionSearchByFile->objectName())
   {
