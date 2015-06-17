@@ -253,7 +253,7 @@ void MainWindow::insertIntoRemovePackage()
   //bool checkDependencies=false;
   //QStringList dependencies;
 
-  if (!isPkgSearchSelected())
+  //if (!isPkgSearchSelected())
   {
     ensureTabVisible(ctn_TABINDEX_TRANSACTION);
     QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
@@ -332,7 +332,7 @@ void MainWindow::insertIntoInstallPackage()
 {
   qApp->processEvents();
 
-  if (!isPkgSearchSelected())
+  //if (!isPkgSearchSelected())
   {
     ensureTabVisible(ctn_TABINDEX_TRANSACTION);
 
@@ -860,6 +860,9 @@ void MainWindow::doRemoveAndInstall()
   TransactionInfo ti = Package::getTargetUpgradeList(listOfInstallTargets);
   QStringList *installTargets = ti.packages;
   QString ds = ti.sizeToDownload;
+
+  if (ti.sizeToDownload == 0) ds = "0.00 Bytes";
+
   QString installList;
 
   foreach(QString target, *installTargets)
@@ -1016,6 +1019,9 @@ void MainWindow::doInstall()
   QStringList *targets = ti.packages;
   QString list;
   QString ds = ti.sizeToDownload;
+
+  if (ti.sizeToDownload == 0) ds = "0.00 Bytes";
+
   TransactionDialog question(this);
 
   foreach(QString target, *targets)
@@ -1474,6 +1480,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         else
         {
           bRefreshGroups = false;
+          m_actionSwitchToPkgSearch->setChecked(false);
           metaBuildPackageList();
         }
       }

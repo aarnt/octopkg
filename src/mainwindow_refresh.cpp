@@ -38,6 +38,7 @@
 #include <QTextBrowser>
 #include <QStandardItem>
 #include <QFutureWatcher>
+#include <QMutableListIterator>
 
 #if QT_VERSION > 0x050000
   #include <QtConcurrent/QtConcurrentRun>
@@ -540,6 +541,20 @@ void MainWindow::metaBuildPackageList()
 void MainWindow::preBuildAURPackageListMeta()
 {
   m_listOfAURPackages = g_fwAURMeta.result();
+
+  //Let's iterate over those found packages to change their status
+  for (QList<PackageListData>::iterator it = m_listOfAURPackages->begin();
+       it != m_listOfAURPackages->end(); ++it)
+  {
+    const PackageRepository::PackageData*const package =
+        m_packageRepo.getFirstPackageByName((*it).name);
+
+    if (package != NULL)
+    {
+      (*it).status = package->status;
+    }
+  }
+
   buildAURPackageList();
 
   if (m_cic) {
@@ -560,6 +575,24 @@ void MainWindow::preBuildAURPackageListMeta()
 void MainWindow::preBuildAURPackageList()
 {
   m_listOfAURPackages = g_fwAUR.result();
+
+  if (m_commandExecuting == ectn_NONE)
+  {
+    qDebug() << "Entered!";
+    //Let's iterate over those found packages to change their status
+    for (QList<PackageListData>::iterator it = m_listOfAURPackages->begin();
+         it != m_listOfAURPackages->end(); ++it)
+    {
+      const PackageRepository::PackageData*const package =
+          m_packageRepo.getFirstPackageByName((*it).name);
+
+      if (package != NULL)
+      {
+        (*it).status = package->status;
+      }
+    }
+  }
+
   buildAURPackageList();
 
   if (m_cic) {
