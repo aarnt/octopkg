@@ -78,9 +78,9 @@ void MainWindow::refreshAppIcon()
 void MainWindow::refreshMenuTools()
 {
   static bool connectorPlv=false;
-  static bool connectorRepo=false;
-  static bool connectorCleaner=false;
-  static bool connectorGist=false;
+  //static bool connectorRepo=false;
+  //static bool connectorCleaner=false;
+  //static bool connectorGist=false;
   int availableTools=0;
 
   if(UnixCommand::hasTheExecutable("plv"))
@@ -112,8 +112,7 @@ void MainWindow::refreshMenuTools()
     }
   }
   else
-    ui->actionRepositoryEditor->setVisible(false);
-  */
+    ui->actionRepositoryEditor->setVisible(false);  
 
   if(UnixCommand::hasTheExecutable("octopi-cachecleaner"))
   {
@@ -165,6 +164,7 @@ void MainWindow::refreshMenuTools()
 
   if (availableTools == 0)
     ui->menuTools->menuAction()->setVisible(false);
+  */
 
   foreach (QAction * act,  ui->menuBar->actions())
   {
@@ -204,11 +204,12 @@ void MainWindow::refreshGroupsWidget()
 /*
  * User clicked AUR tool button in the toolbar
  */
-void MainWindow::pkgSearchClicked()
+void MainWindow::remoteSearchClicked()
 {
-  if (!m_actionSwitchToPkgSearch->isChecked())
+  m_leFilterPackage->clear();
+
+  if (!m_actionSwitchToRemoteSearch->isChecked())
   {
-    m_leFilterPackage->clear();
     ui->menuSearch->setEnabled(true);
   }
   else
@@ -339,7 +340,7 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
 /*
  * Executes QFuture to retrive Outdated AUR list of packages
  */
-void MainWindow::retrieveForeignPackageList()
+/*void MainWindow::retrieveForeignPackageList()
 {
   QEventLoop el;
   QFuture<QList<PackageListData> *> f;
@@ -350,7 +351,7 @@ void MainWindow::retrieveForeignPackageList()
   el.exec();
 
   assert(m_foreignPackageList != NULL);
-}
+}*/
 
 /*
  * Executes QFuture to retrive Unrequired Pacman list of packages
@@ -368,15 +369,15 @@ void MainWindow::retrieveUnrequiredPackageList()
 }
 
 /*
- * Helper method to assign QFuture for outdated AUR list of packages
+ * Helper method to assign QFuture for list of outdated packages
  */
-void MainWindow::preBuildForeignPackageList()
+/*void MainWindow::preBuildForeignPackageList()
 {
   m_foreignPackageList = g_fwForeignPacman.result();
 
   if(m_debugInfo)
     std::cout << "Time elapsed obtaining Foreign pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
-}
+}*/
 
 /*
  * Helper method to assign QFuture for Unrequired Pacman list of packages
@@ -439,7 +440,7 @@ void MainWindow::metaBuildPackageList()
   ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
   //if (ui->twGroups->topLevelItemCount() == 0 || isAllCategoriesSelected())
-  if (m_actionSwitchToPkgSearch->isChecked())
+  if (m_actionSwitchToRemoteSearch->isChecked())
   {
     //m_toolButtonPacman->hide();
     //m_toolButtonAUR->hide();
@@ -456,17 +457,17 @@ void MainWindow::metaBuildPackageList()
     if(!m_leFilterPackage->text().isEmpty())
     {
       m_toolButtonPacman->hide();
-      disconnect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
+      disconnect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
 
       QFuture<QList<PackageListData> *> f;
       f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
-      connect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildAURPackageListMeta()));
+      connect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
       g_fwAURMeta.setFuture(f);
     }
     else
     {
-      m_listOfAURPackages = new QList<PackageListData>();
-      buildAURPackageList();
+      m_listOfRemotePackages = new QList<PackageListData>();
+      buildRemotePackageList();
       delete m_cic;
       m_cic = 0;
       m_leFilterPackage->setFocus();
@@ -480,7 +481,7 @@ void MainWindow::metaBuildPackageList()
     toggleSystemActions(false);
     disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    reapplyPackageFilter();
+    //reapplyPackageFilter();
     disconnect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
 
     QEventLoop el;
@@ -527,13 +528,13 @@ void MainWindow::metaBuildPackageList()
  * Helper method to deal with the QFutureWatcher result before calling
  * AUR package list building method
  */
-void MainWindow::preBuildAURPackageListMeta()
+void MainWindow::preBuildRemotePackageListMeta()
 {
-  m_listOfAURPackages = g_fwAURMeta.result();
+  m_listOfRemotePackages = g_fwAURMeta.result();
 
   //Let's iterate over those found packages to change their status
-  for (QList<PackageListData>::iterator it = m_listOfAURPackages->begin();
-       it != m_listOfAURPackages->end(); ++it)
+  for (QList<PackageListData>::iterator it = m_listOfRemotePackages->begin();
+       it != m_listOfRemotePackages->end(); ++it)
   {
     const PackageRepository::PackageData*const package =
         m_packageRepo.getFirstPackageByName((*it).name);
@@ -544,7 +545,7 @@ void MainWindow::preBuildAURPackageListMeta()
     }
   }
 
-  buildAURPackageList();
+  buildRemotePackageList();
 
   if (m_cic) {
     delete m_cic;
@@ -561,15 +562,15 @@ void MainWindow::preBuildAURPackageListMeta()
  * Helper method to deal with the QFutureWatcher result before calling
  * AUR package list building method
  */
-void MainWindow::preBuildAURPackageList()
+void MainWindow::preBuildRemotePackageList()
 {
-  m_listOfAURPackages = g_fwAUR.result();
+  m_listOfRemotePackages = g_fwAUR.result();
 
   if (m_commandExecuting == ectn_NONE)
   {
     //Let's iterate over those found packages to change their status
-    for (QList<PackageListData>::iterator it = m_listOfAURPackages->begin();
-         it != m_listOfAURPackages->end(); ++it)
+    for (QList<PackageListData>::iterator it = m_listOfRemotePackages->begin();
+         it != m_listOfRemotePackages->end(); ++it)
     {
       const PackageRepository::PackageData*const package =
           m_packageRepo.getFirstPackageByName((*it).name);
@@ -581,7 +582,7 @@ void MainWindow::preBuildAURPackageList()
     }
   }
 
-  buildAURPackageList();
+  buildRemotePackageList();
 
   if (m_cic) {
     delete m_cic;
@@ -593,7 +594,7 @@ void MainWindow::preBuildAURPackageList()
     m_leFilterPackage->setFocus();
   }
 
-  emit buildAURPackageListDone();
+  emit buildRemotePackageListDone();
 }
 
 /*
@@ -601,13 +602,13 @@ void MainWindow::preBuildAURPackageList()
  * given the searchString parameter passed.
  *
  */
-void MainWindow::buildAURPackageList()
+void MainWindow::buildRemotePackageList()
 {
   ui->actionSearchByDescription->setChecked(true);
   m_progressWidget->show();
 
   const QSet<QString>*const unrequiredPackageList = Package::getUnrequiredPackageList();
-  QList<PackageListData> *list = m_listOfAURPackages;
+  QList<PackageListData> *list = m_listOfRemotePackages;
 
   m_progressWidget->setRange(0, list->count());
   m_progressWidget->setValue(0);
@@ -626,9 +627,6 @@ void MainWindow::buildAURPackageList()
   }
 
   m_packageRepo.setAURData(list, *unrequiredPackageList);
-
-  //qDebug() << list->count();
-
   m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   m_packageModel->applyFilter(ectn_ALL_PKGS, "", "NONE");
 
@@ -654,7 +652,23 @@ void MainWindow::buildAURPackageList()
 
   //Refresh application icon
   refreshAppIcon();
-  reapplyPackageFilter();
+
+  if (isPkgSearchSelected())
+  {
+    m_leFilterPackage->initStyleSheet();
+    QString search = Package::parseSearchString(m_leFilterPackage->text());
+    m_packageModel->applyFilter(search);
+
+    ui->tvPackages->selectionModel()->clear();
+    QModelIndex mi = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
+    ui->tvPackages->setCurrentIndex(mi);
+    ui->tvPackages->scrollTo(mi);
+    invalidateTabs();
+  }
+  else
+  {
+    reapplyPackageFilter();
+  }
 
   counter = list->count();
   m_progressWidget->setValue(counter);
@@ -813,8 +827,6 @@ void MainWindow::buildPackageList()
   delete list;
   list = NULL;
 
-
-  //TODO ???
   foreach(QString k, m_outdatedList->keys())
   {
     OutdatedPackageInfo opi = m_outdatedList->value(k);
@@ -827,7 +839,9 @@ void MainWindow::buildPackageList()
   }
 
   if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
-  if (m_leFilterPackage->text() != "") reapplyPackageFilter();
+
+  reapplyPackageFilter();
+
   if (m_refreshPackageLists) qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
   QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
@@ -969,7 +983,7 @@ void MainWindow::refreshToolBar()
  */
 void MainWindow::refreshStatusBarToolButtons()
 {
-  if (!isSearchByFileSelected() && !m_actionSwitchToPkgSearch->isChecked())
+  if (!isSearchByFileSelected() && !m_actionSwitchToRemoteSearch->isChecked())
     ui->twGroups->setEnabled(true);
 }
 
@@ -980,7 +994,7 @@ void MainWindow::refreshStatusBar()
 {
   QString text;
   ui->statusBar->removeWidget(m_toolButtonPacman);
-  ui->statusBar->removeWidget(m_toolButtonAUR);
+  //ui->statusBar->removeWidget(m_toolButtonAUR);
 
   int numberOfInstalledPackages = m_packageModel->getInstalledPackagesCount();
 
@@ -1049,8 +1063,8 @@ void MainWindow::refreshTabInfo(QString pkgName)
 
   if (text)
   {
-    text->clear();
-    text->setHtml(OctopiTabInfo::formatTabInfo(*package, *m_outdatedAURPackagesNameVersion));
+    text->clear();    
+    text->setHtml(OctopiTabInfo::formatTabInfo(*package, *m_outdatedList));
     text->scrollToAnchor(OctopiTabInfo::anchorBegin);
   }
 }
@@ -1100,51 +1114,15 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
   CPUIntensiveComputing cic;
 
   /* Appends all info from the selected package! */
-  QString pkgName=package->name;
+  //QString pkgName=package->name;
 
-  /*if (isPkgSearchSelected() && package->installed() == false)
+  QTextBrowser *text = ui->twProperties->widget(
+        ctn_TABINDEX_INFORMATION)->findChild<QTextBrowser*>("textBrowser");
+  if (text)
   {
-    QString aux_desc = package->description;
-    int space = aux_desc.indexOf(' ');
-    QString pkgDescription = aux_desc.mid(space+1);
-    QString version = StrConstants::getVersion();
-
-    QTextBrowser*const text = ui->twProperties->widget(
-          ctn_TABINDEX_INFORMATION)->findChild<QTextBrowser*>("textBrowser");
-
-    if (text)
-    {
-      QString html;
-      text->clear();
-      QString anchorBegin = "anchorBegin";
-
-      html += "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-      html += "<a id=\"" + anchorBegin + "\"></a>";
-
-      html += "<h2>" + pkgName + "</h2>";
-      html += "<a style=\"font-size:16px;\">" + pkgDescription + "</a>";
-
-      html += "<table border=\"0\">";
-      html += "<tr><th width=\"20%\"></th><th width=\"80%\"></th></tr>";
-      html += "<tr><td>" + version + "</td><td>" + package->version + "</td></tr>";
-
-      html += "</table>";
-
-      text->setHtml(html);
-      text->scrollToAnchor(anchorBegin);
-    }
-  }
-  else //We are not in the AUR group*/
-  {
-    QTextBrowser *text = ui->twProperties->widget(
-          ctn_TABINDEX_INFORMATION)->findChild<QTextBrowser*>("textBrowser");
-
-    if (text)
-    {
-      text->clear();
-      text->setHtml(OctopiTabInfo::formatTabInfo(*package, *m_outdatedAURPackagesNameVersion));
-      text->scrollToAnchor(OctopiTabInfo::anchorBegin);
-    }
+    text->clear();
+    text->setHtml(OctopiTabInfo::formatTabInfo(*package, *m_outdatedList));
+    text->scrollToAnchor(OctopiTabInfo::anchorBegin);
   }
 
   m_cachedPackageInInfo = package->repository+"#"+package->name+"#"+package->version;
@@ -1203,7 +1181,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
       QStandardItemModel*const modelPkgFileList = qobject_cast<QStandardItemModel*>(tvPkgFileList->model());
       modelPkgFileList->clear();
       m_cachedPackageInFiles = "";
-
       bool filterHasFocus = m_leFilterPackage->hasFocus();
       bool tvPackagesHasFocus = ui->tvPackages->hasFocus();
       closeTabFilesSearchBar();
@@ -1422,8 +1399,8 @@ void MainWindow::reapplyPackageFilter()
   {
     bool isFilterPackageSelected = m_leFilterPackage->hasFocus();
     QString search = Package::parseSearchString(m_leFilterPackage->text());
-
     m_packageModel->applyFilter(search);
+
     int numPkgs = m_packageModel->getPackageCount();
 
     if (m_leFilterPackage->text() != ""){

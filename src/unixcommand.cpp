@@ -453,6 +453,11 @@ QByteArray UnixCommand::getTargetUpgradeList(const QString &pkgName)
     args = "install -n -f " + pkgName;
     res = performQuery(args);
   }
+  else //pkg upgrade
+  {
+    args = "upgrade -n ";
+    res = performQuery(args);
+  }
 
   return res;
 }

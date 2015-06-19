@@ -60,8 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_refreshPackageLists = false;
   m_cic = NULL;
   m_outdatedStringList = new QStringList();
-  m_outdatedAURStringList = new QStringList();
-  m_outdatedAURPackagesNameVersion = new QHash<QString, QString>();
+  m_outdatedRemoteStringList = new QStringList();
   m_selectedViewOption = ectn_ALL_PKGS;
   m_selectedRepository = "";
   m_numberOfInstalledPackages = 0;
@@ -75,12 +74,10 @@ MainWindow::MainWindow(QWidget *parent) :
   m_time->start();
 
   retrieveUnrequiredPackageList();
-  retrieveForeignPackageList();
+  //retrieveForeignPackageList();
 
   ui->setupUi(this);
   switchToViewAllPackages();  
-  m_hasAURTool =
-      UnixCommand::hasTheExecutable(StrConstants::getForeignRepositoryToolName()) && !UnixCommand::isRootRunning();
 }
 
 /*
@@ -300,64 +297,6 @@ void MainWindow::outputOutdatedPackageList()
 }
 
 /*
- * Prints the list of outdated AUR packages to the Output tab.
- */
-void MainWindow::outputOutdatedAURPackageList()
-{
-  //We cannot output any list if there is a running transaction!
-  if (m_commandExecuting != ectn_NONE) return;
-
-  QString html = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
-  QString anchorBegin = "anchorBegin";
-  html += "<a id=\"" + anchorBegin + "\"></a>";
-
-  clearTabOutput();
-
-  if(m_outdatedAURStringList->count()==1){
-    html += "<h3>" + StrConstants::getOneOutdatedPackage() + "</h3>";
-  }
-  else
-  {
-    html += "<h3>" +
-        StrConstants::getOutdatedPackages(m_outdatedAURStringList->count()) + "</h3>";
-  }
-
-  html += "<br><table border=\"0\">";
-  html += "<tr><th width=\"25%\" align=\"left\">" + StrConstants::getName() +
-      "</th><th width=\"18%\" align=\"right\">" +
-      StrConstants::getOutdatedVersion() +
-      "</th><th width=\"18%\" align=\"right\">" +
-      StrConstants::getAvailableVersion() + "</th></tr>";
-
-  for (int c=0; c < m_outdatedAURStringList->count(); c++)
-  {
-    QString pkg = m_outdatedAURStringList->at(c);
-    const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkg);
-    if (package != NULL) {
-      QString availableVersion = m_outdatedAURPackagesNameVersion->value(m_outdatedAURStringList->at(c));
-  
-      html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
-          "</td><td align=\"right\"><b><font color=\"#E55451\">" +
-          package->version +
-          "</b></font></td><td align=\"right\">" +
-          availableVersion + "</td></tr>";
-    }
-  }
-
-  writeToTabOutput(html);
-
-  QTextBrowser *text =
-      ui->twProperties->widget(ctn_TABINDEX_OUTPUT)->findChild<QTextBrowser*>("textBrowser");
-
-  if (text)
-  {
-    text->scrollToAnchor(anchorBegin);
-  }
-
-  ui->twProperties->setCurrentIndex(ctn_TABINDEX_OUTPUT);
-}
-
-/*
  * Removes all text inside the TabOutput editor
  */
 void MainWindow::clearTabOutput()
@@ -390,6 +329,7 @@ bool MainWindow::isAllCategoriesSelected()
 
 bool MainWindow::isAllCategories(const QString& category)
 {
+  Q_UNUSED(category);
   return true;
   //return ((category == "<" + StrConstants::getDisplayAllCategories() + ">") && !(m_actionSwitchToPkgSearch->isChecked()));
 }
@@ -399,7 +339,7 @@ bool MainWindow::isAllCategories(const QString& category)
  */
 bool MainWindow::isPkgSearchSelected()
 {
-  return (m_actionSwitchToPkgSearch->isChecked());
+  return (m_actionSwitchToRemoteSearch->isChecked());
 }
 
 /*
@@ -1285,7 +1225,6 @@ void MainWindow::tvPackagesSelectionChanged(const QItemSelection&, const QItemSe
 {
   const QItemSelectionModel*const selection = ui->tvPackages->selectionModel();
   const int selected = selection != NULL ? selection->selectedRows().count() : 0;
-
   QString newMessage = StrConstants::getSelectedPackages(
         m_packageModel->getPackageCount()).
       arg(QString::number(selected));

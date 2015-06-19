@@ -247,14 +247,13 @@ QSet<QString>* Package::getUnrequiredPackageList()
 /*
  * Retrieves the list of outdated packages (those which have newer versions available to download)
  */
-QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
+QHash<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
-  //QString outPkgList = UnixCommand::getOutdatedPackageList();
-
-  QString outPkgList = "Installed packages to be UPGRADED\n\tkdelibs: 4.14.3 -> 4.15\n\tsudo: 1.8.13 -> 1.9\n";
+  QString outPkgList = UnixCommand::getOutdatedPackageList();
+  //QString outPkgList = "Installed packages to be UPGRADED\n\tkdelibs: 4.14.3 -> 4.15\n\tsudo: 1.8.13 -> 1.9\n";
 
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
-  QMap<QString, OutdatedPackageInfo>* res = new QMap<QString, OutdatedPackageInfo>();
+  QHash<QString, OutdatedPackageInfo>* res = new QHash<QString, OutdatedPackageInfo>();
 
   if (packageTuples.contains("Installed packages to be UPGRADED", Qt::CaseInsensitive))
   {
@@ -281,81 +280,6 @@ QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 
   return res;
 }
-
-/*
- * Retrieves the list of outdated Yaourt (AUR) packages
- * (those which have newer versions available to download)
- */
-/*QStringList *Package::getOutdatedAURStringList()
-{
-  QStringList * res = new QStringList();
-
-  if (StrConstants::getForeignRepositoryToolName() != "yaourt" &&
-      StrConstants::getForeignRepositoryToolName() != "pacaur" &&
-      StrConstants::getForeignRepositoryToolName() != "kcp")
-    return res;
-
-  QString outPkgList = UnixCommand::getOutdatedAURPackageList();
-  QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
-  QStringList ignorePkgList = UnixCommand::getIgnorePkgsFromPacmanConf();
-
-  foreach(QString packageTuple, packageTuples)
-  {
-    QStringList parts = packageTuple.split(' ', QString::SkipEmptyParts);
-    {
-      if (StrConstants::getForeignRepositoryToolName() == "yaourt" ||
-          StrConstants::getForeignRepositoryToolName() == "kcp")
-      {
-        QString pkgName;
-        pkgName = parts[0];
-
-        pkgName = pkgName.remove("\033");
-        pkgName = pkgName.remove("[1;35m");
-        pkgName = pkgName.remove("[1;36m");
-        pkgName = pkgName.remove("[1;32m");
-        pkgName = pkgName.remove("[m");
-        pkgName = pkgName.remove("[1m");
-
-        if (pkgName.contains(StrConstants::getForeignRepositoryTargetPrefix(), Qt::CaseInsensitive))
-        {
-          pkgName = pkgName.remove(StrConstants::getForeignRepositoryTargetPrefix());
-          //Let's ignore the "IgnorePkg" list of packages...
-          if (!ignorePkgList.contains(pkgName))
-          {
-            res->append(pkgName); //We only need the package name!
-          }
-        }
-      }
-      else if (StrConstants::getForeignRepositoryToolName() == "pacaur")
-      {
-        QString pkgName;
-        if (parts.count() >= 2)
-        {
-          pkgName = parts[2];
-          pkgName = pkgName.remove("\033");
-          pkgName = pkgName.remove("[1;31m");
-          pkgName = pkgName.remove("[1;32m");
-          pkgName = pkgName.remove("[1;34m");
-          pkgName = pkgName.remove("[1;35m");
-          pkgName = pkgName.remove("[1;39m");
-          pkgName = pkgName.remove("[m");
-          pkgName = pkgName.remove("[0m");
-          pkgName = pkgName.remove("[1m");
-
-          //Let's ignore the "IgnorePkg" list of packages...
-          if (!ignorePkgList.contains(pkgName))
-          {
-            res->append(pkgName); //We only need the package name!
-          }
-        }
-      }
-    }
-  }
-
-  res->sort();
-  return res;
-}
-*/
 
 /*
  * Retrieves the list of all package groups available
@@ -454,7 +378,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
 /*
  *Retrieves the list of foreign packages (those installed from unknown repositories like AUR)
  */
-QList<PackageListData> *Package::getForeignPackageList()
+/*QList<PackageListData> *Package::getForeignPackageList()
 {
   QString foreignPkgList = UnixCommand::getForeignPackageList();
   QStringList packageTuples = foreignPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
@@ -470,7 +394,7 @@ QList<PackageListData> *Package::getForeignPackageList()
   }
 
   return res;
-}
+}*/
 
 /*
  * Retrieves the list of all available packages in the database (installed + non-installed)
@@ -523,12 +447,12 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
  * Retrieves the list of all AUR packages in the database (installed + non-installed)
  * given the search parameter
  */
-QList<PackageListData> * Package::getPkgSearchPackageList(const QString& searchString)
+QList<PackageListData> * Package::getRemotePackageList(const QString& searchString)
 {
   QString pkgName, pkgVersion, pkgCategories, pkgWWW, pkgComment;
   double pkgPkgSize;
   int indName, indVersion, indCategories, indWWW, indComment, indPkgSize;
-  PackageStatus pkgStatus;
+  //PackageStatus pkgStatus;
   QList<PackageListData> * res = new QList<PackageListData>();
   const int cSpaces = 16;
 

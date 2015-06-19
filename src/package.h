@@ -174,27 +174,24 @@ class Package{
 	public:
     static int rpmvercmp(const char *a, const char *b);
     static QSet<QString>* getUnrequiredPackageList();
-    static QMap<QString, OutdatedPackageInfo> * getOutdatedStringList();
+    static QHash<QString, OutdatedPackageInfo> *getOutdatedStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
     static TransactionInfo getTargetUpgradeList(const QString &pkgName = "");
     static QStringList * getTargetRemovalList(const QString &pkgName);
-
-    static QList<PackageListData> *getForeignPackageList();
+    //static QList<PackageListData> *getForeignPackageList();
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
-    //AUR methods
-    static QList<PackageListData> * getPkgSearchPackageList(const QString& searchString);
+    //Remote package methods
+    static QList<PackageListData> * getRemotePackageList(const QString& searchString);
 
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);
     static QString getInformationDescription(const QString &pkgName, bool foreignPackage = false);
     static QString getInformationInstalledSize(const QString &pkgName, bool foreignPackage = false);
 
-    //static QHash<QString, QString> getAUROutdatedPackagesNameVersion();
     static QStringList getContents(const QString &pkgName, bool isInstalled);
     static QStringList getOptionalDeps(const QString &pkgName);
-
     static QString getName(const QString &pkgInfo);
     static QString getVersion(const QString &pkgInfo);
     static QString getRepository(const QString &pkgInfo);

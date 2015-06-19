@@ -22,7 +22,7 @@
 #define OCTOPITABINFO_H
 
 #include "src/packagerepository.h"
-
+#include "src/package.h"
 
 /**
  * @brief The OctopiTabInfo class provides functionality for the Tab "Info"
@@ -57,7 +57,7 @@ public:
    *
    * This function has been extracted from src/mainwindow_refresh.cpp void MainWindow::refreshTabInfo(QString pkgName)
    */
-  static QString formatTabInfo(const PackageRepository::PackageData& package, const QHash<QString, QString>& outdatedAURPackagesNameVersion);
+  static QString formatTabInfo(const PackageRepository::PackageData& package, const QHash<QString, OutdatedPackageInfo>& outdatedRemotePackagesNameVersion);
 
   static const QString anchorBegin;
 };

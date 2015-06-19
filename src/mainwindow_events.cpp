@@ -131,11 +131,11 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       //ui->twGroups->setEnabled(false);
 
       QFuture<QList<PackageListData> *> f;
-      disconnect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildAURPackageList()));
+      disconnect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildRemotePackageList()));
       m_cic = new CPUIntensiveComputing();
       f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
       g_fwAUR.setFuture(f);
-      connect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildAURPackageList()));
+      connect(&g_fwAUR, SIGNAL(finished()), this, SLOT(preBuildRemotePackageList()));
     }
     //We are searching for packages that own some file typed by user...
     else if (isSearchByFileSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)

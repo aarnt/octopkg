@@ -306,8 +306,8 @@ void MainWindow::initToolBar()
     ui->mainToolBar->addAction(m_actionMirrorCheck);
   }*/
 
-  m_separatorForActionPkgSearch = ui->mainToolBar->addSeparator();
-  ui->mainToolBar->addAction(m_actionSwitchToPkgSearch);
+  m_separatorForActionRemoteSearch = ui->mainToolBar->addSeparator();
+  ui->mainToolBar->addAction(m_actionSwitchToRemoteSearch);
 
   m_dummyAction = new QAction(this);
   m_dummyAction->setVisible(false);
@@ -689,12 +689,12 @@ void MainWindow::initActions()
     connect(m_actionMirrorCheck, SIGNAL(triggered()), this, SLOT(doMirrorCheck()));
   }  
 
-  m_actionSwitchToPkgSearch = new QAction(this);
-  m_actionSwitchToPkgSearch->setIcon(IconHelper::getIconInternet());
-  m_actionSwitchToPkgSearch->setText(StrConstants::getSearchForPackages());
-  m_actionSwitchToPkgSearch->setCheckable(true);
-  m_actionSwitchToPkgSearch->setChecked(false);
-  connect(m_actionSwitchToPkgSearch, SIGNAL(triggered()), this, SLOT(pkgSearchClicked()));
+  m_actionSwitchToRemoteSearch = new QAction(this);
+  m_actionSwitchToRemoteSearch->setIcon(IconHelper::getIconInternet());
+  m_actionSwitchToRemoteSearch->setText(StrConstants::getSearchForPackages());
+  m_actionSwitchToRemoteSearch->setCheckable(true);
+  m_actionSwitchToRemoteSearch->setChecked(false);
+  connect(m_actionSwitchToRemoteSearch, SIGNAL(triggered()), this, SLOT(remoteSearchClicked()));
 
   m_actionInstallPacmanUpdates = new QAction(this);
   m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());

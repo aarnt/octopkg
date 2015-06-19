@@ -88,10 +88,10 @@ QList<PackageListData> * searchPacmanPackages()
 /*
  * Starts the non blocking search for Pacman Foreign packages...
  */
-QList<PackageListData> * searchForeignPackages()
+/*QList<PackageListData> * searchForeignPackages()
 {
   return Package::getForeignPackageList();
-}
+}*/
 
 /*
  * Starts the non blocking search for Unrequired Pacman packages...
@@ -131,7 +131,7 @@ GroupMemberPair searchPacmanPackagesFromGroup(QString groupName)
  */
 QList<PackageListData> * searchAURPackages(QString searchString)
 {
-  return Package::getPkgSearchPackageList(searchString);
+  return Package::getRemotePackageList(searchString);
 }
 
 /*
@@ -157,7 +157,7 @@ QString getLatestDistroNews()
 /*
  * Marks the packages installed by AUR/KCP (alien icons in pkg list).
  */
-QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringList *outdatedAURStringList)
+/*QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringList *outdatedAURStringList)
 {
   // Fetch foreign package list
   QList<PackageListData> * result = new QList<PackageListData>();
@@ -188,4 +188,4 @@ QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringLi
   }
 
   return result;
-}
+}*/

@@ -23,6 +23,7 @@
 #include "src/package.h"
 
 #include <QDebug>
+#include <QHash>
 
 /*
  * The OctopiTabInfo class provides functionality for the Tab "Info"
@@ -41,7 +42,7 @@ OctopiTabInfo::OctopiTabInfo()
  * This function has been extracted from src/mainwindow_refresh.cpp void MainWindow::refreshTabInfo(QString pkgName)
  */
 QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& package,
-                                     const QHash<QString, QString>& outdatedAURPackagesNameVersion)
+                                     const QHash<QString, OutdatedPackageInfo>& outdatedPkgList)
 {
   PackageInfoData pid;
 
@@ -96,8 +97,9 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
     if (package.status != ectn_NEWER)
     {
       //if (package.repository != StrConstants::getForeignRepositoryName())
-      {
-        QString outdatedVersion = package.outdatedVersion;
+      {        
+        const OutdatedPackageInfo opi = outdatedPkgList.value(package.name);
+        QString outdatedVersion = opi.oldVersion;
         /*html += "<tr><td>" + version + "</td><td>" + package.version + " <b><font color=\"#E55451\">"
             + StrConstants::getOutdatedInstalledVersion().arg(outdatedVersion) +
             "</b></font></td></tr>";*/

@@ -73,7 +73,7 @@ class MainWindow : public QMainWindow
 
 signals:
   void buildPackageListDone();
-  void buildAURPackageListDone();
+  void buildRemotePackageListDone();
   void buildPackagesFromGroupListDone();
 
 public slots:
@@ -114,9 +114,6 @@ private:
   //Controls the calling of System Upgrade NO CONFIRM action
   bool m_callSystemUpgradeNoConfirm;
 
-  //Controls if this Linux box has an AUR tool installed
-  bool m_hasAURTool;
-
   //Controls if this Linux box has slocate utility
   bool m_hasSLocate;
 
@@ -135,8 +132,8 @@ private:
   //This model provides the list of pending actions of a transaction
   QStandardItemModel *m_modelTransaction;
 
-  //This member holds the result list of AUR packages searched by the user
-  QList<PackageListData> *m_listOfAURPackages;
+  //This member holds the result list of remote packages searched by the user
+  QList<PackageListData> *m_listOfRemotePackages;
 
   //This member holds the list of Pacman packages available
   std::unique_ptr<QList<PackageListData> > m_listOfPackages;
@@ -157,21 +154,20 @@ private:
   //This member holds the last command string executed by Octopi
   QStringList m_lastCommandList;
 
-  QMap<QString, OutdatedPackageInfo> *m_outdatedList;
+  QHash<QString, OutdatedPackageInfo> *m_outdatedList;
   QStringList *m_outdatedStringList;
-  QStringList *m_outdatedAURStringList;
+  QStringList *m_outdatedRemoteStringList;
 
   QList<PackageListData> *m_foreignPackageList;
-  QHash<QString, QString> *m_outdatedAURPackagesNameVersion;
 
   QLabel *m_lblSelCounter;    //Holds the number of selected packages
   QLabel *m_lblTotalCounters; //Holds the total number of packages
   QProgressBar *m_progressWidget;
 
   QToolButton *m_toolButtonPacman;
-  QToolButton *m_toolButtonAUR;
+  //QToolButton *m_toolButtonAUR;
   QMenu *m_menuToolButtonPacman;
-  QMenu *m_menuToolButtonAUR;
+  //QMenu *m_menuToolButtonAUR;
 
   //This is a means for measuring the program's speed at some tasks
   QTime *m_time;
@@ -187,9 +183,9 @@ private:
   QAction *m_actionCopyFullPath;
   QAction *m_actionSysInfo;
 
-  //Toggles use of AUR tool
-  QAction *m_separatorForActionPkgSearch;
-  QAction *m_actionSwitchToPkgSearch;
+  //Toggles use of Remote package search
+  QAction *m_separatorForActionRemoteSearch;
+  QAction *m_actionSwitchToRemoteSearch;
 
   QByteArray m_horizontalSplit;
   QTreeWidgetItem *m_AllGroupsItem;
@@ -297,7 +293,7 @@ private:
 
   void switchToViewAllPackages();
 
-  void retrieveForeignPackageList();
+  //void retrieveForeignPackageList();
   void retrieveUnrequiredPackageList();
 
 private slots:
@@ -327,18 +323,18 @@ private slots:
 
   void buildPackagesFromGroupList(const QString group);
   void buildPackageList();
-  void buildAURPackageList();
+  void buildRemotePackageList();
   //void refreshPackageList();
 
   void metaBuildPackageList();
   void onPackageGroupChanged();
 
-  void pkgSearchClicked();
+  void remoteSearchClicked();
   void groupItemSelected();
 
-  void preBuildAURPackageList();
-  void preBuildAURPackageListMeta();
-  void preBuildForeignPackageList();
+  void preBuildRemotePackageList();
+  void preBuildRemotePackageListMeta();
+  //void preBuildForeignPackageList();
   void preBuildUnrequiredPackageList();
   void preBuildPackageList();
   void preBuildPackagesFromGroupList();
@@ -406,7 +402,6 @@ private slots:
   QString getOutdatedPkgOldVersion(const QString& pkgName);
   QString getOutdatedPkgNewVersion(const QString& pkgName);
   void outputOutdatedPackageList();
-  void outputOutdatedAURPackageList();
 
   void onTabNewsSourceChanged(QUrl newSource);
   void refreshDistroNews(bool searchForLatestNews = true, bool gotoNewsTab = true);
@@ -456,7 +451,6 @@ public:
   const PackageRepository::PackageData* getFirstPackageFromRepo(const QString pkgName);
   bool isPkgSearchSelected();
   bool isSearchByFileSelected();
-
   void turnDebugInfoOn();
   void setCallSystemUpgrade();
   void setCallSystemUpgradeNoConfirm();

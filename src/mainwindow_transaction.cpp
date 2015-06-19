@@ -49,7 +49,7 @@ void MainWindow::changeTransactionActionsState()
   ui->actionCancel->setEnabled(state);
   ui->actionSyncPackages->setEnabled(!state);
 
-  m_actionSwitchToPkgSearch->setEnabled(!state);
+  m_actionSwitchToRemoteSearch->setEnabled(!state);
 
   if (state == false && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);
@@ -695,7 +695,7 @@ void MainWindow::prepareSystemUpgrade()
   if (!doRemovePacmanLockFile()) return;
 
   m_lastCommandList.clear();
-  m_lastCommandList.append("pacman -Su;");
+  m_lastCommandList.append("pkg upgrade;");
   m_lastCommandList.append("echo -e;");
   m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -717,8 +717,7 @@ void MainWindow::prepareSystemUpgrade()
  */
 void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 {
-/*
-  if (isAURGroupSelected() || m_systemUpgradeDialog) return;
+  if (/*isAURGroupSelected() ||*/ m_systemUpgradeDialog) return;
 
   if(m_callSystemUpgrade && m_numberOfOutdatedPackages == 0)
   {
@@ -735,15 +734,16 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 
   qApp->processEvents();
 
-  if(systemUpgradeOptions == ectn_SYNC_DATABASE_OPT)
+  /*if(systemUpgradeOptions == ectn_SYNC_DATABASE_OPT)
   {
     m_commandQueued = ectn_SYSTEM_UPGRADE;
     doSyncDatabase();
   }
-  else
+  else*/
   {
     //Shows a dialog indicating the targets needed to be retrieved and asks for the user's permission.
-    QList<PackageListData> * targets = Package::getTargetUpgradeList();
+    TransactionInfo ti = Package::getTargetUpgradeList();
+    QStringList *targets = ti.packages;
 
     //There are no new updates to install!
     if (targets->count() == 0 && m_outdatedStringList->count() == 0)
@@ -756,19 +756,26 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     {
       //This is a bug and should be shown to the user!
       clearTabOutput();
-      writeToTabOutputExt(UnixCommand::getTargetUpgradeList());
+      //writeToTabOutputExt(UnixCommand::getTargetUpgradeList());
+      QString out = UnixCommand::getTargetUpgradeList();
+      splitOutputStrings(out);
       return;
     }
 
     QString list;
-    double totalDownloadSize = 0;
+    //double totalDownloadSize = 0;
 
-    foreach(PackageListData target, *targets)
+    /*foreach(PackageListData target, *targets)
     {
       totalDownloadSize += target.downloadSize;
       list = list + target.name + "-" + target.version + "\n";
     }
-    list.remove(list.size()-1, 1);
+    list.remove(list.size()-1, 1);*/
+
+    foreach(QString target, *targets)
+    {
+      list = list + target + "\n";
+    }
 
     //User already confirmed all updates in the notifier window!
     if (systemUpgradeOptions == ectn_NOCONFIRM_OPT)
@@ -778,7 +785,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
       QString command;
-      command = "pacman -Su --noconfirm";
+      command = "pkg upgrade -y";
 
       m_unixCommand->executeCommand(command);
       m_commandQueued = ectn_NONE;
@@ -786,8 +793,9 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     else
     {
       //Let's build the system upgrade transaction dialog...
-      totalDownloadSize = totalDownloadSize / 1024;
-      QString ds = Package::kbytesToSize(totalDownloadSize);
+      /*totalDownloadSize = totalDownloadSize / 1024;
+      QString ds = Package::kbytesToSize(totalDownloadSize);*/
+      QString ds = ti.sizeToDownload;
 
       TransactionDialog question(this);
 
@@ -814,7 +822,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
           m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
           QString command;
-          command = "pacman -Su --noconfirm";
+          command = "pkg upgrade -y";
 
           m_unixCommand->executeCommand(command);
           m_commandQueued = ectn_NONE;
@@ -833,7 +841,6 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       }
     }
   }
-*/
 }
 
 /*
@@ -1246,7 +1253,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCancel->setEnabled(true);
 
     //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
-    m_actionSwitchToPkgSearch->setEnabled(false);
+    m_actionSwitchToRemoteSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1257,7 +1264,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCancel->setEnabled(false);
 
     //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(true);
-    m_actionSwitchToPkgSearch->setEnabled(true);
+    m_actionSwitchToRemoteSearch->setEnabled(true);
 
     ui->actionSyncPackages->setEnabled(true);
     if (value == true && m_outdatedStringList->count() > 0)
@@ -1266,7 +1273,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   else if (value == false && state == false)
   {
     //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
-    m_actionSwitchToPkgSearch->setEnabled(false);
+    m_actionSwitchToRemoteSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1283,7 +1290,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionRepositoryEditor->setEnabled(value);  
   m_actionSysInfo->setEnabled(value);
 
-  m_actionSwitchToPkgSearch->setEnabled(value);
+  m_actionSwitchToRemoteSearch->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
 
   ui->actionGetNews->setEnabled(value);
@@ -1480,7 +1487,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         else
         {
           bRefreshGroups = false;
-          m_actionSwitchToPkgSearch->setChecked(false);
+          m_actionSwitchToRemoteSearch->setChecked(false);
           metaBuildPackageList();
         }
       }

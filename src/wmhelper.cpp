@@ -494,7 +494,7 @@ void WMHelper::openDirectory( const QString& dirName ){
 
   if (f.exists())
   {
-    BSDFlavour distro = UnixCommand::getBSDFlavour();
+    //BSDFlavour distro = UnixCommand::getBSDFlavour();
 
     if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_FILE_MANAGER))
     {
