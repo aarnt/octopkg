@@ -220,6 +220,22 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
 }
 
 /*
+ * Retrieves the old version from the given outdated package
+ */
+QString MainWindow::getOutdatedPkgOldVersion(const QString& pkgName)
+{
+  return m_outdatedList->value(pkgName).oldVersion;
+}
+
+/*
+ * Retrieves the new version from the given outdated package
+ */
+QString MainWindow::getOutdatedPkgNewVersion(const QString& pkgName)
+{
+  return m_outdatedList->value(pkgName).newVersion;
+}
+
+/*
  * Prints the list of outdated packages to the Output tab.
  */
 void MainWindow::outputOutdatedPackageList()
@@ -258,15 +274,15 @@ void MainWindow::outputOutdatedPackageList()
     for (int c=0; c < m_outdatedStringList->count(); c++)
     {
       QString pkg = m_outdatedStringList->at(c);
-      const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkg);
+      //const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkg);
 
-      if (package != NULL) {
+      //if (package != NULL) {
         html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
             "</td><td align=\"right\"><b><font color=\"#E55451\">" +
-            package->outdatedVersion +
+            getOutdatedPkgOldVersion(pkg) +
             "</b></font></td><td align=\"right\">" +
-            package->version + "</td></tr>";
-      }
+            getOutdatedPkgNewVersion(pkg) + "</td></tr>";
+      //}
     }
 
     writeToTabOutput(html);

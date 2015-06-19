@@ -57,15 +57,15 @@ QString showPackageInfo(QString pkgName)
     return "";
   }
 
-  QString description = package->comment;
+  QString description = package->comment.trimmed();
 
-  if (description.trimmed().isEmpty())
+  if (description.isEmpty())
   {
     return "";
   }
 
   int space = description.indexOf(" ");
-  QString desc = description.mid(space+1);
+  QString desc = description.mid(space+1).trimmed();
   int size = desc.size();
 
   if (desc.size() > 120)

@@ -91,48 +91,32 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   else if (!package.repository.isEmpty())
     html += "<tr><td>" + url + "</td><td style=\"font-size:14px;\">" + Package::makeURLClickable(package.www) + "</td></tr>";
 
-  /*if (package.outdated())
+  if (package.outdated())
   {
     if (package.status != ectn_NEWER)
     {
       //if (package.repository != StrConstants::getForeignRepositoryName())
       {
         QString outdatedVersion = package.outdatedVersion;
-        html += "<tr><td>" + version + "</td><td>" + package.version + " <b><font color=\"#E55451\">"
+        /*html += "<tr><td>" + version + "</td><td>" + package.version + " <b><font color=\"#E55451\">"
             + StrConstants::getOutdatedInstalledVersion().arg(outdatedVersion) +
+            "</b></font></td></tr>";*/
+        html += "<tr><td>" + version + "</td><td><b><font color=\"#E55451\">" + outdatedVersion +
             "</b></font></td></tr>";
       }
     }
-    else
+    /*else
     {
       QString newerVersion = package.outdatedVersion;
       html += "<tr><td>" + version + "</td><td>" + package.version + " <b><font color=\"#FF8040\">"
           + StrConstants::getNewerInstalledVersion().arg(newerVersion) +
           "</b></font></td></tr>";
-    }
+    }*/
   }
   else
   {
-    if (package.repository != StrConstants::getForeignRepositoryName())
-    {
-      html += "<tr><td>" + version + "</td><td>" + package.version + "</td></tr>";
-    }
-    else
-    {
-      if (package.status == ectn_FOREIGN_OUTDATED &&
-          outdatedAURPackagesNameVersion.count() > 0)
-      {
-        QString availableVersion = outdatedAURPackagesNameVersion.value(package.name);
-        html += "<tr><td>" + version + "</td><td>" + availableVersion + " <b><font color=\"#E55451\">"
-            + StrConstants::getOutdatedInstalledVersion().arg(package.version) +
-            "</b></font></td></tr>";
-      }
-      else
-      {
-        html += "<tr><td>" + version + "</td><td>" + package.version + "</td></tr>";
-      }
-    }
-  }*/
+    html += "<tr><td>" + version + "</td><td>" + package.version + "</td></tr>";
+  }
 
   //This is needed as packager names could be encoded in different charsets, resulting in an error
   QString packagerName = pid.maintainer;

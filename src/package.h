@@ -28,6 +28,7 @@
 #include <QDir>
 #include <QFileSystemWatcher>
 #include <QDateTime>
+#include <QMap>
 #include <QHash>
 #include <QSet>
 
@@ -128,6 +129,11 @@ struct TransactionInfo{
   QString sizeToDownload;
 };
 
+struct OutdatedPackageInfo{
+  QString oldVersion;
+  QString newVersion;
+};
+
 struct PackageInfoData{
   QString name;
   QString repository;
@@ -168,7 +174,7 @@ class Package{
 	public:
     static int rpmvercmp(const char *a, const char *b);
     static QSet<QString>* getUnrequiredPackageList();
-    static QStringList * getOutdatedStringList();
+    static QMap<QString, OutdatedPackageInfo> * getOutdatedStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
     static TransactionInfo getTargetUpgradeList(const QString &pkgName = "");

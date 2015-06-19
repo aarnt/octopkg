@@ -68,20 +68,20 @@ public:
     }
 
   public:
-    const bool    required;
+    /*const*/ bool    required;
     //const bool    managedByAUR; // AUR packages must not be in any group
-    const QString name;
-    const QString repository;
-    const QString origin;
-    const QString version;
-    const QString description;
-    const QString outdatedVersion;
-    const double  downloadSize;
-    const double  installedSize;
-    const PackageStatus status;
-    const QString comment;
-    const QString www;
-    const QString categories;
+    /*const*/ QString name;
+    /*const*/ QString repository;
+    /*const*/ QString origin;
+    /*const*/ QString version;
+    /*const*/ QString description;
+    /*const*/ QString outdatedVersion;
+    /*const*/ double  downloadSize;
+    /*const*/ double  installedSize;
+    /*const*/ PackageStatus status;
+    /*const*/ QString comment;
+    /*const*/ QString www;
+    /*const*/ QString categories;
     //const int     popularity; // -1 for non AUR
     //const QString popularityString;
   };
@@ -118,6 +118,7 @@ public:
   const TListOfPackages& getPackageList() const;
   const TListOfPackages& getPackageList(const QString& group) const;
   PackageData*           getFirstPackageByName(const QString name) const;
+  PackageData*           getFirstPackageByNameEx(const QString name);
 
 private:
   std::vector<IDependency*> m_dependingModels;

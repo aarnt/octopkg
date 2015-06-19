@@ -45,6 +45,7 @@
 #include <QProgressBar>
 #include <QSystemTrayIcon>
 #include <QToolButton>
+#include <QDebug>
 
 /*
  * Loads various application settings configured in ~/.config/octopi/octopi.conf
@@ -150,7 +151,13 @@ void MainWindow::savePackageColumnWidths()
  */
 void MainWindow::initAppIcon()
 {
-  m_outdatedStringList = Package::getOutdatedStringList();
+  m_outdatedStringList->clear();
+  m_outdatedList = Package::getOutdatedStringList();
+  foreach(QString k, m_outdatedList->keys())
+  {
+    m_outdatedStringList->append(k);
+  }
+
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
   refreshAppIcon();
 }

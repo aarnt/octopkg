@@ -157,6 +157,7 @@ private:
   //This member holds the last command string executed by Octopi
   QStringList m_lastCommandList;
 
+  QMap<QString, OutdatedPackageInfo> *m_outdatedList;
   QStringList *m_outdatedStringList;
   QStringList *m_outdatedAURStringList;
 
@@ -402,6 +403,8 @@ private slots:
   void hideGroupsWidget(bool pSaveSettings = true);
   void maximizePackagesTreeView(bool pSaveSettings = true);
   void maximizePropertiesTabWidget(bool pSaveSettings = true);
+  QString getOutdatedPkgOldVersion(const QString& pkgName);
+  QString getOutdatedPkgNewVersion(const QString& pkgName);
   void outputOutdatedPackageList();
   void outputOutdatedAURPackageList();
 

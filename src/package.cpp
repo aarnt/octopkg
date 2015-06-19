@@ -247,29 +247,38 @@ QSet<QString>* Package::getUnrequiredPackageList()
 /*
  * Retrieves the list of outdated packages (those which have newer versions available to download)
  */
-QStringList *Package::getOutdatedStringList()
+QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
-  QString outPkgList = UnixCommand::getOutdatedPackageList();
+  //QString outPkgList = UnixCommand::getOutdatedPackageList();
+
+  QString outPkgList = "Installed packages to be UPGRADED\n\tkdelibs: 4.14.3 -> 4.15\n\tsudo: 1.8.13 -> 1.9\n";
+
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
-  QStringList * res = new QStringList();
-  QStringList ignorePkgList = UnixCommand::getIgnorePkgsFromPacmanConf();
+  QMap<QString, OutdatedPackageInfo>* res = new QMap<QString, OutdatedPackageInfo>();
 
-  foreach(QString packageTuple, packageTuples)
+  if (packageTuples.contains("Installed packages to be UPGRADED", Qt::CaseInsensitive))
   {
-    QStringList parts = packageTuple.split(' ');
+    foreach(QString packageTuple, packageTuples)
     {
-      QString pkgName;
-      pkgName = parts[0];
-
-      //Let's ignore the "IgnorePkg" list of packages...
-      if (!ignorePkgList.contains(pkgName))
+      if (packageTuple.contains("\t"))
       {
-        res->append(pkgName); //We only need the package name!
+        packageTuple.remove("\t");
+        QStringList parts = packageTuple.split(' ');
+        {
+          OutdatedPackageInfo opi;
+          QString pkgName;
+          pkgName = parts[0];
+          pkgName.remove(pkgName.size()-1, 1);
+
+          opi.oldVersion = parts[1];
+          opi.newVersion = parts[3];
+
+          res->insert(pkgName, opi);
+        }
       }
     }
   }
 
-  res->sort();
   return res;
 }
 
@@ -496,8 +505,9 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
         pkgComment += " " + parts[c];
       }
 
+      if (!pkgComment.isEmpty()) pkgComment = pkgName + " " + pkgComment;
       pkgComment = pkgComment.trimmed();
-      //pkgDescription = pkgName + " " + pkgComment;
+      pkgDescription = pkgComment;
 
       PackageListData pld =
           PackageListData(pkgName, pkgOrigin, pkgVersion, pkgComment, pkgStatus, pkgInstalledSize, pkgDownloadedSize);

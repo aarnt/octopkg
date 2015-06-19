@@ -224,7 +224,8 @@ QByteArray UnixCommand::getUnrequiredPackageList()
  */
 QByteArray UnixCommand::getOutdatedPackageList()
 {
-  return performQuery(QStringList("-Qu"));
+  QByteArray result = performQuery("upgrade -n");
+  return result;
 }
 
 /*

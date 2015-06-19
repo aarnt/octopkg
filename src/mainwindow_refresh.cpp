@@ -62,11 +62,7 @@ void MainWindow::refreshAppIcon()
   if ((m_outdatedStringList->count() > 0))
   {
     setWindowIcon(IconHelper::getIconOctopiRed());
-    if(m_commandExecuting != ectn_MIRROR_CHECK && !isPkgSearchSelected()) enableSystemUpgrade=true;
-  }
-  else if(m_outdatedAURStringList->count() > 0)
-  {
-    setWindowIcon(IconHelper::getIconOctopiYellow());
+    if(m_commandExecuting != ectn_MIRROR_CHECK) enableSystemUpgrade=true;
   }
   else
   {
@@ -213,15 +209,13 @@ void MainWindow::pkgSearchClicked()
   if (!m_actionSwitchToPkgSearch->isChecked())
   {
     m_leFilterPackage->clear();
-    //m_actionMenuRepository->setEnabled(false);
-    //ui->twGroups->setEnabled(false);
+    ui->menuSearch->setEnabled(true);
   }
-  /*else
+  else
   {
-    m_actionMenuRepository->setEnabled(true);
-    ui->twGroups->setEnabled(true);
-    //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_ORIGIN_COLUMN, false);
-  }*/
+    ui->actionSearchByFile->setChecked(true);
+    ui->menuSearch->setEnabled(false);
+  }
 
   //switchToViewAllPackages();
   m_selectedRepository = "";
@@ -433,9 +427,6 @@ void MainWindow::preBuildPackagesFromGroupList()
  */
 void MainWindow::metaBuildPackageList()
 {
-  //static bool firstTime = false;
-  //if (!firstTime) m_time->start();
-
   if (isSearchByFileSelected())
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
   else if (isPkgSearchSelected())
@@ -456,7 +447,7 @@ void MainWindow::metaBuildPackageList()
     ui->actionSearchByFile->setEnabled(false);
     //m_packageModel->setShowColumnPopularity(true);
 
-    toggleSystemActions(false);
+    //toggleSystemActions(false);
     disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     clearStatusBar();
 
@@ -530,8 +521,6 @@ void MainWindow::metaBuildPackageList()
                  "Time elapsed building pkgs from '" << getSelectedCategory().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
   }
   */
-
-  //firstTime = false;
 }
 
 /*
@@ -578,7 +567,6 @@ void MainWindow::preBuildAURPackageList()
 
   if (m_commandExecuting == ectn_NONE)
   {
-    qDebug() << "Entered!";
     //Let's iterate over those found packages to change their status
     for (QList<PackageListData>::iterator it = m_listOfAURPackages->begin();
          it != m_listOfAURPackages->end(); ++it)
@@ -719,7 +707,12 @@ void MainWindow::buildPackageList()
   if(m_refreshPackageLists) //If it's not the starting of the app...
   {
     //Let's get outdatedPackages list again!
-    m_outdatedStringList = Package::getOutdatedStringList();
+    m_outdatedStringList->clear();
+    m_outdatedList = Package::getOutdatedStringList();
+    foreach(QString k, m_outdatedList->keys())
+    {
+      m_outdatedStringList->append(k);
+    }
 
     if(m_debugInfo)
       std::cout << "Time elapsed refreshing outdated pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
@@ -817,18 +810,30 @@ void MainWindow::buildPackageList()
     m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_NAME_COLUMN);
   }
 
+  delete list;
+  list = NULL;
+
+
+  //TODO ???
+  foreach(QString k, m_outdatedList->keys())
+  {
+    OutdatedPackageInfo opi = m_outdatedList->value(k);
+    PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(k);
+    if (package != NULL)
+    {
+      package->status = ectn_OUTDATED;
+      package->outdatedVersion = opi.oldVersion;
+    }
+  }
+
   if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
   if (m_leFilterPackage->text() != "") reapplyPackageFilter();
-
   if (m_refreshPackageLists) qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
   QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
   ui->tvPackages->setCurrentIndex(maux);
   ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
   ui->tvPackages->setCurrentIndex(maux);
-
-  delete list;
-  list = NULL;
 
   refreshTabInfo();
   refreshTabFiles();

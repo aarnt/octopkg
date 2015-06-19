@@ -225,6 +225,15 @@ PackageRepository::PackageData* PackageRepository::getFirstPackageByName(const Q
   return NULL;
 }
 
+PackageRepository::PackageData* PackageRepository::getFirstPackageByNameEx(const QString name)
+{
+  for (TListOfPackages::iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
+    if ((*it)->name == name)
+      return *it;
+  }
+  return NULL;
+}
+
 /**
  * @brief checks if the repository groups are up to date
  * @param listOfGroups == group-names
