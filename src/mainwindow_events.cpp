@@ -120,7 +120,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
   {
     //We are searching for AUR foreign packages...
-    if (isPkgSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
+    if (isRemoteSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
       if (m_leFilterPackage->text().size() < 2)
       {

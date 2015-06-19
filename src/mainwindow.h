@@ -449,7 +449,7 @@ public:
   }
 
   const PackageRepository::PackageData* getFirstPackageFromRepo(const QString pkgName);
-  bool isPkgSearchSelected();
+  bool isRemoteSearchSelected();
   bool isSearchByFileSelected();
   void turnDebugInfoOn();
   void setCallSystemUpgrade();

@@ -239,7 +239,7 @@ void MainWindow::outputOutdatedPackageList()
 {
   //We cannot output any list if there is a running transaction!
   if (m_commandExecuting != ectn_NONE ||
-      isPkgSearchSelected())
+      isRemoteSearchSelected())
     return;
 
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
@@ -337,7 +337,7 @@ bool MainWindow::isAllCategories(const QString& category)
 /*
  * Helper to analyse if < AUR > is selected
  */
-bool MainWindow::isPkgSearchSelected()
+bool MainWindow::isRemoteSearchSelected()
 {
   return (m_actionSwitchToRemoteSearch->isChecked());
 }
@@ -413,7 +413,7 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     ui->menuView->setEnabled(true);
     //if (!m_actionSwitchToPkgSearch->isChecked()) ui->twGroups->setEnabled(true);
 
-    if (isPkgSearchSelected())
+    if (isRemoteSearchSelected())
       m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
@@ -426,12 +426,12 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     ui->menuView->setEnabled(true);
     //if (!m_actionSwitchToPkgSearch->isChecked()) ui->twGroups->setEnabled(true);
 
-    if (isPkgSearchSelected())
+    if (isRemoteSearchSelected())
       m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
 
-    if (!isPkgSearchSelected())
+    if (!isRemoteSearchSelected())
       m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   }
   else if (actionSelected->objectName() == ui->actionSearchByFile->objectName())
@@ -533,7 +533,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
       //if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
       menu->addAction(ui->actionInstall);
 
-      if (!isAllCategoriesSelected() && !isPkgSearchSelected()) //&& numberOfSelPkgs > 1)
+      if (!isAllCategoriesSelected() && !isRemoteSearchSelected()) //&& numberOfSelPkgs > 1)
       {
         //Is this group already installed?
         const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());
@@ -553,7 +553,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       menu->addAction(ui->actionRemove);
 
-      if (!isAllCategoriesSelected() && !isPkgSearchSelected())
+      if (!isAllCategoriesSelected() && !isRemoteSearchSelected())
       {
         //Is this group already installed?
         const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());

@@ -430,7 +430,7 @@ void MainWindow::metaBuildPackageList()
 {
   if (isSearchByFileSelected())
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
-  else if (isPkgSearchSelected())
+  else if (isRemoteSearchSelected())
     m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
   else
     m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
@@ -653,7 +653,7 @@ void MainWindow::buildRemotePackageList()
   //Refresh application icon
   refreshAppIcon();
 
-  if (isPkgSearchSelected())
+  if (isRemoteSearchSelected())
   {
     m_leFilterPackage->initStyleSheet();
     QString search = Package::parseSearchString(m_leFilterPackage->text());
@@ -1008,13 +1008,20 @@ void MainWindow::refreshStatusBar()
   }
   else
   {
-    text = StrConstants::getNumberInstalledPackages(0);
+    if (isRemoteSearchSelected())
+    {
+      text = "";
+    }
+    else
+    {
+      text = StrConstants::getNumberInstalledPackages(0);
+    }
   }
 
   m_lblTotalCounters->setText(text);
   ui->statusBar->addWidget(m_lblTotalCounters);
 
-  if((m_numberOfOutdatedPackages > 0) && (!isPkgSearchSelected()))
+  if((m_numberOfOutdatedPackages > 0) && (!isRemoteSearchSelected()))
   {
     m_toolButtonPacman->show();
 
@@ -1236,7 +1243,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     QStandardItem *lastDir, *item, *lastItem=root, *parent;
     bool first=true;
     lastDir = root;
-
     QEventLoop el;
     QFuture<QStringList> f;
     QFutureWatcher<QStringList> fwPackageContents;

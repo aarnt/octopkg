@@ -1313,7 +1313,7 @@ void MainWindow::toggleSystemActions(const bool value)
     m_actionMirrorCheck->setEnabled(value);
   }
 
-  if (isPkgSearchSelected() && StrConstants::getForeignRepositoryToolName() == "kcp")
+  if (isRemoteSearchSelected() && StrConstants::getForeignRepositoryToolName() == "kcp")
   {
     ui->actionSyncPackages->setEnabled(true);
   }
@@ -1449,7 +1449,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     //Did it synchronize any repo? If so, let's refresh some things...
     if (textInTabOutput(StrConstants::getSyncing()))
     {
-      bool aurGroup = isPkgSearchSelected();
+      bool aurGroup = isRemoteSearchSelected();
 
       if (!aurGroup)
       {
@@ -1480,7 +1480,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       else if (m_commandExecuting != ectn_MIRROR_CHECK)
       {
         //If we are in a package group, maybe we have installed/removed something, so...
-        if (!isPkgSearchSelected())
+        if (!isRemoteSearchSelected())
         {
           metaBuildPackageList();
         }
@@ -1521,7 +1521,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   }
 
   enableTransactionActions();
-  if (isPkgSearchSelected())
+  if (isRemoteSearchSelected())
   {
     toggleSystemActions(false);
   }
