@@ -447,7 +447,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
  * Retrieves the list of all AUR packages in the database (installed + non-installed)
  * given the search parameter
  */
-QList<PackageListData> * Package::getRemotePackageList(const QString& searchString)
+QList<PackageListData> * Package::getRemotePackageList(const QString& searchString, bool useCommentSearch)
 {
   QString pkgName, pkgVersion, pkgCategories, pkgWWW, pkgComment;
   double pkgPkgSize;
@@ -459,7 +459,7 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   if (searchString.isEmpty())
     return res;
 
-  QString pkgList = UnixCommand::getPkgSearchPackageList(searchString);
+  QString pkgList = UnixCommand::getRemotePackageList(searchString, useCommentSearch);
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
 
   foreach(QString packageTuple, packageTuples)

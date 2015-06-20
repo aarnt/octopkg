@@ -183,7 +183,7 @@ class Package{
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
     //Remote package methods
-    static QList<PackageListData> * getRemotePackageList(const QString& searchString);
+    static QList<PackageListData> * getRemotePackageList(const QString& searchString, bool useCommentSearch = true);
 
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);

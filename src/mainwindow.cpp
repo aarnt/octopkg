@@ -65,7 +65,6 @@ MainWindow::MainWindow(QWidget *parent) :
   m_selectedRepository = "";
   m_numberOfInstalledPackages = 0;
   m_debugInfo = false;
-
   m_time = new QTime();
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;
@@ -418,7 +417,8 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     else
       m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
 
-    m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_NAME_COLUMN);
+    if (!isRemoteSearchSelected())
+      m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_NAME_COLUMN);
   }
   //We are talking about slower 'search by description'...
   else if (actionSelected->objectName() == ui->actionSearchByDescription->objectName())

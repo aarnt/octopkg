@@ -37,8 +37,8 @@ QFutureWatcher<QString> g_fwToolTip;
 QFutureWatcher<QList<PackageListData> *> g_fwPacman;
 QFutureWatcher<QList<PackageListData> *> g_fwForeignPacman;
 QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
-QFutureWatcher<QList<PackageListData> *> g_fwAUR;
-QFutureWatcher<QList<PackageListData> *> g_fwAURMeta;
+QFutureWatcher<QList<PackageListData> *> g_fwRemote;
+QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
 QFutureWatcher<AUROutdatedPackages *> g_fwOutdatedAURPackages;
 QFutureWatcher<QString> g_fwDistroNews;
 QFutureWatcher<QString> g_fwPackageOwnsFile;
@@ -129,9 +129,9 @@ GroupMemberPair searchPacmanPackagesFromGroup(QString groupName)
 /*
  * Starts the non blocking search for AUR packages...
  */
-QList<PackageListData> * searchAURPackages(QString searchString)
+QList<PackageListData> * searchRemotePackages(QString searchString, bool useCommentSearch)
 {
-  return Package::getRemotePackageList(searchString);
+  return Package::getRemotePackageList(searchString, useCommentSearch);
 }
 
 /*

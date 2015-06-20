@@ -85,7 +85,7 @@ public:
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
   static QByteArray performAURCommand(const QString &args);
-  static QByteArray getPkgSearchPackageList(const QString &searchString);
+  static QByteArray getRemotePackageList(const QString &searchString, bool useCommentSearch = true);
   static QByteArray getUnrequiredPackageList();
   static QByteArray getOutdatedPackageList();
   static QByteArray getOutdatedAURPackageList();

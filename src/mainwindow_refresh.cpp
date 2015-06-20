@@ -78,9 +78,6 @@ void MainWindow::refreshAppIcon()
 void MainWindow::refreshMenuTools()
 {
   static bool connectorPlv=false;
-  //static bool connectorRepo=false;
-  //static bool connectorCleaner=false;
-  //static bool connectorGist=false;
   int availableTools=0;
 
   if(UnixCommand::hasTheExecutable("plv"))
@@ -98,73 +95,6 @@ void MainWindow::refreshMenuTools()
   }
   else
     ui->actionPacmanLogViewer->setVisible(false);
-
-  /*if(UnixCommand::hasTheExecutable("octopi-repoeditor") && UnixCommand::getBSDFlavour() != ectn_KAOS)
-  {
-    availableTools++;
-    ui->menuTools->menuAction()->setVisible(true);
-    ui->actionRepositoryEditor->setVisible(true);
-
-    if (!connectorRepo)
-    {
-      connect(ui->actionRepositoryEditor, SIGNAL(triggered()), this, SLOT(launchRepoEditor()));
-      connectorRepo=true;
-    }
-  }
-  else
-    ui->actionRepositoryEditor->setVisible(false);  
-
-  if(UnixCommand::hasTheExecutable("octopi-cachecleaner"))
-  {
-    availableTools++;
-    ui->menuTools->menuAction()->setVisible(true);
-    ui->actionCacheCleaner->setVisible(true);
-
-    if (!connectorCleaner)
-    {
-      connect(ui->actionCacheCleaner, SIGNAL(triggered()), this, SLOT(launchCacheCleaner()));
-      connectorCleaner=true;
-    }
-  }
-  else
-    ui->actionCacheCleaner->setVisible(false);
-
-  if (UnixCommand::hasTheExecutable("gist"))
-  {
-    ui->menuTools->menuAction()->setVisible(true);
-    if (ui->menuTools->actions().indexOf(m_actionSysInfo) == -1)
-    {
-      ui->menuTools->addSeparator();
-      m_actionSysInfo->setText("SysInfo");
-      ui->menuTools->addAction(m_actionSysInfo);
-      availableTools++;
-
-      if (!connectorGist)
-      {
-        connect(m_actionSysInfo, SIGNAL(triggered()), this, SLOT(gistSysInfo()));
-        connectorGist=true;
-      }
-    }
-  }
-  else
-  {
-    if (ui->menuTools->actions().indexOf(m_actionSysInfo) != -1)
-    {
-      foreach(QAction *act, ui->menuTools->actions())
-      {
-        if (act->isSeparator() || (act->text() == "SysInfo") || (act->text() == "&SysInfo"))
-        {
-          ui->menuTools->removeAction(act);
-        }
-      }
-
-      availableTools--;
-    }
-  }
-
-  if (availableTools == 0)
-    ui->menuTools->menuAction()->setVisible(false);
-  */
 
   foreach (QAction * act,  ui->menuBar->actions())
   {
@@ -208,14 +138,15 @@ void MainWindow::remoteSearchClicked()
 {
   m_leFilterPackage->clear();
 
-  if (!m_actionSwitchToRemoteSearch->isChecked())
+  if (m_actionSwitchToRemoteSearch->isChecked())
   {
-    ui->menuSearch->setEnabled(true);
+    ui->actionSearchByDescription->setChecked(true);
+    ui->actionSearchByFile->setChecked(false);
   }
   else
   {
+    ui->actionSearchByName->setChecked(true);
     ui->actionSearchByFile->setChecked(true);
-    ui->menuSearch->setEnabled(false);
   }
 
   //switchToViewAllPackages();
@@ -402,7 +333,6 @@ void MainWindow::preBuildPackageList()
     std::cout << "Time elapsed obtaining pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
 
   buildPackageList();
-
   toggleSystemActions(true);
 
   emit buildPackageListDone();
@@ -457,12 +387,12 @@ void MainWindow::metaBuildPackageList()
     if(!m_leFilterPackage->text().isEmpty())
     {
       m_toolButtonPacman->hide();
-      disconnect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
+      disconnect(&g_fwRemoteMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
 
       QFuture<QList<PackageListData> *> f;
-      f = QtConcurrent::run(searchAURPackages, m_leFilterPackage->text());
-      connect(&g_fwAURMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
-      g_fwAURMeta.setFuture(f);
+      f = QtConcurrent::run(searchRemotePackages, m_leFilterPackage->text(), ui->actionSearchByDescription->isChecked());
+      connect(&g_fwRemoteMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
+      g_fwRemoteMeta.setFuture(f);
     }
     else
     {
@@ -530,7 +460,7 @@ void MainWindow::metaBuildPackageList()
  */
 void MainWindow::preBuildRemotePackageListMeta()
 {
-  m_listOfRemotePackages = g_fwAURMeta.result();
+  m_listOfRemotePackages = g_fwRemoteMeta.result();
 
   //Let's iterate over those found packages to change their status
   for (QList<PackageListData>::iterator it = m_listOfRemotePackages->begin();
@@ -564,7 +494,7 @@ void MainWindow::preBuildRemotePackageListMeta()
  */
 void MainWindow::preBuildRemotePackageList()
 {
-  m_listOfRemotePackages = g_fwAUR.result();
+  m_listOfRemotePackages = g_fwRemote.result();
 
   if (m_commandExecuting == ectn_NONE)
   {
@@ -604,7 +534,7 @@ void MainWindow::preBuildRemotePackageList()
  */
 void MainWindow::buildRemotePackageList()
 {
-  ui->actionSearchByDescription->setChecked(true);
+  //ui->actionSearchByDescription->setChecked(true);
   m_progressWidget->show();
 
   const QSet<QString>*const unrequiredPackageList = Package::getUnrequiredPackageList();

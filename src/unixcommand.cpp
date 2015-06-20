@@ -202,10 +202,15 @@ QByteArray UnixCommand::performAURCommand(const QString &args)
 /*
  * Returns a string containing all AUR packages given a searchString parameter
  */
-QByteArray UnixCommand::getPkgSearchPackageList(const QString &searchString)
+QByteArray UnixCommand::getRemotePackageList(const QString &searchString, bool useCommentSearch)
 {
   QByteArray result("");
-  result = performQuery("search -Q name -Q version -Q categories -Q www -Q comment -Q pkg-size " + searchString);
+
+  if (useCommentSearch)
+    result = performQuery("search -Q name -Q version -Q categories -Q www -Q comment -Q pkg-size --comment " + searchString);
+  else
+    result = performQuery("search -Q name -Q version -Q categories -Q www -Q comment -Q pkg-size " + searchString);
+
   return result;
 }
 
