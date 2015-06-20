@@ -410,6 +410,8 @@ private slots:
   void onHelpUsage();
   void onHelpAbout();
   void onPressDelete();
+
+  void disableTransactionButtons();
   void changeTransactionActionsState();
   void clearTransactionTreeView();
   void positionInPkgListSearchByFile();

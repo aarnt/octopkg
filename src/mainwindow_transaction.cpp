@@ -31,6 +31,7 @@
 #include "multiselectiondialog.h"
 #include <iostream>
 #include <cassert>
+#include "searchlineedit.h"
 
 #include <QComboBox>
 #include <QProgressBar>
@@ -38,6 +39,15 @@
 #include <QStandardItem>
 #include <QTextBrowser>
 #include <QDebug>
+
+/*
+ * Disables transaction buttons
+ */
+void MainWindow::disableTransactionButtons()
+{
+  ui->actionCommit->setEnabled(false);
+  ui->actionCancel->setEnabled(false);
+}
 
 /*
  * Watches the state of tvTransaction treeview to see if Commit/Cancel actions must be activated/deactivated
@@ -48,7 +58,6 @@ void MainWindow::changeTransactionActionsState()
   ui->actionCommit->setEnabled(state);
   ui->actionCancel->setEnabled(state);
   ui->actionSyncPackages->setEnabled(!state);
-
   m_actionSwitchToRemoteSearch->setEnabled(!state);
 
   if (state == false && m_outdatedStringList->count() > 0)
@@ -268,12 +277,6 @@ void MainWindow::insertIntoRemovePackage()
         return;
       }
     }
-
-    /*QString removeCmd = m_removeCommand;
-    if (removeCmd == "Rcs" )
-    {
-      checkDependencies = true;
-    }*/
 
     foreach(QModelIndex item, selectedRows)
     {
@@ -909,6 +912,8 @@ void MainWindow::doRemoveAndInstall()
   {
     if (!doRemovePacmanLockFile()) return;
 
+    disableTransactionButtons();
+
     QString command;
     command = "pkg remove -f -y " + listOfRemoveTargets +
         "; pkg install -f -y " + listOfInstallTargets;
@@ -982,6 +987,8 @@ void MainWindow::doRemove()
   {
     if (!doRemovePacmanLockFile()) return;
 
+    disableTransactionButtons();
+
     QString command;
     command = "pkg remove -f -y " + listOfTargets;
 
@@ -1053,6 +1060,8 @@ void MainWindow::doInstall()
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
     if (!doRemovePacmanLockFile()) return;
+
+    disableTransactionButtons();
 
     QString command;
     command = "pkg install -f -y " + listOfTargets;
@@ -1487,6 +1496,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         else
         {
           bRefreshGroups = false;
+          m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
           metaBuildPackageList();
         }
@@ -1528,8 +1538,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 
   //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
   //  refreshGroupsWidget();
-
-  //refreshMenuTools(); //Maybe some of octopi tools were added/removed...
 
   m_unixCommand->removeTemporaryFile();
 

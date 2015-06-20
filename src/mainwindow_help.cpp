@@ -61,20 +61,19 @@ void MainWindow::initTabHelpUsage()
   if ((!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning())))
   {
     html +=
-        QString("<a style=\"color:'#4BC413'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
-      QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a style=\"color:'#4BC413'\" href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");
+        QString("<a style=\"color:'#4BC413'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>");
+      /*QString("<h4><p>") + strForMoreInfo + " " +
+      QString("<a style=\"color:'#4BC413'\" href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");*/
   }
   else
   {
     html +=
-        QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
-      QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");
+        QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>");
+      /*QString("<h4><p>") + strForMoreInfo + " " +
+      QString("<a href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");*/
   }
 
-    html += tr("Package classification:") +
-
+  html += tr("Package classification:") +
   QString("<ul type=\"square\"><li>") + iconPath + "installed.png\"/> " +
      tr("An installed package") + QString("</li>") +
   QString("<li>") + iconPath + "unrequired.png\"/> " +
@@ -91,10 +90,10 @@ void MainWindow::initTabHelpUsage()
   QString("</li>") +
   //QString("<li>") + iconPath + "foreign_red.png\"/> " +
   //   tr("An outdated foreign package") +
-  QString("</li>") +
-  QString("<li>") + iconPath + "newer.png\"/> " +
-           tr("A newer than repository package") +
   QString("</li></ul>") +
+  /*QString("<li>") + iconPath + "newer.png\"/> " +
+           tr("A newer than repository package") +
+  QString("</li></ul>") +*/
 
      tr("Basic usage help:") +
   QString("<ul><li>") +
@@ -122,9 +121,9 @@ void MainWindow::initTabHelpUsage()
 
      tr("Control+key sequences:") +
   QString("<ul><li>") +
-     tr("Ctrl+D or 'File/Sync database' to sync the local database with latest remote changes (pacman -Sy)") +
+     tr("Ctrl+D or 'File/Sync database' to sync the local database with latest remote changes") +
   QString("</li><li>") +
-     tr("Ctrl+U or 'File/System upgrade' to make a full system upgrade (pacman -Su)") +
+     tr("Ctrl+U or 'File/System upgrade' to make a full system upgrade") +
   QString("</li><li>") +
      tr("Ctrl+L to find a package in the package list") +
   QString("</li><li>") +
@@ -141,16 +140,16 @@ void MainWindow::initTabHelpUsage()
      tr("Ctrl+Q or 'File/Exit' to exit the application") +
   QString("</li></ul>") +
 
-     tr("Control+shift+key sequences:") +
+  /*   tr("Control+shift+key sequences:") +
   QString("<ul><li>") +
      tr("Ctrl+Shift+C to clean local packages cache (pacman -Sc)") +
   QString("</li><li>") +
      tr("Ctrl+Shift+G to display all package groups") +
   QString("</li><li>") +
      tr("Ctrl+Shift+R to remove Pacman's transaction lock file") +
-  /*QString("</li><li>") +
-     tr("Ctrl+Shift+Y to display %1 group").arg(StrConstants::getForeignRepositoryGroupName()) +*/
-  QString("</li></ul>") +
+  QString("</li><li>") +
+     tr("Ctrl+Shift+Y to display %1 group").arg(StrConstants::getForeignRepositoryGroupName()) +
+  QString("</li></ul>") +*/
 
      tr("F+key sequences:") +
   QString("<ul><li>") +
