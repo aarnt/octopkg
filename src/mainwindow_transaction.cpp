@@ -1320,8 +1320,8 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
 
-    m_actionSwitchToLocalFilter->setEnabled(false);
-    m_actionSwitchToRemoteSearch->setEnabled(false);
+    m_actionSwitchToLocalFilter->setEnabled(true);
+    m_actionSwitchToRemoteSearch->setEnabled(true);
 
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
