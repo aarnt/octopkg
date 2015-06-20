@@ -438,11 +438,11 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
   {
     m_leFilterPackage->clear();
     m_packageModel->applyFilter("");
-    ui->actionViewAllPackages->trigger();
-    m_actionRepositoryAll->trigger();
-    ui->menuView->setEnabled(false);
+    //ui->actionViewAllPackages->trigger();
+    //m_actionRepositoryAll->trigger();
+    //ui->menuView->setEnabled(false);
 
-    ui->twGroups->setEnabled(false);
+    //ui->twGroups->setEnabled(false);
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
   }
 
