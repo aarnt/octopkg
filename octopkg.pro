@@ -8,9 +8,8 @@ QT += core gui network xml dbus widgets quick quickwidgets
 
 DEFINES += OCTOPKG_EXTENSIONS
 CONFIG += qt warn_on debug
-#LIBS += -L../libpcbsd -L/usr/local/lib -lpcbsd-ui -lpcbsd-utils
 LIBS += -L/usr/local/lib
-INCLUDEPATH+= ../libpcbsd/utils ../libpcbsd/ui /usr/local/include
+INCLUDEPATH += /usr/local/include
 QMAKE_CXXFLAGS += -std=c++11
 TEMPLATE = app
 DESTDIR += bin
