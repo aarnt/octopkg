@@ -1453,7 +1453,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
                      StrConstants::getCommandFinishedWithErrors() + "</b><br>");
   }
 
-  if(m_commandQueued == ectn_SYSTEM_UPGRADE)
+  /*if(m_commandQueued == ectn_SYSTEM_UPGRADE)
   {
     //Did it synchronize any repo? If so, let's refresh some things...
     if (textInTabOutput(StrConstants::getSyncing()))
@@ -1468,8 +1468,9 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 
     doSystemUpgrade();
     m_commandQueued = ectn_NONE;
-  }
-  else if (m_commandQueued == ectn_NONE)
+  }*/
+
+  if (m_commandQueued == ectn_NONE)
   {
     if(exitCode == 0 || exitCode == 255) //mate-terminal is returning code 255 sometimes...
     {
@@ -1477,27 +1478,46 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       if (m_commandExecuting == ectn_SYNC_DATABASE)
       {
         //Retrieves the RSS News from respective Distro site...
-        refreshDistroNews(true, false);
-        metaBuildPackageList();
-      }
-      else if (m_commandExecuting == ectn_SYSTEM_UPGRADE ||
-               m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
-      {
-        //buildPackageList(false);
-        metaBuildPackageList();
-      }
-      else if (m_commandExecuting != ectn_MIRROR_CHECK)
-      {
-        //If we are in a package group, maybe we have installed/removed something, so...
-        if (!isRemoteSearchSelected())
-        {
-          metaBuildPackageList();
-        }
-        else
+        if (isRemoteSearchSelected())
         {
           bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
+          refreshDistroNews(true, false);
+          metaBuildPackageList();
+        }
+        else
+        {
+          refreshDistroNews(true, false);
+          metaBuildPackageList();
+        }
+      }
+      else if (m_commandExecuting == ectn_SYSTEM_UPGRADE ||
+               m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
+      {
+        if (isRemoteSearchSelected())
+        {
+          bRefreshGroups = false;
+          m_leFilterPackage->clear();
+          m_actionSwitchToRemoteSearch->setChecked(false);
+          metaBuildPackageList();
+        }
+        else
+        {
+          metaBuildPackageList();
+        }
+      }
+      else
+      {
+        if (isRemoteSearchSelected())
+        {
+          bRefreshGroups = false;
+          m_leFilterPackage->clear();
+          m_actionSwitchToRemoteSearch->setChecked(false);
+          metaBuildPackageList();
+        }
+        else
+        {
           metaBuildPackageList();
         }
       }

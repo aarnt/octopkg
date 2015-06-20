@@ -32,8 +32,9 @@
 const QString ctn_MIRROR_CHECK_APP("mirror-check");
 
 enum CommandExecuting { ectn_NONE, ectn_MIRROR_CHECK, ectn_SYNC_DATABASE,
-                        ectn_SYSTEM_UPGRADE, ectn_INSTALL, ectn_REMOVE,
-                        ectn_REMOVE_INSTALL, ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
+                        ectn_SYSTEM_UPGRADE, ectn_INSTALL,
+                        ectn_REMOVE, ectn_REMOVE_INSTALL,
+                        ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
                         ectn_RUN_IN_TERMINAL };
 
 enum BSDFlavour { ectn_FREEBSD, ectn_PCBSD, ectn_UNKNOWN };
