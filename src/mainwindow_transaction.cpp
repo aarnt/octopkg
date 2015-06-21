@@ -1488,6 +1488,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         }
         else
         {
+          m_leFilterPackage->clear();
           refreshDistroNews(true, false);
           metaBuildPackageList();
         }
@@ -1504,6 +1505,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         }
         else
         {
+          m_leFilterPackage->clear();
           metaBuildPackageList();
         }
       }
@@ -1518,6 +1520,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         }
         else
         {
+          m_leFilterPackage->clear();
           metaBuildPackageList();
         }
       }
@@ -1652,7 +1655,7 @@ bool MainWindow::searchForKeyVerbs(const QString &msg)
 /*
  * Processes the output of the 'pacman process' so we can update percentages and messages at real time
  */
-void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
+void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 {  
   if (m_commandExecuting == ectn_RUN_IN_TERMINAL ||
       m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL) return;
@@ -1753,6 +1756,7 @@ void MainWindow::parsePacmanProcessOutput(const QString &pMsg)
       msg.contains(QRegularExpression("MiB")) ||
       msg.contains(QRegularExpression("kB/s")) ||
       msg.contains(QRegularExpression("MB/s")) ||
+      msg.contains(QRegularExpression("[0-9]+ B")) ||
       msg.contains(QRegularExpression("[0-9]{2}:[0-9]{2}"))) return;
 
     //Let's supress some annoying string bugs...
@@ -1871,7 +1875,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
             }
 
             //std::cout << "Error1: " << aux.toLatin1().data() << std::endl;
-            parsePacmanProcessOutput(aux);
+            parsePkgProcessOutput(aux);
           }
         }
       }
@@ -1880,7 +1884,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
         if (!m.isEmpty())
         {
           //std::cout << "Error2: " << m.toLatin1().data() << std::endl;
-          parsePacmanProcessOutput(m);
+          parsePkgProcessOutput(m);
         }
       }
     }
@@ -1891,7 +1895,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
         if (!m3.isEmpty())
         {
           //std::cout << "Error3: " << m3.toLatin1().data() << std::endl;
-          parsePacmanProcessOutput(m3);
+          parsePkgProcessOutput(m3);
         }
       }
     }

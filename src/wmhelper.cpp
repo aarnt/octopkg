@@ -62,10 +62,14 @@ bool WMHelper::isKDERunning(){
       proc.waitForFinished();
 
       QString out = proc.readAll();
+
       proc.close();
 
       if (out.count(desktop)>0)
+      {
         ret = true;
+        break;
+      }
     }
 
     firstTime = false;
@@ -261,7 +265,7 @@ QString WMHelper::getXFCEEditor(){
 QString WMHelper::getKDESUCommand(){
   QString result = "";
 
-  if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
+  if (UnixCommand::getBSDFlavour() == ectn_PCBSD || UnixCommand::getBSDFlavour() == ectn_FREEBSD)
     result = "/usr/local/lib/kde4/libexec/kdesu";
   else
     result = ctn_KDESU;
@@ -318,7 +322,7 @@ QString WMHelper::getSUCommand(){
     result = getGKSUCommand();
   }
   else if (isKDERunning()){        
-    if (UnixCommand::getBSDFlavour() == ectn_PCBSD){
+    if (UnixCommand::getBSDFlavour() == ectn_PCBSD || UnixCommand::getBSDFlavour() == ectn_FREEBSD){
       QFile kdesu("/usr/local/lib/kde4/libexec/kdesu");
       if (kdesu.exists()){
         result = getKDESUCommand();

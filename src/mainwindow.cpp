@@ -522,9 +522,19 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
-      if (package->installed() == false || package->required || Package::isForbidden(package->name))
+      if (UnixCommand::getBSDFlavour() == ectn_FREEBSD)
       {
-        allRemovable = false;
+        if (package->installed() == false || Package::isForbidden(package->name))
+        {
+          allRemovable = false;
+        }
+      }
+      else if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
+      {
+        if (package->installed() == false || package->required || Package::isForbidden(package->name))
+        {
+          allRemovable = false;
+        }
       }
     }
 

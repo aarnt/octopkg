@@ -560,19 +560,23 @@ void MainWindow::buildRemotePackageList()
   m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   m_packageModel->applyFilter(ectn_ALL_PKGS, "", "NONE");
 
-  QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
-  ui->tvPackages->setCurrentIndex(maux);
-  ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
-  ui->tvPackages->setCurrentIndex(maux);
+  if (list->count() > 0)
+  {
+    QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
+    ui->tvPackages->setCurrentIndex(maux);
+    ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
+    ui->tvPackages->setCurrentIndex(maux);
+
+    refreshTabInfo();
+    refreshTabFiles();
+
+    if (isPackageTreeViewVisible())
+    {
+      ui->tvPackages->setFocus();
+    }
+  }
 
   list->clear();
-  refreshTabInfo();
-  refreshTabFiles();
-
-  if (isPackageTreeViewVisible())
-  {
-    ui->tvPackages->setFocus();
-  }
 
   //Refresh counters
   m_numberOfInstalledPackages = installedCount;
@@ -924,7 +928,6 @@ void MainWindow::refreshStatusBar()
 {
   QString text;
   ui->statusBar->removeWidget(m_toolButtonPacman);
-  //ui->statusBar->removeWidget(m_toolButtonAUR);
 
   int numberOfInstalledPackages = m_packageModel->getInstalledPackagesCount();
 
@@ -940,6 +943,11 @@ void MainWindow::refreshStatusBar()
   {
     if (isRemoteSearchSelected())
     {
+      if (m_packageModel->getPackageCount() == 0)
+      {
+        m_lblSelCounter->setText("");
+      }
+
       text = "";
     }
     else

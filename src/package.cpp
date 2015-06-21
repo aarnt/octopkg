@@ -533,23 +533,26 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   }
 
   //Adds the last one...
-  PackageListData pld;
-  pld.name = pkgName;
-  pld.version = pkgVersion;
-  pld.categories = pkgCategories;
-  pld.www = pkgWWW;
-  pld.comment = pkgName + " " + pkgComment;
-  pld.downloadSize = pkgPkgSize;
-  pld.status = ectn_NON_INSTALLED;
-  pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
+  if (packageTuples.count() > 0)
+  {
+    PackageListData pld;
+    pld.name = pkgName;
+    pld.version = pkgVersion;
+    pld.categories = pkgCategories;
+    pld.www = pkgWWW;
+    pld.comment = pkgName + " " + pkgComment;
+    pld.downloadSize = pkgPkgSize;
+    pld.status = ectn_NON_INSTALLED;
+    pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
 
-  pkgName="";
-  pkgVersion="";
-  pkgCategories="";
-  pkgWWW="";
-  pkgComment="";
-  pkgPkgSize=0;
-  res->append(pld);
+    pkgName="";
+    pkgVersion="";
+    pkgCategories="";
+    pkgWWW="";
+    pkgComment="";
+    pkgPkgSize=0;
+    res->append(pld);
+  }
 
   return res;
 }
@@ -1205,8 +1208,17 @@ bool Package::hasPkgNGDatabase()
 
   if (!done)
   {
-    QFile f(ctn_PKGNG_CORE_DB_FILE);
-    answer = f.exists();
+    if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
+    {
+      QFile f(ctn_PKGNG_PCBSD_CORE_DB_FILE);
+      answer = f.exists();
+    }
+    else if (UnixCommand::getBSDFlavour() == ectn_FREEBSD)
+    {
+      QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
+      answer = f.exists();
+    }
+
     done = true;
   }
 

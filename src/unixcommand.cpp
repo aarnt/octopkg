@@ -572,7 +572,11 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
   QProcess proc;
   proc.setProcessChannelMode(QProcess::MergedChannels);
   QString sParam = "\"which " + exeName + "\"";
-  proc.start("/usr/local/bin/bash -c " + sParam);
+  if (getBSDFlavour() == ectn_PCBSD)
+    proc.start("/usr/local/bin/bash -c " + sParam);
+  else if (getBSDFlavour() == ectn_FREEBSD)
+    proc.start("/bin/sh -c " + sParam);
+
   proc.waitForFinished();
 
   QString out = proc.readAllStandardOutput();
@@ -992,6 +996,10 @@ BSDFlavour UnixCommand::getBSDFlavour()
     if (QFile::exists("/etc/rc.conf.pcbsd"))
     {
       ret = ectn_PCBSD;
+    }
+    else if (QFile::exists("/etc/rc.conf"))
+    {
+      ret = ectn_FREEBSD;
     }
     else
     {

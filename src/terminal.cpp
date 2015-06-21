@@ -358,7 +358,7 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
     if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
     {
       QString cmd =
-          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pacman -name pacman -e bash -c " + ftemp->fileName() + "\"";
+          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e bash -c " + ftemp->fileName() + "\"";
 
       m_process->start(cmd);
     }
@@ -376,7 +376,6 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
       else
       {        
         cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
-        //qDebug() << cmd;
       }
 
       m_process->start(cmd);
@@ -420,7 +419,7 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
     if (m_selectedTerminal == ctn_RXVT_TERMINAL)
     {
       QString cmd =
-          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pacman -name pacman -e bash -c " + ftemp->fileName() + "\"";
+          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e bash -c " + ftemp->fileName() + "\"";
 
       m_process->start(cmd);
     }
