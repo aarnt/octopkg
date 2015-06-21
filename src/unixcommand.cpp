@@ -1017,27 +1017,29 @@ BSDFlavour UnixCommand::getBSDFlavour()
     {
       ret = ectn_PCBSD;
     }
-
-    QFile file("/var/log/messages");
-    if (file.exists())
+    else //It's NOT PC-BSD!
     {
-      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return ectn_UNKNOWN;
-
-      QTextStream in(&file);
-      QString aux = in.readAll();
-      if (aux.contains("ghostbsd", Qt::CaseInsensitive))
+      QFile file("/var/log/messages");
+      if (file.exists())
       {
-        ret = ectn_GHOSTBSD;
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+          return ectn_UNKNOWN;
+
+        QTextStream in(&file);
+        QString aux = in.readAll();
+        if (aux.contains("ghostbsd", Qt::CaseInsensitive))
+        {
+          ret = ectn_GHOSTBSD;
+        }
+        else
+        {
+          ret = ectn_FREEBSD;
+        }
       }
       else
       {
-        ret = ectn_FREEBSD;
+        ret = ectn_UNKNOWN;
       }
-    }
-    else
-    {
-      ret = ectn_UNKNOWN;
     }
 
     firstTime = false;
