@@ -1,8 +1,17 @@
 This is OctoPkg, a powerful pkgng front-end using Qt libs. 
 ================================================================
 
-The project's source code is hosted at 
-	https://github.com/aarnt/octopkg.
+You'll need "git" and "qt5" packages in order to get latest dev version!
+
+To download the source code, type:
+
+	$ git clone https://github.com/aarnt/octopkg
+	$ /usr/local/lib/qt5/bin/qmake
+	$ make
+
+To run it:
+
+	$ bin/octopkg
 
 You'll need a privilege escalation tool to use it, once running as 
 root will ONLY work in KDE. OctoPkg supports kdesu and gksu for that.
