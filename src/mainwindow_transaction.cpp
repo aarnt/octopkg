@@ -852,8 +852,9 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
  */
 void MainWindow::doRemoveAndInstall()
 {
+  static QString commandToInstall = "";
+
   QString listOfRemoveTargets = getTobeRemovedPackages();
-  //QStringList *pRemoveTargets = Package::getTargetRemovalList(listOfRemoveTargets);
   QString removeList;
   QString allLists;
 
@@ -915,8 +916,9 @@ void MainWindow::doRemoveAndInstall()
     disableTransactionButtons();
 
     QString command;
-    command = "pkg remove -f -y " + listOfRemoveTargets +
-        "; pkg install -f -y " + listOfInstallTargets;
+    //command = "pkg remove -f -y " + listOfRemoveTargets +
+    //    "; pkg install -f -y " + listOfInstallTargets;
+    command = "pkg remove -f -y " + listOfRemoveTargets;
 
     m_lastCommandList.clear();
     m_lastCommandList.append("pkg remove -f " + listOfRemoveTargets + ";");
@@ -938,8 +940,12 @@ void MainWindow::doRemoveAndInstall()
 
     if (result == QDialogButtonBox::Yes)
     {
-      m_commandExecuting = ectn_REMOVE_INSTALL;
-      m_unixCommand->executeCommand(command);
+      m_commandExecuting = ectn_REMOVE;
+      m_commandQueued = ectn_INSTALL;
+      doRemove();
+
+      //qDebug() << command;
+      //m_unixCommand->executeCommand(command);
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {
@@ -1453,24 +1459,16 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
                      StrConstants::getCommandFinishedWithErrors() + "</b><br>");
   }
 
-  /*if(m_commandQueued == ectn_SYSTEM_UPGRADE)
+  if(m_commandQueued == ectn_INSTALL)
   {
-    //Did it synchronize any repo? If so, let's refresh some things...
-    if (textInTabOutput(StrConstants::getSyncing()))
-    {
-      bool aurGroup = isRemoteSearchSelected();
+    //metaBuildPackageList();???
 
-      if (!aurGroup)
-      {
-        metaBuildPackageList();        
-      }
-    }
-
-    doSystemUpgrade();
     m_commandQueued = ectn_NONE;
-  }*/
+    doInstall();
+    return;
+  }
 
-  if (m_commandQueued == ectn_NONE)
+  else if (m_commandQueued == ectn_NONE)
   {
     if(exitCode == 0 || exitCode == 255) //mate-terminal is returning code 255 sometimes...
     {
@@ -1653,7 +1651,7 @@ bool MainWindow::searchForKeyVerbs(const QString &msg)
 }
 
 /*
- * Processes the output of the 'pacman process' so we can update percentages and messages at real time
+ * Processes the output of the 'pkg process' so we can update percentages and messages at real time
  */
 void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 {  
@@ -1736,7 +1734,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         target = msg.left(p).remove("Processing").trimmed();
 
         if(!textInTabOutput(target))
-          writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>");
+          writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
       }
     }
 
@@ -1781,7 +1779,6 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg = msg.trimmed();
 
     //std::cout << "debug: " << msg.toLatin1().data() << std::endl;
-
     QString order;
     int ini = msg.indexOf(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "));
     if (ini == 0)
@@ -1982,32 +1979,45 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     }
     else
     {
-      if(newMsg.contains("removing ") ||
-         newMsg.contains("could not ") ||
-         newMsg.contains("error:", Qt::CaseInsensitive) ||
-         newMsg.contains("failed") ||
-         newMsg.contains("is not synced") ||
-         newMsg.contains("could not be found"))
+      if(newMsg.contains(QRegularExpression("REMOVED")) ||
+         newMsg.contains(QRegularExpression("removing ")) ||
+         newMsg.contains(QRegularExpression("could not ")) ||
+         newMsg.contains(QRegularExpression("error")) ||
+         newMsg.contains(QRegularExpression("failed")) ||
+         newMsg.contains(QRegularExpression("is not synced")) ||
+         newMsg.contains(QRegularExpression("could not be found")))
       {
         newMsg = "<b><font color=\"#E55451\">" + newMsg + "&nbsp;</font></b>"; //RED
       }
-      else if(newMsg.contains("checking ") ||
-              newMsg.contains("-- reinstalling") ||
-              newMsg.contains("installing ") ||
-              newMsg.contains("upgrading ") ||
-              newMsg.contains("loading ") ||
-              newMsg.contains("resolving ") ||
-              newMsg.contains("looking "))
+      else if(newMsg.contains(QRegularExpression("REINSTALLED")) ||
+              newMsg.contains(QRegularExpression("INSTALLED")) ||
+              newMsg.contains(QRegularExpression("UPDATED")) ||
+              newMsg.contains(QRegularExpression("[Cc]hecking")) ||
+              newMsg.contains(QRegularExpression("[Rr]einstalling")) ||
+              newMsg.contains(QRegularExpression("[Ii]nstalling")) ||
+              newMsg.contains(QRegularExpression("[Uu]pgrading")) ||
+              newMsg.contains(QRegularExpression("[Ll]oading")) ||
+              newMsg.contains(QRegularExpression("[Rr]esolving")) ||
+              newMsg.contains(QRegularExpression("[Ll]ooking")))
       {
          newMsg = "<b><font color=\"#4BC413\">" + newMsg + "</font></b>"; //GREEN
       }
-      else if (newMsg.contains("warning") || (newMsg.contains("downgrading")))
+      else if (newMsg.contains(QRegularExpression("warning")) ||
+               (newMsg.contains(QRegularExpression("downgrading"))))
       {
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
-      else if (!newMsg.contains("::"))
+      else if (newMsg.contains("-") &&
+               (!newMsg.contains(QRegularExpression("(is|are) up-to-date"))) &&
+               (!newMsg.contains(QRegularExpression("\\s"))))
       {
-        newMsg += "<br>";
+        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
+      }
+      else if (newMsg.contains(":") &&
+               (!newMsg.contains(QRegularExpression("\\):"))) &&
+               (!newMsg.contains(QRegularExpression(":$"))))
+      {
+        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
       }
     }
 

@@ -30,66 +30,32 @@
 #include <QTranslator>
 #include <QResource>
 
-
-#define NO_GTK_STYLE
-
 int main(int argc, char *argv[])
 {
   ArgumentList *argList = new ArgumentList(argc, argv);
-
-#if QT_VERSION < 0x050000
-  QApplication::setGraphicsSystem(QLatin1String("raster"));
-#endif
-
   QString packagesToInstall;
-  QString arg;
-
-  for (int c=1; c<argc; c++)
-  {
-    arg = argv[c];
-    /*if (arg.contains(QRegularExpression("pkg.tar.[gz|xz]")))
-    {
-      packagesToInstall += arg + ",";
-    }*/
-  }
-
   QtSingleApplication app( StrConstants::getApplicationName(), argc, argv );
 
   if (app.isRunning())
-  {
-    if (argList->getSwitch("-sysupgrade"))
-    {
-      app.sendMessage("SYSUPGRADE");
-    }
-    else if (argList->getSwitch("-sysupgrade-noconfirm"))
-    {
-      app.sendMessage("SYSUPGRADE_NOCONFIRM");
-    }
-    else if (argList->getSwitch("-close"))
-    {
-      app.sendMessage("CLOSE");
-    }
-    else if (argList->getSwitch("-hide"))
-    {
-      app.sendMessage("HIDE");
-    }
-    else if (!packagesToInstall.isEmpty())
-    {
-      app.sendMessage(packagesToInstall);
-    }
-    else
-    {
-      app.sendMessage("RAISE");
-    }
-
+  {    
+    app.sendMessage("RAISE");
     return 0;
+  }
+
+  if(!UnixCommand::hasTheExecutable("pkg"))
+  {
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoPkgFound());
+  }
+  if(!UnixCommand::hasTheExecutable("sh"))
+  {
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
   }
 
   //This sends a message just to enable the socket-based QtSingleApplication engine
   app.sendMessage("RAISE");
 
   QTranslator appTranslator;
-  appTranslator.load(":/resources/translations/octopi_" +
+  appTranslator.load(":/resources/translations/octopkg_" +
                      QLocale::system().name());
   app.installTranslator(&appTranslator);
 
@@ -111,23 +77,6 @@ int main(int argc, char *argv[])
   MainWindow w;
   app.setActivationWindow(&w);
   app.setQuitOnLastWindowClosed(false);
-
-#if QT_VERSION < 0x050000
-  #ifndef NO_GTK_STYLE
-  if (!argList->getSwitch("-style"))
-  {
-    if (UnixCommand::getLinuxDistro() == ectn_MANJAROLINUX &&
-        (!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning()) && (!WMHelper::isLXQTRunning())))
-    {
-      app.setStyle(new QGtkStyle());
-    }
-    else if(UnixCommand::getLinuxDistro() != ectn_CHAKRA)
-    {
-      app.setStyle(new QCleanlooksStyle());
-    }
-  }
-  #endif
-#endif
 
   if (argList->getSwitch("-sysupgrade-noconfirm"))
   {
@@ -152,7 +101,6 @@ int main(int argc, char *argv[])
     w.setPackagesToInstallList(packagesToInstallList);
   }
 
-  w.setRemoveCommand("Rcs"); //argList->getSwitchArg("-removecmd", "Rcs"));
   w.show();
 
   QResource::registerResource("./resources.qrc");

@@ -1230,6 +1230,6 @@ bool Package::hasPkgNGDatabase()
  */
 bool Package::isForbidden(const QString pkgName)
 {
-  QStringList forbiddenPkgs = { "pcbsd-base", "pcbsd-meta-kde", "pcbsd-meta-virtualboxguest", "pkg" };
+  QStringList forbiddenPkgs = { "pcbsd-base", "pcbsd-meta-kde", "pcbsd-meta-virtualboxguest", "pkg", "xorg" };
   return forbiddenPkgs.contains(pkgName);
 }

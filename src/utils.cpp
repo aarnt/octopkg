@@ -373,7 +373,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     }
     else
     {
-      res = "<h3><font color=\"#E55451\">" + StrConstants::getIncompatibleLinuxDistroError() + "</font></h3>";
+      res = "<h3><font color=\"#E55451\">" + StrConstants::getIncompatibleBSDFlavourError() + "</font></h3>";
     }
   }
 

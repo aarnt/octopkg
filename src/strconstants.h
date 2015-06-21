@@ -40,11 +40,11 @@ public:
 
   static QString getApplicationCliHelp(){
     QString str =
-        "\n" + QObject::tr("Octopi usage help:") + "\n\n" +
-        "-version: " + QObject::tr("show application version.") + "\n" +
+        "\n" + QObject::tr("OctoPkg usage help:") + "\n\n" +
+        "-version: " + QObject::tr("show application version."); /*+ "\n" +
         "-style <Qt4-style>: " + QObject::tr("use a different Qt4 style (ex: -style gtk).") + "\n" +
         "-removecmd <Remove-command>: " + QObject::tr("use a different remove command (ex: -removecmd R).") + "\n" +
-        "-sysupgrade: " + QObject::tr("force a system upgrade at startup.") + "\n";
+        "-sysupgrade: " + QObject::tr("force a system upgrade at startup.") + "\n";*/
 
     return str;
   }
@@ -112,8 +112,8 @@ public:
     return QObject::tr("No news could be found! Press Ctrl+G to download the latest news.");
   }
 
-  static QString getIncompatibleLinuxDistroError(){
-    return QObject::tr("This Linux distro seems to be incompatible with Octopi!");
+  static QString getIncompatibleBSDFlavourError(){
+    return QObject::tr("This BSD flavour seems to be incompatible with Octopi!");
   }
 
   static QString getInternetUnavailableError(){
@@ -493,6 +493,14 @@ public:
 
   static QString getYoullNeedSuFrontend(){
     return QObject::tr("You'll need to install a su frontend like gksu or kdesu.");
+  }
+
+  static QString getErrorNoPkgFound(){
+    return QObject::tr("'pkg' binary was not found.");
+  }
+
+  static QString getErrorNoBashFound(){
+    return QObject::tr("'sh' binary was not found.");
   }
 
   static QString getErrorRunningWithRoot(){

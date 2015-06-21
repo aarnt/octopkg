@@ -131,7 +131,7 @@ void Terminal::openTerminal(const QString &dirName)
     else if (UnixCommand::hasTheExecutable(ctn_XTERM)){
       QString cmd = ctn_XTERM +
           " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \"" +
-          "cd " + dirName + " && /bin/bash\"";
+          "cd " + dirName + " && /bin/sh\"";
       m_process->startDetached( cmd );
     }
   }
@@ -193,7 +193,7 @@ void Terminal::openTerminal(const QString &dirName)
     else if (m_selectedTerminal == ctn_XTERM){
       QString cmd = ctn_XTERM +
           " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \"" +
-          "cd " + dirName + " && /bin/bash\"";
+          "cd " + dirName + " && /bin/sh\"";
       m_process->startDetached( cmd );
     }
   }
@@ -358,12 +358,12 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
     if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL))
     {
       QString cmd =
-          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e bash -c " + ftemp->fileName() + "\"";
+          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e sh -c " + ftemp->fileName() + "\"";
 
       m_process->start(cmd);
     }
     else if(WMHelper::isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (WMHelper::isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_TERMINAL)){
@@ -371,46 +371,46 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
 
       if (UnixCommand::isRootRunning())
       {
-        cmd = "dbus-launch " + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName();
+        cmd = "dbus-launch " + ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName();
       }
       else
       {        
-        cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
+        cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName() + "\"";
       }
 
       m_process->start(cmd);
     }
     else if (WMHelper::isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_TDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
+      QString cmd = suCommand + " \"" + ctn_TDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName() + "\"";
       m_process->start(cmd);
     }
     else if (WMHelper::isLXDERunning() && UnixCommand::hasTheExecutable(ctn_LXDE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (WMHelper::isMATERunning() && UnixCommand::hasTheExecutable(ctn_MATE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_MATE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_MATE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (WMHelper::isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_LXQT_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_LXQT_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_PEK_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_PEK_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_PEK_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_LXDE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_XTERM)){
       QString cmd = suCommand + " \"" + ctn_XTERM +
-          " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \'bash -c " + ftemp->fileName() + "'\"";
+          " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
   }
@@ -419,12 +419,12 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
     if (m_selectedTerminal == ctn_RXVT_TERMINAL)
     {
       QString cmd =
-          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e bash -c " + ftemp->fileName() + "\"";
+          suCommand + " \"" + ctn_RXVT_TERMINAL + " -title pkg -name pkg -e sh -c " + ftemp->fileName() + "\"";
 
       m_process->start(cmd);
     }
     else if(m_selectedTerminal == ctn_XFCE_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_KDE_TERMINAL){
@@ -432,38 +432,38 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
 
       if (UnixCommand::isRootRunning())
       {
-        cmd = "dbus-launch " + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName();
+        cmd = "dbus-launch " + ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName();
       }
       else
       {
-        cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
+        cmd = suCommand + " \"" + ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName() + "\"";
       }
 
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_TDE_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_TDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName() + "\"";
+      QString cmd = suCommand + " \"" + ctn_TDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName() + "\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_PEK_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_PEK_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_PEK_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_LXDE_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_LXDE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_MATE_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_MATE_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_MATE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_LXQT_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_LXQT_TERMINAL + " -e \'bash -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + " \"" + ctn_LXQT_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_XTERM){
       QString cmd = suCommand + " \"" + ctn_XTERM +
-          " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \'bash -c " + ftemp->fileName() + "'\"";
+          " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e \'sh -c " + ftemp->fileName() + "'\"";
       m_process->start(cmd);
     }
   }
@@ -511,7 +511,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
     }
     else if (WMHelper::isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_TERMINAL))
     {
-      cmd = ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName();
+      cmd = ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName();
     }
     else if (WMHelper::isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_TERMINAL)){
       cmd = ctn_TDE_TERMINAL + " --nofork -e " + ftemp->fileName();
@@ -523,7 +523,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
       cmd = ctn_MATE_TERMINAL + " -e " + ftemp->fileName();
     }
     else if (WMHelper::isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_TERMINAL)){
-      cmd = ctn_LXQT_TERMINAL + " -e bash -c " + ftemp->fileName();
+      cmd = ctn_LXQT_TERMINAL + " -e sh -c " + ftemp->fileName();
     }
     else if (UnixCommand::hasTheExecutable(ctn_PEK_TERMINAL)){
       cmd = ctn_PEK_TERMINAL + " -e " + ftemp->fileName();
@@ -565,7 +565,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
     }
     else if (m_selectedTerminal == ctn_KDE_TERMINAL)
     {
-      cmd = ctn_KDE_TERMINAL + " --nofork -e bash -c " + ftemp->fileName();
+      cmd = ctn_KDE_TERMINAL + " --nofork -e sh -c " + ftemp->fileName();
     }
     else if (m_selectedTerminal == ctn_TDE_TERMINAL){
       cmd = ctn_TDE_TERMINAL + " --nofork -e " + ftemp->fileName();
@@ -577,7 +577,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
       cmd = ctn_MATE_TERMINAL + " -e " + ftemp->fileName();
     }
     else if (m_selectedTerminal == ctn_LXQT_TERMINAL){
-      cmd = ctn_LXQT_TERMINAL + " -e bash -c " + ftemp->fileName();
+      cmd = ctn_LXQT_TERMINAL + " -e sh -c " + ftemp->fileName();
     }
     else if (m_selectedTerminal == ctn_XTERM){
       cmd = ctn_XTERM +

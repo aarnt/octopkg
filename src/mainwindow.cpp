@@ -73,7 +73,6 @@ MainWindow::MainWindow(QWidget *parent) :
   m_time->start();
 
   retrieveUnrequiredPackageList();
-  //retrieveForeignPackageList();
 
   ui->setupUi(this);
   switchToViewAllPackages();  
@@ -522,14 +521,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
-      if (UnixCommand::getBSDFlavour() == ectn_FREEBSD)
-      {
-        if (package->installed() == false || Package::isForbidden(package->name))
-        {
-          allRemovable = false;
-        }
-      }
-      else if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
+      if (UnixCommand::getBSDFlavour() == ectn_PCBSD || UnixCommand::getBSDFlavour() == ectn_FREEBSD)
       {
         if (package->installed() == false || package->required || Package::isForbidden(package->name))
         {
