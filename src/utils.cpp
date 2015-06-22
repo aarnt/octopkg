@@ -272,17 +272,17 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
  */
 QString utils::retrieveDistroNews(bool searchForLatestNews)
 {
-  const QString ctn_ANTERGOS_RSS_URL = "http://antergos.com/category/news/feed/";
+  /*const QString ctn_ANTERGOS_RSS_URL = "http://antergos.com/category/news/feed/";
   const QString ctn_ARCHBSD_RSS_URL = "http://archbsd.net/feeds/news/";
   const QString ctn_ARCH_LINUX_RSS_URL = "https://www.archlinux.org/feeds/news/";
   const QString ctn_CHAKRA_RSS_URL = "http://chakraos.org/news/index.php?/feeds/index.rss2";
   const QString ctn_KAOS_RSS_URL = "http://kaosx.us/feed/";
-  //const QString ctn_MANJARO_LINUX_RSS_URL = "http://manjaro.org/feed/";
   const QString ctn_MANJARO_LINUX_RSS_URL = "https://manjaro.github.io/feed.xml";
-  const QString ctn_NETRUNNER_RSS_URL = "http://www.netrunner-os.com/feed/";
+  const QString ctn_NETRUNNER_RSS_URL = "http://www.netrunner-os.com/feed/";*/
+  const QString ctn_FREEBSD_RSS_URL = "http://www.freebsd.org/news/rss.xml";
   const QString ctn_PCBSD_RSS_URL = "http://blog.pcbsd.org/feed/";
 
-  BSDFlavour distro = UnixCommand::getBSDFlavour();
+  BSDFlavour bsd = UnixCommand::getBSDFlavour();
   QString res;
   QString tmpRssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/.tmp_distro_rss.xml";
   QString rssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/distro_rss.xml";
@@ -297,11 +297,15 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     fileRss.close();
   }
 
-  if(searchForLatestNews && UnixCommand::hasInternetConnection() && distro != ectn_UNKNOWN)
+  if(searchForLatestNews && UnixCommand::hasInternetConnection() && bsd != ectn_UNKNOWN)
   {
     QString curlCommand = "curl %1 -o %2";
 
-    if (distro == ectn_PCBSD)
+    if (bsd == ectn_FREEBSD)
+    {
+      curlCommand = curlCommand.arg(ctn_FREEBSD_RSS_URL).arg(tmpRssPath);
+    }
+    else if (bsd == ectn_PCBSD)
     {
       curlCommand = curlCommand.arg(ctn_PCBSD_RSS_URL).arg(tmpRssPath);
     }
@@ -367,7 +371,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     {
       res = "<h3><font color=\"#E55451\">" + StrConstants::getInternetUnavailableError() + "</font></h3>";
     }
-    else if (distro != ectn_UNKNOWN)
+    else if (bsd != ectn_UNKNOWN)
     {
       res = "<h3><font color=\"#E55451\">" + StrConstants::getNewsErrorMessage() + "</font></h3>";
     }
@@ -387,9 +391,13 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
 QString utils::parseDistroNews()
 {
   QString html;
-  BSDFlavour distro = UnixCommand::getBSDFlavour();
+  BSDFlavour bsd = UnixCommand::getBSDFlavour();
 
-  if (distro == ectn_PCBSD)
+  if (bsd == ectn_FREEBSD)
+  {
+    html = "<p align=\"center\"><h2>" + StrConstants::getFreeBSDNews() + "</h2></p><ul>";
+  }
+  else if (bsd == ectn_PCBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getPCBSDNews() + "</h2></p><ul>";
   }
@@ -399,11 +407,14 @@ QString utils::parseDistroNews()
   int itemCounter=0;
 
   QFile file(rssPath);
+
   if (!file.open(QIODevice::ReadOnly)) return "";
+
   if (!doc.setContent(&file)) {
       file.close();
       return "";
   }
+
   file.close();
 
   QDomElement docElem = doc.documentElement(); //This is rss
@@ -439,7 +450,6 @@ QString utils::parseDistroNews()
             else if (eText.tagName() == "link")
             {
               itemLink = Package::makeURLClickable(eText.text());
-              //if (UnixCommand::getBSDFlavour() == ectn_MANJAROLINUX) itemLink += "<br>";
             }
             else if (eText.tagName() == "description")
             {

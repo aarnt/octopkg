@@ -445,7 +445,7 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
   }
 
-  if (!isSearchByFileSelected() && m_packageModel->getPackageCount() <= 1)
+  if (!isSearchByFileSelected() && (!isRemoteSearchSelected()) && m_packageModel->getPackageCount() <= 1)
   {
     m_leFilterPackage->clear();
     //metaBuildPackageList();

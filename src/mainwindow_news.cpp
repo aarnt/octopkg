@@ -32,16 +32,7 @@
 
 #include <QTextBrowser>
 #include <QFutureWatcher>
-
-#if QT_VERSION > 0x050000
-  #include <QtConcurrent/QtConcurrentRun>
-#else
-  #include <QtConcurrentRun>
-#endif
-
-#if QT_VERSION < 0x050000
-  using namespace QtConcurrent;
-#endif
+#include <QtConcurrent/QtConcurrentRun>
 
 /*
  * This is the high level method that orquestrates the Distro RSS News printing in tabNews
@@ -58,22 +49,22 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
 
   if (searchForLatestNews)
   {
-    BSDFlavour distro = UnixCommand::getBSDFlavour();
+    BSDFlavour bsd = UnixCommand::getBSDFlavour();
 
     if (gotoNewsTab)
     {
       clearTabOutput();
     }
 
-    if (gotoNewsTab && distro == ectn_FREEBSD)
+    if (gotoNewsTab && bsd == ectn_FREEBSD)
     {
       writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("FreeBSD") + "</b>");
+                          StrConstants::getSearchingForBSDNews().arg("FreeBSD") + "</b>");
     }
-    else if (gotoNewsTab && distro == ectn_PCBSD)
+    else if (gotoNewsTab && bsd == ectn_PCBSD)
     {
       writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForDistroNews().arg("PC-BSD") + "</b>");
+                          StrConstants::getSearchingForBSDNews().arg("PC-BSD") + "</b>");
     }
 
     /*

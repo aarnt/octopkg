@@ -104,6 +104,10 @@ public:
     return QObject::tr("Netrunner Rolling news");
   }
 
+  static QString getFreeBSDNews(){
+    return QObject::tr("FreeBSD news");
+  }
+
   static QString getPCBSDNews(){
     return QObject::tr("PC-BSD news");
   }
@@ -317,7 +321,7 @@ public:
     return QObject::tr("Building package list...");
   }
 
-  static QString getSearchingForDistroNews(){
+  static QString getSearchingForBSDNews(){
     return QObject::tr("Searching for %1 latest news...");
   }
 

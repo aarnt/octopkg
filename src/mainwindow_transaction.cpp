@@ -720,7 +720,7 @@ void MainWindow::prepareSystemUpgrade()
  */
 void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 {
-  if (/*isAURGroupSelected() ||*/ m_systemUpgradeDialog) return;
+  if (m_systemUpgradeDialog) return;
 
   if(m_callSystemUpgrade && m_numberOfOutdatedPackages == 0)
   {
@@ -810,17 +810,21 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
                          "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
 
       question.setWindowTitle(StrConstants::getConfirmation());
+
+      //IMPORTANT: Let's have the YES button out of "pkg upgrade" for the moment!
+      question.removeYesButton();
+
       question.setInformativeText(StrConstants::getConfirmationQuestion());
       question.setDetailedText(list);
 
       m_systemUpgradeDialog = true;
       int result = question.exec();
 
-      if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
+      if(/*result == QDialogButtonBox::Yes ||*/ result == QDialogButtonBox::AcceptRole)
       {
         prepareSystemUpgrade();
 
-        if (result == QDialogButtonBox::Yes)
+        /*if (result == QDialogButtonBox::Yes)
         {
           m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
@@ -830,7 +834,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
           m_unixCommand->executeCommand(command);
           m_commandQueued = ectn_NONE;
         }
-        else if (result == QDialogButtonBox::AcceptRole)
+        else*/ if (result == QDialogButtonBox::AcceptRole)
         {
           m_commandExecuting = ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL;
           m_unixCommand->runCommandInTerminal(m_lastCommandList);
