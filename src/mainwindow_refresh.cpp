@@ -140,11 +140,13 @@ void MainWindow::remoteSearchClicked()
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
+    m_leFilterPackage->setToolTip(StrConstants::getRemotePackageSearchTip());
     ui->actionSearchByDescription->setChecked(true);
     ui->actionSearchByFile->setChecked(false);
   }
   else
   {
+    m_leFilterPackage->setToolTip("");
     ui->actionSearchByName->setChecked(true);
     ui->actionSearchByFile->setChecked(true);
   }
@@ -612,6 +614,22 @@ void MainWindow::buildRemotePackageList()
 
   refreshToolBar();
   refreshStatusBarToolButtons();
+
+  //If we found no packages, let's make another search, this time 'by name'...
+  if (!m_leFilterPackage->text().isEmpty() &&
+      (!m_leFilterPackage->text().contains(QRegularExpression("\\s"))) &&
+      m_packageModel->getPackageCount() == 0 &&
+      ui->actionSearchByDescription->isChecked())
+  {
+    if (m_cic != NULL)
+    {
+      delete m_cic;
+      m_cic = 0;
+    }
+
+    ui->actionSearchByName->setChecked(true);
+    metaBuildPackageList();
+  }
 }
 
 /*

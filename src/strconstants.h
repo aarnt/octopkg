@@ -361,6 +361,10 @@ public:
     return QObject::tr("Removing Pacman's transaction lock file...");
   }
 
+  static QString getRemotePackageSearchTip(){
+    return QObject::tr("Press ENTER to start your search");
+  }
+
   static QString getSyncing(){
     return QObject::tr("Syncing");
   }

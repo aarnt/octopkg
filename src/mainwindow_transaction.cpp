@@ -1556,17 +1556,13 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   }
 
   enableTransactionActions();
-  if (isRemoteSearchSelected())
-  {
-    toggleSystemActions(false);
-  }
 
   //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
   //  refreshGroupsWidget();
 
   m_unixCommand->removeTemporaryFile();
 
-  delete m_unixCommand; //EXPERIMENTAL
+  delete m_unixCommand;
 
   m_commandExecuting = ectn_NONE;
 }

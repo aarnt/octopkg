@@ -440,15 +440,25 @@ void MainWindow::tvPackagesSearchColumnChanged(QAction *actionSelected)
     //ui->actionViewAllPackages->trigger();
     //m_actionRepositoryAll->trigger();
     //ui->menuView->setEnabled(false);
-
     //ui->twGroups->setEnabled(false);
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
   }
 
-  if (!isSearchByFileSelected() && (!isRemoteSearchSelected()) && m_packageModel->getPackageCount() <= 1)
+  /*if (!isSearchByFileSelected() && (!isRemoteSearchSelected()) && m_packageModel->getPackageCount() <= 1)
   {
     m_leFilterPackage->clear();
-    //metaBuildPackageList();
+  }*/
+
+  if (!isRemoteSearchSelected())
+  {
+    if (m_packageModel->getPackageCount() == 0)
+    {
+      m_leFilterPackage->setNotFoundStyle();
+    }
+    else if (m_packageModel->getPackageCount() > 0 && (!m_leFilterPackage->text().isEmpty()))
+    {
+      m_leFilterPackage->setFoundStyle();
+    }
   }
 
   QModelIndex mi = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
