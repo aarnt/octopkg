@@ -30,7 +30,6 @@
 #include "searchlineedit.h"
 #include "treeviewpackagesitemdelegate.h"
 #include "searchbar.h"
-#include "repoconf.h"
 #include <iostream>
 #include <cassert>
 
@@ -287,7 +286,6 @@ void MainWindow::initMenuBar()
 void MainWindow::initToolBar()
 {
   initPackageGroups();
-
   ui->mainToolBar->setIconSize(QSize(22, 22));
   ui->mainToolBar->addAction(ui->actionSyncPackages);
   ui->mainToolBar->addAction(ui->actionSystemUpgrade);

@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 QT += core gui network xml dbus widgets quick quickwidgets
-
 DEFINES += OCTOPKG_EXTENSIONS
 CONFIG += qt warn_on debug
 LIBS += -L/usr/local/lib
@@ -19,8 +18,6 @@ UI_DIR += build
 
 HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/QtSolutions/qtlocalpeer.h \
-        repoeditor/repoentry.h \
-        src/repoconf.h \
         src/mainwindow.h \
         src/strconstants.h \
         src/searchlineedit.h \
@@ -44,8 +41,6 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
 
 SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/QtSolutions/qtlocalpeer.cpp \
-        repoeditor/repoentry.cpp \
-        src/repoconf.cpp \
         src/main.cpp\
         src/mainwindow.cpp \
         src/searchlineedit.cpp \
