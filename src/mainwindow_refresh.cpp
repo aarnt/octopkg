@@ -944,6 +944,8 @@ void MainWindow::refreshStatusBarToolButtons()
  */
 void MainWindow::refreshStatusBar()
 {
+  m_lblSelCounter->setVisible(true);
+  m_lblTotalCounters->setVisible(true);
   QString text;
   ui->statusBar->removeWidget(m_toolButtonPacman);
 
@@ -964,6 +966,8 @@ void MainWindow::refreshStatusBar()
       if (m_packageModel->getPackageCount() == 0)
       {
         m_lblSelCounter->setText("");
+        m_lblSelCounter->setVisible(false);
+        m_lblTotalCounters->setVisible(false);
       }
 
       text = "";
@@ -977,7 +981,7 @@ void MainWindow::refreshStatusBar()
   m_lblTotalCounters->setText(text);
   ui->statusBar->addWidget(m_lblTotalCounters);
 
-  if((m_numberOfOutdatedPackages > 0) && (!isRemoteSearchSelected()))
+  if (m_numberOfOutdatedPackages > 0)
   {
     m_toolButtonPacman->show();
 

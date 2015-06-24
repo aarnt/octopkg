@@ -114,6 +114,7 @@ double Package::simplePow(int base, int exp)
   for(; exp > 0; exp--) {
     result *= base;
   }
+
   return result;
 }
 
@@ -255,17 +256,22 @@ QHash<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QHash<QString, OutdatedPackageInfo>* res = new QHash<QString, OutdatedPackageInfo>();
 
-  if (packageTuples.contains("Installed packages to be UPGRADED", Qt::CaseInsensitive))
+  if (packageTuples.contains("Installed packages to be UPGRADED:", Qt::CaseInsensitive))
   {
     foreach(QString packageTuple, packageTuples)
     {
+      if (packageTuple.contains("packages to be") &&
+          !packageTuple.contains("Installed packages to be UPGRADED:")) break;
+
       if (packageTuple.contains("\t"))
       {
         packageTuple.remove("\t");
+
         QStringList parts = packageTuple.split(' ');
         {
           OutdatedPackageInfo opi;
           QString pkgName;
+
           pkgName = parts[0];
           pkgName.remove(pkgName.size()-1, 1);
 

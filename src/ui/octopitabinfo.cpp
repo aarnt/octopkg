@@ -44,18 +44,7 @@ OctopiTabInfo::OctopiTabInfo()
 QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& package,
                                      const QHash<QString, OutdatedPackageInfo>& outdatedPkgList)
 {
-  PackageInfoData pid;
-
-  /*if (package.repository != StrConstants::getForeignRepositoryName() &&
-      (package.installed() == false || package.outdated() == true)) {
-    pid = Package::getInformation(package.name);
-  }
-  else
-  {
-    pid = Package::getInformation(package.name, true); //This is a foreign package!!!
-  }*/
-
-  pid = Package::getInformation(package.name);
+  PackageInfoData pid = Package::getInformation(package.name);
 
   QString version = StrConstants::getVersion();
   QString url = StrConstants::getURL();
@@ -96,16 +85,9 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   {
     if (package.status != ectn_NEWER)
     {
-      //if (package.repository != StrConstants::getForeignRepositoryName())
-      {        
-        const OutdatedPackageInfo opi = outdatedPkgList.value(package.name);
-        QString outdatedVersion = opi.oldVersion;
-        /*html += "<tr><td>" + version + "</td><td>" + package.version + " <b><font color=\"#E55451\">"
-            + StrConstants::getOutdatedInstalledVersion().arg(outdatedVersion) +
-            "</b></font></td></tr>";*/
-        html += "<tr><td>" + version + "</td><td><b><font color=\"#E55451\">" + outdatedVersion +
-            "</b></font></td></tr>";
-      }
+      const OutdatedPackageInfo opi = outdatedPkgList.value(package.name);
+      html += "<tr><td>" + version + "</td><td><b><font color=\"#E55451\">" + opi.oldVersion + "</font></b>  <b>" +
+          StrConstants::getNewVersionAvailable().arg(opi.newVersion) + "</b></td></tr>";
     }
     /*else
     {

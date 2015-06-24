@@ -236,9 +236,7 @@ QString MainWindow::getOutdatedPkgNewVersion(const QString& pkgName)
 void MainWindow::outputOutdatedPackageList()
 {
   //We cannot output any list if there is a running transaction!
-  if (m_commandExecuting != ectn_NONE ||
-      isRemoteSearchSelected())
-    return;
+  if (m_commandExecuting != ectn_NONE) return;
 
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
 
@@ -269,15 +267,11 @@ void MainWindow::outputOutdatedPackageList()
     for (int c=0; c < m_outdatedStringList->count(); c++)
     {
       QString pkg = m_outdatedStringList->at(c);
-      //const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkg);
-
-      //if (package != NULL) {
-        html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
-            "</td><td align=\"right\"><b><font color=\"#E55451\">" +
-            getOutdatedPkgOldVersion(pkg) +
-            "</b></font></td><td align=\"right\">" +
-            getOutdatedPkgNewVersion(pkg) + "</td></tr>";
-      //}
+      html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
+          "</td><td align=\"right\"><b><font color=\"#E55451\">" +
+          getOutdatedPkgOldVersion(pkg) +
+          "</b></font></td><td align=\"right\">" +
+          getOutdatedPkgNewVersion(pkg) + "</td></tr>";
     }
 
     writeToTabOutput(html);
