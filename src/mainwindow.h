@@ -185,6 +185,7 @@ private:
 
   //Toggles use of Remote package search
   QAction *m_separatorForActionRemoteSearch;
+  QAction *m_actionSwitchToLocalFilter;
   QAction *m_actionSwitchToRemoteSearch;
 
   QByteArray m_horizontalSplit;

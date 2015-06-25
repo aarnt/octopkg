@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>552</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -297,7 +297,10 @@
      <normaloff>:/resources/images/fast_forward.png</normaloff>:/resources/images/fast_forward.png</iconset>
    </property>
    <property name="text">
-    <string>System &amp;upgrade</string>
+    <string>Package &amp;upgrade</string>
+   </property>
+   <property name="toolTip">
+    <string>Package upgrade</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+U</string>

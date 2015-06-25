@@ -140,12 +140,14 @@ void MainWindow::remoteSearchClicked()
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
+    m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextRemote());
     m_leFilterPackage->setToolTip(StrConstants::getRemotePackageSearchTip());
     ui->actionSearchByDescription->setChecked(true);
     ui->actionSearchByFile->setChecked(false);
   }
   else
   {
+    m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextLocal());
     m_leFilterPackage->setToolTip("");
     ui->actionSearchByName->setChecked(true);
     ui->actionSearchByFile->setChecked(true);

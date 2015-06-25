@@ -1231,9 +1231,9 @@ void MainWindow::tvPackagesSelectionChanged(const QItemSelection&, const QItemSe
 {
   const QItemSelectionModel*const selection = ui->tvPackages->selectionModel();
   const int selected = selection != NULL ? selection->selectedRows().count() : 0;
-  QString newMessage = StrConstants::getSelectedPackages(
-        m_packageModel->getPackageCount()).
-      arg(QString::number(selected));
+
+  QString newMessage = StrConstants::getTotalPackages(m_packageModel->getPackageCount()) +
+      "  " + StrConstants::getSelectedPackages(selected) + " ";
 
   QString text;
   int numberOfInstalledPackages = m_packageModel->getInstalledPackagesCount();

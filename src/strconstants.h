@@ -337,8 +337,12 @@ public:
     return QObject::tr("(version %1 is available)");
   }
 
-  static QString getSelectedPackages(int packageCount){
-    return QObject::tr("%n (%2) packages", 0, packageCount);
+  static QString getTotalPackages(int packageCount){
+    return QObject::tr("%n packages", 0, packageCount);
+  }
+
+  static QString getSelectedPackages(int selectedCount){
+    return QObject::tr("%n selected", 0, selectedCount);
   }
 
   static QString getNumberInstalledPackages(int installedPackagesCount){
@@ -359,6 +363,14 @@ public:
 
   static QString getRemovingPacmanTransactionLockFile(){
     return QObject::tr("Removing Pacman's transaction lock file...");
+  }
+
+  static QString getLineEditTextLocal(){
+    return QObject::tr("Filter installed packages");
+  }
+
+  static QString getLineEditTextRemote(){
+    return QObject::tr("Enter your search and press ENTER");
   }
 
   static QString getRemotePackageSearchTip(){
@@ -386,7 +398,7 @@ public:
   }
 
   static QString getSystemUpgrade(){
-    return QObject::tr("Starting full system upgrade...");
+    return QObject::tr("Starting package upgrade...");
   }
 
   static QString getInstallingPackages(){
@@ -580,8 +592,12 @@ public:
     return QObject::tr("Use \"%1\" tool").arg(getForeignRepositoryToolName());
   }
 
+  static QString getFilterLocalPackages(){
+    return QObject::tr("Filter installed packages");
+  }
+
   static QString getSearchForPackages(){
-    return QObject::tr("Search for remote packages...");
+    return QObject::tr("Search for remote packages");
   }
 
   static QString getSearchStringIsShort(){

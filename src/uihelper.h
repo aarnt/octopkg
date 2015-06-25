@@ -39,13 +39,6 @@ public:
   static QIcon getIconOctopiRed(){ return QIcon(":/resources/images/octopi_red.png"); }
   static QIcon getIconOctopiYellow(){ return QIcon(":/resources/images/octopi_yellow.png"); }
   static QIcon getIconOctopiGreen(){ return QIcon(":/resources/images/octopi_green.png"); }
-  static QIcon getIconFrozen(){ return QIcon(":/resources/images/tgz_frozen_flat.png"); }
-  static QIcon getIconUnFrozen(){ return QIcon(":/resources/images/tgz4_flat.png"); }
-  static QIcon getIconRPM(){ return QIcon(":/resources/images/rpm.png"); }
-  static QIcon getIconInferior(){ return QIcon(":/resources/images/inferiorversion_red.png"); }
-  static QIcon getIconSuperior(){ return QIcon(":/resources/images/superiorversion.png"); }
-  static QIcon getIconOtherVersion(){ return QIcon(":/resources/images/agent.png"); }
-  static QIcon getIconOtherArch(){ return QIcon(":/resources/images/cpu.png"); }
   static QIcon getIconInstalled(){ return QIcon(":/resources/images/installed.png"); }
   static QIcon getIconNonInstalled(){ return QIcon(":/resources/images/noninstalled.png"); }
   static QIcon getIconOutdated(){ return QIcon(":/resources/images/outdated.png"); }
@@ -53,6 +46,13 @@ public:
   static QIcon getIconUnrequired(){ return QIcon(":/resources/images/unrequired.png"); }
   static QIcon getIconForeignGreen(){ return QIcon(":/resources/images/foreign_green.png"); }
   static QIcon getIconForeignRed(){ return QIcon(":/resources/images/foreign_red.png"); }
+
+  static QIcon getIconHardDrive(){
+    if (WMHelper::isKDERunning())
+      return QIcon::fromTheme("drive-harddisk", QIcon(":/resources/images/drive-harddisk.png"));
+    else
+      return QIcon(":/resources/images/drive-harddisk.png");
+  }
 
   static QIcon getIconBinary(){
     if (WMHelper::isKDERunning())
