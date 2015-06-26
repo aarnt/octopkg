@@ -515,7 +515,9 @@ void MainWindow::initTabInfo(){
   text->setReadOnly(true);
   text->setFrameShape(QFrame::NoFrame);
   text->setFrameShadow(QFrame::Plain);
-  text->setOpenExternalLinks(true);
+  //text->setOpenExternalLinks(true);
+  text->setOpenLinks(false);
+  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
   gridLayoutX->addWidget ( text, 0, 0, 1, 1 );
 
   QString tabName(StrConstants::getTabInfoName());
@@ -524,6 +526,7 @@ void MainWindow::initTabInfo(){
       "MainWindow", tabName.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ) );
   ui->twProperties->setUsesScrollButtons(false);
   ui->twProperties->setCurrentIndex(ctn_TABINDEX_INFORMATION);
+
   text->show();
   text->setFocus();
 }
@@ -621,7 +624,6 @@ void MainWindow::initActions()
 {
   m_hasSLocate = UnixCommand::hasTheExecutable("slocate");
   m_hasMirrorCheck = UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
-
   m_actionSysInfo = new QAction(this);
 
   if(m_hasMirrorCheck)

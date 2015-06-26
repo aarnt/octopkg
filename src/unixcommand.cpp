@@ -263,6 +263,15 @@ QByteArray UnixCommand::getForeignPackageList()
 }
 
 /*
+ * Retrieves the dependencies pkg list with 'pkg query %dn' command
+ */
+QByteArray UnixCommand::getDependenciesList(const QString &pkgName)
+{
+  QByteArray result = performQuery("query \"%dn\" " + pkgName);
+  return result;
+}
+
+/*
  * Returns a string with the list of all packages available in all repositories
  * (installed + not installed)
  *

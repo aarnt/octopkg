@@ -112,16 +112,6 @@ struct PackageListData{
                                     downloadSize(dSize),
                                     status(pkgStatus){
   }
-
-  /*PackageListData(QString n, QString v, QString cat, QString w, QString c, PackageStatus pkgStatus, double dSize)
-                                    : name(n),
-                                      version(v),
-                                      categories(cat),
-                                      www(w),
-                                      comment(c),
-                                      downloadSize(dSize),
-                                      status(pkgStatus){
-  }*/
 };
 
 struct TransactionInfo{
@@ -191,7 +181,7 @@ class Package{
     static double getDownloadSizeDescription(const QString &pkgName);
     static QString getInformationDescription(const QString &pkgName, bool foreignPackage = false);
     static QString getInformationInstalledSize(const QString &pkgName, bool foreignPackage = false);
-
+    static QString getDependencies(const QString &pkgName);
     static QStringList getContents(const QString &pkgName, bool isInstalled);
     static QStringList getOptionalDeps(const QString &pkgName);
     static QString getName(const QString &pkgInfo);

@@ -1057,6 +1057,25 @@ QString Package::getInformationInstalledSize(const QString &pkgName, bool foreig
 }
 
 /*
+ * Retrieves the dependencies list of packages for the given pkgName
+ */
+QString Package::getDependencies(const QString &pkgName)
+{
+  QStringList pkgList;
+  QString res;
+
+  QString aux = UnixCommand::getDependenciesList(pkgName);
+  pkgList = aux.split("\n", QString::SkipEmptyParts);
+
+  foreach(QString dependency, pkgList)
+  {
+    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a>&nbsp;&nbsp;";
+  }
+
+  return res.trimmed();
+}
+
+/*
  * Helper to get only the Version field of AUR package information
  */
 /*

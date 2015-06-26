@@ -91,6 +91,7 @@ public:
   static QByteArray getOutdatedPackageList();
   static QByteArray getOutdatedAURPackageList();
   static QByteArray getForeignPackageList();
+  static QByteArray getDependenciesList(const QString &pkgName);
   static QByteArray getPackageList(const QString &pkgName = "");
   static QByteArray getPackageInformation(const QString &pkgName, bool foreignPackage);
   static QByteArray getAURPackageVersionInformation();
@@ -100,7 +101,6 @@ public:
 
   static QString getPackageByFilePath(const QString &filePath);
   static QStringList getFilePathSuggestions(const QString &file);
-
   static QByteArray getPackageGroups();
   static QByteArray getPackagesFromGroup(const QString &groupName);
 

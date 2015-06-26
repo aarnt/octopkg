@@ -189,6 +189,10 @@ public:
     return QObject::tr("Provides");
   }
 
+  static QString getDependencies(){
+    return QObject::tr("Dependencies");
+  }
+
   static QString getDependsOn(){
     return QObject::tr("Depends On");
   }

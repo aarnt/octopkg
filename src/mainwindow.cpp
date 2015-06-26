@@ -183,16 +183,14 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
   if (link.toString().contains("goto:"))
   {
     QString pkgName = link.toString().mid(5);
-
-    QModelIndex columnIndex = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN,
-                                                    QModelIndex());
-
+    QModelIndex columnIndex = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
     QModelIndexList foundItems = m_packageModel->match(columnIndex, Qt::DisplayRole, pkgName, -1, Qt::MatchExactly);
     QModelIndex proxyIndex;
 
     if (foundItems.count() == 1)
     {
       proxyIndex = foundItems.first();
+
       if(proxyIndex.isValid())
       {
         ui->tvPackages->scrollTo(proxyIndex, QAbstractItemView::PositionAtCenter);
