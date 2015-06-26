@@ -42,7 +42,9 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QHash>
+#include <QToolTip>
 #include <QFutureWatcher>
+#include <QtConcurrent/QtConcurrentRun>
 
 /*
  * MainWindow's constructor: basic UI init
@@ -173,6 +175,39 @@ QTextBrowser *MainWindow::getOutputTextBrowser()
   }
 
   return ret;
+}
+
+/*
+ * Shows comment of given anchor
+ */
+void MainWindow::showAnchorDescription(const QUrl &link)
+{
+  if (link.toString().contains("goto:"))
+  {
+    //qDebug() << "ENTERED!";
+    QString pkgName = link.toString().mid(5);
+
+    QFuture<QString> f;
+    disconnect(&g_fwToolTipInfo, SIGNAL(finished()), this, SLOT(execToolTip()));
+    f = QtConcurrent::run(showPackageInfo, pkgName);
+    g_fwToolTipInfo.setFuture(f);
+    connect(&g_fwToolTipInfo, SIGNAL(finished()), this, SLOT(execToolTip()));
+  }
+}
+
+/*
+ * When the tooltip QFuture method is finished, we show the selected tooltip to the user
+ */
+void MainWindow::execToolTip()
+{
+  QPoint point = QCursor::pos();
+  if (g_fwToolTipInfo.result().trimmed().isEmpty())
+    return;
+
+  point.setX(point.x() + 25);
+  point.setY(point.y() + 25);
+
+  QToolTip::showText(point, g_fwToolTipInfo.result());
 }
 
 /*

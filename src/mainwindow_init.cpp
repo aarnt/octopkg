@@ -515,9 +515,10 @@ void MainWindow::initTabInfo(){
   text->setReadOnly(true);
   text->setFrameShape(QFrame::NoFrame);
   text->setFrameShadow(QFrame::Plain);
-  //text->setOpenExternalLinks(true);
   text->setOpenLinks(false);
   connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
+  connect(text, SIGNAL(highlighted(QUrl)), this, SLOT(showAnchorDescription(QUrl)));
+
   gridLayoutX->addWidget ( text, 0, 0, 1, 1 );
 
   QString tabName(StrConstants::getTabInfoName());
@@ -598,7 +599,8 @@ void MainWindow::initTabOutput()
   text->setFrameShadow(QFrame::Plain);
 
   connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
-  gridLayoutX->addWidget (text, 0, 0, 1, 1);  
+  connect(text, SIGNAL(highlighted(QUrl)), this, SLOT(showAnchorDescription(QUrl)));
+  gridLayoutX->addWidget (text, 0, 0, 1, 1);
 
   QString aux(StrConstants::getTabOutputName());
   ui->twProperties->removeTab(ctn_TABINDEX_OUTPUT);

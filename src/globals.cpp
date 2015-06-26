@@ -34,6 +34,7 @@
  */
 
 QFutureWatcher<QString> g_fwToolTip;
+QFutureWatcher<QString> g_fwToolTipInfo;
 QFutureWatcher<QList<PackageListData> *> g_fwPacman;
 QFutureWatcher<QList<PackageListData> *> g_fwForeignPacman;
 QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;

@@ -425,8 +425,9 @@ private slots:
   void searchBarFindNextInTreeView();
   void searchBarFindPreviousInTreeView();
   void searchBarClosedInTreeView();
+  void showAnchorDescription(const QUrl & link);
   void outputTextBrowserAnchorClicked(const QUrl & link);
-
+  void execToolTip();
   void launchPLV();
   void launchRepoEditor();
   void launchCacheCleaner();
