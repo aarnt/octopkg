@@ -52,7 +52,7 @@ QList<PackageListData> * searchPacmanPackages();
 QSet<QString> * searchUnrequiredPacmanPackages();
 QList<PackageListData> * searchForeignPackages();
 //QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringList *outdatedAURStringList);
-QList<PackageListData> * searchRemotePackages(QString searchString, bool useCommentSearch = true);
+QList<PackageListData> * searchRemotePackages(QString searchString);
 QString searchPacmanPackagesByFile(const QString &file);
 GroupMemberPair          searchPacmanPackagesFromGroup(QString groupName);
 //AUROutdatedPackages * getOutdatedAURPackages();

@@ -142,15 +142,13 @@ void MainWindow::remoteSearchClicked()
   {
     m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextRemote());
     m_leFilterPackage->setToolTip(StrConstants::getRemotePackageSearchTip());
-    ui->actionSearchByDescription->setChecked(true);
-    ui->actionSearchByFile->setChecked(false);
+    ui->menuSearch->setEnabled(false);
   }
   else
   {
     m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextLocal());
     m_leFilterPackage->setToolTip("");
-    ui->actionSearchByName->setChecked(true);
-    ui->actionSearchByFile->setChecked(true);
+    ui->menuSearch->setEnabled(true);
   }
 
   //switchToViewAllPackages();
@@ -394,7 +392,7 @@ void MainWindow::metaBuildPackageList()
       disconnect(&g_fwRemoteMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
 
       QFuture<QList<PackageListData> *> f;
-      f = QtConcurrent::run(searchRemotePackages, m_leFilterPackage->text(), ui->actionSearchByDescription->isChecked());
+      f = QtConcurrent::run(searchRemotePackages, m_leFilterPackage->text());
       connect(&g_fwRemoteMeta, SIGNAL(finished()), this, SLOT(preBuildRemotePackageListMeta()));
       g_fwRemoteMeta.setFuture(f);
     }
@@ -585,12 +583,6 @@ void MainWindow::buildRemotePackageList()
   //Refresh counters
   m_numberOfInstalledPackages = installedCount;
 
-  //Refresh statusbar widget
-  refreshStatusBar();
-
-  //Refresh application icon
-  refreshAppIcon();
-
   if (isRemoteSearchSelected())
   {
     m_leFilterPackage->initStyleSheet();
@@ -607,6 +599,12 @@ void MainWindow::buildRemotePackageList()
   {
     reapplyPackageFilter();
   }
+
+  //Refresh statusbar widget
+  refreshStatusBar();
+
+  //Refresh application icon
+  refreshAppIcon();
 
   counter = list->count();
   m_progressWidget->setValue(counter);

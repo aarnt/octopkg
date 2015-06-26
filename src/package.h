@@ -181,10 +181,11 @@ class Package{
     static TransactionInfo getTargetUpgradeList(const QString &pkgName = "");
     static QStringList * getTargetRemovalList(const QString &pkgName);
     //static QList<PackageListData> *getForeignPackageList();
+    static QList<PackageListData> * parsePackageTuple(const QStringList &packageTuples, QStringList &packageCache);
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
     //Remote package methods
-    static QList<PackageListData> * getRemotePackageList(const QString& searchString, bool useCommentSearch = true);
+    static QList<PackageListData> * getRemotePackageList(const QString& searchString);
 
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);

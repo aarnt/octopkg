@@ -450,23 +450,15 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
 }
 
 /*
- * Retrieves the list of all AUR packages in the database (installed + non-installed)
- * given the search parameter
+ * Parses the list of packages obtained by the "pkg" tool
  */
-QList<PackageListData> * Package::getRemotePackageList(const QString& searchString, bool useCommentSearch)
+QList<PackageListData> * Package::parsePackageTuple(const QStringList &packageTuples, QStringList &packageCache)
 {
   QString pkgName, pkgVersion, pkgCategories, pkgWWW, pkgComment;
   double pkgPkgSize;
   int indName, indVersion, indCategories, indWWW, indComment, indPkgSize;
-  //PackageStatus pkgStatus;
-  QList<PackageListData> * res = new QList<PackageListData>();
   const int cSpaces = 16;
-
-  if (searchString.isEmpty())
-    return res;
-
-  QString pkgList = UnixCommand::getRemotePackageList(searchString, useCommentSearch);
-  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  QList<PackageListData> * res = new QList<PackageListData>();
 
   foreach(QString packageTuple, packageTuples)
   {
@@ -478,6 +470,9 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
       if (!pkgName.isEmpty())
       {
         pld.name = pkgName;
+
+        if (packageCache.contains(pkgName)) continue;
+
         pld.version = pkgVersion;
         pld.categories = pkgCategories;
         pld.www = pkgWWW;
@@ -485,6 +480,8 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
         pld.downloadSize = pkgPkgSize;
         pld.status = ectn_NON_INSTALLED;
         pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
+
+        packageCache.append(pkgName);
 
         pkgName="";
         pkgVersion="";
@@ -539,7 +536,7 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   }
 
   //Adds the last one...
-  if (packageTuples.count() > 0)
+  if (packageTuples.count() > 0 && (!packageCache.contains(pkgName)))
   {
     PackageListData pld;
     pld.name = pkgName;
@@ -551,12 +548,44 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
     pld.status = ectn_NON_INSTALLED;
     pld.repository = ctn_PKGNG_FAKE_REPOSITORY;
 
+    packageCache.append(pkgName);
+
     pkgName="";
     pkgVersion="";
     pkgCategories="";
     pkgWWW="";
     pkgComment="";
     pkgPkgSize=0;
+
+    res->append(pld);
+  }
+
+  return res;
+}
+
+/*
+ * Retrieves the list of all AUR packages in the database (installed + non-installed)
+ * given the search parameter
+ */
+QList<PackageListData> * Package::getRemotePackageList(const QString& searchString)
+{
+  QList<PackageListData> * res = new QList<PackageListData>();
+  QList<PackageListData> * resComment = new QList<PackageListData>();
+  QStringList packageCache;
+
+  if (searchString.isEmpty())
+    return res;
+
+  QString pkgList = UnixCommand::getRemotePackageList(searchString, false);
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  res = parsePackageTuple(packageTuples, packageCache);
+
+  QString pkgListComment = UnixCommand::getRemotePackageList(searchString, true);
+  QStringList packageTuplesComment = pkgListComment.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  resComment = parsePackageTuple(packageTuplesComment, packageCache);
+
+  foreach(PackageListData pld, *resComment)
+  {
     res->append(pld);
   }
 
@@ -582,7 +611,6 @@ QString Package::extractFieldFromInfo(const QString &field, const QString &pkgIn
       aux = pkgInfo.mid(fieldPos);
 
       fieldEnd = aux.indexOf("Shared Libs required");
-
       fieldEnd2 = aux.indexOf("Shared Libs provided");
       if (fieldEnd2 == -1)
         fieldEnd2 = aux.indexOf("Annotations");

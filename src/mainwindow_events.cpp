@@ -133,7 +133,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       QFuture<QList<PackageListData> *> f;
       disconnect(&g_fwRemote, SIGNAL(finished()), this, SLOT(preBuildRemotePackageList()));
       m_cic = new CPUIntensiveComputing();
-      f = QtConcurrent::run(searchRemotePackages, m_leFilterPackage->text(), ui->actionSearchByDescription->isChecked());
+      f = QtConcurrent::run(searchRemotePackages, m_leFilterPackage->text());
       g_fwRemote.setFuture(f);
       connect(&g_fwRemote, SIGNAL(finished()), this, SLOT(preBuildRemotePackageList()));
     }

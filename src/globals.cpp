@@ -129,9 +129,9 @@ GroupMemberPair searchPacmanPackagesFromGroup(QString groupName)
 /*
  * Starts the non blocking search for AUR packages...
  */
-QList<PackageListData> * searchRemotePackages(QString searchString, bool useCommentSearch)
+QList<PackageListData> * searchRemotePackages(QString searchString)
 {
-  return Package::getRemotePackageList(searchString, useCommentSearch);
+  return Package::getRemotePackageList(searchString);
 }
 
 /*
