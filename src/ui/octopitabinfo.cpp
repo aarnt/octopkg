@@ -45,6 +45,7 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
                                      const QHash<QString, OutdatedPackageInfo>& outdatedPkgList)
 {
   PackageInfoData pid = Package::getInformation(package.name);
+
   QString version = StrConstants::getVersion();
   QString url = StrConstants::getURL();
   QString licenses = StrConstants::getLicenses();
@@ -143,7 +144,6 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   QString dependenciesList = Package::getDependencies(package.name);
   if ( !dependenciesList.isEmpty())
   {
-    qDebug() << "<tr><td>" + dependencies + "</td><td>" + dependenciesList + "</td></tr>";
     html += "<tr><td>" + dependencies + "</td><td>" + dependenciesList + "</td></tr>";
   }
 
