@@ -204,9 +204,8 @@ void MainWindow::execToolTip()
   if (g_fwToolTipInfo.result().trimmed().isEmpty())
     return;
 
-  point.setX(point.x() + 25);
-  point.setY(point.y() + 25);
-
+  point.setX(point.x());
+  point.setY(point.y());
   QToolTip::showText(point, g_fwToolTipInfo.result());
 }
 
