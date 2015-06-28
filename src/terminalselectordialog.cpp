@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2014 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <QVBoxLayout>
 
 /*
- * This dialog lets user chooses one of the available terminals to use with Octopi
+ * This dialog lets user chooses one of the available terminals to use with OctoPkg
  */
 
 TerminalSelectorDialog::TerminalSelectorDialog(QWidget *parent, QStringList terminalList):

@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -135,6 +135,9 @@ void MainWindow::show()
 
     QMainWindow::show();
 
+    m_listOfVisitedPackages.clear();
+    m_indOfVisitedPackage = 0;
+
     if (Package::hasPkgNGDatabase())
     {
       metaBuildPackageList();
@@ -209,36 +212,93 @@ void MainWindow::execToolTip()
   QToolTip::showText(point, g_fwToolTipInfo.result());
 }
 
+void MainWindow::positionInPackageList(const QString &pkgName)
+{
+  QModelIndex columnIndex = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
+  QModelIndexList foundItems = m_packageModel->match(columnIndex, Qt::DisplayRole, pkgName, -1, Qt::MatchExactly);
+  QModelIndex proxyIndex;
+
+  if (foundItems.count() == 1)
+  {
+    proxyIndex = foundItems.first();
+
+    if(proxyIndex.isValid())
+    {
+      ui->tvPackages->scrollTo(proxyIndex, QAbstractItemView::PositionAtCenter);
+      ui->tvPackages->setCurrentIndex(proxyIndex);
+      changeTabWidgetPropertiesIndex(ctn_TABINDEX_INFORMATION);
+    }
+  }
+  if (foundItems.count() == 0 || !proxyIndex.isValid())
+  {
+    refreshTabInfo(pkgName);
+    disconnect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
+    ensureTabVisible(ctn_TABINDEX_INFORMATION);
+    connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
+  }
+}
+
 /*
- * This SLOT is called whenever user clicks a url inside output's textBrowser
+ * This SLOT is called whenever user clicks an url inside output's textBrowser
  */
 void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
 {
   if (link.toString().contains("goto:"))
   {
     QString pkgName = link.toString().mid(5);
-    QModelIndex columnIndex = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
-    QModelIndexList foundItems = m_packageModel->match(columnIndex, Qt::DisplayRole, pkgName, -1, Qt::MatchExactly);
-    QModelIndex proxyIndex;
 
-    if (foundItems.count() == 1)
+    bool indIncremented = false;
+    QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
+    QModelIndex item = selectionModel->selectedRows(PackageModel::ctn_PACKAGE_NAME_COLUMN).first();
+    const PackageRepository::PackageData*const selectedPackage = m_packageModel->getData(item);
+    //qDebug() << "Testing with index: " << m_indOfVisitedPackage;
+
+    if (!m_listOfVisitedPackages.isEmpty())
     {
-      proxyIndex = foundItems.first();
+      int limit = m_listOfVisitedPackages.count()-1;
 
-      if(proxyIndex.isValid())
+      if (m_indOfVisitedPackage <= limit)
       {
-        ui->tvPackages->scrollTo(proxyIndex, QAbstractItemView::PositionAtCenter);
-        ui->tvPackages->setCurrentIndex(proxyIndex);
-        changeTabWidgetPropertiesIndex(ctn_TABINDEX_INFORMATION);
+        if (m_listOfVisitedPackages.at(m_indOfVisitedPackage) != selectedPackage->name)
+        {
+          m_indOfVisitedPackage++;
+          indIncremented = true;
+          m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
+
+          m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
+        }
+        else
+        {
+          if ((m_indOfVisitedPackage+1) <= limit)
+          {
+            if (m_listOfVisitedPackages.at(m_indOfVisitedPackage+1) != pkgName)
+              m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
+          }
+          else
+            m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
+        }
+      }
+      else if (m_indOfVisitedPackage == 1)
+      {
+        m_indOfVisitedPackage++;
+        indIncremented = true;
+        m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
+
+        m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
       }
     }
-    if (foundItems.count() == 0 || !proxyIndex.isValid())
+    else //The list is EMPTY!
     {
-      refreshTabInfo(pkgName);
-      disconnect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
-      ensureTabVisible(ctn_TABINDEX_INFORMATION);
-      connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
+      m_indOfVisitedPackage++;
+      indIncremented = true;
+      m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
+
+      m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
     }
+
+    if (indIncremented == false) m_indOfVisitedPackage++;
+
+    positionInPackageList(pkgName);
   }
   else
   {
@@ -913,7 +973,7 @@ void MainWindow::invalidateTabs()
 {
   if(ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION) //This is TabInfo
   {
-    refreshTabInfo(true);
+    refreshTabInfo(false, false);
     return;
   }
   else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
@@ -1288,38 +1348,26 @@ void MainWindow::tvPackagesSelectionChanged(const QItemSelection&, const QItemSe
 }
 
 /*
- * Launch Pacman Log Viewer
- */
 void MainWindow::launchPLV()
 {
   QProcess *proc = new QProcess();
   proc->startDetached("plv");
 }
 
-/*
- * Launch Repo Editor
- */
 void MainWindow::launchRepoEditor()
 {
   m_unixCommand = new UnixCommand(this);
   m_unixCommand->executeCommand(QLatin1String("octopi-repoeditor"), ectn_LANG_USER_DEFINED);
 }
 
-/*
- * Launch Cache Cleaner
- */
 void MainWindow::launchCacheCleaner()
 {
   m_unixCommand = new UnixCommand(this);
   m_unixCommand->execCommandAsNormalUser(QLatin1String("octopi-cachecleaner"));
 }
 
-/*
- * Makes a gist with a bunch of system file contents.
- */
 void MainWindow::gistSysInfo()
 {
-/*
   if (!UnixCommand::hasTheExecutable("gist") ||
       m_commandExecuting != ectn_NONE) return;
 
@@ -1431,13 +1479,5 @@ void MainWindow::gistSysInfo()
 
   QString distroPrettyName = UnixCommand::getLinuxDistroPrettyName();
   QMessageBox::information(this, distroPrettyName + " SysInfo", Package::makeURLClickable(gist), QMessageBox::Ok);
+}
 */
-}
-
-/*
- * Opens "~/.config/octopi/octopi.conf" file for edition
- */
-void MainWindow::editOctopiConf()
-{
-  WMHelper::editFile(SettingsManager::getOctopiConfPath(), ectn_EDIT_AS_NORMAL_USER);
-}

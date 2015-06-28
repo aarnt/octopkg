@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *               2013 Manuel Tortosa
 *
 * This program is free software; you can redistribute it and/or modify
@@ -68,8 +68,8 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
     }
 
     /*
-     * Here, we retrieve distro's latest news without
-     * blocking Octopi main interface.
+     * Here, we retrieve BSD's latest news without
+     * blocking OctoPkg main interface.
      */
     QFuture<QString> f;
     f = QtConcurrent::run(getLatestDistroNews);

@@ -1,5 +1,5 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
+* This file is part of OctoPkg, an open-source GUI for pkgng.
 * Copyright (C) 2014 Thomas Binkau
 *
 * This program is free software; you can redistribute it and/or modify
@@ -262,7 +262,7 @@ PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bo
   : required(isRequired), name(pkg.name),
     repository(pkg.repository),
     origin(pkg.origin),
-    version(pkg.version), description(pkg.description.toLatin1()), // octopi wants it converted to utf8
+    version(pkg.version), description(pkg.description.toLatin1()), // octoPkg wants it converted to utf8
     outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize), installedSize(pkg.installedSize),
     status(pkg.status != ectn_OUTDATED ?
            pkg.status :

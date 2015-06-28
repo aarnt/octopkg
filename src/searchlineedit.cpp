@@ -18,6 +18,7 @@
 #include <QRegularExpressionValidator>
 #include <QCompleter>
 #include <QStringListModel>
+#include <QDebug>
 
 SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
   QLineEdit(parent){
@@ -173,31 +174,16 @@ void SearchLineEdit::setFoundStyle(){
 void SearchLineEdit::setNotFoundStyle(){
   QString style;
   style += "QLineEdit {";
-
-  //if (UnixCommand::getBSDFlavour() != ectn_CHAKRA)
-  //{
-    style += "font-family: 'MS Sans Serif';";
-    style += "font-style: italic;";
-    style += "padding-left: 20px;";
-    style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
-    style += "border-width: 3px;";
-    style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-    style += "color: white; ";
-    style += "background-color: lightgray;"; //rgb(255, 108, 108); //palette(mid);"; //rgb(207, 135, 142);";
-    style += "border-color: rgb(206, 204, 197);}";
-    setStyleSheet(style);
-  //}
-  // setPalette() must be called after setStyleSheet()
-  /*else
-  {
-    style += "padding-left: 20px;}";
-    setStyleSheet(style);
-
-    QPalette palette(QApplication::palette());
-    palette.setColor(QPalette::Base, Qt::lightGray);
-    palette.setColor(QPalette::Text, Qt::white);
-    setPalette(palette);
-  }*/
+  style += "font-family: 'MS Sans Serif';";
+  style += "font-style: italic;";
+  style += "padding-left: 20px;";
+  style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
+  style += "border-width: 3px;";
+  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  style += "color: white; ";
+  style += "background-color: lightgray;"; //rgb(255, 108, 108); //palette(mid);"; //rgb(207, 135, 142);";
+  style += "border-color: rgb(206, 204, 197);}";
+  setStyleSheet(style);
 }
 
 QString SearchLineEdit::buttonStyleSheetForCurrentState() const
@@ -206,6 +192,12 @@ QString SearchLineEdit::buttonStyleSheetForCurrentState() const
   if (WMHelper::isKDERunning()) {
     this->text().isEmpty() ? this->m_SearchButton->setIcon(IconHelper::getIconSearch())
                            : this->m_SearchButton->setIcon(IconHelper::getIconClear());
+
+    if (!this->text().isEmpty())
+      this->m_SearchButton->setToolTip(StrConstants::getClear());
+    else
+      this->m_SearchButton->setToolTip("");
+
     this->m_SearchButton->setAutoRaise(true);
     return QString();
   }

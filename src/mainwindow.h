@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -147,11 +147,11 @@ private:
   //This member holds the list of packages to install with "pacman -U" command
   QStringList m_packagesToInstallList;
 
-  //This member holds the current command type being executed by Octopi
+  //This member holds the current command type being executed by OctoPkg
   CommandExecuting m_commandExecuting;
   CommandExecuting m_commandQueued;
 
-  //This member holds the last command string executed by Octopi
+  //This member holds the last command string executed by OctoPkg
   QStringList m_lastCommandList;
 
   QHash<QString, OutdatedPackageInfo> *m_outdatedList;
@@ -178,8 +178,7 @@ private:
   QAction *m_actionShowGroups;
   QAction *m_actionMirrorCheck;
   QAction *m_actionMenuRepository;
-  QAction *m_actionRepositoryAll;
-  QAction *m_actionEditOctopiConf;
+  QAction *m_actionRepositoryAll;  
   QAction *m_actionCopyFullPath;
   QAction *m_actionSysInfo;
 
@@ -203,6 +202,9 @@ private:
 
   QSet<QString> * m_unrequiredPackageList;
 
+  QStringList m_listOfVisitedPackages;
+  int m_indOfVisitedPackage;
+
   int selectTerminal(const int initialTerminalIndex);
 
   void loadSettings();
@@ -212,7 +214,7 @@ private:
 
   void initAppIcon();
   void refreshAppIcon();
-  void refreshMenuTools();
+  //void refreshMenuTools();
   void initMenuBar();
   void initPackageGroups();
   void refreshGroupsWidget();
@@ -309,7 +311,6 @@ private slots:
   void expandThisContentItems();
   void openFile();
   void editFile();
-  void editOctopiConf();
   void openTerminal();
   void openDirectory();
   void openRootTerminal();
@@ -426,12 +427,13 @@ private slots:
   void searchBarFindPreviousInTreeView();
   void searchBarClosedInTreeView();
   void showAnchorDescription(const QUrl & link);
+  void positionInPackageList(const QString &pkgName);
   void outputTextBrowserAnchorClicked(const QUrl & link);
   void execToolTip();
-  void launchPLV();
+  /*void launchPLV();
   void launchRepoEditor();
   void launchCacheCleaner();
-  void gistSysInfo();
+  void gistSysInfo();*/
 
 public slots:
   void doSystemUpgrade(SystemUpgradeOptions sysUpgradeOption = ectn_NO_OPT);

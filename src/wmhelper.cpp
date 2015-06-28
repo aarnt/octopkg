@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@
 #include <QDebug>
 
 /*
- * This class is a helper to abstract some Desktop Environments services for Octopi.
+ * This class is a helper to abstract some Desktop Environments services for OctoPkg.
  * These include: open and edit a file, open a directory and a terminal.
  *
  * There's also a method to retrieve the available tool to obtain root privileges.
@@ -284,7 +284,6 @@ QString WMHelper::getKDESUCommand(){
 QString WMHelper::getQSUDOCommand()
 {
   QString result = ctn_QSUDO;
-
   return result;
 }
 
@@ -498,8 +497,6 @@ void WMHelper::openDirectory( const QString& dirName ){
 
   if (f.exists())
   {
-    //BSDFlavour distro = UnixCommand::getBSDFlavour();
-
     if (UnixCommand::hasTheExecutable(ctn_ARCHBANG_FILE_MANAGER))
     {
       s << dir;

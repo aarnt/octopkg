@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkp, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 #include "searchbar.h"
 #include "globals.h"
 #include "terminal.h"
+#include "terminalselectordialog.h"
 
 #include <QCloseEvent>
 #include <QMessageBox>
@@ -40,20 +41,7 @@
 #include <QTextBrowser>
 #include <QFutureWatcher>
 #include <QClipboard>
-
-#if QT_VERSION >= 0x050300
-  #include "terminalselectordialog.h"
-#endif
-
-#if QT_VERSION >= 0x050000
-  #include <QtConcurrent/QtConcurrentRun>  
-#else
-  #include <QtConcurrentRun>
-#endif
-
-#if QT_VERSION < 0x050000
-  using namespace QtConcurrent;
-#endif
+#include <QtConcurrent/QtConcurrentRun>
 
 /*
  * Before we close the application, let's confirm if there is a pending transaction...
@@ -278,12 +266,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       doRemovePacmanLockFile(); //If we are not executing any command, let's remove Pacman's lock file
     }
   } 
-  else if(ke->key() == Qt::Key_S && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
-  {
-    gistSysInfo();
-  }
 
-  #if QT_VERSION >= 0x050300
   else if(ke->key() == Qt::Key_T && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier)
           && m_initializationCompleted)
   {
@@ -300,15 +283,13 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
-  #endif
 
   else ke->ignore();
 }
 
 /*
- * Calls TerminalSelectorDialog to let user chooses which terminal to use with Octopi
+ * Calls TerminalSelectorDialog to let user chooses which terminal to use with OctoPkg
  */
-#if QT_VERSION >= 0x050300
 int MainWindow::selectTerminal(const int initialTerminalIndex)
 {
   int result = initialTerminalIndex;
@@ -328,13 +309,14 @@ int MainWindow::selectTerminal(const int initialTerminalIndex)
 
   return result;
 }
-#endif
 
 /*
  * This Event method is called whenever the user releases a key
  */
 void MainWindow::keyReleaseEvent(QKeyEvent* ke)
 {
+  //qDebug() << "StringList: " << m_listOfVisitedPackages;
+
   if ((ui->tvPackages->hasFocus()) && (
       ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
       ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
@@ -345,5 +327,39 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
       refreshTabInfo(false, true);
       ui->tvPackages->setFocus();
     }
+  }
+  else if(ke->key() == Qt::Key_Home && ke->modifiers() == Qt::AltModifier)
+  {
+    m_indOfVisitedPackage = 0;
+
+    if (!m_listOfVisitedPackages.isEmpty())
+      positionInPackageList(m_listOfVisitedPackages.at(m_indOfVisitedPackage));
+  }
+  else if(ke->key() == Qt::Key_Left && ke->modifiers() == Qt::AltModifier)
+  {
+    if (m_indOfVisitedPackage > 0)
+    {
+      --m_indOfVisitedPackage;
+    }
+
+    if (!m_listOfVisitedPackages.isEmpty())
+      positionInPackageList(m_listOfVisitedPackages.at(m_indOfVisitedPackage));
+  }
+  else if(ke->key() == Qt::Key_Right && ke->modifiers() == Qt::AltModifier)
+  {
+    if (m_indOfVisitedPackage < (m_listOfVisitedPackages.count()-1))
+    {
+      ++m_indOfVisitedPackage;
+    }
+
+    if (!m_listOfVisitedPackages.isEmpty())
+      positionInPackageList(m_listOfVisitedPackages.at(m_indOfVisitedPackage));
+  }
+  else if(ke->key() == Qt::Key_End && ke->modifiers() == Qt::AltModifier)
+  {
+    m_indOfVisitedPackage = m_listOfVisitedPackages.count()-1;
+
+    if (!m_listOfVisitedPackages.isEmpty())
+      positionInPackageList(m_listOfVisitedPackages.at(m_indOfVisitedPackage));
   }
 }

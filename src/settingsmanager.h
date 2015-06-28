@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -72,7 +72,7 @@ class SettingsManager
     static SettingsManager* instance();
     static QString getTerminal();
 
-    static QString getOctopiConfPath()
+    static QString getOctoPkgConfPath()
     {
       return QDir::homePath() +
           QDir::separator() + ".config/octopkg/octopkg.conf";

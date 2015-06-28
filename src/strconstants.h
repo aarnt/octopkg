@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -117,7 +117,7 @@ public:
   }
 
   static QString getIncompatibleBSDFlavourError(){
-    return QObject::tr("This BSD flavour seems to be incompatible with Octopi!");
+    return QObject::tr("This BSD flavour seems to be incompatible with OctoPkg!");
   }
 
   static QString getInternetUnavailableError(){
@@ -528,7 +528,7 @@ public:
   }
 
   static QString getErrorRunningWithRoot(){
-    return QObject::tr("You can not run Octopi with administrator's credentials.");
+    return QObject::tr("You can not run OctoPkg with administrator's credentials.");
   }
 
   static QString getThereIsAPendingTransaction(){

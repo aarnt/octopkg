@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 /*
  * This SettingsManager class holds the getters and setters needed to deal with the database
- * in which all Octopi configuration is saved and retrieved (~/.config/octopi/)
+ * in which all OctoPkg configuration is saved and retrieved (~/.config/octopkg/)
  */
 
 #include "settingsmanager.h"
@@ -147,7 +147,7 @@ void SettingsManager::setLastSyncDbTime(QDateTime newValue)
 //Notifier related ------------------------------------------------------------------
 
 
-//Octopi related --------------------------------------------------------------------
+//OctoPkg related --------------------------------------------------------------------
 int SettingsManager::getCurrentTabIndex(){
   return instance()->getSYSsettings()->value(
         ctn_KEY_CURRENT_TAB_INDEX, 0).toInt();
@@ -326,4 +326,4 @@ bool SettingsManager::isValidTerminalSelected()
   }
 }
 
-//Octopi related --------------------------------------------------------------------
+//OctoPkg related --------------------------------------------------------------------

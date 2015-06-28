@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@
 #include <QDebug>
 
 /*
- * Loads various application settings configured in ~/.config/octopi/octopi.conf
+ * Loads various application settings configured in ~/.config/octopkg/octopkg.conf
  */
 void MainWindow::loadSettings(){
   if (ui->tvPackages->model() != NULL)
@@ -90,7 +90,7 @@ void MainWindow::loadPanelSettings(){
 }
 
 /*
- * Saves all application settings to ~/.config/octopi/octopi.conf
+ * Saves all application settings to ~/.config/octopkg/octopkg.conf
  */
 void MainWindow::saveSettings(SaveSettingsReason saveSettingsReason){
   switch(saveSettingsReason){
@@ -146,7 +146,7 @@ void MainWindow::savePackageColumnWidths()
 }
 
 /*
- * If we have some outdated packages, let's put octopi in a red face/angry state ;-)
+ * If we have some outdated packages, let's put octoPkg in a red face/angry state ;-)
  */
 void MainWindow::initAppIcon()
 {
@@ -274,10 +274,6 @@ void MainWindow::initMenuBar()
     text = text.remove("&");
     act->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
   }
-
-#ifdef OCTOPI_DEV_CODE
-  ui->menuFile->insertAction(ui->actionExit, m_actionEditOctopiConf);
-#endif
 }
 
 /*
@@ -648,7 +644,6 @@ void MainWindow::initActions()
   m_actionSwitchToRemoteSearch->setText(StrConstants::getSearchForPackages());
   m_actionSwitchToRemoteSearch->setCheckable(true);
   m_actionSwitchToRemoteSearch->setChecked(false);
-  //connect(m_actionSwitchToRemoteSearch, SIGNAL(triggered()), this, SLOT(remoteSearchClicked()));
 
   QActionGroup *actionGroupSearch = new QActionGroup(this);
   actionGroupSearch->addAction(m_actionSwitchToLocalFilter);
@@ -669,11 +664,6 @@ void MainWindow::initActions()
   m_actionShowGroups->setChecked(true);
   m_actionShowGroups->setShortcut(QKeySequence(Qt::Key_F9));
   connect(m_actionShowGroups, SIGNAL(triggered()), this, SLOT(hideGroupsWidget()));
-
-  m_actionEditOctopiConf = new QAction(this);
-  m_actionEditOctopiConf->setText("octopi.conf...");
-  m_actionEditOctopiConf->setIcon(IconHelper::getIconBinary());
-  connect(m_actionEditOctopiConf, SIGNAL(triggered()), this, SLOT(editOctopiConf()));
 
   m_actionCopyFullPath = new QAction(this);
   m_actionCopyFullPath->setText(StrConstants::getCopyFullPath());

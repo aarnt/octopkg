@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -120,10 +120,6 @@ QString UnixCommand::discoverBinaryPath(const QString& binary){
 bool UnixCommand::cleanPacmanCache()
 {
   QProcess pacman;
-  /*QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-  pacman.setProcessEnvironment(env);*/
   QString commandStr = "\"yes | pacman -Scc\"";
 
   QString command = WMHelper::getSUCommand() + " " + commandStr;
@@ -140,7 +136,6 @@ QByteArray UnixCommand::performQuery(const QStringList args)
 {
   QByteArray result("");
   QProcess pacman;
-
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("LANG", "C");
   env.insert("LC_MESSAGES", "C");
@@ -992,8 +987,8 @@ QStringList UnixCommand::getIgnorePkgsFromPacmanConf()
 }
 
 /*
- * Retrieves the LinuxDistro where Octopi is running on!
- * Reads file "/etc/os-release" and searchs for compatible Octopi distros
+ * Retrieves the BSDFlavour where OctoPkg is running on!
+ * Reads file "/etc/os-release" and searchs for compatible OctoPkg BSDs
  */
 BSDFlavour UnixCommand::getBSDFlavour()
 {

@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013  Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015  Alexandre Albuquerque Arnt
 *               2013  Manuel Tortosa
 *
 * This program is free software; you can redistribute it and/or modify
@@ -33,7 +33,7 @@
 #include <QMessageBox>
 
 /*
- * Initialize the Help tab with basic information about using Octopi
+ * Initialize the Help tab with basic information about using OctoPkg
  */
 void MainWindow::initTabHelpUsage()
 {
@@ -61,16 +61,16 @@ void MainWindow::initTabHelpUsage()
   if ((!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning())))
   {
     html +=
-        QString("<a style=\"color:'#4BC413'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>");
-      /*QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a style=\"color:'#4BC413'\" href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");*/
+      QString("<a style=\"color:'#4BC413'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<h4><p>") + strForMoreInfo + " " +
+      QString("<a style=\"color:'#4BC413'\" href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
   }
   else
   {
     html +=
-        QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>");
-      /*QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a href=\"http://octopiproject.wordpress.com\">http://octopiproject.wordpress.com</a>.</p></h4><br>");*/
+      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<h4><p>") + strForMoreInfo + " " +
+      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
   }
 
   html += tr("Package classification:") +
@@ -79,8 +79,6 @@ void MainWindow::initTabHelpUsage()
   QString("<li>") + iconPath + "unrequired.png\"/> " +
      tr("An installed package (not required by others)") +
   QString("</li>") +
-  //QString("<li>" + iconPath + "foreign_green.png\"/> ") +
-  //   tr("A foreign package, installed from") + " " + StrConstants::getForeignRepositoryName() +
   QString("</li>") +
   QString("<li>") + iconPath + "noninstalled.png\"/> " +
      tr("A non installed package") +
@@ -88,8 +86,6 @@ void MainWindow::initTabHelpUsage()
   QString("<li>") + iconPath + "outdated.png\"/> " +
      tr("An outdated package") +
   QString("</li>") +
-  //QString("<li>") + iconPath + "foreign_red.png\"/> " +
-  //   tr("An outdated foreign package") +
   QString("</li></ul>") +
   /*QString("<li>") + iconPath + "newer.png\"/> " +
            tr("A newer than repository package") +
@@ -117,6 +113,14 @@ void MainWindow::initTabHelpUsage()
      tr("Alt+5 to switch to 'News' tab") +
   QString("</li><li>") +
      tr("Alt+6 or 'F1' to show this help page") +
+  QString("</li><li>") +
+     tr("Alt+\"Left key\" to go to previous clicked anchor") +
+  QString("</li><li>") +
+     tr("Alt+\"Right key\" to go to next clicked anchor") +
+  QString("</li><li>") +
+     tr("Alt+\"Home key\" to go to first clicked anchor") +
+  QString("</li><li>") +
+     tr("Alt+\"End key\" to go to last clicked anchor") +
   QString("</li></ul>") +
 
      tr("Control+key sequences:") +
@@ -195,7 +199,7 @@ void MainWindow::onHelpAbout()
 {
   QString aboutText = "<b>" + StrConstants::getApplicationName() +
       " - " + StrConstants::getApplicationVersion() + "</b>" + " (" + StrConstants::getQtVersion() + ")<br>";
-  //aboutText += "<a href=\"http://octopiproject.wordpress.com/\">http://octopiproject.wordpress.com</a><br><br>";
+  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br><br>";
   aboutText += "<br>&copy; Alexandre Albuquerque Arnt";
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);
 }

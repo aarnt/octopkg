@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -229,7 +229,7 @@ public:
     return QIcon::fromTheme("applications-internet", QIcon(":/resources/images/applications-internet.png"));
   }
 
-  //QActions without icons in Octopi does this works for gtk, too?
+  //QActions without icons in OctoPkg does this works for gtk, too?
   static QIcon getIconHelpAbout(){ return QIcon::fromTheme("help-about"); }
   static QIcon getIconHelpUsage(){ return QIcon::fromTheme("help-contents"); }
   static QIcon getIconInstallLocalPackage(){ return QIcon::fromTheme("utilities-file-archiver"); }

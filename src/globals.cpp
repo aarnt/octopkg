@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -22,15 +22,10 @@
 #include "mainwindow.h"
 
 #include <QFutureWatcher>
-
-#if QT_VERSION > 0x050000
-  #include <QtConcurrent/QtConcurrentMap>
-#else
-  #include <QtConcurrentMap>
-#endif
+#include <QtConcurrent/QtConcurrentMap>
 
 /*
- * Global functions related to Octopi's multithread code
+ * Global functions related to OctoPkg's multithread code
  */
 
 QFutureWatcher<QString> g_fwToolTip;

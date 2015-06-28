@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2014 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -539,7 +539,7 @@ void Terminal::runCommandInTerminalAsNormalUser(const QStringList &commandList)
           " -fn \"*-fixed-*-*-*-18-*\" -fg White -bg Black -title xterm -e " + ftemp->fileName();
     }
     else {
-      std::cerr << "ERROR: Octopi found no suitable terminal!" << std::endl;
+      std::cerr << "ERROR: OctoPkg found no suitable terminal!" << std::endl;
       emit finishedTerminal(0, QProcess::CrashExit);
       return;
     }

@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -267,7 +267,7 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
 
 /*
  * Retrieves the distro RSS news feed from its respective site
- * If it fails to connect to the internet, uses the available "./.config/octopi/distro_rss.xml"
+ * If it fails to connect to the internet, uses the available "./.config/octopkg/distro_rss.xml"
  * The result is a QString containing the RSS News Feed XML code
  */
 QString utils::retrieveDistroNews(bool searchForLatestNews)
@@ -362,7 +362,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
   {
     QFile fileRss(rssPath);
 
-    //Maybe we have a file in "./.config/octopi/distro_rss.xml"
+    //Maybe we have a file in "./.config/octopkg/distro_rss.xml"
     if (fileRss.exists())
     {
       res = contentsRss;

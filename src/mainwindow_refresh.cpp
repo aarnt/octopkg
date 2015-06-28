@@ -1,6 +1,6 @@
 /*
-* This file is part of Octopi, an open-source GUI for pacman.
-* Copyright (C) 2013 Alexandre Albuquerque Arnt
+* This file is part of OctoPkg, an open-source GUI for pkgng.
+* Copyright (C) 2015 Alexandre Albuquerque Arnt
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License as published by
@@ -75,7 +75,7 @@ void MainWindow::refreshAppIcon()
 /*
  * Reconfigure Tools menu according available tools in the system
  */
-void MainWindow::refreshMenuTools()
+/*void MainWindow::refreshMenuTools()
 {
   static bool connectorPlv=false;
   int availableTools=0;
@@ -102,7 +102,7 @@ void MainWindow::refreshMenuTools()
     text = text.remove("&");
     act->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
   }
-}
+}*/
 
 /*
  * Inserts the group names into the Groups treeView

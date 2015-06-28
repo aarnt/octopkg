@@ -1,6 +1,5 @@
 #include <QCoreApplication>
 #include "argumentlist.h"
-//#include <QDebug>
 
 /**
   Obtain the command line arguments from the currently
