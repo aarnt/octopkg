@@ -112,7 +112,7 @@ public:
   static bool hasInternetConnection();
   static bool doInternetPingTest();
   static bool isTextFile( const QString& fileName ); //fileName is Path + Name
-
+  static QString getPkgNGVersion();
   static bool hasTheExecutable( const QString& exeName );
   static bool isAppRunning(const QString &appName, bool justOneInstance = false);
 

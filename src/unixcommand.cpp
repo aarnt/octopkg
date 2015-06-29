@@ -576,6 +576,7 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
   QProcess proc;
   proc.setProcessChannelMode(QProcess::MergedChannels);
   QString sParam = "\"which " + exeName + "\"";
+
   if (getBSDFlavour() == ectn_PCBSD)
     proc.start("/usr/local/bin/bash -c " + sParam);
   else if (getBSDFlavour() == ectn_FREEBSD)
@@ -685,6 +686,15 @@ bool UnixCommand::isTextFile(const QString& fileName)
           (output.indexOf( "text", from ) != -1) ||
           (output.indexOf( "empty", from ) != -1)) &&
           (output.indexOf( "executable", from) == -1));
+}
+
+/*
+ * Retrieves pkgNG version.
+ */
+QString UnixCommand::getPkgNGVersion()
+{
+  QString v = performQuery("--version");
+  return v;
 }
 
 /*

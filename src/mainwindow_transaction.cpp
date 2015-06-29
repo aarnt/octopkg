@@ -1641,7 +1641,6 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   bool continueTesting = false;
   QString perc;
   QString msg = pMsg;
-
   QString progressRun;
   QString progressEnd;
   msg.remove(QRegularExpression(".+\\[Y/n\\].+"));
@@ -1691,31 +1690,28 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 
     //continueTesting = false;
     QString target;
-    if (m_commandExecuting == ectn_SYNC_DATABASE)
-    {
-      /*
+    /*
         Updating pcbsd-major repository catalogue...
         Fetching <>:
         Processing entries:
         pcbsd-major repository update completed. 24141 packages processed.
       */
 
-      if (msg.contains("Fetching"))
-      {
-        int p = msg.indexOf(":");
-        target = msg.left(p).remove("Fetching").trimmed();
+    if (msg.contains("Fetching"))
+    {
+      int p = msg.indexOf(":");
+      target = msg.left(p).remove("Fetching").trimmed();
 
-        if(!textInTabOutput(target))
-          writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
-      }
-      else if (msg.contains("Processing"))
-      {
-        int p = msg.indexOf(":");
-        target = msg.left(p).remove("Processing").trimmed();
+      if(!textInTabOutput(target))
+        writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
+    }
+    else if (msg.contains("Processing"))
+    {
+      int p = msg.indexOf(":");
+      target = msg.left(p).remove("Processing").trimmed();
 
-        if(!textInTabOutput(target))
-          writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
-      }
+      if(!textInTabOutput(target))
+        writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
     }
 
     //Here we print the transaction percentage updating
@@ -1936,8 +1932,8 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
         msg.indexOf("Enter a selection", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("Proceed with", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("%") != -1 ||
-        msg.indexOf("[") != -1 ||
-        msg.indexOf("]") != -1 ||
+        //msg.indexOf("[") != -1 ||
+        //msg.indexOf("]") != -1 ||
         msg.indexOf("---") != -1)
     {
       return;
@@ -1965,6 +1961,8 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
          newMsg.contains(QRegularExpression("error")) ||
          newMsg.contains(QRegularExpression("failed")) ||
          newMsg.contains(QRegularExpression("is not synced")) ||
+         newMsg.contains(QRegularExpression("[Rr]emoving")) ||
+         newMsg.contains(QRegularExpression("[Dd]einstalling")) ||
          newMsg.contains(QRegularExpression("could not be found")))
       {
         newMsg = "<b><font color=\"#E55451\">" + newMsg + "&nbsp;</font></b>"; //RED
@@ -1978,7 +1976,9 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
               newMsg.contains(QRegularExpression("[Uu]pgrading")) ||
               newMsg.contains(QRegularExpression("[Ll]oading")) ||
               newMsg.contains(QRegularExpression("[Rr]esolving")) ||
+              newMsg.contains(QRegularExpression("[Ee]xtracting")) ||
               newMsg.contains(QRegularExpression("[Ll]ooking")))
+
       {
          newMsg = "<b><font color=\"#4BC413\">" + newMsg + "</font></b>"; //GREEN
       }

@@ -199,7 +199,11 @@ void MainWindow::onHelpAbout()
 {
   QString aboutText = "<b>" + StrConstants::getApplicationName() +
       " - " + StrConstants::getApplicationVersion() + "</b>" + " (" + StrConstants::getQtVersion() + ")<br>";
-  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br><br>";
-  aboutText += "<br>&copy; Alexandre Albuquerque Arnt";
+  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
+  aboutText += "&copy; Alexandre Albuquerque Arnt<br><br>";
+  aboutText += "<b>pkgng - " + UnixCommand::getPkgNGVersion() + "</b><br>";
+  aboutText += "<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
+  aboutText += "&copy; FreeBSD";
+
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);
 }
