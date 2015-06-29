@@ -73,9 +73,6 @@ public:
   //Returns the BSD Flavour where OctoPkg is running on
   static BSDFlavour getBSDFlavour();
 
-  //Returns the PrettyName info from /etc/os-release
-  static QString getLinuxDistroPrettyName();
-
   //Delegations from Package class (due to QProcess use)
   static QString runCommand(const QString& commandToRun);
   static QString runCurlCommand(const QString& commandToRun);
@@ -112,6 +109,7 @@ public:
   static bool hasInternetConnection();
   static bool doInternetPingTest();
   static bool isTextFile( const QString& fileName ); //fileName is Path + Name
+
   static QString getPkgNGVersion();
   static bool hasTheExecutable( const QString& exeName );
   static bool isAppRunning(const QString &appName, bool justOneInstance = false);
