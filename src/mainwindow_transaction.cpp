@@ -1969,6 +1969,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       }
       else if(newMsg.contains(QRegularExpression("REINSTALLED")) ||
               newMsg.contains(QRegularExpression("INSTALLED")) ||
+              newMsg.contains(QRegularExpression("UPGRADED")) ||
               newMsg.contains(QRegularExpression("UPDATED")) ||
               newMsg.contains(QRegularExpression("[Cc]hecking")) ||
               newMsg.contains(QRegularExpression("[Rr]einstalling")) ||
@@ -1978,7 +1979,6 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
               newMsg.contains(QRegularExpression("[Rr]esolving")) ||
               newMsg.contains(QRegularExpression("[Ee]xtracting")) ||
               newMsg.contains(QRegularExpression("[Ll]ooking")))
-
       {
          newMsg = "<b><font color=\"#4BC413\">" + newMsg + "</font></b>"; //GREEN
       }
