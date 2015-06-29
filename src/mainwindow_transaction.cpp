@@ -334,35 +334,18 @@ void MainWindow::insertGroupIntoRemovePackage()
 void MainWindow::insertIntoInstallPackage()
 {
   qApp->processEvents();
+  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
-  //if (!isPkgSearchSelected())
+  foreach(QModelIndex item, selectedRows)
   {
-    ensureTabVisible(ctn_TABINDEX_TRANSACTION);
-
-    QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
-    //First, let's see if we are dealing with a package group
-    /*if(!isAllCategoriesSelected())
-    {
-      //If we are trying to insert all the group's packages, why not insert the entire group?
-      if(selectedRows.count() == m_packageModel->getPackageCount())
-      {
-        insertInstallPackageIntoTransaction(getSelectedCategory());
-        return;
-      }
-    }*/
-
-    foreach(QModelIndex item, selectedRows)
-    {            
-      const PackageRepository::PackageData*const package = m_packageModel->getData(item);
-      if (package == NULL) {
-        assert(false);
-        continue;
-      }
-
-      //insertIntoInstallPackageOptDeps(package->name); //Do we have any deps???
-      //insertInstallPackageIntoTransaction(package->repository + "/" + package->name);
-      insertInstallPackageIntoTransaction(package->name);
+    const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+    if (package == NULL) {
+      assert(false);
+      continue;
     }
+
+    insertInstallPackageIntoTransaction(package->name);
   }
 }
 
@@ -1443,11 +1426,9 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 {
   bool bRefreshGroups = true;
   m_progressWidget->close();
-
   ui->twProperties->setTabText(ctn_TABINDEX_OUTPUT, StrConstants::getTabOutputName());
 
   //mate-terminal is returning code 255 sometimes...
-  //TODO: Have to improve this test!
   if ((exitCode == 0 || exitCode == 255) && exitStatus == QProcess::NormalExit)
   {
     //First, we empty the tabs cache!
@@ -1465,8 +1446,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 
   if(m_commandQueued == ectn_INSTALL)
   {
-    //metaBuildPackageList();???
-
     m_commandQueued = ectn_NONE;
     doInstall();
     return;
@@ -1517,8 +1496,9 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           bRefreshGroups = false;
           m_leFilterPackage->clear();
-          m_actionSwitchToRemoteSearch->setChecked(false);
-          metaBuildPackageList();
+          m_actionSwitchToRemoteSearch->setChecked(false);          
+          m_actionSwitchToLocalFilter->setChecked(true);
+          remoteSearchClicked();
         }
         else
         {
