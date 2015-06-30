@@ -312,6 +312,8 @@ void MainWindow::initToolBar()
   ui->mainToolBar->toggleViewAction()->setEnabled(false);
   ui->mainToolBar->toggleViewAction()->setVisible(false);
 
+  ui->mainToolBar->setStyleSheet(StrConstants::getToolBarCSS());
+
   m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextLocal());
 }
 
