@@ -1447,6 +1447,8 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   if(m_commandQueued == ectn_INSTALL)
   {
     m_commandQueued = ectn_NONE;
+    //Let's first remove all remove targets...
+    removePackagesFromRemoveTransaction();
     doInstall();
     return;
   }
