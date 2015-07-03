@@ -24,6 +24,7 @@
 
 #include <QDebug>
 #include <QHash>
+#include <QRegularExpression>
 
 /*
  * The OctopiTabInfo class provides functionality for the Tab "Info"
@@ -138,13 +139,18 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
   if (!pid.arch.isEmpty())
     html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
 
-  if(! pid.options.isEmpty())
-    html += "<tr><td>" + options + "</td><td>" + pid.options + "</td></tr>";
-
   QString dependenciesList = Package::getDependencies(package.name);
   if ( !dependenciesList.isEmpty())
   {
-    html += "<tr><td>" + dependencies + "</td><td>" + dependenciesList + "</td></tr>";
+    html += "<br><tr><td>" + dependencies + "</td><td>" + dependenciesList + "</td></tr>";
+    if (! pid.options.isEmpty()) html += "<br>";
+  }
+
+  if(! pid.options.isEmpty())
+  {
+    if (dependenciesList.isEmpty()) html += "<br>";
+
+    html += "<tr><td>" + options + "</td><td>" + pid.options + "</td></tr>";
   }
 
   html += "</table>"; 
