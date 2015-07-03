@@ -251,7 +251,6 @@ QSet<QString>* Package::getUnrequiredPackageList()
 QHash<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
   QString outPkgList = UnixCommand::getOutdatedPackageList();
-  //QString outPkgList = "Installed packages to be UPGRADED\n\tkdelibs: 4.14.3 -> 4.15\n\tsudo: 1.8.13 -> 1.9\n";
 
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QHash<QString, OutdatedPackageInfo>* res = new QHash<QString, OutdatedPackageInfo>();
@@ -1066,140 +1065,30 @@ QString Package::getDependencies(const QString &pkgName)
 
   QString aux = UnixCommand::getDependenciesList(pkgName);
   pkgList = aux.split("\n", QString::SkipEmptyParts);
+  pkgList.sort();
 
   foreach(QString dependency, pkgList)
   {
-    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a>&nbsp;&nbsp;";
+    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
   }
 
   return res.trimmed();
 }
 
 /*
- * Helper to get only the Version field of AUR package information
- */
-/*
-QHash<QString, QString> Package::getAUROutdatedPackagesNameVersion()
-{
-  QHash<QString, QString> hash;
-
-  if(UnixCommand::getLinuxDistro() == ectn_CHAKRA ||
-      (StrConstants::getForeignRepositoryToolName() != "yaourt" &&
-      StrConstants::getForeignRepositoryToolName() != "pacaur" &&
-      StrConstants::getForeignRepositoryToolName() != "kcp"))
-  {
-    return hash;
-  }
-
-  QString res = UnixCommand::getAURPackageVersionInformation();
-  QStringList listOfPkgs = res.split("\n", QString::SkipEmptyParts);
-  QStringList ignorePkgList = UnixCommand::getIgnorePkgsFromPacmanConf();
-
-  if ((StrConstants::getForeignRepositoryToolName() == "yaourt") ||
-    (StrConstants::getForeignRepositoryToolName() == "kcp"))
-  {
-    foreach (QString line, listOfPkgs)
-    {
-      line = line.remove("\033");
-      line = line.remove("[1;35m");
-      line = line.remove("[1;36m");
-      line = line.remove("[1;32m");
-      line = line.remove("[m");
-      line = line.remove("[1m");
-
-      if (line.contains(StrConstants::getForeignRepositoryTargetPrefix(), Qt::CaseInsensitive))
-      {
-        line = line.remove(StrConstants::getForeignRepositoryTargetPrefix());
-        QStringList nameVersion = line.split(" ", QString::SkipEmptyParts);
-        QString pkgName = nameVersion.at(0);
-
-        //Let's ignore the "IgnorePkg" list of packages...
-        if (!ignorePkgList.contains(pkgName))
-        {
-          hash.insert(pkgName, nameVersion.at(1));
-        }
-      }
-    }
-  }
-  else if (StrConstants::getForeignRepositoryToolName() == "pacaur")
-  {
-    foreach (QString line, listOfPkgs)
-    {
-      line = line.remove("\033");
-      line = line.remove("[1;31m");
-      line = line.remove("[1;32m");
-      line = line.remove("[1;34m");
-      line = line.remove("[1;35m");
-      line = line.remove("[1;39m");
-      line = line.remove("[m");
-      line = line.remove("[0m");
-      line = line.remove("[1m");
-
-      QStringList sl = line.split(" ", QString::SkipEmptyParts);
-      if (sl.count() >= 6)
-      {
-        hash.insert(sl.at(2), sl.at(5));
-      }
-    }
-  }
-
-  return hash;
-}
-*/
-
-/*
  * Retrieves the file list content of the given package
  */
 QStringList Package::getContents(const QString& pkgName, bool isInstalled)
 {
-  //qDebug() << pkgName << ":" << isInstalled;
-
-  QStringList slResult;
   QByteArray result;
 
   if (isInstalled)
   {
     result = UnixCommand::getPackageContentsUsingPacman(pkgName);
   }
-  /*else if (UnixCommand::getBSDFlavour() == ectn_ARCHBANGLINUX ||
-           UnixCommand::getBSDFlavour() == ectn_ARCHLINUX ||
-           UnixCommand::getBSDFlavour() == ectn_KAOS ||
-           UnixCommand::getBSDFlavour() == ectn_MOOOSLINUX)
-  {
-    result = UnixCommand::getPackageContentsUsingPkgfile(pkgName);
-  }*/
 
   QString aux(result);
   QStringList rsl = aux.split("\n", QString::SkipEmptyParts);
-
-  /*if ( !rsl.isEmpty() )
-  {
-    if (rsl.at(0) == "./"){
-      rsl.removeFirst();
-    }
-    if (isInstalled)
-    {
-      rsl.replaceInStrings(QRegularExpression(pkgName + " "), "");
-      rsl.sort();
-      slResult = rsl;
-    }
-    // If the filelist came from pkgfile, it's something like this:
-    // apps/kdemultimedia-juk  /usr/share/doc/kde/html/en/juk/search-playlist.png
-    else
-    {
-      QStringList rsl2;
-      foreach(QString line, rsl)
-      {
-        QStringList slAux = line.split("\t", QString::SkipEmptyParts);
-        rsl2.append(QString(slAux.at(1).trimmed()));
-      }
-
-      rsl2.sort();
-      slResult = rsl2;
-    }
-  }
-
-  return slResult;*/
 
   return rsl;
 }

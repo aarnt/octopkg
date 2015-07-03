@@ -264,15 +264,17 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
           m_indOfVisitedPackage++;
           indIncremented = true;
           m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
-
           m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
+          m_indOfVisitedPackage++; //CHANGED!!!
         }
         else
         {
           if ((m_indOfVisitedPackage+1) <= limit)
           {
             if (m_listOfVisitedPackages.at(m_indOfVisitedPackage+1) != pkgName)
+            {
               m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
+            }
           }
           else
             m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
@@ -283,7 +285,6 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
         m_indOfVisitedPackage++;
         indIncremented = true;
         m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
-
         m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
       }
     }
@@ -292,7 +293,6 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
       m_indOfVisitedPackage++;
       indIncremented = true;
       m_listOfVisitedPackages.insert(m_indOfVisitedPackage, selectedPackage->name);
-
       m_listOfVisitedPackages.insert(m_indOfVisitedPackage+1, pkgName);
     }
 

@@ -1,2 +1,6 @@
+0.1.1
+  BugFix: the name of some dependencies were not being shown correctly.
+  BugFix: list of dependencies was not sorted.
+
 0.1.0 
   Initial Proof of Concept release.
