@@ -1348,24 +1348,6 @@ void MainWindow::tvPackagesSelectionChanged(const QItemSelection&, const QItemSe
 }
 
 /*
-void MainWindow::launchPLV()
-{
-  QProcess *proc = new QProcess();
-  proc->startDetached("plv");
-}
-
-void MainWindow::launchRepoEditor()
-{
-  m_unixCommand = new UnixCommand(this);
-  m_unixCommand->executeCommand(QLatin1String("octopi-repoeditor"), ectn_LANG_USER_DEFINED);
-}
-
-void MainWindow::launchCacheCleaner()
-{
-  m_unixCommand = new UnixCommand(this);
-  m_unixCommand->execCommandAsNormalUser(QLatin1String("octopi-cachecleaner"));
-}
-
 void MainWindow::gistSysInfo()
 {
   if (!UnixCommand::hasTheExecutable("gist") ||

@@ -516,7 +516,6 @@ void MainWindow::initTabInfo(){
   text->setOpenLinks(false);
   connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
   connect(text, SIGNAL(highlighted(QUrl)), this, SLOT(showAnchorDescription(QUrl)));
-
   gridLayoutX->addWidget ( text, 0, 0, 1, 1 );
 
   QString tabName(StrConstants::getTabInfoName());
@@ -524,8 +523,15 @@ void MainWindow::initTabInfo(){
   ui->twProperties->insertTab(ctn_TABINDEX_INFORMATION, tabInfo, QApplication::translate (
       "MainWindow", tabName.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ) );
   ui->twProperties->setUsesScrollButtons(false);
-  ui->twProperties->setCurrentIndex(ctn_TABINDEX_INFORMATION);
 
+  SearchBar *searchBar = new SearchBar(this);
+  connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(searchBarTextChangedInTextBrowser(QString)));
+  connect(searchBar, SIGNAL(closed()), this, SLOT(searchBarClosedInTextBrowser()));
+  connect(searchBar, SIGNAL(findNext()), this, SLOT(searchBarFindNextInTextBrowser()));
+  connect(searchBar, SIGNAL(findPrevious()), this, SLOT(searchBarFindPreviousInTextBrowser()));
+  gridLayoutX->addWidget(searchBar, 1, 0, 1, 1);
+
+  ui->twProperties->setCurrentIndex(ctn_TABINDEX_INFORMATION);
   text->show();
   text->setFocus();
 }

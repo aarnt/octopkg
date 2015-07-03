@@ -216,7 +216,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   else if(ke->key() == Qt::Key_F && ke->modifiers() == Qt::ControlModifier)
   {
     if (isPropertiesTabWidgetVisible() &&
-        (ui->twProperties->currentIndex() == ctn_TABINDEX_OUTPUT ||
+        (ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION ||
+         ui->twProperties->currentIndex() == ctn_TABINDEX_OUTPUT ||
          ui->twProperties->currentIndex() == ctn_TABINDEX_NEWS ||
          ui->twProperties->currentIndex() == ctn_TABINDEX_HELPUSAGE))
     {
@@ -295,7 +296,6 @@ int MainWindow::selectTerminal(const int initialTerminalIndex)
   int result = initialTerminalIndex;
   std::unique_ptr<TerminalSelectorDialog> d(
         new TerminalSelectorDialog(this, Terminal::getListOfAvailableTerminals()));
-
   d->setInitialTerminalIndex(initialTerminalIndex);
 
   if (d->exec() == QDialog::Accepted)

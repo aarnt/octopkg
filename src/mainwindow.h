@@ -397,7 +397,6 @@ private slots:
   bool insertIntoRemovePackageDeps(const QStringList &dependencies);
   void insertGroupIntoRemovePackage();
   void insertGroupIntoInstallPackage();
-
   void hideGroupsWidget(bool pSaveSettings = true);
   void maximizePackagesTreeView(bool pSaveSettings = true);
   void maximizePropertiesTabWidget(bool pSaveSettings = true);
@@ -430,10 +429,7 @@ private slots:
   void positionInPackageList(const QString &pkgName);
   void outputTextBrowserAnchorClicked(const QUrl & link);
   void execToolTip();
-  /*void launchPLV();
-  void launchRepoEditor();
-  void launchCacheCleaner();
-  void gistSysInfo();*/
+  //void gistSysInfo();
 
 public slots:
   void doSystemUpgrade(SystemUpgradeOptions sysUpgradeOption = ectn_NO_OPT);
