@@ -653,11 +653,11 @@ void MainWindow::initActions()
   m_actionSwitchToRemoteSearch->setCheckable(true);
   m_actionSwitchToRemoteSearch->setChecked(false);
 
-  QActionGroup *actionGroupSearch = new QActionGroup(this);
-  actionGroupSearch->addAction(m_actionSwitchToLocalFilter);
-  actionGroupSearch->addAction(m_actionSwitchToRemoteSearch);
-  actionGroupSearch->setExclusive(true);
-  connect(actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+  m_actionGroupSearch = new QActionGroup(this);
+  m_actionGroupSearch->addAction(m_actionSwitchToLocalFilter);
+  m_actionGroupSearch->addAction(m_actionSwitchToRemoteSearch);
+  m_actionGroupSearch->setExclusive(true);
+  connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
 
   m_actionInstallPacmanUpdates = new QAction(this);
   m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());

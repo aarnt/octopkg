@@ -4,6 +4,7 @@
   BugFix: list of dependencies was not sorted.
   BugFix: outdated pkg list was not sorted.
   BugFix: When user closed searchbar inside a QTextBrowser, cursor position was reseted.
+  BugFix: Do not refresh pkg lists while clicking remote/local buttons.
   Added search feature also in Information tab.
 
 0.1.0 

@@ -46,6 +46,7 @@ class QTextBrowser;
 class QMenu;
 class SearchLineEdit;
 class QAction;
+class QActionGroup;
 class QTreeWidgetItem;
 class QTime;
 
@@ -183,6 +184,7 @@ private:
   QAction *m_actionSysInfo;
 
   //Toggles use of Remote package search
+  QActionGroup *m_actionGroupSearch;
   QAction *m_separatorForActionRemoteSearch;
   QAction *m_actionSwitchToLocalFilter;
   QAction *m_actionSwitchToRemoteSearch;

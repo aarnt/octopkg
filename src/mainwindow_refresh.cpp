@@ -30,6 +30,7 @@
 #include "globals.h"
 #include <iostream>
 #include <cassert>
+#include "src/ui/octopitabinfo.h"
 
 #include <QTimer>
 #include <QLabel>
@@ -39,18 +40,7 @@
 #include <QStandardItem>
 #include <QFutureWatcher>
 #include <QMutableListIterator>
-
-#if QT_VERSION > 0x050000
-  #include <QtConcurrent/QtConcurrentRun>
-#else
-  #include <QtConcurrentRun>
-#endif
-
-#if QT_VERSION < 0x050000
-  using namespace QtConcurrent;
-#endif
-
-#include "src/ui/octopitabinfo.h"
+#include <QtConcurrent/QtConcurrentRun>
 
 /*
  * If we have some outdated packages, let's put an angry red face icon in this app!
@@ -136,6 +126,23 @@ void MainWindow::refreshGroupsWidget()
  */
 void MainWindow::remoteSearchClicked()
 {
+  static bool lastPkgButtonClickedWasRemote = false;
+
+  if (lastPkgButtonClickedWasRemote && m_actionSwitchToRemoteSearch->isChecked())
+  {
+    disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+    m_actionSwitchToRemoteSearch->setChecked(false);
+    m_actionSwitchToLocalFilter->setChecked(true);
+    connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+  }
+  else if (!lastPkgButtonClickedWasRemote && m_actionSwitchToLocalFilter->isChecked())
+  {
+    disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+    m_actionSwitchToLocalFilter->setChecked(false);
+    m_actionSwitchToRemoteSearch->setChecked(true);
+    connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+  }
+
   m_leFilterPackage->clear();
 
   if (m_actionSwitchToRemoteSearch->isChecked())
@@ -151,12 +158,18 @@ void MainWindow::remoteSearchClicked()
     ui->menuSearch->setEnabled(true);
   }
 
-  //switchToViewAllPackages();
   m_selectedRepository = "";
-  //m_actionRepositoryAll->setChecked(true);
-  //changePackageListModel(ectn_ALL_PKGS, "");
-  m_refreshPackageLists = true;
+  m_refreshPackageLists = false;
   metaBuildPackageList();
+
+  if (m_actionSwitchToRemoteSearch->isChecked())
+  {
+    lastPkgButtonClickedWasRemote = true;
+  }
+  else
+  {
+    lastPkgButtonClickedWasRemote = false;
+  }
 }
 
 /*
@@ -360,6 +373,8 @@ void MainWindow::preBuildPackagesFromGroupList()
  */
 void MainWindow::metaBuildPackageList()
 {
+  m_time->start();
+
   if (isSearchByFileSelected())
     m_leFilterPackage->setRefreshValidator(ectn_FILE_VALIDATOR);
   else if (isRemoteSearchSelected())
@@ -367,20 +382,12 @@ void MainWindow::metaBuildPackageList()
   else
     m_leFilterPackage->setRefreshValidator(ectn_DEFAULT_VALIDATOR);
 
-  //m_packageModel->setShowColumnPopularity(false);
-  //ui->twGroups->setEnabled(false);
   ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
   //if (ui->twGroups->topLevelItemCount() == 0 || isAllCategoriesSelected())
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
-    //m_toolButtonPacman->hide();
-    //m_toolButtonAUR->hide();
-    //switchToViewAllPackages();
     ui->actionSearchByFile->setEnabled(false);
-    //m_packageModel->setShowColumnPopularity(true);
-
-    //toggleSystemActions(false);
     disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     clearStatusBar();
 
@@ -675,6 +682,10 @@ void MainWindow::buildPackageList()
     //Let's get outdatedPackages list again!
     m_outdatedStringList->clear();
     m_outdatedList = Package::getOutdatedStringList();
+
+    if(m_debugInfo)
+      std::cout << "Time elapsed retrieving outdated pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
+
     foreach(QString k, m_outdatedList->keys())
     {
       m_outdatedStringList->append(k);
@@ -1033,6 +1044,7 @@ void MainWindow::refreshTabInfo(QString pkgName)
     text->clear();    
     text->setHtml(OctopiTabInfo::formatTabInfo(*package, *m_outdatedList));
     text->scrollToAnchor(OctopiTabInfo::anchorBegin);
+
     //We have to clear the cached Info contents...
     m_cachedPackageInInfo = "";
   }

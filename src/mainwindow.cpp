@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_foreignPackageList = NULL;
 
   //Here we try to speed up first pkg list build!
-  m_time->start();
+  //m_time->start();
 
   retrieveUnrequiredPackageList();
 
