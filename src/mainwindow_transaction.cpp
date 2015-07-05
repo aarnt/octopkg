@@ -1680,17 +1680,13 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 
   if (msg.indexOf(progressRun) != -1 || continueTesting)
   {
-    //if (!continueTesting){
-    {
-      int p = msg.indexOf("%");
+    int p = msg.indexOf("%");
 
-      if (msg.at(p-3).isSpace())
-        perc = msg.mid(p-2, 3).trimmed();
+    if (msg.at(p-3).isSpace())
+      perc = msg.mid(p-2, 3).trimmed();
 
-      //qDebug() << "percentage is: " << perc;
-    }
+    //qDebug() << "percentage is: " << perc;
 
-    //continueTesting = false;
     QString target;
     /*
         Updating pcbsd-major repository catalogue...
@@ -1699,7 +1695,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         pcbsd-major repository update completed. 24141 packages processed.
       */
 
-    if (msg.contains("Fetching"))
+    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("kB/s")))
     {
       int p = msg.indexOf(":");
       target = msg.left(p).remove("Fetching").trimmed();
