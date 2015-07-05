@@ -43,7 +43,7 @@ OctopiTabInfo::OctopiTabInfo()
  * This function has been extracted from src/mainwindow_refresh.cpp void MainWindow::refreshTabInfo(QString pkgName)
  */
 QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& package,
-                                     const QHash<QString, OutdatedPackageInfo>& outdatedPkgList)
+                                     const QMap<QString, OutdatedPackageInfo>& outdatedPkgList)
 {
   PackageInfoData pid = Package::getInformation(package.name);
 

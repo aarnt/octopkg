@@ -2,6 +2,7 @@
   BugFix: anchor navigation fixes.
   BugFix: the name of some dependencies were not being shown correctly.
   BugFix: list of dependencies was not sorted.
+  BugFix: outdated pkg list was not sorted.
   Added search feature also in Information tab.
 
 0.1.0 

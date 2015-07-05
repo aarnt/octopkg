@@ -154,7 +154,7 @@ private:
   //This member holds the last command string executed by OctoPkg
   QStringList m_lastCommandList;
 
-  QHash<QString, OutdatedPackageInfo> *m_outdatedList;
+  QMap<QString, OutdatedPackageInfo> *m_outdatedList;
   QStringList *m_outdatedStringList;
   QStringList *m_outdatedRemoteStringList;
 

@@ -57,7 +57,7 @@ public:
    *
    * This function has been extracted from src/mainwindow_refresh.cpp void MainWindow::refreshTabInfo(QString pkgName)
    */
-  static QString formatTabInfo(const PackageRepository::PackageData& package, const QHash<QString, OutdatedPackageInfo>& outdatedRemotePackagesNameVersion);
+  static QString formatTabInfo(const PackageRepository::PackageData& package, const QMap<QString, OutdatedPackageInfo> &outdatedRemotePackagesNameVersion);
 
   static const QString anchorBegin;
 };

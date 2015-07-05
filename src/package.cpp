@@ -248,12 +248,12 @@ QSet<QString>* Package::getUnrequiredPackageList()
 /*
  * Retrieves the list of outdated packages (those which have newer versions available to download)
  */
-QHash<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
+QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
   QString outPkgList = UnixCommand::getOutdatedPackageList();
 
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
-  QHash<QString, OutdatedPackageInfo>* res = new QHash<QString, OutdatedPackageInfo>();
+  QMap<QString, OutdatedPackageInfo>* res = new QMap<QString, OutdatedPackageInfo>();
 
   if (packageTuples.contains("Installed packages to be UPGRADED:", Qt::CaseInsensitive))
   {
