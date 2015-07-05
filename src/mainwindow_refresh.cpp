@@ -1083,8 +1083,6 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
   CPUIntensiveComputing cic;
 
   /* Appends all info from the selected package! */
-  //QString pkgName=package->name;
-
   QTextBrowser *text = ui->twProperties->widget(
         ctn_TABINDEX_INFORMATION)->findChild<QTextBrowser*>("textBrowser");
   if (text)

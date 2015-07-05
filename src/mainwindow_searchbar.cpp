@@ -27,6 +27,7 @@
 #include "searchbar.h"
 
 #include <QTextBrowser>
+#include <QDebug>
 
 /*
  * Every time the user changes the text to search inside a textBrowser...
@@ -205,9 +206,12 @@ void MainWindow::searchBarFindPreviousInTreeView()
  * Every time the user presses ESC or clicks the close button inside a textBrowser...
  */
 void MainWindow::searchBarClosedInTextBrowser()
-{
-  searchBarTextChangedInTextBrowser("");
+{  
   QTextBrowser *tb = ui->twProperties->currentWidget()->findChild<QTextBrowser*>("textBrowser");
+  QTextCursor tc = tb->textCursor();
+  searchBarTextChangedInTextBrowser("");
+  tc.clearSelection();
+  tb->setTextCursor(tc);
 
   if (tb)
     tb->setFocus();
