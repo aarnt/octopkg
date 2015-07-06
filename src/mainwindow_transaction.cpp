@@ -29,6 +29,7 @@
 #include "strconstants.h"
 #include "transactiondialog.h"
 #include "multiselectiondialog.h"
+#include "globals.h"
 #include <iostream>
 #include <cassert>
 #include "searchlineedit.h"
@@ -39,6 +40,8 @@
 #include <QStandardItem>
 #include <QTextBrowser>
 #include <QDebug>
+#include <QFutureWatcher>
+#include <QtConcurrent/QtConcurrentRun>
 
 /*
  * Disables transaction buttons
@@ -699,6 +702,18 @@ void MainWindow::prepareSystemUpgrade()
 }
 
 /*
+ * Prepares the Package::getTargetUpgradeList() transaction info in a separate thread
+ */
+void MainWindow::prepareTargetUpgradeList()
+{
+  QFuture<TransactionInfo> f;
+  f = QtConcurrent::run(getTargetUpgradeList);
+  disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
+  connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
+  g_fwTargetUpgradeList.setFuture(f);
+}
+
+/*
  * Does a system upgrade with "pacman -Su" !
  */
 void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
@@ -718,117 +733,99 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 
   if (!isSUAvailable()) return;
 
-  qApp->processEvents();
+  //Shows a dialog indicating the targets needed to be retrieved and asks for the user's permission.
+  TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList();
+  QStringList *targets = ti.packages;
 
-  /*if(systemUpgradeOptions == ectn_SYNC_DATABASE_OPT)
+  //There are no new updates to install!
+  if (targets->count() == 0 && m_outdatedStringList->count() == 0)
   {
-    m_commandQueued = ectn_SYSTEM_UPGRADE;
-    doSyncDatabase();
+    clearTabOutput();
+    writeToTabOutputExt("<b>" + StrConstants::getNoNewUpdatesAvailable() + "</b>");
+    return;
   }
-  else*/
+  else if (targets->count() == 0 && m_outdatedStringList->count() > 0)
   {
-    //Shows a dialog indicating the targets needed to be retrieved and asks for the user's permission.
-    TransactionInfo ti = Package::getTargetUpgradeList();
-    QStringList *targets = ti.packages;
+    //This is a bug and should be shown to the user!
+    clearTabOutput();
+    //writeToTabOutputExt(UnixCommand::getTargetUpgradeList());
+    QString out = UnixCommand::getTargetUpgradeList();
+    splitOutputStrings(out);
+    return;
+  }
 
-    //There are no new updates to install!
-    if (targets->count() == 0 && m_outdatedStringList->count() == 0)
-    {
-      clearTabOutput();
-      writeToTabOutputExt("<b>" + StrConstants::getNoNewUpdatesAvailable() + "</b>");
-      return;
-    }
-    else if (targets->count() == 0 && m_outdatedStringList->count() > 0)
-    {
-      //This is a bug and should be shown to the user!
-      clearTabOutput();
-      //writeToTabOutputExt(UnixCommand::getTargetUpgradeList());
-      QString out = UnixCommand::getTargetUpgradeList();
-      splitOutputStrings(out);
-      return;
-    }
+  QString list;
 
-    QString list;
-    //double totalDownloadSize = 0;
+  foreach(QString target, *targets)
+  {
+    list = list + target + "\n";
+  }
 
-    /*foreach(PackageListData target, *targets)
-    {
-      totalDownloadSize += target.downloadSize;
-      list = list + target.name + "-" + target.version + "\n";
-    }
-    list.remove(list.size()-1, 1);*/
+  //User already confirmed all updates in the notifier window!
+  if (systemUpgradeOptions == ectn_NOCONFIRM_OPT)
+  {
+    prepareSystemUpgrade();
 
-    foreach(QString target, *targets)
-    {
-      list = list + target + "\n";
-    }
+    m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
-    //User already confirmed all updates in the notifier window!
-    if (systemUpgradeOptions == ectn_NOCONFIRM_OPT)
+    QString command;
+    command = "pkg upgrade -y";
+
+    m_unixCommand->executeCommand(command);
+    m_commandQueued = ectn_NONE;
+  }
+  else
+  {
+    //Let's build the system upgrade transaction dialog...
+    /*totalDownloadSize = totalDownloadSize / 1024;
+      QString ds = Package::kbytesToSize(totalDownloadSize);*/
+    QString ds = ti.sizeToDownload;
+
+    TransactionDialog question(this);
+
+    if(targets->count()==1)
+      question.setText(StrConstants::getRetrievePackage() +
+                       "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
+    else
+      question.setText(StrConstants::getRetrievePackages(targets->count()) +
+                       "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
+
+    question.setWindowTitle(StrConstants::getConfirmation());
+
+    //IMPORTANT: Let's have the YES button out of "pkg upgrade" for the moment!
+    //question.removeYesButton();
+
+    question.setInformativeText(StrConstants::getConfirmationQuestion());
+    question.setDetailedText(list);
+
+    m_systemUpgradeDialog = true;
+    int result = question.exec();
+
+    if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
     {
       prepareSystemUpgrade();
 
-      m_commandExecuting = ectn_SYSTEM_UPGRADE;
+      if (result == QDialogButtonBox::Yes)
+      {
+        m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
-      QString command;
-      command = "pkg upgrade -y";
+        QString command;
+        command = "pkg upgrade -y";
 
-      m_unixCommand->executeCommand(command);
-      m_commandQueued = ectn_NONE;
+        m_unixCommand->executeCommand(command);
+        m_commandQueued = ectn_NONE;
+      }
+      else if (result == QDialogButtonBox::AcceptRole)
+      {
+        m_commandExecuting = ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL;
+        m_unixCommand->runCommandInTerminal(m_lastCommandList);
+        m_commandQueued = ectn_NONE;
+      }
     }
-    else
+    else if (result == QDialogButtonBox::No)
     {
-      //Let's build the system upgrade transaction dialog...
-      /*totalDownloadSize = totalDownloadSize / 1024;
-      QString ds = Package::kbytesToSize(totalDownloadSize);*/
-      QString ds = ti.sizeToDownload;
-
-      TransactionDialog question(this);
-
-      if(targets->count()==1)
-        question.setText(StrConstants::getRetrievePackage() +
-                         "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
-      else
-        question.setText(StrConstants::getRetrievePackages(targets->count()) +
-                         "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
-
-      question.setWindowTitle(StrConstants::getConfirmation());
-
-      //IMPORTANT: Let's have the YES button out of "pkg upgrade" for the moment!
-      //question.removeYesButton();
-
-      question.setInformativeText(StrConstants::getConfirmationQuestion());
-      question.setDetailedText(list);
-
-      m_systemUpgradeDialog = true;
-      int result = question.exec();
-
-      if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
-      {
-        prepareSystemUpgrade();
-
-        if (result == QDialogButtonBox::Yes)
-        {
-          m_commandExecuting = ectn_SYSTEM_UPGRADE;
-
-          QString command;
-          command = "pkg upgrade -y";
-
-          m_unixCommand->executeCommand(command);
-          m_commandQueued = ectn_NONE;
-        }
-        else if (result == QDialogButtonBox::AcceptRole)
-        {
-          m_commandExecuting = ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL;
-          m_unixCommand->runCommandInTerminal(m_lastCommandList);
-          m_commandQueued = ectn_NONE;
-        }
-      }
-      else if (result == QDialogButtonBox::No)
-      {
-        m_systemUpgradeDialog = false;
-        enableTransactionActions();
-      }
+      m_systemUpgradeDialog = false;
+      enableTransactionActions();
     }
   }
 }

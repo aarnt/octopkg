@@ -328,13 +328,14 @@ private slots:
   void buildPackagesFromGroupList(const QString group);
   void buildPackageList();
   void buildRemotePackageList();
-  //void refreshPackageList();
+  void searchForPkgPackages();
+  void prepareTargetUpgradeList();
 
   void metaBuildPackageList();
   void onPackageGroupChanged();
 
   void remoteSearchClicked();
-  void groupItemSelected();
+  void groupItemSelected();  
 
   void preBuildRemotePackageList();
   void preBuildRemotePackageListMeta();
@@ -368,7 +369,6 @@ private slots:
   void doInstall();
   void doCleanCache();
   void doSyncDatabase();
-  //void doMirrorCheck();
   //void doAURUpgrade();
   //void doInstallAURPackage();
   //void doRemoveAURPackage();

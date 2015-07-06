@@ -45,18 +45,20 @@ extern QFutureWatcher<QList<PackageListData> *> g_fwRemote;
 extern QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
 //extern QFutureWatcher<QList<PackageListData> *> g_fwMarkForeignPackages;
 //extern QFutureWatcher<AUROutdatedPackages *> g_fwOutdatedAURPackages;
+extern QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
 extern QFutureWatcher<QString> g_fwDistroNews;
 extern QFutureWatcher<QString> g_fwPackageOwnsFile;
+extern QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
 
 QString showPackageInfo(QString pkgName);
-QList<PackageListData> * searchPacmanPackages();
+TransactionInfo getTargetUpgradeList();
+QList<PackageListData> * searchPkgPackages();
 QSet<QString> * searchUnrequiredPacmanPackages();
 QList<PackageListData> * searchForeignPackages();
-//QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringList *outdatedAURStringList);
 QList<PackageListData> * searchRemotePackages(QString searchString);
 QString searchPacmanPackagesByFile(const QString &file);
 GroupMemberPair          searchPacmanPackagesFromGroup(QString groupName);
-//AUROutdatedPackages * getOutdatedAURPackages();
+QMap<QString, OutdatedPackageInfo> * getOutdatedList();
 QString getLatestDistroNews();
 
 #endif // MAINWINDOW_GLOBALS_H

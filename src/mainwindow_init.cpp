@@ -663,7 +663,7 @@ void MainWindow::initActions()
   m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());
   m_actionInstallPacmanUpdates->setText(ui->actionInstall->text());
   m_actionInstallPacmanUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
+  connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(prepareTargetUpgradeList()));
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());

@@ -38,8 +38,10 @@ QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
 QFutureWatcher<AUROutdatedPackages *> g_fwOutdatedAURPackages;
 QFutureWatcher<QString> g_fwDistroNews;
 QFutureWatcher<QString> g_fwPackageOwnsFile;
+QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
 QFutureWatcher<QList<PackageListData> *> g_fwMarkForeignPackages;
 QFutureWatcher<QSet<QString> *> g_fwUnrequiredPacman;
+QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
 
 /*
  * Given a packageName, returns its description
@@ -76,7 +78,7 @@ QString showPackageInfo(QString pkgName)
 /*
  * Starts the non blocking search for Pacman packages...
  */
-QList<PackageListData> * searchPacmanPackages()
+QList<PackageListData> * searchPkgPackages()
 {
   return Package::getPackageList("");
 }
@@ -131,18 +133,6 @@ QList<PackageListData> * searchRemotePackages(QString searchString)
 }
 
 /*
- * Starts the non blocking retrive of AUR outdated package versions...
- * Results in a hash: [key] AUR pkg name / [value] AUR pkg version available
- */
-/*AUROutdatedPackages * getOutdatedAURPackages()
-{
-  AUROutdatedPackages * res = new AUROutdatedPackages();
-  res->content = Package::getAUROutdatedPackagesNameVersion();
-
-  return res;
-}*/
-
-/*
  * Starts the non blocking search for RSS distro news...
  */
 QString getLatestDistroNews()
@@ -151,37 +141,17 @@ QString getLatestDistroNews()
 }
 
 /*
- * Marks the packages installed by AUR/KCP (alien icons in pkg list).
+ * Starts the non blocking search for outdated pkgs
  */
-/*QList<PackageListData> * markForeignPackagesInPkgList(bool hasAURTool, QStringList *outdatedAURStringList)
+QMap<QString, OutdatedPackageInfo> *getOutdatedList()
 {
-  // Fetch foreign package list
-  QList<PackageListData> * result = new QList<PackageListData>();
-  std::unique_ptr<QList<PackageListData> > listForeign(Package::getForeignPackageList());
-  PackageListData pld;
+  return Package::getOutdatedStringList();
+}
 
-  QList<PackageListData>::const_iterator itForeign = listForeign->begin();
-
-  while (itForeign != listForeign->end())
-  {
-    if (!hasAURTool || !outdatedAURStringList->contains(itForeign->name))
-    {
-      pld = PackageListData(
-            itForeign->name, itForeign->repository, itForeign->version,
-            itForeign->name + " " + Package::getInformationDescription(itForeign->name, true),
-            ectn_FOREIGN);
-    }
-    else
-    {
-      pld = PackageListData(
-            itForeign->name, itForeign->repository, itForeign->version,
-            itForeign->name + " " + Package::getInformationDescription(itForeign->name, true),
-            ectn_FOREIGN_OUTDATED);
-    }
-
-    result->append(pld);
-    ++itForeign;
-  }
-
-  return result;
-}*/
+/*
+ * Starts the non blocking 'pkg upgrade -n'
+ */
+TransactionInfo getTargetUpgradeList()
+{
+  return Package::getTargetUpgradeList();
+}
