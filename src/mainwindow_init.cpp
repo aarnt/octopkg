@@ -663,7 +663,7 @@ void MainWindow::initActions()
   m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());
   m_actionInstallPacmanUpdates->setText(ui->actionInstall->text());
   m_actionInstallPacmanUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(prepareTargetUpgradeList()));
+  connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());
@@ -696,7 +696,7 @@ void MainWindow::initActions()
   connect(ui->actionRemoveTransactionItems, SIGNAL(triggered()), this, SLOT(onPressDelete()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
   connect(ui->actionSyncPackages, SIGNAL(triggered()), this, SLOT(doSyncDatabase()));
-  connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doSystemUpgrade()));
+  connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
   connect(ui->actionRemove, SIGNAL(triggered()), this, SLOT(insertIntoRemovePackage()));
   connect(ui->actionInstall, SIGNAL(triggered()), this, SLOT(insertIntoInstallPackage()));
   connect(ui->actionFindFileInPackage, SIGNAL(triggered()), this, SLOT(findFileInPackage()));

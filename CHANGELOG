@@ -1,4 +1,4 @@
-0.1.1
+0.2.0
   BugFix: anchor navigation fixes.
   BugFix: the name of some dependencies were not being shown correctly.
   BugFix: list of dependencies was not sorted.
@@ -6,6 +6,7 @@
   BugFix: When user closed searchbar inside a QTextBrowser, cursor position was reseted.
   BugFix: Do not refresh pkg lists while clicking remote/local buttons.
   Added search feature also in Information tab.
+  Heavily threaded version, minimizing interface freezing.
 
 0.1.0 
   Initial Proof of Concept release.

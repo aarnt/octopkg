@@ -52,7 +52,9 @@ void MainWindow::refreshAppIcon()
   if ((m_outdatedStringList->count() > 0))
   {
     setWindowIcon(IconHelper::getIconOctopiRed());
-    if(m_commandExecuting != ectn_MIRROR_CHECK) enableSystemUpgrade=true;
+
+    if(m_commandExecuting != ectn_MIRROR_CHECK && !isThereAPendingTransaction())
+      enableSystemUpgrade=true;
   }
   else
   {
@@ -429,7 +431,7 @@ void MainWindow::metaBuildPackageList()
     ui->actionSearchByFile->setEnabled(true);
     ui->actionSearchByName->setChecked(true);
 
-    toggleSystemActions(false);
+    //toggleSystemActions(false);
     disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     //reapplyPackageFilter();

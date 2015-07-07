@@ -329,7 +329,7 @@ private slots:
   void buildPackageList();
   void buildRemotePackageList();
   void searchForPkgPackages();
-  void prepareTargetUpgradeList();
+  void prepareTargetUpgradeList(const QString &pkgName="", CommandExecuting type=ectn_SYSTEM_UPGRADE);
 
   void metaBuildPackageList();
   void onPackageGroupChanged();
@@ -363,9 +363,11 @@ private slots:
   void changedTabIndex();
   void invalidateTabs(); //This method clears the current information showed on tab.
 
+  void doPreRemoveAndInstall();
   void doRemoveAndInstall();
   void doRemove();
   bool doRemovePacmanLockFile();
+  void doPreInstall();
   void doInstall();
   void doCleanCache();
   void doSyncDatabase();
@@ -431,6 +433,8 @@ private slots:
   void positionInPackageList(const QString &pkgName);
   void outputTextBrowserAnchorClicked(const QUrl & link);
   void execToolTip();
+  void doPreSystemUpgrade();
+
   //void gistSysInfo();
 
 public slots:

@@ -192,10 +192,10 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   {
     openTerminal();
   }
-  else if(ke->key() == Qt::Key_F5)
+  /*else if(ke->key() == Qt::Key_F5)
   {
     metaBuildPackageList();
-  }
+  }*/
   else if(ke->key() == Qt::Key_F6)
   {
     openDirectory();

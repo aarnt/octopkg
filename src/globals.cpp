@@ -151,7 +151,7 @@ QMap<QString, OutdatedPackageInfo> *getOutdatedList()
 /*
  * Starts the non blocking 'pkg upgrade -n'
  */
-TransactionInfo getTargetUpgradeList()
+TransactionInfo getTargetUpgradeList(const QString& pkgName)
 {
-  return Package::getTargetUpgradeList();
+  return Package::getTargetUpgradeList(pkgName);
 }

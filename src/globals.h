@@ -51,7 +51,7 @@ extern QFutureWatcher<QString> g_fwPackageOwnsFile;
 extern QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
 
 QString showPackageInfo(QString pkgName);
-TransactionInfo getTargetUpgradeList();
+TransactionInfo getTargetUpgradeList(const QString &pkgName);
 QList<PackageListData> * searchPkgPackages();
 QSet<QString> * searchUnrequiredPacmanPackages();
 QList<PackageListData> * searchForeignPackages();

@@ -61,7 +61,6 @@ void MainWindow::changeTransactionActionsState()
   ui->actionCommit->setEnabled(state);
   ui->actionCancel->setEnabled(state);
   ui->actionSyncPackages->setEnabled(!state);
-  m_actionSwitchToRemoteSearch->setEnabled(!state);
 
   if (state == false && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);
@@ -704,13 +703,47 @@ void MainWindow::prepareSystemUpgrade()
 /*
  * Prepares the Package::getTargetUpgradeList() transaction info in a separate thread
  */
-void MainWindow::prepareTargetUpgradeList()
+void MainWindow::prepareTargetUpgradeList(const QString& pkgName, CommandExecuting type)
 {
   QFuture<TransactionInfo> f;
-  f = QtConcurrent::run(getTargetUpgradeList);
+  f = QtConcurrent::run(getTargetUpgradeList, pkgName);
+
+  disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doInstall()));
+  disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doRemoveAndInstall()));
   disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
-  connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
+
+  if (type == ectn_INSTALL)
+  {
+    toggleSystemActions(false);
+    ui->actionCommit->setEnabled(false);
+    ui->actionCancel->setEnabled(false);
+
+    connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doInstall()));
+  }
+  else if (type == ectn_REMOVE_INSTALL)
+  {
+    toggleSystemActions(false);
+    ui->actionCommit->setEnabled(false);
+    ui->actionCancel->setEnabled(false);
+
+    connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doRemoveAndInstall()));
+  }
+  else if (type == ectn_SYSTEM_UPGRADE)
+  {
+    toggleSystemActions(false);
+
+    connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
+  }
+
   g_fwTargetUpgradeList.setFuture(f);
+}
+
+/*
+ * Prepares the 'pkg upgrade' transaction information
+ */
+void MainWindow::doPreSystemUpgrade()
+{
+  prepareTargetUpgradeList();
 }
 
 /*
@@ -826,22 +859,29 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     {
       m_systemUpgradeDialog = false;
       enableTransactionActions();
+      toggleSystemActions(true);
     }
   }
 }
 
 /*
- * Removes and Installs all selected packages in one transaction just using:
- * "pacman -R alltoRemove; pacman -S alltoInstall"
+ * Prepares the Remove and Install transaction information
+ */
+void MainWindow::doPreRemoveAndInstall()
+{
+  QString listOfInstallTargets = getTobeInstalledPackages();
+  prepareTargetUpgradeList(listOfInstallTargets, ectn_REMOVE_INSTALL);
+}
+
+/*
+ * Removes and Installs all selected packages in two transactions using
+ * a QUEUED remove command: *
  */
 void MainWindow::doRemoveAndInstall()
 {
-  static QString commandToInstall = "";
-
   QString listOfRemoveTargets = getTobeRemovedPackages();
   QString removeList;
   QString allLists;
-
   TransactionDialog question(this);
   QString dialogText;
 
@@ -852,7 +892,7 @@ void MainWindow::doRemoveAndInstall()
   }
 
   QString listOfInstallTargets = getTobeInstalledPackages();
-  TransactionInfo ti = Package::getTargetUpgradeList(listOfInstallTargets);
+  TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList(listOfInstallTargets);
   QStringList *installTargets = ti.packages;
   QString ds = ti.sizeToDownload;
 
@@ -900,8 +940,6 @@ void MainWindow::doRemoveAndInstall()
     disableTransactionButtons();
 
     QString command;
-    //command = "pkg remove -f -y " + listOfRemoveTargets +
-    //    "; pkg install -f -y " + listOfInstallTargets;
     command = "pkg remove -f -y " + listOfRemoveTargets;
 
     m_lastCommandList.clear();
@@ -936,6 +974,11 @@ void MainWindow::doRemoveAndInstall()
       m_commandExecuting = ectn_RUN_IN_TERMINAL;
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
+  }
+  else
+  {
+    m_commandExecuting = ectn_NONE;
+    enableTransactionActions();
   }
 }
 
@@ -977,7 +1020,7 @@ void MainWindow::doRemove()
   {
     if (!doRemovePacmanLockFile()) return;
 
-    disableTransactionButtons();
+    //disableTransactionButtons();
 
     QString command;
     command = "pkg remove -f -y " + listOfTargets;
@@ -1011,6 +1054,20 @@ void MainWindow::doRemove()
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
   }
+  else
+  {
+    m_commandExecuting = ectn_NONE;
+    enableTransactionActions();
+  }
+}
+
+/*
+ * Prepares the Install transaction information
+ */
+void MainWindow::doPreInstall()
+{
+  QString listOfTargets = getTobeInstalledPackages();
+  prepareTargetUpgradeList(listOfTargets, ectn_INSTALL);
 }
 
 /*
@@ -1019,7 +1076,7 @@ void MainWindow::doRemove()
 void MainWindow::doInstall()
 {
   QString listOfTargets = getTobeInstalledPackages();
-  TransactionInfo ti = Package::getTargetUpgradeList(listOfTargets);
+  TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList(listOfTargets);
   QStringList *targets = ti.packages;
   QString list;
   QString ds = ti.sizeToDownload;
@@ -1082,6 +1139,11 @@ void MainWindow::doInstall()
       m_commandExecuting = ectn_RUN_IN_TERMINAL;
       m_unixCommand->runCommandInTerminal(m_lastCommandList);
     }
+  }
+  else
+  {
+    m_commandExecuting = ectn_NONE;
+    enableTransactionActions();
   }
 }
 
@@ -1303,20 +1365,20 @@ void MainWindow::toggleTransactionActions(const bool value)
   if (m_initializationCompleted) ui->twGroups->setEnabled(value);
 }
 
+/*
+ * Enables / Disables important interface actions
+ */
 void MainWindow::toggleSystemActions(const bool value)
 {
   if (value == true && m_commandExecuting != ectn_NONE) return;
 
-  if(m_hasMirrorCheck)
-  {
-    m_actionMirrorCheck->setEnabled(value);
-  }
+  bool state = isThereAPendingTransaction();
 
-  if (isRemoteSearchSelected() && StrConstants::getForeignRepositoryToolName() == "kcp")
+  if (isRemoteSearchSelected() && !state)
   {
     ui->actionSyncPackages->setEnabled(true);
   }
-  else
+  else if ((value == true && !state) || value == false)
   {
     ui->actionSyncPackages->setEnabled(value);
   }
@@ -1325,7 +1387,7 @@ void MainWindow::toggleSystemActions(const bool value)
 
   ui->actionGetNews->setEnabled(value);
 
-  if (value == true && m_outdatedStringList->count() > 0)
+  if (value == true && !state && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);
   else
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1339,7 +1401,7 @@ void MainWindow::commitTransaction()
   //Are there any remove actions to be commited?
   if(getRemoveTransactionParentItem()->rowCount() > 0 && getInstallTransactionParentItem()->rowCount() > 0)
   {
-    doRemoveAndInstall();
+    doPreRemoveAndInstall();
   }
   else if(getRemoveTransactionParentItem()->rowCount() > 0)
   {
@@ -1347,7 +1409,7 @@ void MainWindow::commitTransaction()
   }
   else if(getInstallTransactionParentItem()->rowCount() > 0)
   {
-    doInstall();
+    doPreInstall();
   }
 }
 
@@ -1446,7 +1508,8 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     m_commandQueued = ectn_NONE;
     //Let's first remove all remove targets...
     removePackagesFromRemoveTransaction();
-    doInstall();
+    doPreInstall();
+    //doInstall();
     return;
   }
 
