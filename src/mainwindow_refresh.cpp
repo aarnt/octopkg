@@ -128,6 +128,8 @@ void MainWindow::refreshGroupsWidget()
  */
 void MainWindow::remoteSearchClicked()
 {
+  if (m_commandExecuting != ectn_NONE) return;
+
   static bool lastPkgButtonClickedWasRemote = false;
 
   if (lastPkgButtonClickedWasRemote && m_actionSwitchToRemoteSearch->isChecked())

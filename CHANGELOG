@@ -5,6 +5,7 @@
   BugFix: outdated pkg list was not sorted.
   BugFix: When user closed searchbar inside a QTextBrowser, cursor position was reseted.
   BugFix: Do not refresh pkg lists while clicking remote/local buttons.
+  BugFix: Fix gksu "-- f parameter" execution error.
   Added search feature also in Information tab.
   Heavily threaded version, minimizing interface freezing.
 

@@ -742,7 +742,14 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
   }
   else
   {
-    command = WMHelper::getSUCommand() + /*"\"" +*/ pCommand /*+ "\""*/;
+    if (WMHelper::getSUCommand() == ctn_KDESU)
+    {
+      command = WMHelper::getSUCommand() + pCommand;
+    }
+    else
+    {
+      command = WMHelper::getSUCommand() + "\"" + pCommand + "\"";
+    }
   }
 
   m_process->start(command);
@@ -961,7 +968,6 @@ QStringList UnixCommand::getFieldFromPacmanConf(const QString &fieldName)
   while(true);
 
   file.close();
-
   return result;
 }
 
