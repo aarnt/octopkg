@@ -657,6 +657,8 @@ void MainWindow::buildRemotePackageList()
     ui->actionSearchByName->setChecked(true);
     metaBuildPackageList();
   }
+
+  emit buildPackageListDone();
 }
 
 /*
@@ -844,6 +846,8 @@ void MainWindow::buildPackageList()
   refreshToolBar();
   refreshStatusBarToolButtons();
   m_refreshPackageLists = true;  
+
+  emit buildPackageListDone();
 }
 
 /*

@@ -388,6 +388,8 @@ private slots:
   void selectedNonInstalledPackagesMenu();
   void selectedRepositoryMenu(QAction *actionRepoSelected);
 
+  void resetTransaction();
+
   void actionsProcessStarted();
   void actionsProcessFinished(int exitCode, QProcess::ExitStatus);
   void actionsProcessReadOutput();

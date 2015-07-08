@@ -1509,7 +1509,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     //Let's first remove all remove targets...
     removePackagesFromRemoveTransaction();
     doPreInstall();
-    //doInstall();
     return;
   }
 
@@ -1517,6 +1516,8 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
   {
     if(exitCode == 0 || exitCode == 255) //mate-terminal is returning code 255 sometimes...
     {
+      clearTransactionTreeView();
+
       //After the command, we can refresh the package list, so any change can be seem.
       if (m_commandExecuting == ectn_SYNC_DATABASE)
       {
@@ -1528,12 +1529,14 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           m_actionSwitchToRemoteSearch->setChecked(false);
           refreshDistroNews(true, false);
           metaBuildPackageList();
+          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
         else
         {
           m_leFilterPackage->clear();
           refreshDistroNews(true, false);
           metaBuildPackageList();
+          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
       }
       else if (m_commandExecuting == ectn_SYSTEM_UPGRADE ||
@@ -1545,11 +1548,13 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
           metaBuildPackageList();
+          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
         else
         {
           m_leFilterPackage->clear();
           metaBuildPackageList();
+          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
       }
       else
@@ -1566,13 +1571,12 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           m_leFilterPackage->clear();
           metaBuildPackageList();
+          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
       }
 
-      clearTransactionTreeView();
-
       //Does it still need to upgrade another packages due to SyncFirst issues???
-      if ((m_commandExecuting == ectn_SYSTEM_UPGRADE ||
+      /*if ((m_commandExecuting == ectn_SYSTEM_UPGRADE ||
            m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
           && m_outdatedStringList->count() > 0)
       {
@@ -1580,11 +1584,11 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         m_unixCommand->removeTemporaryFile();
         doSystemUpgrade();
         return;
-      }
+      }*/
     }
   }
 
-  if (exitCode != 0 && (textInTabOutput("conflict"))) //|| _textInTabOutput("could not satisfy dependencies")))
+  if ((exitCode != 0) && (textInTabOutput("conflict") || textInTabOutput("error")))
   {
     int res = QMessageBox::question(this, StrConstants::getThereHasBeenATransactionError(),
                                     StrConstants::getConfirmExecuteTransactionInTerminal(),
@@ -1596,17 +1600,25 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       return;
     }
   }
+  else if (exitCode != 0)
+  {
+    resetTransaction();
+  }
+}
 
+/*
+ * Garbage collects some transaction objects and reset others
+ */
+void MainWindow::resetTransaction()
+{
   enableTransactionActions();
-
   //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
   //  refreshGroupsWidget();
-
   m_unixCommand->removeTemporaryFile();
-
   delete m_unixCommand;
-
   m_commandExecuting = ectn_NONE;
+
+  disconnect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
 }
 
 /*
