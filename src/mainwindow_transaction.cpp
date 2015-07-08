@@ -1565,6 +1565,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);          
           m_actionSwitchToLocalFilter->setChecked(true);
+          m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
         }
         else

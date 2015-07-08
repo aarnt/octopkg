@@ -128,7 +128,7 @@ void MainWindow::refreshGroupsWidget()
  */
 void MainWindow::remoteSearchClicked()
 {
-  if (m_commandExecuting != ectn_NONE) return;
+  if (m_commandExecuting != ectn_NONE && m_commandExecuting != ectn_LOCAL_PKG_REFRESH) return;
 
   static bool lastPkgButtonClickedWasRemote = false;
 
@@ -165,6 +165,11 @@ void MainWindow::remoteSearchClicked()
   m_selectedRepository = "";
   m_refreshPackageLists = false;
   metaBuildPackageList();
+
+  if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)
+  {
+    connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+  }
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
