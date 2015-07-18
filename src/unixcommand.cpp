@@ -579,7 +579,7 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
 
   if (getBSDFlavour() == ectn_PCBSD)
     proc.start("/usr/local/bin/bash -c " + sParam);
-  else if (getBSDFlavour() == ectn_FREEBSD)
+  else if (getBSDFlavour() == ectn_FREEBSD || getBSDFlavour() == ectn_GHOSTBSD)
     proc.start("/bin/sh -c " + sParam);
 
   proc.waitForFinished();
@@ -1017,9 +1017,23 @@ BSDFlavour UnixCommand::getBSDFlavour()
     {
       ret = ectn_PCBSD;
     }
-    else if (QFile::exists("/etc/rc.conf"))
+
+    QFile file("/var/log/messages");
+    if (file.exists())
     {
-      ret = ectn_FREEBSD;
+      if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return ectn_UNKNOWN;
+
+      QTextStream in(&file);
+      QString aux = in.readAll();
+      if (aux.contains("ghostbsd", Qt::CaseInsensitive))
+      {
+        ret = ectn_GHOSTBSD;
+      }
+      else
+      {
+        ret = ectn_FREEBSD;
+      }
     }
     else
     {

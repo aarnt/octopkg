@@ -272,14 +272,8 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
  */
 QString utils::retrieveDistroNews(bool searchForLatestNews)
 {
-  /*const QString ctn_ANTERGOS_RSS_URL = "http://antergos.com/category/news/feed/";
-  const QString ctn_ARCHBSD_RSS_URL = "http://archbsd.net/feeds/news/";
-  const QString ctn_ARCH_LINUX_RSS_URL = "https://www.archlinux.org/feeds/news/";
-  const QString ctn_CHAKRA_RSS_URL = "http://chakraos.org/news/index.php?/feeds/index.rss2";
-  const QString ctn_KAOS_RSS_URL = "http://kaosx.us/feed/";
-  const QString ctn_MANJARO_LINUX_RSS_URL = "https://manjaro.github.io/feed.xml";
-  const QString ctn_NETRUNNER_RSS_URL = "http://www.netrunner-os.com/feed/";*/
   const QString ctn_FREEBSD_RSS_URL = "http://www.freebsd.org/news/rss.xml";
+  const QString ctn_GHOSTBSD_RSS_URL = "http://www.ghostbsd.org/rss.xml";
   const QString ctn_PCBSD_RSS_URL = "http://blog.pcbsd.org/feed/";
 
   BSDFlavour bsd = UnixCommand::getBSDFlavour();
@@ -304,6 +298,10 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     if (bsd == ectn_FREEBSD)
     {
       curlCommand = curlCommand.arg(ctn_FREEBSD_RSS_URL).arg(tmpRssPath);
+    }
+    else if (bsd == ectn_GHOSTBSD)
+    {
+      curlCommand = curlCommand.arg(ctn_GHOSTBSD_RSS_URL).arg(tmpRssPath);
     }
     else if (bsd == ectn_PCBSD)
     {
@@ -396,6 +394,10 @@ QString utils::parseDistroNews()
   if (bsd == ectn_FREEBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getFreeBSDNews() + "</h2></p><ul>";
+  }
+  else if (bsd == ectn_GHOSTBSD)
+  {
+    html = "<p align=\"center\"><h2>" + StrConstants::getGhostBSDNews() + "</h2></p><ul>";
   }
   else if (bsd == ectn_PCBSD)
   {

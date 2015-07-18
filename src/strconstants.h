@@ -108,6 +108,10 @@ public:
     return QObject::tr("FreeBSD news");
   }
 
+  static QString getGhostBSDNews(){
+    return QObject::tr("GhostBSD news");
+  }
+
   static QString getPCBSDNews(){
     return QObject::tr("PC-BSD news");
   }

@@ -44,7 +44,6 @@ extern QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
 extern QFutureWatcher<QList<PackageListData> *> g_fwRemote;
 extern QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
 //extern QFutureWatcher<QList<PackageListData> *> g_fwMarkForeignPackages;
-//extern QFutureWatcher<AUROutdatedPackages *> g_fwOutdatedAURPackages;
 extern QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
 extern QFutureWatcher<QString> g_fwDistroNews;
 extern QFutureWatcher<QString> g_fwPackageOwnsFile;
