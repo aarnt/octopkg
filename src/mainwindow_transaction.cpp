@@ -1768,7 +1768,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         pcbsd-major repository update completed. 24141 packages processed.
       */
 
-    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("kB/s")))
+    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
     {
       int p = msg.indexOf(":");
       target = msg.left(p).remove("Fetching").trimmed();
