@@ -1829,9 +1829,11 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("Fontconfig warning.+"));
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
+
     //Gksu buggy strings
     msg.remove(QRegularExpression("you should recompile libgtop and dependent applications.+"));
     msg.remove(QRegularExpression("This libgtop was compiled on.+"));
+    msg.remove(QRegularExpression("If you see strange problems caused by it.+"));
     msg.remove(QRegularExpression("LibGTop-Server.+"));
     msg.remove(QRegularExpression("received eof.+"));
     msg.remove(QRegularExpression("pid [0-9]+"));
