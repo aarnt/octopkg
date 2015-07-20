@@ -1024,10 +1024,10 @@ void MainWindow::doRemove()
     //disableTransactionButtons();
 
     QString command;
-    command = "pkg remove -f -y " + listOfTargets;
+    command = "pkg remove -R -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pkg remove -f " + listOfTargets + ";");
+    m_lastCommandList.append("pkg remove -R -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1830,9 +1830,11 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
     //Gksu buggy strings
+    msg.remove(QRegularExpression("you should recompile libgtop and dependent applications.+"));
     msg.remove(QRegularExpression("This libgtop was compiled on.+"));
     msg.remove(QRegularExpression("LibGTop-Server.+"));
     msg.remove(QRegularExpression("received eof.+"));
+    msg.remove(QRegularExpression("pid [0-9]+"));
     msg = msg.trimmed();
 
     //std::cout << "debug: " << msg.toLatin1().data() << std::endl;

@@ -481,7 +481,7 @@ QByteArray UnixCommand::getTargetRemovalList(const QString &pkgName)
 
   if(!pkgName.isEmpty())
   {
-    args = "remove -n " + pkgName;
+    args = "remove -R -n " + pkgName;
     res = performQuery(args);
   }
 
