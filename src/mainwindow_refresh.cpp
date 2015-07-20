@@ -364,7 +364,11 @@ void MainWindow::preBuildPackageList()
   buildPackageList();
   toggleSystemActions(true);
 
-  //emit buildPackageListDone();
+  if (!m_initializationCompleted)
+  {
+    remoteSearchClicked();
+    m_initializationCompleted = true;
+  }
 }
 
 /*
@@ -829,7 +833,7 @@ void MainWindow::buildPackageList()
       m_leFilterPackage->setFocus();
     }
 
-    m_initializationCompleted = true;        
+    //m_initializationCompleted = true;
     firstTime = false;
 
     if (m_callSystemUpgrade)

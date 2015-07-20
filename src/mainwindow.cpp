@@ -140,9 +140,7 @@ void MainWindow::show()
 
     if (Package::hasPkgNGDatabase())
     {
-      //metaBuildPackageList();
-      //CHANGED
-      remoteSearchClicked();
+      metaBuildPackageList();
     }
     // Maybe this system has never run a pacman -Syy
     else
