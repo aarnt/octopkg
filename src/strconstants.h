@@ -509,6 +509,10 @@ public:
     return QObject::tr("Do you really want to cancel the transaction?");
   }
 
+  static QString getPkgNotAvailable(){
+    return QObject::tr("This package is not available in the database!");
+  }
+
   static QString getEnterAdministratorsPassword(){
     return QObject::tr(
           "Please, enter the administrator's password");

@@ -1077,8 +1077,18 @@ void MainWindow::doPreInstall()
 void MainWindow::doInstall()
 {
   QString listOfTargets = getTobeInstalledPackages();
+
   TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList(listOfTargets);
   QStringList *targets = ti.packages;
+
+  if (targets->count() == 0)
+  {
+    QMessageBox::critical( 0, StrConstants::getApplicationName(),
+                           StrConstants::getPkgNotAvailable());
+    enableTransactionActions();
+    return;
+  }
+
   QString list;
   QString ds = ti.sizeToDownload;
 
@@ -1096,7 +1106,7 @@ void MainWindow::doInstall()
     question.setText(StrConstants::getRetrievePackage() +
                           "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
   }
-  else
+  else if (targets->count() > 1)
     question.setText(StrConstants::getRetrievePackages(targets->count()) +
                      "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
 
@@ -1819,6 +1829,10 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("Fontconfig warning.+"));
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
+    //Gksu buggy strings
+    msg.remove(QRegularExpression("This libgtop was compiled on.+"));
+    msg.remove(QRegularExpression("LibGTop-Server.+"));
+    msg.remove(QRegularExpression("received eof.+"));
     msg = msg.trimmed();
 
     //std::cout << "debug: " << msg.toLatin1().data() << std::endl;

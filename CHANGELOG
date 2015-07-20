@@ -6,6 +6,7 @@
   BugFix: When user closed searchbar inside a QTextBrowser, cursor position was reseted.
   BugFix: Do not refresh pkg lists while clicking remote/local buttons.
   BugFix: Fix gksu "-- f parameter" execution error.
+  BugFix: When trying to install a Ports pkg not available in database, shows error.
   Added GhostBSD support (thanks to ringo32 and rkramerbsd). 
   Added search feature also in Information tab.
   Heavily threaded version, minimizing interface freezing.
