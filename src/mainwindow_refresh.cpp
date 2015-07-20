@@ -163,7 +163,12 @@ void MainWindow::remoteSearchClicked()
   }
 
   m_selectedRepository = "";
-  m_refreshPackageLists = false;
+
+  if (m_commandExecuting == ectn_NONE)
+    m_refreshPackageLists = false;
+  else if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)
+    m_refreshPackageLists = true;
+
   metaBuildPackageList();
 
   if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)

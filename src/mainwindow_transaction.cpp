@@ -165,6 +165,7 @@ void MainWindow::insertInstallPackageIntoTransaction(const QString &pkgName)
 {
   QTreeView *tvTransaction =
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
+
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
   QStandardItem * siPackageToInstall = new QStandardItem(IconHelper::getIconInstallItem(), pkgName);
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
@@ -1575,17 +1576,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
         }
       }
-
-      //Does it still need to upgrade another packages due to SyncFirst issues???
-      /*if ((m_commandExecuting == ectn_SYSTEM_UPGRADE ||
-           m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
-          && m_outdatedStringList->count() > 0)
-      {
-        m_commandExecuting = ectn_NONE;
-        m_unixCommand->removeTemporaryFile();
-        doSystemUpgrade();
-        return;
-      }*/
     }
   }
 
@@ -1718,6 +1708,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   QString msg = pMsg;
   QString progressRun;
   QString progressEnd;
+
   msg.remove(QRegularExpression(".+\\[Y/n\\].+"));
 
   //Let's remove color codes from strings...
@@ -1754,6 +1745,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   if (msg.indexOf(progressRun) != -1 || continueTesting)
   {
     int p = msg.indexOf("%");
+    if (p == -1 || (p-3 < 0) || (p-2 < 0)) return; //Guard!
 
     if (msg.at(p-3).isSpace())
       perc = msg.mid(p-2, 3).trimmed();
@@ -1762,15 +1754,17 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 
     QString target;
     /*
-        Updating pcbsd-major repository catalogue...
-        Fetching <>:
-        Processing entries:
-        pcbsd-major repository update completed. 24141 packages processed.
-      */
+      Updating pcbsd-major repository catalogue...
+      Fetching <>:
+      Processing entries:
+      pcbsd-major repository update completed. 24141 packages processed.
+    */
 
     if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
     {
       int p = msg.indexOf(":");
+      if (p == -1) return; //Guard!
+
       target = msg.left(p).remove("Fetching").trimmed();
 
       if(!textInTabOutput(target))
@@ -1779,6 +1773,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     else if (msg.contains("Processing"))
     {
       int p = msg.indexOf(":");
+      if (p == -1) return; //Guard!
+
       target = msg.left(p).remove("Processing").trimmed();
 
       if(!textInTabOutput(target))
@@ -1831,6 +1827,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     if (ini == 0)
     {
       int rp = msg.indexOf(")");
+      if (rp == -1) return; //Guard!
+
       order = msg.left(rp+2);
       msg = msg.remove(0, rp+2);
     }
@@ -1843,7 +1841,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         QString pkgName = msg.mid(9).trimmed();
 
         const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkgName);
-        if (pkgName.indexOf("...") != -1 || //TODO: maybe && was meant ?, what does pacman actually do here ?
+        if (pkgName.indexOf("...") != -1 && //TODO: maybe && was meant ?, what does pacman actually do here ?
             (package != NULL && package->installed()))
         {
           writeToTabOutputExt("<b><font color=\"#E55451\">" + msg + "</font></b>"); //RED
@@ -1852,32 +1850,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       else
       {
         QString altMsg = msg;
-
-        if (msg.indexOf(":: Synchronizing package databases...") == -1 &&
-            msg.indexOf(":: Starting full system upgrade...") == -1)
-        {
-          //std::cout << "Entered here: " << msg.toLatin1().data() << std::endl;
-
-          if (m_commandExecuting == ectn_SYNC_DATABASE &&
-              msg.indexOf("is up to date") != -1)
-          {
-            if (!m_progressWidget->isVisible()) m_progressWidget->show();
-            m_progressWidget->setValue(100);
-
-            int blank = msg.indexOf(" ");
-            QString repo = msg.left(blank);
-
-            if (repo.contains("error", Qt::CaseInsensitive) ||
-                repo.contains("gconf", Qt::CaseInsensitive) ||
-                repo.contains("failed", Qt::CaseInsensitive) ||
-                repo.contains("fontconfig", Qt::CaseInsensitive) ||
-                repo.contains("reading", Qt::CaseInsensitive)) return;
-
-            altMsg = repo + " " + StrConstants::getIsUpToDate();
-          }
-
-          writeToTabOutputExt(altMsg); //BLACK
-        }
+        writeToTabOutputExt(altMsg); //BLACK
       }
     }
   }
