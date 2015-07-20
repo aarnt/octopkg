@@ -842,7 +842,6 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       if (result == QDialogButtonBox::Yes)
       {
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
-
         QString command;
         command = "pkg upgrade -y";
 
@@ -988,14 +987,15 @@ void MainWindow::doRemoveAndInstall()
  */
 void MainWindow::doRemove()
 {
-  QString listOfTargets = getTobeRemovedPackages();
+  QString listOfTargets = getTobeRemovedPackages();  
   QStringList *_targets = Package::getTargetRemovalList(listOfTargets);
+  listOfTargets = "";
   QString list;
 
-  QStringList targets = listOfTargets.split(" ", QString::SkipEmptyParts);
-  foreach(QString target, targets)
+  foreach(QString target, *_targets)
   {
     list = list + target + "\n";
+    listOfTargets += target + " ";
   }
 
   TransactionDialog question(this);
@@ -1006,9 +1006,9 @@ void MainWindow::doRemove()
     question.setText(StrConstants::getRemovePackage());
   }
   else
-    question.setText(StrConstants::getRemovePackages(targets.count()));
+    question.setText(StrConstants::getRemovePackages(_targets->count()));
 
-  if (getNumberOfTobeRemovedPackages() < targets.count())
+  if (getNumberOfTobeRemovedPackages() < _targets->count())
     question.setWindowTitle(StrConstants::getWarning());
   else
     question.setWindowTitle(StrConstants::getConfirmation());

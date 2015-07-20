@@ -372,8 +372,6 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
     {
       res->append(infoTuple.remove(QRegularExpression("\t")).trimmed());
     }
-
-    res->append(infoTuple);
   }
 
   res->sort();
