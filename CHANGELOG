@@ -8,6 +8,7 @@
   BugFix: Fix gksu "-- f parameter" execution error.
   BugFix: When trying to install a Ports pkg not available in database, shows error 
 	(thanks to asxbsd).
+  Let user removes any automatic installed package.
   Added GhostBSD support (thanks to ringo32 and rkramerbsd). 
   Added search feature also in Information tab.
   Heavily threaded version, minimizing interface freezing.

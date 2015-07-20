@@ -621,7 +621,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
           UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
           UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
       {
-        if (package->installed() == false || package->required || Package::isForbidden(package->name))
+        if (package->installed() == false /*|| package->required*/ || Package::isForbidden(package->name))
         {
           allRemovable = false;
         }
