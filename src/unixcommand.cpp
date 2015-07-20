@@ -1017,29 +1017,17 @@ BSDFlavour UnixCommand::getBSDFlavour()
     {
       ret = ectn_PCBSD;
     }
-    else //It's NOT PC-BSD!
+    else if (QFile::exists("/etc/rc.conf.ghostbsd"))
     {
-      QFile file("/var/log/messages");
-      if (file.exists())
-      {
-        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-          return ectn_UNKNOWN;
-
-        QTextStream in(&file);
-        QString aux = in.readAll();
-        if (aux.contains("ghostbsd", Qt::CaseInsensitive))
-        {
-          ret = ectn_GHOSTBSD;
-        }
-        else
-        {
-          ret = ectn_FREEBSD;
-        }
-      }
-      else
-      {
-        ret = ectn_UNKNOWN;
-      }
+      ret = ectn_GHOSTBSD;
+    }
+    else if (QFile::exists("/etc/rc.conf"))
+    {
+      ret = ectn_FREEBSD;
+    }
+    else
+    {
+      ret = ectn_UNKNOWN;
     }
 
     firstTime = false;
