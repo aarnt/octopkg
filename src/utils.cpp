@@ -36,6 +36,7 @@
 #include <QProcess>
 #include <QTimer>
 #include <QRegularExpression>
+#include <QDebug>
 
 /*
  * The needed constructor
@@ -258,7 +259,6 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
   foundItems = sim->findItems(Package::parseSearchString(name), Qt::MatchRegExp|Qt::MatchRecursive);
   foreach(QStandardItem *item, foundItems)
   {
-    //if (item->accessibleDescription().contains("directory")) continue;
     res->append(item->index());
   }
 
@@ -272,6 +272,7 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
  */
 QString utils::retrieveDistroNews(bool searchForLatestNews)
 {
+  const QString ctn_DRAGONFLYBSD_RSS_URL = "https://www.dragonflydigest.com/feed";
   const QString ctn_FREEBSD_RSS_URL = "http://www.freebsd.org/news/rss.xml";
   const QString ctn_GHOSTBSD_RSS_URL = "http://www.ghostbsd.org/rss.xml";
   const QString ctn_PCBSD_RSS_URL = "http://blog.pcbsd.org/feed/";
@@ -299,6 +300,10 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     {
       curlCommand = curlCommand.arg(ctn_FREEBSD_RSS_URL).arg(tmpRssPath);
     }
+    else if (bsd == ectn_DRAGONFLYBSD)
+    {
+      curlCommand = curlCommand.arg(ctn_DRAGONFLYBSD_RSS_URL).arg(tmpRssPath);
+    }
     else if (bsd == ectn_GHOSTBSD)
     {
       curlCommand = curlCommand.arg(ctn_GHOSTBSD_RSS_URL).arg(tmpRssPath);
@@ -316,7 +321,6 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
       if (!fileRss.exists())
       {
         fileTmpRss.rename(tmpRssPath, rssPath);
-
         if (!fileRss.open(QIODevice::ReadOnly | QIODevice::Text)) res = "";
         QTextStream in2(&fileRss);
         contentsRss = in2.readAll();
@@ -394,6 +398,10 @@ QString utils::parseDistroNews()
   if (bsd == ectn_FREEBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getFreeBSDNews() + "</h2></p><ul>";
+  }
+  else if (bsd == ectn_DRAGONFLYBSD)
+  {
+    html = "<p align=\"center\"><h2>" + StrConstants::getDragonFlyBSDNews() + "</h2></p><ul>";
   }
   else if (bsd == ectn_GHOSTBSD)
   {

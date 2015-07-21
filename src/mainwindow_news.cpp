@@ -56,10 +56,20 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
       clearTabOutput();
     }
 
-    if (gotoNewsTab && bsd == ectn_FREEBSD)
+    if (gotoNewsTab && bsd == ectn_DRAGONFLYBSD)
+    {
+      writeToTabOutputExt("<b>" +
+                          StrConstants::getSearchingForBSDNews().arg("DragonFlyBSD") + "</b>");
+    }
+    else if (gotoNewsTab && bsd == ectn_FREEBSD)
     {
       writeToTabOutputExt("<b>" +
                           StrConstants::getSearchingForBSDNews().arg("FreeBSD") + "</b>");
+    }
+    else if (gotoNewsTab && bsd == ectn_GHOSTBSD)
+    {
+      writeToTabOutputExt("<b>" +
+                          StrConstants::getSearchingForBSDNews().arg("GhostBSD") + "</b>");
     }
     else if (gotoNewsTab && bsd == ectn_PCBSD)
     {

@@ -267,7 +267,8 @@ QString WMHelper::getKDESUCommand(){
 
   if (UnixCommand::getBSDFlavour() == ectn_PCBSD ||
       UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
-      UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
+      UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
+      UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
     result = "/usr/local/lib/kde4/libexec/kdesu";
   else
     result = ctn_KDESU;
@@ -325,7 +326,8 @@ QString WMHelper::getSUCommand(){
   else if (isKDERunning()){        
     if (UnixCommand::getBSDFlavour() == ectn_PCBSD ||
         UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
-        UnixCommand::getBSDFlavour() == ectn_GHOSTBSD){
+        UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
+        UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD){
       QFile kdesu("/usr/local/lib/kde4/libexec/kdesu");
       if (kdesu.exists()){
         result = getKDESUCommand();

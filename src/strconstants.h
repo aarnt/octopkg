@@ -104,6 +104,10 @@ public:
     return QObject::tr("Netrunner Rolling news");
   }
 
+  static QString getDragonFlyBSDNews(){
+    return QObject::tr("DragonFlyBSD news");
+  }
+
   static QString getFreeBSDNews(){
     return QObject::tr("FreeBSD news");
   }

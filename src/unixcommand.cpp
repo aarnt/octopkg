@@ -579,7 +579,7 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
 
   if (getBSDFlavour() == ectn_PCBSD)
     proc.start("/usr/local/bin/bash -c " + sParam);
-  else if (getBSDFlavour() == ectn_FREEBSD || getBSDFlavour() == ectn_GHOSTBSD)
+  else /*if (getBSDFlavour() == ectn_FREEBSD || getBSDFlavour() == ectn_GHOSTBSD)*/
     proc.start("/bin/sh -c " + sParam);
 
   proc.waitForFinished();
@@ -1021,13 +1021,25 @@ BSDFlavour UnixCommand::getBSDFlavour()
     {
       ret = ectn_GHOSTBSD;
     }
-    else if (QFile::exists("/etc/rc.conf"))
-    {
-      ret = ectn_FREEBSD;
-    }
     else
     {
-      ret = ectn_UNKNOWN;
+      QProcess p;
+      p.start("uname");
+      p.waitForFinished();
+      QString out = p.readAllStandardOutput();
+
+      if (out.contains("FreeBSD"))
+      {
+        ret = ectn_FREEBSD;
+      }
+      else if (out.contains("DragonFly"))
+      {
+        ret = ectn_DRAGONFLYBSD;
+      }
+      else
+      {
+        ret = ectn_UNKNOWN;
+      }
     }
 
     firstTime = false;

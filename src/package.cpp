@@ -1153,7 +1153,7 @@ bool Package::hasPkgNGDatabase()
       QFile f(ctn_PKGNG_PCBSD_CORE_DB_FILE);
       answer = f.exists();
     }
-    else if (UnixCommand::getBSDFlavour() == ectn_FREEBSD || UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
+    else /*if (UnixCommand::getBSDFlavour() == ectn_FREEBSD || UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)*/
     {
       QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
       answer = f.exists();
