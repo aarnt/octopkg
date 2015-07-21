@@ -165,7 +165,6 @@ void MainWindow::insertInstallPackageIntoTransaction(const QString &pkgName)
 {
   QTreeView *tvTransaction =
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
-
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
   QStandardItem * siPackageToInstall = new QStandardItem(IconHelper::getIconInstallItem(), pkgName);
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
@@ -265,31 +264,29 @@ void MainWindow::insertIntoRemovePackage()
   //bool checkDependencies=false;
   //QStringList dependencies;
 
-  //if (!isPkgSearchSelected())
-  {
-    ensureTabVisible(ctn_TABINDEX_TRANSACTION);
-    QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
+  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
-    //First, let's see if we are dealing with a package group
-    if(!isAllCategoriesSelected())
+  //First, let's see if we are dealing with a package group
+  if(!isAllCategoriesSelected())
+  {
+    //If we are trying to remove all the group's packages, why not remove the entire group?
+    if(selectedRows.count() == m_packageModel->getPackageCount())
     {
-      //If we are trying to remove all the group's packages, why not remove the entire group?
-      if(selectedRows.count() == m_packageModel->getPackageCount())
-      {
-        insertRemovePackageIntoTransaction(getSelectedCategory());
-        return;
-      }
+      insertRemovePackageIntoTransaction(getSelectedCategory());
+      return;
+    }
+  }
+
+  foreach(QModelIndex item, selectedRows)
+  {
+    const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+    if (package == NULL) {
+      assert(false);
+      continue;
     }
 
-    foreach(QModelIndex item, selectedRows)
-    {
-      const PackageRepository::PackageData*const package = m_packageModel->getData(item);
-      if (package == NULL) {
-        assert(false);
-        continue;
-      }
-
-      /*if(checkDependencies)
+    /*if(checkDependencies)
       {
         QStringList *targets = Package::getTargetRemovalList(package->name);
 
@@ -316,8 +313,7 @@ void MainWindow::insertIntoRemovePackage()
         }
       }*/
 
-      insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
-    }
+    insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
   }
 }
 
@@ -1324,7 +1320,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
 
-    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
+    m_actionSwitchToLocalFilter->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
@@ -1335,7 +1331,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
 
-    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(true);
+    m_actionSwitchToLocalFilter->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
 
     ui->actionSyncPackages->setEnabled(true);
@@ -1344,7 +1340,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   }
   else if (value == false && state == false)
   {
-    //if(m_hasMirrorCheck) m_actionMirrorCheck->setEnabled(false);
+    m_actionSwitchToLocalFilter->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(false);
 
     ui->actionSyncPackages->setEnabled(false);
@@ -1356,17 +1352,11 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionRemoveTransactionItem->setEnabled(value);
   ui->actionRemoveTransactionItems->setEnabled(value);
   ui->actionRemove->setEnabled(value);
-
   ui->actionPacmanLogViewer->setEnabled(value);
   ui->actionCacheCleaner->setEnabled(value);
   ui->actionRepositoryEditor->setEnabled(value);  
   m_actionSysInfo->setEnabled(value);
-
-  m_actionSwitchToRemoteSearch->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
-
-  ui->actionGetNews->setEnabled(value);
-  ui->actionInstallLocalPackage->setEnabled(value);
   ui->actionOpenRootTerminal->setEnabled(value);
   ui->actionHelpUsage->setEnabled(value);
   ui->actionHelpAbout->setEnabled(value);
@@ -1522,7 +1512,6 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     doPreInstall();
     return;
   }
-
   else if (m_commandQueued == ectn_NONE)
   {
     if(exitCode == 0 || exitCode == 255) //mate-terminal is returning code 255 sometimes...
@@ -1538,9 +1527,10 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
+          m_actionSwitchToLocalFilter->setChecked(true);
           refreshDistroNews(true, false);
-          metaBuildPackageList();
-          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+          m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
+          remoteSearchClicked();
         }
         else
         {
@@ -1558,8 +1548,9 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
-          metaBuildPackageList();
-          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+          m_actionSwitchToLocalFilter->setChecked(true);
+          m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
+          remoteSearchClicked();
         }
         else
         {
@@ -1589,19 +1580,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     }
   }
 
-  if ((exitCode != 0) && (textInTabOutput("conflict") || textInTabOutput("error")))
-  {
-    int res = QMessageBox::question(this, StrConstants::getThereHasBeenATransactionError(),
-                                    StrConstants::getConfirmExecuteTransactionInTerminal(),
-                                    QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
-
-    if (res == QMessageBox::Yes)
-    {
-      m_unixCommand->runCommandInTerminal(m_lastCommandList);         
-      return;
-    }
-  }
-  else if (exitCode != 0)
+  if (exitCode != 0)
   {
     resetTransaction();
   }
@@ -1618,7 +1597,6 @@ void MainWindow::resetTransaction()
   m_unixCommand->removeTemporaryFile();
   delete m_unixCommand;
   m_commandExecuting = ectn_NONE;
-
   disconnect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
 }
 
@@ -1994,8 +1972,6 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
         msg.indexOf("Enter a selection", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("Proceed with", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("%") != -1 ||
-        //msg.indexOf("[") != -1 ||
-        //msg.indexOf("]") != -1 ||
         msg.indexOf("---") != -1)
     {
       return;
