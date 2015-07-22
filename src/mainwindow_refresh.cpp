@@ -730,7 +730,6 @@ void MainWindow::buildPackageList()
     if(m_debugInfo)
       std::cout << "Time elapsed refreshing outdated pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
 
-    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     m_numberOfOutdatedPackages = m_outdatedStringList->count();
 
     delete m_unrequiredPackageList;
@@ -740,9 +739,6 @@ void MainWindow::buildPackageList()
 
     if(m_debugInfo)
       std::cout << "Time elapsed obtaining unrequired pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
-
-    //qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    //emit buildPackageListDone();
   }
 
   // Fetch package list
@@ -771,9 +767,7 @@ void MainWindow::buildPackageList()
   counter = list->count();
   m_progressWidget->setValue(counter);
   m_progressWidget->close();
-
   m_packageRepo.setData(list, *m_unrequiredPackageList);
-  //if (m_refreshPackageLists) qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
   if(m_debugInfo)
     std::cout << "Time elapsed setting the list to the treeview: " << m_time->elapsed() << " mili seconds." << std::endl;
@@ -804,8 +798,6 @@ void MainWindow::buildPackageList()
   if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
 
   reapplyPackageFilter();
-
-  //if (m_refreshPackageLists) qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
   QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
   ui->tvPackages->setCurrentIndex(maux);

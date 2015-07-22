@@ -68,7 +68,6 @@ QString Package::makeURLClickable( const QString &s )
 
   rx.setCaseSensitivity( Qt::CaseInsensitive );
 	rx1.setCaseSensitivity( Qt::CaseInsensitive );
-
 	int search = 0;
 	int ini = 0;
 
@@ -251,18 +250,27 @@ QSet<QString>* Package::getUnrequiredPackageList()
 QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
   QString outPkgList = UnixCommand::getOutdatedPackageList();
-
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QMap<QString, OutdatedPackageInfo>* res = new QMap<QString, OutdatedPackageInfo>();
+  bool pkgsToUpgrade = false;
 
   if (packageTuples.contains("Installed packages to be UPGRADED:", Qt::CaseInsensitive))
   {
     foreach(QString packageTuple, packageTuples)
     {
       if (packageTuple.contains("packages to be") &&
-          !packageTuple.contains("Installed packages to be UPGRADED:")) break;
+          !packageTuple.contains("Installed packages to be UPGRADED:"))
+      {
+        pkgsToUpgrade = false;
+        continue;
+      }
+      else if (packageTuple.contains("packages to be") &&
+          packageTuple.contains("Installed packages to be UPGRADED:"))
+      {
+        pkgsToUpgrade = true;
+      }
 
-      if (packageTuple.contains("\t"))
+      if (pkgsToUpgrade && packageTuple.contains("\t"))
       {
         packageTuple.remove("\t");
 

@@ -8,6 +8,7 @@
   BugFix: Fix gksu "-- f parameter" execution error.
   BugFix: When trying to install a Ports pkg not available in database, shows error 
 	(thanks to asxbsd).
+  BugFix: List of outdated packages not being retrieved in some cases.
   Let user removes any automatic installed package.
   Remove commands now use -R option.
   Added DragonFlyBSD support.
