@@ -1385,7 +1385,6 @@ void MainWindow::toggleSystemActions(const bool value)
   }
 
   ui->actionInstallLocalPackage->setEnabled(value);
-
   ui->actionGetNews->setEnabled(value);
 
   if (value == true && !state && m_outdatedStringList->count() > 0)
@@ -2021,7 +2020,8 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
          newMsg = "<b><font color=\"#4BC413\">" + newMsg + "</font></b>"; //GREEN
       }
       else if (newMsg.contains(QRegularExpression("warning")) ||
-               (newMsg.contains(QRegularExpression("downgrading"))))
+               newMsg.contains(QRegularExpression("downgrading")) ||
+               newMsg.contains(QRegularExpression("options changed")))
       {
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
