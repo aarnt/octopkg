@@ -1,5 +1,6 @@
 0.3.0
   BugFix in anchor output when pkg list is empty.
+  BugFix: TransactionDialog was size constrained.
 
 0.2.0
   BugFix: anchor navigation fixes.

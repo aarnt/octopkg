@@ -437,8 +437,6 @@ private slots:
   void execToolTip();
   void doPreSystemUpgrade();
 
-  //void gistSysInfo();
-
 public slots:
   void doSystemUpgrade(SystemUpgradeOptions sysUpgradeOption = ectn_NO_OPT);
 
