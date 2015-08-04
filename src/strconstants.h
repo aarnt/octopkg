@@ -31,7 +31,7 @@ public:
   }
 
   static QString getApplicationVersion(){
-    return "0.2.0";
+    return "0.3.0-dev";
   }
 
   static QString getQtVersion(){
@@ -410,7 +410,7 @@ public:
   }
 
   static QString getSystemUpgrade(){
-    return QObject::tr("Starting package upgrade...");
+    return QObject::tr("Installing updates...");
   }
 
   static QString getInstallingPackages(){
