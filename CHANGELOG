@@ -2,6 +2,7 @@
   BugFix in anchor output when pkg list is empty.
   BugFix: TransactionDialog was size constrained.
   Now the size of TransactionDialog is saved between calls.
+  Now tab Files shows progress bar while building pkg list.
 
 0.2.0
   BugFix: anchor navigation fixes.

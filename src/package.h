@@ -161,6 +161,7 @@ class Package{
 
     static QString extractFieldFromInfo(const QString &field, const QString &pkgInfo);
     static double simplePow(int base, int exp);
+    static void navigateThroughDirs(QStringList parts, QStringList& auxList, int ind);
 
 	public:
     static int rpmvercmp(const char *a, const char *b);
@@ -215,7 +216,6 @@ class Package{
     static QString makeURLClickable(const QString &information);
     static QString getBaseName( const QString& pkgName );
     static QString parseSearchString( QString searchStr, bool exactMatch = false );
-
     static bool hasPkgNGDatabase();
     static bool isForbidden(const QString pkgName);
 };

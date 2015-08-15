@@ -1107,35 +1107,12 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
 }
 
 /*
- * Navigate thru directories to build a hierarquic directory list
- */
-void MainWindow::navigateThroughDirs(QStringList parts, QStringList& auxList, int ind)
-{
-  static QString dir="";
-  dir = dir + "/" + parts[ind];
-
-  if (!auxList.contains(dir+"/"))
-  {
-    auxList.append(dir+"/");
-  }
-
-  if (ind < parts.count()-2)
-  {
-    ind++;
-    navigateThroughDirs(parts, auxList, ind);
-  }
-  else
-  {
-    dir="";
-    return;
-  }
-}
-
-/*
  * Re-populates the treeview which contains the file list of selected package (tab TWO)
  */
 void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 {  
+  if (m_progressWidget->isVisible()) return;
+
   if(neverQuit == false &&
      (ui->twProperties->currentIndex() != ctn_TABINDEX_FILES || !isPropertiesTabWidgetVisible()))
   {
@@ -1157,6 +1134,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
       bool filterHasFocus = m_leFilterPackage->hasFocus();
       bool tvPackagesHasFocus = ui->tvPackages->hasFocus();
       closeTabFilesSearchBar();
+
       if (filterHasFocus) m_leFilterPackage->setFocus();
       else if (tvPackagesHasFocus) ui->tvPackages->setFocus();
 
@@ -1220,21 +1198,14 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     el.exec();
     fileList = fwPackageContents.result();
 
-    //Let's change that listing a bit...
-    QStringList auxList;
-    foreach(QString file, fileList)
-    {
-      QStringList parts = file.split("/", QString::SkipEmptyParts);
-      navigateThroughDirs(parts, auxList, 0);
-    }
-
-    fileList = fileList + auxList;
-    fileList.sort();
-
-    if (fileList.count() > 0) CPUIntensiveComputing cic;
 
     QString fullPath;
     bool isSymLinkToDir = false;
+
+    int counter = 0;
+    m_progressWidget->setRange(0, fileList.count());
+    m_progressWidget->setValue(0);
+    m_progressWidget->show();
 
     foreach ( QString file, fileList )
     {
@@ -1341,8 +1312,13 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 
       lastItem = item;
       first = false;
+
+      counter++;
+      m_progressWidget->setValue(counter);
+      qApp->processEvents();
     }
 
+    m_progressWidget->close();
     root = fakeRoot;
     fakeModelPkgFileList->sort(0);
     modelPkgFileList = fakeModelPkgFileList;
