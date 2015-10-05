@@ -435,6 +435,10 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
       pkgDownloadedSize = 0;
       pkgInstalledSize = strToKBytes(parts[3]);
 
+      //If we are using pkgng >= 1.6
+      if (pkgInstalledSize == 0)
+        pkgInstalledSize = strToKBytes2(parts[3]);
+
       for(int c=4; c<parts.count(); c++)
       {
         pkgComment += " " + parts[c];
