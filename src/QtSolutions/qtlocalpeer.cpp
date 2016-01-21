@@ -40,6 +40,7 @@
 
 #include "qtlocalpeer.h"
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDataStream>
 #include <QtCore/QTime>
 #include <QRegularExpression>
 
