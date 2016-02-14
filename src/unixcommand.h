@@ -144,10 +144,10 @@ public:
   void openRootTerminal();
   void runCommandInTerminal(const QStringList& commandList);
   void runCommandInTerminalAsNormalUser(const QStringList& commandList);
+  void terminateCommand();
 
   static void execCommandAsNormalUser(const QString &pCommand);
   static void execCommand(const QString &pCommand);
-
   static QByteArray getCommandOutput(const QString &pCommand);
 
   void executeCommand(const QString &pCommand, Language lang=ectn_LANG_ENGLISH);

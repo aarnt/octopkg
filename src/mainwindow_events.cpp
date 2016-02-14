@@ -210,7 +210,15 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_C && ke->modifiers() == Qt::ControlModifier)
   {
-    copyFullPathToClipboard();
+    QTreeView *tb = ui->twProperties->currentWidget()->findChild<QTreeView*>("tvPkgFileList");
+    if (tb && tb->hasFocus())
+    {
+      copyFullPathToClipboard();
+    }
+    else if (m_commandExecuting != ectn_NONE)
+    {
+      m_unixCommand->terminateCommand();
+    }
   }
   else if(ke->key() == Qt::Key_L && ke->modifiers() == Qt::ControlModifier)
   {

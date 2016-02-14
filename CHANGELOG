@@ -1,6 +1,8 @@
 0.3.0
   BugFix in anchor output when pkg list is empty.
   BugFix: TransactionDialog was size constrained.
+  Added the option to terminate the current transaction being executed, by pressing 
+	"Ctrl+C".
   Now the size of TransactionDialog is saved between calls.
   Now tab Files shows progress bar while building pkg list.
 

@@ -646,6 +646,14 @@ void UnixCommand::execCommand(const QString &pCommand)
 }
 
 /*
+ * Stops the running command
+ */
+void UnixCommand::terminateCommand()
+{
+  m_process->terminate();
+}
+
+/*
  * Runs a command with a QProcess blocking object and returns its output!
  */
 QByteArray UnixCommand::getCommandOutput(const QString &pCommand)
