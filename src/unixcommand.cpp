@@ -120,7 +120,7 @@ QString UnixCommand::discoverBinaryPath(const QString& binary){
 bool UnixCommand::cleanPacmanCache()
 {
   QProcess pacman;
-  QString commandStr = "\"yes | pacman -Scc\"";
+  QString commandStr = "pkg clean -a -y";
 
   QString command = WMHelper::getSUCommand() + " " + commandStr;
   pacman.start(command);

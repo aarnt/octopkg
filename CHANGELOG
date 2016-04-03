@@ -3,6 +3,7 @@
   BugFix: TransactionDialog was size constrained.
   Added the option to terminate the current transaction being executed, by pressing 
 	"Ctrl+C".
+  Added "pkg clean" support (Ctrl+Shift+C).
   Now the size of TransactionDialog is saved between calls.
   Now tab Files shows progress bar while building pkg list.
 
