@@ -273,9 +273,9 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
 QString utils::retrieveDistroNews(bool searchForLatestNews)
 {
   const QString ctn_DRAGONFLYBSD_RSS_URL = "https://www.dragonflydigest.com/feed";
-  const QString ctn_FREEBSD_RSS_URL = "http://www.freebsd.org/news/rss.xml";
+  const QString ctn_FREEBSD_RSS_URL = "https://www.freebsd.org/news/rss.xml";
   const QString ctn_GHOSTBSD_RSS_URL = "http://www.ghostbsd.org/rss.xml";
-  const QString ctn_PCBSD_RSS_URL = "http://blog.pcbsd.org/feed/";
+  const QString ctn_PCBSD_RSS_URL = "https://www.trueos.org/feed/";
 
   BSDFlavour bsd = UnixCommand::getBSDFlavour();
   QString res;

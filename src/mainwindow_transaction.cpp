@@ -1739,7 +1739,10 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
 
     //qDebug() << "percentage is: " << perc;
 
-    QString target;
+    QString target, pName;
+    QRegularExpression regex;
+    QRegularExpressionMatch match;
+
     /*
       Updating pcbsd-major repository catalogue...
       Fetching <>:
@@ -1753,8 +1756,15 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       if (p == -1) return; //Guard!
 
       target = msg.left(p).remove("Fetching").trimmed();
+      pName = target;
+      regex.setPattern("\\[\\d+/\\d+\\]\\s\\s(.*)");
+      match = regex.match(target);
+      if (match.hasMatch())
+      {
+        pName = match.captured(1);
+      }
 
-      if(!textInTabOutput(target))
+      if(!textInTabOutput(pName))
         writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
     }
     else if (msg.contains("Processing"))
@@ -1977,6 +1987,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     }
 
     //If the msg waiting to being print has not yet been printed...
+    //std::cout << "Searching for duplicates: " << msg.toLatin1().data() << std::endl;
     if(textInTabOutput(msg))
     {
       return;
@@ -2054,6 +2065,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     else
       text->insertHtml(newMsg);
 
+    //std::cout << "Printed: " << msg.toLatin1().data() << std::endl;
     text->ensureCursorVisible();
   }
 }
