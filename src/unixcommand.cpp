@@ -701,7 +701,7 @@ bool UnixCommand::isTextFile(const QString& fileName)
 /*
  * Given a filename, checks if it is an ELF relocatable file
  */
-bool UnixCommand::isELFRelocatable(const QString& fileName)
+bool UnixCommand::isLSBRelated(const QString& fileName)
 {
   QProcess *p = new QProcess();
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -718,7 +718,8 @@ bool UnixCommand::isELFRelocatable(const QString& fileName)
   delete p;
   int from = output.indexOf(":", 0)+1;
 
-  return (output.indexOf( "LSB relocatable", from) != -1);
+  return (output.indexOf( "LSB relocatable", from) != -1 ||
+          output.indexOf( "LSB shared object", from) != -1);
 }
 
 /*

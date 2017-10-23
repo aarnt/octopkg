@@ -109,7 +109,7 @@ public:
   static bool hasInternetConnection();
   static bool doInternetPingTest();
   static bool isTextFile( const QString& fileName ); //fileName is Path + Name
-  static bool isELFRelocatable(const QString& fileName);
+  static bool isLSBRelated(const QString& fileName);
 
   static QString getPkgNGVersion();
   static bool hasTheExecutable( const QString& exeName );

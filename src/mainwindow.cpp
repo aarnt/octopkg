@@ -818,7 +818,7 @@ void MainWindow::execContextMenuPkgFileList(QPoint point)
         menu.addAction(ui->actionOpenTerminal);
       }
     }
-    else if (f.exists() && !UnixCommand::isELFRelocatable(selectedPath))
+    else if (f.exists() && !UnixCommand::isLSBRelated(selectedPath))
     {
       menu.addAction(ui->actionOpenFile);
     }
