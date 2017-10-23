@@ -693,7 +693,32 @@ bool UnixCommand::isTextFile(const QString& fileName)
   return (((output.indexOf( "ASCII", from ) != -1) ||
           (output.indexOf( "text", from ) != -1) ||
           (output.indexOf( "empty", from ) != -1)) &&
-          (output.indexOf( "executable", from) == -1));
+          (output.indexOf( "LSB executable", from) == -1) &&
+          (output.indexOf( "LSB relocatable", from) == -1)
+          );
+}
+
+/*
+ * Given a filename, checks if it is an ELF relocatable file
+ */
+bool UnixCommand::isELFRelocatable(const QString& fileName)
+{
+  QProcess *p = new QProcess();
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.insert("LANG", "C");
+  env.insert("LC_MESSAGES", "C");
+  p->setProcessEnvironment(env);
+
+  QStringList s(fileName);
+  p->start( "file", s );
+  p->waitForFinished();
+
+  QByteArray output = p->readAllStandardOutput();
+  p->close();
+  delete p;
+  int from = output.indexOf(":", 0)+1;
+
+  return (output.indexOf( "LSB relocatable", from) != -1);
 }
 
 /*

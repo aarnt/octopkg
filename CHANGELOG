@@ -1,5 +1,6 @@
 0.3.0
-  BugFix in anchor output when pkg list is empty.
+  BugFix: Do not offer to open "LSB relocatable" files at File tab.
+  BugFix: anchor output when pkg list is empty.
   BugFix: TransactionDialog was size constrained.
   Added the option to terminate the current transaction being executed, by pressing 
 	"Ctrl+C".
