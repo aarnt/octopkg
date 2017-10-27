@@ -136,13 +136,13 @@ void MainWindow::remoteSearchClicked()
   {
     disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
     m_actionSwitchToRemoteSearch->setChecked(false);
-    m_actionSwitchToLocalFilter->setChecked(true);
+    m_actionSwitchToLocalSearch->setChecked(true);
     connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
   }
-  else if (!lastPkgButtonClickedWasRemote && m_actionSwitchToLocalFilter->isChecked())
+  else if (!lastPkgButtonClickedWasRemote && m_actionSwitchToLocalSearch->isChecked())
   {
     disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
-    m_actionSwitchToLocalFilter->setChecked(false);
+    m_actionSwitchToLocalSearch->setChecked(false);
     m_actionSwitchToRemoteSearch->setChecked(true);
     connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
   }
@@ -418,7 +418,7 @@ void MainWindow::metaBuildPackageList()
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
     ui->actionSearchByFile->setEnabled(false);
-    disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
+    //disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     clearStatusBar();
 
     m_cic = new CPUIntensiveComputing();
@@ -447,10 +447,8 @@ void MainWindow::metaBuildPackageList()
     ui->actionSearchByFile->setEnabled(true);
     ui->actionSearchByName->setChecked(true);
 
-    //toggleSystemActions(false);
-    disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    //reapplyPackageFilter();
+    //disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
+    //connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     disconnect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
 
     if (m_refreshPackageLists)
@@ -854,6 +852,7 @@ void MainWindow::buildPackageList()
   m_refreshPackageLists = true;  
 
   emit buildPackageListDone();
+  m_leFilterPackage->setFocus();
 }
 
 /*
@@ -1343,6 +1342,15 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
  */
 void MainWindow::reapplyPackageFilter()
 {
+  if (m_actionSwitchToRemoteSearch->isChecked())
+  {
+    if (m_leFilterPackage->text() == "")
+    {
+        m_packageModel->applyFilter("ççç");
+    }
+    return;
+  }
+
   if (!isSearchByFileSelected())
   {
     bool isFilterPackageSelected = m_leFilterPackage->hasFocus();
@@ -1357,7 +1365,7 @@ void MainWindow::reapplyPackageFilter()
     }
     else{
       m_leFilterPackage->initStyleSheet();
-      m_packageModel->applyFilter("");
+      m_packageModel->applyFilter("");     
     }
 
     if (isFilterPackageSelected || numPkgs == 0)

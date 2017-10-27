@@ -294,7 +294,7 @@ void MainWindow::initToolBar()
   ui->mainToolBar->addAction(ui->actionCommit);
   ui->mainToolBar->addAction(ui->actionCancel);
   m_separatorForActionRemoteSearch = ui->mainToolBar->addSeparator();
-  ui->mainToolBar->addAction(m_actionSwitchToLocalFilter);
+  ui->mainToolBar->addAction(m_actionSwitchToLocalSearch);
   ui->mainToolBar->addAction(m_actionSwitchToRemoteSearch);
 
   m_dummyAction = new QAction(this);
@@ -641,11 +641,11 @@ void MainWindow::initActions()
     connect(m_actionMirrorCheck, SIGNAL(triggered()), this, SLOT(doMirrorCheck()));
   }  
 
-  m_actionSwitchToLocalFilter = new QAction(this);
-  m_actionSwitchToLocalFilter->setIcon(IconHelper::getIconHardDrive());
-  m_actionSwitchToLocalFilter->setText(StrConstants::getFilterLocalPackages());
-  m_actionSwitchToLocalFilter->setCheckable(true);
-  m_actionSwitchToLocalFilter->setChecked(true);
+  m_actionSwitchToLocalSearch = new QAction(this);
+  m_actionSwitchToLocalSearch->setIcon(IconHelper::getIconHardDrive());
+  m_actionSwitchToLocalSearch->setText(StrConstants::getFilterLocalPackages());
+  m_actionSwitchToLocalSearch->setCheckable(true);
+  m_actionSwitchToLocalSearch->setChecked(true);
 
   m_actionSwitchToRemoteSearch = new QAction(this);
   m_actionSwitchToRemoteSearch->setIcon(IconHelper::getIconInternet());
@@ -654,7 +654,7 @@ void MainWindow::initActions()
   m_actionSwitchToRemoteSearch->setChecked(false);
 
   m_actionGroupSearch = new QActionGroup(this);
-  m_actionGroupSearch->addAction(m_actionSwitchToLocalFilter);
+  m_actionGroupSearch->addAction(m_actionSwitchToLocalSearch);
   m_actionGroupSearch->addAction(m_actionSwitchToRemoteSearch);
   m_actionGroupSearch->setExclusive(true);
   connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));

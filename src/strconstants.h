@@ -378,7 +378,7 @@ public:
   }
 
   static QString getLineEditTextLocal(){
-    return QObject::tr("Filter installed packages");
+    return QObject::tr("Search for installed packages");
   }
 
   static QString getLineEditTextRemote(){
@@ -486,7 +486,7 @@ public:
   }
 
   static QString getWarning(){
-    return QObject::tr("Warning!!!");
+    return QObject::tr("Warning");
   }
 
   static QString getConfirmation(){
@@ -609,7 +609,7 @@ public:
   }
 
   static QString getFilterLocalPackages(){
-    return QObject::tr("Filter installed packages");
+    return QObject::tr("Search for installed packages");
   }
 
   static QString getSearchForPackages(){
