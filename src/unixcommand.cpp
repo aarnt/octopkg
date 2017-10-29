@@ -122,7 +122,7 @@ bool UnixCommand::cleanPacmanCache()
   QProcess pacman;
   QString commandStr = "pkg clean -a -y";
 
-  QString command = WMHelper::getSUCommand() + " " + commandStr;
+  QString command = WMHelper::getSUCommand() + " \"" + commandStr + "\"";
   pacman.start(command);
   pacman.waitForFinished();
 

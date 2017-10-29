@@ -1,4 +1,5 @@
 0.3.0
+  BugFix: pkg clean cache was not working.
   BugFix: Package list does not flashes at program startup.
   BugFix: Do not offer to open "LSB relocatable" files at File tab.
   BugFix: anchor output when pkg list is empty.
