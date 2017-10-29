@@ -2038,12 +2038,15 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
       else if (newMsg.contains("-") &&
+               (!newMsg.contains(QRegularExpression("->"))) &&
                (!newMsg.contains(QRegularExpression("(is|are) up-to-date"))) &&
                (!newMsg.contains(QRegularExpression("\\s"))))
       {
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
       }
       else if (newMsg.contains(":") &&
+               (!newMsg.contains(QRegularExpression("->"))) &&
+               (!newMsg.contains(QRegularExpression("Number of packages to be"))) &&
                (!newMsg.contains(QRegularExpression("\\):"))) &&
                (!newMsg.contains(QRegularExpression(":$"))))
       {
