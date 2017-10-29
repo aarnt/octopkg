@@ -144,16 +144,16 @@ void MainWindow::initTabHelpUsage()
      tr("Ctrl+Q or 'File/Exit' to exit the application") +
   QString("</li></ul>") +
 
-  /*   tr("Control+shift+key sequences:") +
+     tr("Control+shift+key sequences:") +
   QString("<ul><li>") +
-     tr("Ctrl+Shift+C to clean local packages cache (pacman -Sc)") +
-  QString("</li><li>") +
+     tr("Ctrl+Shift+C to clean local packages cache (pkg clean)") +
+  /*QString("</li><li>") +
      tr("Ctrl+Shift+G to display all package groups") +
   QString("</li><li>") +
      tr("Ctrl+Shift+R to remove Pacman's transaction lock file") +
   QString("</li><li>") +
-     tr("Ctrl+Shift+Y to display %1 group").arg(StrConstants::getForeignRepositoryGroupName()) +
-  QString("</li></ul>") +*/
+     tr("Ctrl+Shift+Y to display %1 group").arg(StrConstants::getForeignRepositoryGroupName()) +*/
+  QString("</li></ul>") +
 
      tr("F+key sequences:") +
   QString("<ul><li>") +
