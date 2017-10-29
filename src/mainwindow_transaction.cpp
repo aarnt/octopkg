@@ -1275,20 +1275,16 @@ void MainWindow::doCleanCache()
 
   if (res == QMessageBox::Yes)
   {
-    qApp->processEvents();
+    m_commandExecuting = ectn_CLEAN_CACHE;
+    m_unixCommand = new UnixCommand(this);
+
+    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
+                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
 
     clearTabOutput();
     writeToTabOutputExt("<b>" + StrConstants::getCleaningPackageCache() + "</b>");
-    qApp->processEvents();
-    bool res = UnixCommand::cleanPacmanCache();
-    qApp->processEvents();
-
-    if (res)
-    {
-      writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedOK() + "</b>");
-    }
-    else
-      writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedWithErrors() + "</b>");
+    QString command = "pkg clean -a -y";
+    m_unixCommand->executeCommand(command);
   }
 }
 
