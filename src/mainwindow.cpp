@@ -121,17 +121,11 @@ void MainWindow::show()
     loadPanelSettings();
     initStatusBar();
     initToolButtonPacman();
-    //initToolButtonAUR();
     initAppIcon();
     initMenuBar();
     initToolBar();
     initTabWidgetPropertiesIndex();
     refreshDistroNews(false);
-
-    if (Package::hasPkgNGDatabase())
-    {
-      refreshGroupsWidget();
-    }
 
     QMainWindow::show();
 

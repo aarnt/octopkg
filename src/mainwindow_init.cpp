@@ -476,7 +476,7 @@ void MainWindow::initPackageTreeView()
   ui->tvPackages->header()->setSectionsMovable(false);
   ui->tvPackages->header()->setSectionResizeMode(QHeaderView::Interactive);
   ui->tvPackages->header()->setDefaultAlignment( Qt::AlignLeft );
-  resizePackageView();
+  resizePackageTreeView();
 
   connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(tvPackagesSelectionChanged(QItemSelection,QItemSelection)));
@@ -489,7 +489,20 @@ void MainWindow::initPackageTreeView()
   connect(ui->tvPackages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClickPackageList()));
 }
 
-void MainWindow::resizePackageView()
+void MainWindow::removePackageTreeViewConnections()
+{
+  disconnect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+          this, SLOT(tvPackagesSelectionChanged(QItemSelection,QItemSelection)));
+  disconnect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(changedTabIndex()));
+  disconnect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(changedTabIndex()));
+  disconnect(ui->tvPackages->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this,
+          SLOT(headerViewPackageListSortIndicatorClicked(int,Qt::SortOrder)));
+  disconnect(ui->tvPackages, SIGNAL(customContextMenuRequested(QPoint)), this,
+          SLOT(execContextMenuPackages(QPoint)));
+  disconnect(ui->tvPackages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClickPackageList()));
+}
+
+void MainWindow::resizePackageTreeView()
 {
   ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_ICON_COLUMN,
                                  SettingsManager::getPackageIconColumnWidth());

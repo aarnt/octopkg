@@ -132,6 +132,8 @@ void MainWindow::remoteSearchClicked()
 
   static bool lastPkgButtonClickedWasRemote = false;
 
+  invalidateTabs();
+
   if (lastPkgButtonClickedWasRemote && m_actionSwitchToRemoteSearch->isChecked())
   {
     disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
@@ -601,6 +603,12 @@ void MainWindow::buildRemotePackageList()
   m_packageModel->applyFilter(PackageModel::ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN);
   m_packageModel->applyFilter(ectn_ALL_PKGS, "", "NONE");
 
+  if (ui->tvPackages->model() != m_packageModel.get())
+  {
+    ui->tvPackages->setModel(m_packageModel.get());
+    initPackageTreeView();
+  }
+
   if (list->count() > 0)
   {
     QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
@@ -709,6 +717,13 @@ void MainWindow::showPackagesWithNoDescription()
 void MainWindow::buildPackageList()
 {
   CPUIntensiveComputing cic;
+  static QStandardItemModel emptyModel;
+  if (!m_initializationCompleted)
+  {
+    ui->tvPackages->setModel(&emptyModel);
+    removePackageTreeViewConnections();
+  }
+
   static bool firstTime = true;
 
   if(m_refreshPackageLists) //If it's not the starting of the app...
@@ -1347,6 +1362,7 @@ void MainWindow::reapplyPackageFilter()
     if (m_leFilterPackage->text() == "")
     {
         m_packageModel->applyFilter("ççç");
+        refreshStatusBar();
     }
     return;
   }
