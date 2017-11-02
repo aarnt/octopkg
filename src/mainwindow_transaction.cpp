@@ -1275,6 +1275,7 @@ void MainWindow::doCleanCache()
 
   if (res == QMessageBox::Yes)
   {
+    disableTransactionActions();
     m_commandExecuting = ectn_CLEAN_CACHE;
     m_unixCommand = new UnixCommand(this);
 
@@ -1501,6 +1502,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
 
   if (m_commandExecuting == ectn_CLEAN_CACHE)
   {
+    enableTransactionActions();
     m_unixCommand->removeTemporaryFile();
     delete m_unixCommand;
     m_commandExecuting = ectn_NONE;
