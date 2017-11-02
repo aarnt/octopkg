@@ -1499,6 +1499,14 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
                      StrConstants::getCommandFinishedWithErrors() + "</b><br>");
   }
 
+  if (m_commandExecuting == ectn_CLEAN_CACHE)
+  {
+    m_unixCommand->removeTemporaryFile();
+    delete m_unixCommand;
+    m_commandExecuting = ectn_NONE;
+    return;
+  }
+
   if(m_commandQueued == ectn_INSTALL)
   {
     m_commandQueued = ectn_NONE;
