@@ -1201,7 +1201,25 @@ bool Package::hasPkgNGDatabase()
       QFile f(ctn_PKGNG_PCBSD_CORE_DB_FILE);
       answer = f.exists();
     }
-    else /*if (UnixCommand::getBSDFlavour() == ectn_FREEBSD || UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)*/
+    //If we're running inside a GhostBSD OS, let's check which repo file we get
+    else if (UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
+    {
+      QFile f(ctn_PKGNG_GHOSTBSD_CORE_DB_FILE);
+      answer = f.exists();
+
+      //Well, maybe it's an old GhostBSD release...
+      if (!answer)
+      {
+        QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
+        answer = f.exists();
+      }
+    }
+    else if (UnixCommand::getBSDFlavour() == ectn_TRUEOS)
+    {
+      QFile f(ctn_PKGNG_TRUEOS_CORE_DB_FILE);
+      answer = f.exists();
+    }
+    else
     {
       QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
       answer = f.exists();

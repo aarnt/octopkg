@@ -1211,8 +1211,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     //Let's wait before we get the pkg file list from the other thread...
     el.exec();
     fileList = fwPackageContents.result();
-
-
     QString fullPath;
     bool isSymLinkToDir = false;
 
@@ -1329,7 +1327,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 
       counter++;
       m_progressWidget->setValue(counter);
-      qApp->processEvents();
+      //qApp->processEvents();
     }
 
     m_progressWidget->close();

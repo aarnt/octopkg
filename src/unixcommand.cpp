@@ -339,8 +339,10 @@ QByteArray UnixCommand::getAURPackageVersionInformation()
 QByteArray UnixCommand::getPackageContentsUsingPacman(const QString& pkgName)
 {
   QByteArray res = performQuery("query \"%Fp\" " + pkgName);
-  //qDebug() << res;
-  return res;
+
+  //if the pkg is more than a MEGABYTE big, let's abort it!
+  if (res.size() > 1048576) return "";
+  else return res;
 }
 
 /*
@@ -1062,7 +1064,11 @@ BSDFlavour UnixCommand::getBSDFlavour()
       p.waitForFinished();
       QString out = p.readAllStandardOutput();
 
-      if (out.contains("FreeBSD"))
+      if (out.contains("(trueos-"))
+      {
+        ret = ectn_TRUEOS;
+      }
+      else if (out.contains("FreeBSD"))
       {
         ret = ectn_FREEBSD;
       }
