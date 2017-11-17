@@ -37,7 +37,7 @@ enum CommandExecuting { ectn_NONE, ectn_CLEAN_CACHE, ectn_MIRROR_CHECK,
                         ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
                         ectn_RUN_IN_TERMINAL, ectn_LOCAL_PKG_REFRESH };
 
-enum BSDFlavour { ectn_DRAGONFLYBSD, ectn_FREEBSD, ectn_GHOSTBSD, ectn_PCBSD, ectn_UNKNOWN };
+enum BSDFlavour { ectn_DRAGONFLYBSD, ectn_FREEBSD, ectn_GHOSTBSD, ectn_PCBSD, ectn_TRUEOS, ectn_UNKNOWN };
 
 enum Language { ectn_LANG_ENGLISH, ectn_LANG_USER_DEFINED };
 

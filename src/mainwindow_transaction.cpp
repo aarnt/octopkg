@@ -2022,6 +2022,12 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       {
         newMsg = "<b><font color=\"#E55451\">" + newMsg + "&nbsp;</font></b>"; //RED
       }
+      else if (newMsg.contains(QRegularExpression("warning")) ||
+               newMsg.contains(QRegularExpression("downgrading")) ||
+               newMsg.contains(QRegularExpression("options changed")))
+      {
+        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
+      }
       else if(newMsg.contains(QRegularExpression("REINSTALLED")) ||
               newMsg.contains(QRegularExpression("INSTALLED")) ||
               newMsg.contains(QRegularExpression("UPGRADED")) ||
@@ -2036,12 +2042,6 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
               newMsg.contains(QRegularExpression("[Ll]ooking")))
       {
          newMsg = "<b><font color=\"#4BC413\">" + newMsg + "</font></b>"; //GREEN
-      }
-      else if (newMsg.contains(QRegularExpression("warning")) ||
-               newMsg.contains(QRegularExpression("downgrading")) ||
-               newMsg.contains(QRegularExpression("options changed")))
-      {
-        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
       else if (newMsg.contains("-") &&
                (!newMsg.contains(QRegularExpression("->"))) &&
