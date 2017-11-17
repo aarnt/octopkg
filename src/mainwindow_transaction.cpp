@@ -1350,10 +1350,10 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionRemoveTransactionItems->setEnabled(value);
   ui->actionRemove->setEnabled(value);
   ui->actionPacmanLogViewer->setEnabled(value);
-  ui->actionCacheCleaner->setEnabled(value);
   ui->actionRepositoryEditor->setEnabled(value);  
   m_actionSysInfo->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
+  ui->actionCleanPackagesCache->setEnabled(value);
   ui->actionOpenRootTerminal->setEnabled(value);
   ui->actionHelpUsage->setEnabled(value);
   ui->actionHelpAbout->setEnabled(value);
@@ -1383,6 +1383,7 @@ void MainWindow::toggleSystemActions(const bool value)
 
   ui->actionInstallLocalPackage->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
+  ui->actionCleanPackagesCache->setEnabled(value);
 
   if (value == true && !state && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);

@@ -136,7 +136,7 @@
      <x>0</x>
      <y>0</y>
      <width>552</width>
-     <height>19</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="contextMenuPolicy">
@@ -175,6 +175,7 @@
     <addaction name="actionSystemUpgrade"/>
     <addaction name="separator"/>
     <addaction name="actionInstallLocalPackage"/>
+    <addaction name="actionCleanPackagesCache"/>
     <addaction name="actionOpenRootTerminal"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -297,7 +298,7 @@
      <normaloff>:/resources/images/fast_forward.png</normaloff>:/resources/images/fast_forward.png</iconset>
    </property>
    <property name="text">
-    <string>Install updates</string>
+    <string>&amp;Install updates</string>
    </property>
    <property name="toolTip">
     <string>Install updates</string>
@@ -544,6 +545,15 @@
    </property>
    <property name="text">
     <string>By &amp;file</string>
+   </property>
+  </action>
+  <action name="actionCleanPackagesCache">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/resources/images/cachecleaner.png</normaloff>:/resources/images/cachecleaner.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Clean packages' cache</string>
    </property>
   </action>
  </widget>
