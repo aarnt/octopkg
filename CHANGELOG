@@ -8,8 +8,8 @@
   Abort show file content when file list is greater than 1MB of text.
   Changed F12 key behaviour to F11.
   Added the option to terminate the current transaction being executed, by pressing 
-	"Ctrl+C".
-  Added "pkg clean" support (Ctrl+Shift+C).
+	"Ctrl+Z".
+  Added "pkg clean" support (Ctrl+Shift+C and menu item).
   Now the size of TransactionDialog is saved between calls.
   Now tab Files shows progress bar while building pkg list.
 

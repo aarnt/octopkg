@@ -215,7 +215,10 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     {
       copyFullPathToClipboard();
     }
-    else if (m_commandExecuting != ectn_NONE)
+  }
+  else if(ke->key() == Qt::Key_Z && ke->modifiers() == Qt::ControlModifier)
+  {
+    if (m_commandExecuting != ectn_NONE)
     {
       m_unixCommand->terminateCommand();
     }

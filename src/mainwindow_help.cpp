@@ -146,7 +146,7 @@ void MainWindow::initTabHelpUsage()
 
      tr("Control+shift+key sequences:") +
   QString("<ul><li>") +
-     tr("Ctrl+Shift+C to clean local packages cache (pkg clean)") +
+     tr("Ctrl+Shift+C to clean local packages' cache (pkg clean)") +
   /*QString("</li><li>") +
      tr("Ctrl+Shift+G to display all package groups") +
   QString("</li><li>") +
