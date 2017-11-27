@@ -988,13 +988,9 @@ void MainWindow::refreshStatusBar()
         m_lblSelCounter->setVisible(false);
         m_lblTotalCounters->setVisible(false);
       }
+    }
 
-      text = "";
-    }
-    else
-    {
-      text = StrConstants::getNumberInstalledPackages(0);
-    }
+    text = StrConstants::getNumberInstalledPackages(0);
   }
 
   m_lblTotalCounters->setText(text);
