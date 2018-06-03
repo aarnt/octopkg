@@ -269,7 +269,19 @@ QString WMHelper::getKDESUCommand(){
       UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
       UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
       UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
-    result = "/usr/local/lib/kde4/libexec/kdesu";
+  {
+    QFile f ("/usr/local/lib/kde4/libexec/kdesu");
+    if (f.exists())
+      result = "/usr/local/lib/kde4/libexec/kdesu";
+    else
+    {
+      f.setFileName("/usr/local/lib/libexec/kf5/kdesu");
+      if (f.exists())
+        result = "/usr/local/lib/libexec/kf5/kdesu";
+      else
+        result = "";
+    }
+  }
   else
     result = ctn_KDESU;
 
@@ -328,12 +340,10 @@ QString WMHelper::getSUCommand(){
         UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
         UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
         UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD){
-      QFile kdesu("/usr/local/lib/kde4/libexec/kdesu");
-      if (kdesu.exists()){
         result = getKDESUCommand();
-      }
-      else if (UnixCommand::hasTheExecutable(ctn_QSUDO)){
-        result = getQSUDOCommand() + " ";
+
+        if (result.isEmpty() && UnixCommand::hasTheExecutable(ctn_QSUDO)){
+          result = getQSUDOCommand() + " ";
       }
     }
   }

@@ -5,6 +5,7 @@
   BugFix: Do not offer to open "LSB relocatable" files at File tab.
   BugFix: anchor output when pkg list is empty.
   BugFix: TransactionDialog was size constrained.
+  Added plasma5 support.
   Abort show file content when file list is greater than 1MB of text.
   Changed F12 key behaviour to F11.
   Added the option to terminate the current transaction being executed, by pressing 
