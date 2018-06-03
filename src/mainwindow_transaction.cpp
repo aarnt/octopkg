@@ -1823,6 +1823,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("Fontconfig warning.+"));
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
+    msg.remove(QRegularExpression("QXcbConnection: XCB error.+"));
 
     //Gksu buggy strings
     msg.remove(QRegularExpression("couldn't lock.+"));
