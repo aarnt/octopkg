@@ -24,6 +24,7 @@
 
 #include <QMessageBox>
 #include <QPushButton>
+#include <QRegularExpression>
 #include <QDialog>
 #include <QCloseEvent>
 
