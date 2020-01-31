@@ -149,7 +149,7 @@ void MainWindow::remoteSearchClicked()
     connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
   }
 
-  m_leFilterPackage->clear();
+  //m_leFilterPackage->clear();
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {

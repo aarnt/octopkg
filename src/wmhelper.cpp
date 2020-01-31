@@ -330,7 +330,7 @@ QString WMHelper::getGKSUCommand(){
  * The generic SU get method. It retrieves the SU you have installed in your system!
  */
 QString WMHelper::getSUCommand(){
-  QString result(ctn_NO_SU_COMMAND);
+  /*QString result(ctn_NO_SU_COMMAND);
 
   if (isXFCERunning() && (UnixCommand::hasTheExecutable(ctn_GKSU_2))){
     result = getGKSUCommand();
@@ -358,9 +358,9 @@ QString WMHelper::getSUCommand(){
   }
   else if (UnixCommand::hasTheExecutable(ctn_TDESU)){
     result = getTDESUCommand();
-  }
+  }*/
 
-  return result;
+  return "/usr/lib/octopkg/octopkg-sudo -d ";
 }
 
 /*

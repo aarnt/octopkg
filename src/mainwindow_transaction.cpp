@@ -131,7 +131,7 @@ void MainWindow::insertRemovePackageIntoTransaction(const QString &pkgName)
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
-  QStandardItem * siPackageToRemove = new QStandardItem(IconHelper::getIconRemoveItem(), pkgName);
+  QStandardItem * siPackageToRemove = new QStandardItem(/*IconHelper::getIconRemoveItem(),*/ pkgName);
   QStandardItemModel *sim = qobject_cast<QStandardItemModel *>(siRemoveParent->model());
   QList<QStandardItem *> foundItems = sim->findItems(pkgName, Qt::MatchRecursive | Qt::MatchExactly);
 
@@ -145,7 +145,8 @@ void MainWindow::insertRemovePackageIntoTransaction(const QString &pkgName)
     QString pkg = pkgName.mid(slash+1);
     QList<QStandardItem *> aux = sim->findItems(pkg, Qt::MatchRecursive | Qt::MatchExactly);
 
-    if (aux.count() == 0) siRemoveParent->appendRow(siPackageToRemove);
+    if (aux.count() > 0) siInstallParent->removeRow(aux.at(0)->row());
+    siRemoveParent->appendRow(siPackageToRemove);
   }
   else if (foundItems.size() == 1 && foundItems.at(0)->parent() == siInstallParent)
   {
@@ -166,7 +167,7 @@ void MainWindow::insertInstallPackageIntoTransaction(const QString &pkgName)
   QTreeView *tvTransaction =
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
-  QStandardItem * siPackageToInstall = new QStandardItem(IconHelper::getIconInstallItem(), pkgName);
+  QStandardItem * siPackageToInstall = new QStandardItem(/*IconHelper::getIconInstallItem(),*/ pkgName);
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
   QStandardItemModel *sim = qobject_cast<QStandardItemModel *>(siInstallParent->model());
   QList<QStandardItem *> foundItems = sim->findItems(pkgName, Qt::MatchRecursive | Qt::MatchExactly);
@@ -634,11 +635,11 @@ void MainWindow::onPressDelete()
 bool MainWindow::isSUAvailable()
 {
   //If there are no means to run the actions, we must warn!
-  if (UnixCommand::isRootRunning() && WMHelper::isKDERunning())
+  /*if (UnixCommand::isRootRunning() && WMHelper::isKDERunning())
   {
     return true;
-  }
-  else if (WMHelper::getSUCommand() == ctn_NO_SU_COMMAND){
+  }*/
+  if (WMHelper::getSUCommand() == ctn_NO_SU_COMMAND){
     QMessageBox::critical( 0, StrConstants::getApplicationName(),
                            StrConstants::getErrorNoSuCommand() +
                            "\n" + StrConstants::getYoullNeedSuFrontend());

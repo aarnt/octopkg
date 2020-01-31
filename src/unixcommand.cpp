@@ -784,7 +784,8 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
     }
     else
     {
-      command = WMHelper::getSUCommand() + "\"" + pCommand + "\"";
+      //command = WMHelper::getSUCommand() + "\"" + pCommand + "\"";
+      command = WMHelper::getSUCommand() + pCommand;
     }
   }
 

@@ -9,6 +9,7 @@
         <file>resources/styles/vline.png</file>
         <file>resources/images/drive-harddisk.png</file>
         <file>resources/images/applications-internet.png</file>
+        <file>resources/images/cloud.png</file>
         <file>resources/images/octopi_transparent.png</file>
         <file>resources/images/octopi_red.png</file>
         <file>resources/images/octopi_yellow.png</file>
@@ -48,6 +49,5 @@
         <file>resources/images/show_groups.png</file>
         <file>resources/images/mirror-check.png</file>
         <file>resources/images/cachecleaner.png</file>
-        <file>resources/qml/chooseterminal.qml</file>
     </qresource>
 </RCC>

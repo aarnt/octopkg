@@ -461,7 +461,7 @@ void MainWindow::initLineEditFilterPackages(){
  */
 void MainWindow::initPackageTreeView()
 {
-  ui->tvPackages->setAlternatingRowColors(true);
+  //ui->tvPackages->setAlternatingRowColors(true);
   ui->tvPackages->setItemDelegate(new TreeViewPackagesItemDelegate(ui->tvPackages));
   ui->tvPackages->setContextMenuPolicy(Qt::CustomContextMenu);
   ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -738,8 +738,8 @@ void MainWindow::initActions()
   ui->actionCancel->setIcon(IconHelper::getIconRollback());
   ui->actionExit->setIcon(IconHelper::getIconExit());
   ui->actionSystemUpgrade->setIcon(IconHelper::getIconSystemUpgrade());
-  ui->actionInstall->setIcon(IconHelper::getIconInstallItem());
-  ui->actionRemove->setIcon(IconHelper::getIconRemoveItem());
+  ui->actionInstall->setIcon(IconHelper::getIconToInstall()); //getIconInstallItem());
+  ui->actionRemove->setIcon(IconHelper::getIconToRemove()); //getIconRemoveItem());
   ui->actionGetNews->setIcon(IconHelper::getIconGetNews());
   ui->actionCollapseItem->setIcon(IconHelper::getIconCollapse());
   ui->actionExpandItem->setIcon(IconHelper::getIconExpand());

@@ -74,6 +74,9 @@
         <property name="indentation">
          <number>20</number>
         </property>
+        <property name="uniformRowHeights">
+         <bool>true</bool>
+        </property>
        </widget>
        <widget class="QTreeWidget" name="twGroups">
         <property name="maximumSize">

@@ -226,7 +226,10 @@ public:
   }
 
   static QIcon getIconInternet(){
-    return QIcon::fromTheme("applications-internet", QIcon(":/resources/images/applications-internet.png"));
+    if (WMHelper::isKDERunning())
+      return QIcon::fromTheme("applications-internet", QIcon(":/resources/images/cloud.png"));
+    else
+      return QIcon(":/resources/images/cloud.png");
   }
 
   //QActions without icons in OctoPkg does this works for gtk, too?

@@ -363,7 +363,8 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
       m_process->start(cmd);
     }
     else if(WMHelper::isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
+      //QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "\'";
       m_process->start(cmd);
     }
     else if (WMHelper::isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_TERMINAL)){
@@ -401,7 +402,8 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
+      //QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "\'";
       m_process->start(cmd);
     }
     else if (UnixCommand::hasTheExecutable(ctn_LXDE_TERMINAL)){
@@ -424,7 +426,7 @@ void Terminal::runCommandInTerminal(const QStringList &commandList)
       m_process->start(cmd);
     }
     else if(m_selectedTerminal == ctn_XFCE_TERMINAL){
-      QString cmd = suCommand + " \"" + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "'\"";
+      QString cmd = suCommand + ctn_XFCE_TERMINAL + " -e \'sh -c " + ftemp->fileName() + "\'";
       m_process->start(cmd);
     }
     else if (m_selectedTerminal == ctn_KDE_TERMINAL){

@@ -528,7 +528,7 @@ public:
   }
 
   static QString getYoullNeedSuFrontend(){
-    return QObject::tr("You'll need to install a su frontend like gksu or kdesu.");
+    return QObject::tr("You'll need to install octopkg-sudo.");
   }
 
   static QString getErrorNoPkgFound(){

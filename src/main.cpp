@@ -52,6 +52,10 @@ int main(int argc, char *argv[])
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
   }
+  if(!UnixCommand::hasTheExecutable("/usr/lib/octopkg/octopkg-sudo"))
+  {
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getYoullNeedSuFrontend());
+  }
 
   //This sends a message just to enable the socket-based QtSingleApplication engine
   app.sendMessage("RAISE");
@@ -71,7 +75,7 @@ int main(int argc, char *argv[])
     return(0);
   }
 
-  if (UnixCommand::isRootRunning() && !WMHelper::isKDERunning()){
+  if (UnixCommand::isRootRunning()){
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorRunningWithRoot());
     return ( -2 );
   }
