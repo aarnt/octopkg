@@ -8,7 +8,7 @@
  * Authors:
  *   Palo Kisa <palo.kisa@gmail.com>
  *
- * Copyright: 2019 Octopi team
+ * Copyright: 2020 OctoPKG team
  * Authors:
  *   Alexandre Albuquerque Arnt
  *

@@ -166,9 +166,7 @@ private:
   QProgressBar *m_progressWidget;
 
   QToolButton *m_toolButtonPacman;
-  //QToolButton *m_toolButtonAUR;
   QMenu *m_menuToolButtonPacman;
-  //QMenu *m_menuToolButtonAUR;
 
   //This is a means for measuring the program's speed at some tasks
   QTime *m_time;
@@ -206,8 +204,6 @@ private:
 
   QStringList m_listOfVisitedPackages;
   int m_indOfVisitedPackage;
-
-  int selectTerminal(const int initialTerminalIndex);
 
   void loadSettings();
   void loadPanelSettings();
@@ -388,7 +384,6 @@ private slots:
   void selectedRepositoryMenu(QAction *actionRepoSelected);
 
   void resetTransaction();
-
   void actionsProcessStarted();
   void actionsProcessFinished(int exitCode, QProcess::ExitStatus);
   void actionsProcessReadOutput();

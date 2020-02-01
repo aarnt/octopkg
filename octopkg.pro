@@ -36,8 +36,7 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/model/packagemodel.h \
         src/ui/octopitabinfo.h \
         src/utils.h \
-        src/terminal.h \
-        src/terminalselectordialog.h
+        src/terminal.h
 
 SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/QtSolutions/qtlocalpeer.cpp \
@@ -65,8 +64,7 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/model/packagemodel.cpp \
         src/ui/octopitabinfo.cpp \
         src/utils.cpp \
-        src/terminal.cpp \
-        src/terminalselectordialog.cpp
+        src/terminal.cpp
 
 FORMS   += ui/mainwindow.ui \
         ui/transactiondialog.ui \
