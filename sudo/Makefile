@@ -1331,40 +1331,13 @@ passworddialog.o: passworddialog.cpp passworddialog.h \
 		/usr/local/include/qt5/QtGui/qvector2d.h \
 		/usr/local/include/qt5/QtGui/qtouchdevice.h \
 		ui_passworddialog.h \
-		/usr/local/include/qt5/QtCore/QVariant \
 		/usr/local/include/qt5/QtGui/QIcon \
 		/usr/local/include/qt5/QtGui/qicon.h \
-		/usr/local/include/qt5/QtWidgets/QApplication \
-		/usr/local/include/qt5/QtWidgets/qapplication.h \
-		/usr/local/include/qt5/QtCore/qcoreapplication.h \
-		/usr/local/include/qt5/QtCore/qeventloop.h \
-		/usr/local/include/qt5/QtWidgets/qdesktopwidget.h \
-		/usr/local/include/qt5/QtGui/qguiapplication.h \
-		/usr/local/include/qt5/QtGui/qinputmethod.h \
-		/usr/local/include/qt5/QtWidgets/QDialogButtonBox \
-		/usr/local/include/qt5/QtWidgets/qdialogbuttonbox.h \
-		/usr/local/include/qt5/QtWidgets/QFrame \
-		/usr/local/include/qt5/QtWidgets/qframe.h \
-		/usr/local/include/qt5/QtWidgets/QGridLayout \
-		/usr/local/include/qt5/QtWidgets/qgridlayout.h \
-		/usr/local/include/qt5/QtWidgets/qlayout.h \
-		/usr/local/include/qt5/QtWidgets/qlayoutitem.h \
-		/usr/local/include/qt5/QtWidgets/qboxlayout.h \
-		/usr/local/include/qt5/QtWidgets/QHBoxLayout \
-		/usr/local/include/qt5/QtWidgets/QLabel \
-		/usr/local/include/qt5/QtWidgets/qlabel.h \
-		/usr/local/include/qt5/QtWidgets/QLineEdit \
-		/usr/local/include/qt5/QtWidgets/qlineedit.h \
-		/usr/local/include/qt5/QtGui/qtextcursor.h \
-		/usr/local/include/qt5/QtGui/qtextformat.h \
-		/usr/local/include/qt5/QtGui/qpen.h \
-		/usr/local/include/qt5/QtGui/qtextoption.h \
+		/usr/local/include/qt5/QtGui/QClipboard \
+		/usr/local/include/qt5/QtGui/qclipboard.h \
 		/usr/local/include/qt5/QtWidgets/QToolButton \
 		/usr/local/include/qt5/QtWidgets/qtoolbutton.h \
-		/usr/local/include/qt5/QtWidgets/qabstractbutton.h \
-		/usr/local/include/qt5/QtWidgets/QVBoxLayout \
-		/usr/local/include/qt5/QtGui/QClipboard \
-		/usr/local/include/qt5/QtGui/qclipboard.h
+		/usr/local/include/qt5/QtWidgets/qabstractbutton.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o passworddialog.o passworddialog.cpp
 
 sudo.o: sudo.cpp sudo.h \
