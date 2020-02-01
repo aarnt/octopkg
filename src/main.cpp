@@ -44,15 +44,15 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  if(!UnixCommand::hasTheExecutable("pkg"))
+  /*if(!UnixCommand::hasTheExecutable("pkg"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoPkgFound());
-  }
-  if(!UnixCommand::hasTheExecutable("sh"))
+  }*/
+  if(!QFile::exists("/bin/sh"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
   }
-  if(!UnixCommand::hasTheExecutable("/usr/lib/octopkg/octopkg-sudo"))
+  if(!QFile::exists("/usr/lib/octopkg/octopkg-sudo"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGSudoNotFound());
   }

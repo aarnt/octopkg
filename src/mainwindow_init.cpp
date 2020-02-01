@@ -641,8 +641,8 @@ void MainWindow::initTabOutput()
  */
 void MainWindow::initActions()
 {
-  m_hasSLocate = UnixCommand::hasTheExecutable("slocate");
-  m_hasMirrorCheck = UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
+  m_hasSLocate = false; //UnixCommand::hasTheExecutable("slocate");
+  m_hasMirrorCheck = false; //UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
   m_actionSysInfo = new QAction(this);
 
   if(m_hasMirrorCheck)
