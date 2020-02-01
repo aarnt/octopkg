@@ -1,5 +1,7 @@
 ## This is OctoPkg, a powerful pkgng front-end using Qt libs.
 
+![Main window](https://raw.githubusercontent.com/aarnt/octopkg/master/octopkg-mainwindow.png)
+
 You'll need "git" and "qt5" packages in order to get latest dev version!
 
 To download the source code, type:
