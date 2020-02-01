@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
   }
   if(!UnixCommand::hasTheExecutable("/usr/lib/octopkg/octopkg-sudo"))
   {
-    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getYoullNeedSuFrontend());
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGSudoNotFound());
   }
 
   //This sends a message just to enable the socket-based QtSingleApplication engine

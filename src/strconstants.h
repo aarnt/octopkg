@@ -531,6 +531,10 @@ public:
     return QObject::tr("You'll need to install octopkg-sudo.");
   }
 
+  static QString getOctoPKGSudoNotFound(){
+    return QObject::tr("\"/usr/lib/octopkg/octopkg-sudo\" was not found!");
+  }
+
   static QString getErrorNoPkgFound(){
     return QObject::tr("'pkg' binary was not found.");
   }
