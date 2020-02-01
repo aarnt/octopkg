@@ -147,7 +147,7 @@
    </property>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>He&amp;lp</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionHelpUsage"/>
     <addaction name="separator"/>
@@ -155,7 +155,7 @@
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>V&amp;iew</string>
+     <string>&amp;View</string>
     </property>
     <addaction name="actionViewAllPackages"/>
     <addaction name="actionViewInstalledPackages"/>
@@ -171,7 +171,7 @@
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionGetNews"/>
     <addaction name="actionSyncPackages"/>
@@ -185,7 +185,7 @@
    </widget>
    <widget class="QMenu" name="menuSearch">
     <property name="title">
-     <string>Se&amp;arch</string>
+     <string>&amp;Search</string>
     </property>
     <addaction name="actionSearchByName"/>
     <addaction name="actionSearchByDescription"/>
@@ -277,7 +277,7 @@
      <normaloff>:/resources/images/refresh.png</normaloff>:/resources/images/refresh.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Sync database</string>
+    <string>&amp;Check updates</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
@@ -289,7 +289,7 @@
      <normaloff>:/resources/images/exit.png</normaloff>:/resources/images/exit.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Exit</string>
+    <string>E&amp;xit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -460,7 +460,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;By name</string>
+    <string>By &amp;name</string>
    </property>
   </action>
   <action name="actionFindFileInPackage">
@@ -556,7 +556,7 @@
      <normaloff>:/resources/images/cachecleaner.png</normaloff>:/resources/images/cachecleaner.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Clean packages' cache</string>
+    <string>Cl&amp;ean packages' cache</string>
    </property>
   </action>
  </widget>

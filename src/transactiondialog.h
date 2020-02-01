@@ -24,6 +24,7 @@
 #include <QDialog>
 
 const int ctn_RUN_IN_TERMINAL(328);
+
 class QPushButton;
 
 class TransactionDialog : public QDialog
@@ -37,7 +38,6 @@ public:
   void setText(const QString text);
   void setInformativeText(const QString text);
   void setDetailedText(const QString detailedtext);
-
   void removeYesButton();
 
 public slots:

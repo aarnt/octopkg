@@ -268,12 +268,12 @@ void MainWindow::initMenuBar()
 
   ui->menuView->menuAction()->setVisible(false);
 
-  foreach (QAction * act,  ui->menuBar->actions())
+  /*foreach (QAction * act,  ui->menuBar->actions())
   {
     QString text = act->text();
     text = text.remove("&");
     act->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
-  }
+  }*/
 }
 
 /*
@@ -779,12 +779,12 @@ void MainWindow::initActions()
     }
   }
 
-  QString text;
+  /*QString text;
   foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
   {
     text = ac->text().remove("&");
     ac->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
-  }
+  }*/
 
   ui->actionInstallLocalPackage->setVisible(false);
   toggleTransactionActions(true);

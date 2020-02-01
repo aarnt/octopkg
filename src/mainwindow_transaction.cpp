@@ -1825,6 +1825,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
     msg.remove(QRegularExpression("QXcbConnection: XCB error.+"));
+    msg.remove(QRegularExpression("qt.qpa.xcb:.+"));
 
     //Gksu buggy strings
     msg.remove(QRegularExpression("couldn't lock.+"));

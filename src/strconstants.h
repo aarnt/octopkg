@@ -613,7 +613,7 @@ public:
   }
 
   static QString getFilterLocalPackages(){
-    return QObject::tr("Search for installed packages");
+    return QObject::tr("View installed packages");
   }
 
   static QString getSearchForPackages(){
