@@ -11,12 +11,13 @@ $ git clone https://github.com/aarnt/octopkg
 $ cd octopkg
 $ /usr/local/lib/qt5/bin/qmake
 $ make
+# make install
 ```
 
 To run it:
 
 ```
-$ bin/octopkg
+$ octopkg
 ```
 
 You'll also need a privilege escalation tool called "octopkg-sudo" available on "sudo" folder.

@@ -73,3 +73,27 @@ FORMS   += ui/mainwindow.ui \
 RESOURCES += resources.qrc
 
 #TRANSLATIONS += resources/translations/octopkg_pt_BR.ts
+
+# install
+isEmpty(PREFIX) {
+    PREFIX = /usr/local
+}
+
+isEmpty(DATADIR) {
+    DATADIR = $$PREFIX/share
+}
+
+isEmpty(BINDIR) {
+    BINDIR = $$PREFIX/bin
+}
+
+target.path = $$BINDIR
+bin.path = $$BINDIR
+
+desktop.path = $$DATADIR/applications
+desktop.files += octopkg.desktop
+
+icon.path = $$DATADIR/icons
+icon.files += resources/images/octopi.png
+
+INSTALLS += target bin desktop icon
