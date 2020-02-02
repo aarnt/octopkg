@@ -634,11 +634,6 @@ void MainWindow::onPressDelete()
  */
 bool MainWindow::isSUAvailable()
 {
-  //If there are no means to run the actions, we must warn!
-  /*if (UnixCommand::isRootRunning() && WMHelper::isKDERunning())
-  {
-    return true;
-  }*/
   if (WMHelper::getSUCommand() == ctn_NO_SU_COMMAND){
     QMessageBox::critical( 0, StrConstants::getApplicationName(),
                            StrConstants::getErrorNoSuCommand() +

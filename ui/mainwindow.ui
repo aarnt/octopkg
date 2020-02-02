@@ -106,7 +106,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tabInfo">
         <attribute name="title">
@@ -120,7 +120,7 @@
        </widget>
        <widget class="QWidget" name="tabTransaction">
         <attribute name="title">
-         <string>Transaction</string>
+         <string>Actions</string>
         </attribute>
        </widget>
        <widget class="QWidget" name="tabOutput">
@@ -164,7 +164,7 @@
    </widget>
    <widget class="QMenu" name="menuTransaction">
     <property name="title">
-     <string>&amp;Transaction</string>
+     <string>&amp;Actions</string>
     </property>
     <addaction name="actionCommit"/>
     <addaction name="actionCancel"/>
@@ -250,7 +250,7 @@
      <normaloff>:/resources/images/commit.png</normaloff>:/resources/images/commit.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Commit</string>
+    <string>A&amp;pply</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+M</string>
@@ -262,7 +262,7 @@
      <normaloff>:/resources/images/rollback.png</normaloff>:/resources/images/rollback.png</iconset>
    </property>
    <property name="text">
-    <string>Ca&amp;ncel</string>
+    <string>&amp;Cancel</string>
    </property>
    <property name="toolTip">
     <string>Cancel</string>

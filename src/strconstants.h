@@ -298,7 +298,7 @@ public:
   }
 
   static QString getTabTransactionName(){
-    return QObject::tr("Transaction");
+    return QObject::tr("Actions");
   }
 
   static QString getTabOutputName(){
@@ -494,11 +494,11 @@ public:
   }
 
   static QString getThereHasBeenATransactionError(){
-    return QObject::tr("There has been a transaction error!");
+    return QObject::tr("There has been an action error!");
   }
 
   static QString getConfirmExecuteTransactionInTerminal(){
-    return QObject::tr("Do you want to execute this transaction in a Terminal?");
+    return QObject::tr("Do you want to execute these actions in a Terminal?");
   }
 
   static QString getCleanCacheConfirmation(){
@@ -510,7 +510,7 @@ public:
   }
 
   static QString getCancelTransactionConfirmation(){
-    return QObject::tr("Do you really want to cancel the transaction?");
+    return QObject::tr("Do you really want to cancel the action?");
   }
 
   static QString getPkgNotAvailable(){
@@ -548,7 +548,7 @@ public:
   }
 
   static QString getThereIsAPendingTransaction(){
-    return QObject::tr("There is a pending transaction");
+    return QObject::tr("There are pending actions");
   }
 
   static QString getDoYouReallyWantToQuit(){

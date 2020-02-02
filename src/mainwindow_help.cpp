@@ -106,7 +106,7 @@ void MainWindow::initTabHelpUsage()
   QString("</li><li>") +
      tr("Alt+2 to switch to 'Files' tab") +
   QString("</li><li>") +
-     tr("Alt+3 to switch to 'Transaction' tab") +
+     tr("Alt+3 to switch to 'Actions' tab") +
   QString("</li><li>") +
      tr("Alt+4 to switch to 'Output' tab") +
   QString("</li><li>") +
@@ -135,9 +135,9 @@ void MainWindow::initTabHelpUsage()
   //QString("</li><li>") +
   //   tr("Ctrl+N or 'View/Non installed' to show/hide non installed packages") +
   QString("</li><li>") +
-     tr("Ctrl+M or 'Transaction/Commit' to start installation/removal of selected packages") +
+     tr("Ctrl+M or 'Actions/Apply' to start installation/removal of selected packages") +
   QString("</li><li>") +
-     tr("Ctrl+E or 'Transaction/Cancel' to clear the selection of to be removed/installed packages") +
+     tr("Ctrl+E or 'Actions/Cancel' to clear the selection of to be removed/installed packages") +
   QString("</li><li>") +
      tr("Ctrl+G or 'File/Get latest distro news' to retrieve the latest RSS based distro news") +
   QString("</li><li>") +
