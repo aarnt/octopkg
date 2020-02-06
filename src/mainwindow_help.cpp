@@ -27,6 +27,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "searchbar.h"
+#include "constants.h"
 
 #include <QString>
 #include <QTextBrowser>
@@ -68,9 +69,9 @@ void MainWindow::initTabHelpUsage()
   else
   {
     html +=
-      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
+      QString("<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
   }
 
   html += tr("Package classification:") +
@@ -199,10 +200,10 @@ void MainWindow::onHelpAbout()
 {
   QString aboutText = "<b>" + StrConstants::getApplicationName() +
       " - " + StrConstants::getApplicationVersion() + "</b>" + " (" + StrConstants::getQtVersion() + ")<br>";
-  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
+  aboutText += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
   aboutText += "&copy; Alexandre Albuquerque Arnt<br><br>";
   aboutText += "<b>pkgng - " + UnixCommand::getPkgNGVersion() + "</b><br>";
-  aboutText += "<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
+  aboutText += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
   aboutText += "&copy; FreeBSD";
 
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);

@@ -29,6 +29,7 @@
 #include "searchbar.h"
 #include "utils.h"
 #include "globals.h"
+#include "constants.h"
 #include <iostream>
 
 #include <QStandardItemModel>
@@ -356,7 +357,7 @@ void MainWindow::outputOutdatedPackageList()
     for (int c=0; c < m_outdatedStringList->count(); c++)
     {
       QString pkg = m_outdatedStringList->at(c);
-      html += "<tr><td><a href=\"goto:" + pkg + "\">" + pkg +
+      html += "<tr><td><a style=\"color:'" + hyperlinkColor + "'\" href=\"goto:" + pkg + "\">" + pkg +
           "</td><td align=\"right\"><b><font color=\"#E55451\">" +
           getOutdatedPkgOldVersion(pkg) +
           "</b></font></td><td align=\"right\">" +

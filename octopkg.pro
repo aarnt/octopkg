@@ -18,6 +18,7 @@ UI_DIR += build
 
 HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/QtSolutions/qtlocalpeer.h \
+        src/constants.h \
         src/mainwindow.h \
         src/strconstants.h \
         src/searchlineedit.h \

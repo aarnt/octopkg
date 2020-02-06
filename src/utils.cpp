@@ -26,6 +26,7 @@
 
 #include "utils.h"
 #include "strconstants.h"
+#include "constants.h"
 #include <iostream>
 
 #include <QStandardItemModel>
@@ -46,9 +47,6 @@ utils::ProcessWrapper::ProcessWrapper(QObject *parent) :
 {
   m_process = new QProcess(parent);
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  //env.insert("LANG", "C");
-  //env.insert("LC_MESSAGES", "C");
-
   env.remove("LANG");
   env.remove("LC_MESSAGES");
   env.insert("LANG", QLocale::system().name() + ".UTF-8");
@@ -275,7 +273,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
   const QString ctn_DRAGONFLYBSD_RSS_URL = "https://www.dragonflydigest.com/feed";
   const QString ctn_FREEBSD_RSS_URL = "https://www.freebsd.org/news/rss.xml";
   const QString ctn_GHOSTBSD_RSS_URL = "http://www.ghostbsd.org/rss.xml";
-  const QString ctn_PCBSD_RSS_URL = "https://www.trueos.org/feed/";
+  //const QString ctn_PCBSD_RSS_URL = "https://www.trueos.org/feed/";
 
   BSDFlavour bsd = UnixCommand::getBSDFlavour();
   QString res;
@@ -308,10 +306,10 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     {
       curlCommand = curlCommand.arg(ctn_GHOSTBSD_RSS_URL).arg(tmpRssPath);
     }
-    else if (bsd == ectn_PCBSD)
+    /*else if (bsd == ectn_PCBSD)
     {
       curlCommand = curlCommand.arg(ctn_PCBSD_RSS_URL).arg(tmpRssPath);
-    }
+    }*/
 
     if (UnixCommand::runCurlCommand(curlCommand).isEmpty())
     {
@@ -491,5 +489,7 @@ QString utils::parseDistroNews()
   }
 
   html += "</ul>";
+  html = html.replace("<a href=", "<a style=\"color:'" + hyperlinkColor + "'\" href=");
+
   return html;
 }
