@@ -153,7 +153,7 @@ QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& packa
     html += "<tr><td>" + options + "</td><td>" + pid.options + "</td></tr>";
   }
 
-  html += "</table>"; 
+  html += "</table><br>";
 
   return html;
 }

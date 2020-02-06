@@ -488,7 +488,7 @@ QString utils::parseDistroNews()
     n = n.nextSibling();
   }
 
-  html += "</ul>";
+  html += "</ul><br>";
   html = html.replace("<a href=", "<a style=\"color:'" + hyperlinkColor + "'\" href=");
 
   return html;
