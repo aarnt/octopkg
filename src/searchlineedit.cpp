@@ -38,9 +38,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
 
   // Increase button size a bit for kde
   if (WMHelper::isKDERunning())
-    this->m_SearchButton->setFixedSize(20, 20);
-  else
     this->m_SearchButton->setFixedSize(18, 18);
+  else
+    this->m_SearchButton->setFixedSize(16, 16);
 
   this->m_SearchButton->setCursor(Qt::ArrowCursor);
   this->m_SearchButton->setStyleSheet(this->buttonStyleSheetForCurrentState());
@@ -135,10 +135,10 @@ QString SearchLineEdit::styleSheetForCurrentState()
 
   style += "padding-left: 20px;";
   style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + frameWidth + 1);
-  style += "border-width: 3px;";
-  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-  style += "background-color: rgba(255, 255, 255, 255);"; //204);";
-  style += "color: black;}";
+  style += "border-width: 3px;}";
+  //style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  //style += "background-color: rgba(255, 255, 255, 255);"; //204);";
+  //style += "color: black;}";
 
   return style;
 }
@@ -151,11 +151,11 @@ void SearchLineEdit::setFoundStyle(){
   style += "font-style: italic;";
   style += "padding-left: 20px;";
   style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
-  style += "border-width: 3px;";
-  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-  style += "color: black; ";
-  style += "background-color: rgb(255, 255, 200);";
-  style += "border-color: rgb(206, 204, 197);}";
+  style += "border-width: 3px;}";
+  //style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  //style += "color: black; ";
+  //style += "background-color: rgb(255, 255, 200);";
+  //style += "border-color: rgb(206, 204, 197);}";
   setStyleSheet(style);
 
   /*else
@@ -178,11 +178,11 @@ void SearchLineEdit::setNotFoundStyle(){
   style += "font-style: italic;";
   style += "padding-left: 20px;";
   style += QString("padding-right: %1px;").arg(this->m_SearchButton->sizeHint().width() + 2);
-  style += "border-width: 3px;";
-  style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
-  style += "color: white; ";
-  style += "background-color: lightgray;"; //rgb(255, 108, 108); //palette(mid);"; //rgb(207, 135, 142);";
-  style += "border-color: rgb(206, 204, 197);}";
+  style += "border-width: 3px;}";
+  //style += "border-image: url(:/resources/images/esf-border.png) 3 3 3 3 stretch;";
+  //style += "color: white; ";
+  //style += "background-color: lightgray;"; //rgb(255, 108, 108); //palette(mid);"; //rgb(207, 135, 142);";
+  //style += "border-color: rgb(206, 204, 197);}";
   setStyleSheet(style);
 }
 
@@ -210,7 +210,7 @@ QString SearchLineEdit::buttonStyleSheetForCurrentState() const
 
   if (!this->text().isEmpty())
   {
-    style += "QToolButton:pressed { background-image: url(:/resources/images/esf-clear-active.png); }";
+    style += "QToolButton:pressed { background-image: url(:/resources/images/esf-clear.png); }";
     this->m_SearchButton->setToolTip(StrConstants::getClear());
   }
   else this->m_SearchButton->setToolTip("");

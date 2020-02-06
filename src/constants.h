@@ -3,6 +3,6 @@
 
 #include <QString>
 
-const QString hyperlinkColor("#00A8CB"); //"#4BC413");
+const QString hyperlinkColor("#00A8CB");
 
 #endif // CONSTANTS_H
