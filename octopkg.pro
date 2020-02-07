@@ -35,7 +35,7 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/multiselectiondialog.h \
         src/packagerepository.h \
         src/model/packagemodel.h \
-        src/ui/octopitabinfo.h \
+        src/ui/octopkgtabinfo.h \
         src/utils.h \
         src/terminal.h
 
@@ -63,7 +63,7 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/multiselectiondialog.cpp \
         src/packagerepository.cpp \
         src/model/packagemodel.cpp \
-        src/ui/octopitabinfo.cpp \
+        src/ui/octopkgtabinfo.cpp \
         src/utils.cpp \
         src/terminal.cpp
 

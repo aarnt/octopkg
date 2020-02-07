@@ -1065,10 +1065,6 @@ BSDFlavour UnixCommand::getBSDFlavour()
       p.waitForFinished();
       QString out = p.readAllStandardOutput();
 
-      /*if (out.contains("(trueos-"))
-      {
-        ret = ectn_TRUEOS;
-      }*/
       if (out.contains("FreeBSD"))
       {
         ret = ectn_FREEBSD;

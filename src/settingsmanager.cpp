@@ -306,7 +306,7 @@ void SettingsManager::setPackageVersionColumnWidth(int newValue)
 
 /*
  * Search all supported terminals to see if the selected one is valid
- */
+ *
 bool SettingsManager::isValidTerminalSelected()
 {
   QString userTerminal = getTerminal();
@@ -336,6 +336,6 @@ bool SettingsManager::isValidTerminalSelected()
   {
     return false;
   }
-}
+}*/
 
 //OctoPkg related --------------------------------------------------------------------

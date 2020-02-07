@@ -98,7 +98,7 @@ class SettingsManager
     static QByteArray getWindowSize();
     static QByteArray getTransactionWindowSize();
     static QByteArray getSplitterHorizontalState();
-    static bool isValidTerminalSelected();
+    //static bool isValidTerminalSelected();
 
     //CacheCleaner related
     static int getKeepNumInstalledPackages();

@@ -44,10 +44,10 @@
  * Build    1.1.2000
  */
 
-class OctopiTabInfo
+class OctopkgTabInfo
 {
 public:
-  OctopiTabInfo();
+  OctopkgTabInfo();
   
   /**
    * @brief formats TabInfo as HTML

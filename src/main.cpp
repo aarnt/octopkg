@@ -44,10 +44,6 @@ int main(int argc, char *argv[])
     return 0;
   }
 
-  /*if(!UnixCommand::hasTheExecutable("pkg"))
-  {
-    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoPkgFound());
-  }*/
   if(!QFile::exists("/bin/sh"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());

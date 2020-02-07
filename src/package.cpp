@@ -77,7 +77,7 @@ QString Package::makeURLClickable( const QString &s )
 		QString s1 = rx.cap();
     QString ns;
 
-    ns = "<a style=\"color:'" + hyperlinkColor + "'\" href=\"" + s1 + "\">" + s1 + "</a>";
+    ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
     sb.replace( ini, s1.length(), ns);
 		search = ini + (2*s1.length()) + 15;	
 	}
@@ -94,7 +94,7 @@ QString Package::makeURLClickable( const QString &s )
     int blanks = s1.count(QRegExp("^|[\\s]+"));
 		for (int i=0; i<blanks; i++) ns += " ";
 
-    ns += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://" + s1.trimmed() + "\">" + s1.trimmed() + "</a>";
+    ns += "<a href=\"http://" + s1.trimmed() + "\">" + s1.trimmed() + "</a>";
 
 		sb.replace( ini, s1.length(), ns);
 		search = ini + (2*s1.length()) + 15;	
@@ -1080,7 +1080,7 @@ QString Package::getDependencies(const QString &pkgName)
 
   foreach(QString dependency, pkgList)
   {
-    res += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"goto:" + dependency + "\">" + dependency + "</a> ";
+    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
   }
 
   return res.trimmed();

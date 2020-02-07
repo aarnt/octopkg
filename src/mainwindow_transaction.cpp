@@ -30,9 +30,9 @@
 #include "transactiondialog.h"
 #include "multiselectiondialog.h"
 #include "globals.h"
+#include "searchlineedit.h"
 #include <iostream>
 #include <cassert>
-#include "searchlineedit.h"
 
 #include <QComboBox>
 #include <QProgressBar>

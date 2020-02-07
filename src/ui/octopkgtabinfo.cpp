@@ -18,7 +18,7 @@
 *
 */
 
-#include "octopitabinfo.h"
+#include "octopkgtabinfo.h"
 #include "src/strconstants.h"
 #include "src/package.h"
 
@@ -33,16 +33,16 @@
 /**
  * @brief OctopiTabInfo::anchorBegin for navigation
  */
-const QString OctopiTabInfo::anchorBegin("anchorBegin");
+const QString OctopkgTabInfo::anchorBegin("anchorBegin");
 
-OctopiTabInfo::OctopiTabInfo()
+OctopkgTabInfo::OctopkgTabInfo()
 {
 }
 
 /**
  * This function has been extracted from src/mainwindow_refresh.cpp void MainWindow::refreshTabInfo(QString pkgName)
  */
-QString OctopiTabInfo::formatTabInfo(const PackageRepository::PackageData& package,
+QString OctopkgTabInfo::formatTabInfo(const PackageRepository::PackageData& package,
                                      const QMap<QString, OutdatedPackageInfo>& outdatedPkgList)
 {
   PackageInfoData pid = Package::getInformation(package.name);

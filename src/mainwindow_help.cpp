@@ -59,19 +59,19 @@ void MainWindow::initTabHelpUsage()
     QString("<h3><p>") + tr("A Qt5-based pkgng front-end,") + " " +
     tr("licensed under the terms of") + " ";
 
-  if ((!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning())))
+  /*if ((!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning())))
   {
     html +=
-      QString("<a style=\"color:'#4BC413'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a style=\"color:'#4BC413'\" href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
+      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
   }
-  else
+  else*/
   {
     html +=
-      QString("<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
+      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
   }
 
   html += tr("Package classification:") +
@@ -200,10 +200,10 @@ void MainWindow::onHelpAbout()
 {
   QString aboutText = "<b>" + StrConstants::getApplicationName() +
       " - " + StrConstants::getApplicationVersion() + "</b>" + " (" + StrConstants::getQtVersion() + ")<br>";
-  aboutText += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
+  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
   aboutText += "&copy; Alexandre Albuquerque Arnt<br><br>";
   aboutText += "<b>pkgng - " + UnixCommand::getPkgNGVersion() + "</b><br>";
-  aboutText += "<a style=\"color:'" + hyperlinkColor + "'\" href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
+  aboutText += "<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
   aboutText += "&copy; FreeBSD";
 
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);

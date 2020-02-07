@@ -58,9 +58,9 @@ void MainWindow::loadSettings(){
     ui->tvPackages->header()->setSortIndicator( packageListOrderedCol, packageListSortOrder );
     ui->tvPackages->sortByColumn( packageListOrderedCol, packageListSortOrder );
 
-    if (!SettingsManager::isValidTerminalSelected()){
+    /*if (!SettingsManager::isValidTerminalSelected()){
       SettingsManager::setTerminal(ctn_AUTOMATIC);
-    }
+    }*/
   }
   else assert(false);
 }
