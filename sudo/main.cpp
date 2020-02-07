@@ -65,11 +65,11 @@ void setNoPasswdUse()
     out << cmd;
     file.close();
 
-    std::cout << "octopi-sudo" << ": \"/etc/sudoers.d/octopihelper\" was created successfully." << std::endl;
+    std::cout << "octopkg-sudo" << ": \"/etc/sudoers.d/octopihelper\" was created successfully." << std::endl;
   }
   else
   {
-    std::cout << "octopi-sudo" << ": \"/etc/sudoers.d/octopihelper\" could not be created." << std::endl;
+    std::cout << "octopkg-sudo" << ": \"/etc/sudoers.d/octopihelper\" could not be created." << std::endl;
   }
 }
 

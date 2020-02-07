@@ -78,7 +78,7 @@ void MainWindow::initTabHelpUsage()
   QString("<ul type=\"square\"><li>") + iconPath + "installed.png\"/> " +
      tr("An installed package") + QString("</li>") +
   QString("<li>") + iconPath + "unrequired.png\"/> " +
-     tr("An installed package (explicitly installed)") +
+     tr("An explicitly installed package") +
   QString("</li>") +
   QString("</li>") +
   QString("<li>") + iconPath + "noninstalled.png\"/> " +
