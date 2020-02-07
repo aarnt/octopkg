@@ -6,7 +6,6 @@ It needs sudo to work, so your user or group must be part of sudoers.
 Steps to build:
 
 ```
-$ cd sudo
 $ /usr/local/lib/qt5/bin/qmake
 $ make
 # make install
