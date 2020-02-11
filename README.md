@@ -24,4 +24,6 @@ To run it:
 $ octopkg
 ```
 
+Remember: OctoPkg needs sudo to work, so your user or group must be part of sudoers.
+
 Enjoy!
