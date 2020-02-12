@@ -6,7 +6,7 @@ CONFIG += qt console warn_on debug lrelease embed_translations
 QM_FILES_RESOURCE_PREFIX=/translations
 LIBS += -lutil
 TEMPLATE = app
-TARGET = octopkg-sudo
+TARGET = octopkg-doas
 INCLUDEPATH += .
 
 # The following define makes your compiler warn you if you use any

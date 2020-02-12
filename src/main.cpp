@@ -48,9 +48,9 @@ int main(int argc, char *argv[])
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
   }
-  if(!QFile::exists("/usr/lib/octopkg/octopkg-sudo"))
+  if(!QFile::exists("/usr/lib/octopkg/octopkg-doas"))
   {
-    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGSudoNotFound());
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
   }
 
   //This sends a message just to enable the socket-based QtSingleApplication engine

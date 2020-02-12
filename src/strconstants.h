@@ -528,11 +528,11 @@ public:
   }
 
   static QString getYoullNeedSuFrontend(){
-    return QObject::tr("You'll need to install octopkg-sudo.");
+    return QObject::tr("You'll need to install octopkg-doas.");
   }
 
-  static QString getOctoPKGSudoNotFound(){
-    return QObject::tr("\"/usr/lib/octopkg/octopkg-sudo\" was not found!");
+  static QString getOctoPKGDoasNotFound(){
+    return QObject::tr("\"/usr/lib/octopkg/octopkg-doas\" was not found!");
   }
 
   static QString getErrorNoPkgFound(){

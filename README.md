@@ -8,7 +8,7 @@ To download the source code, type:
 
 ```
 $ git clone https://github.com/aarnt/octopkg
-$ cd octopkg/sudo
+$ cd octopkg/doas
 $ /usr/local/lib/qt5/bin/qmake
 $ make
 # make install
@@ -24,6 +24,6 @@ To run it:
 $ octopkg
 ```
 
-Remember: OctoPkg needs sudo to work, so your user or group must be part of sudoers.
+Remember: OctoPkg needs doas tool to work.
 
 Enjoy!

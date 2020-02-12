@@ -60,13 +60,13 @@
 
 namespace
 {
-const QString app_master{QStringLiteral("octopkg-sudo")};
+const QString app_master{QStringLiteral("octopkg-doas")};
 const QString app_version{QStringLiteral("0.14.1")};
 const QString app_lxsu{QStringLiteral("su")};
-const QString app_lxsudo{QStringLiteral("sudo")};
+const QString app_lxsudo{QStringLiteral("doas")};
 
 const QString su_prog{QStringLiteral("su")};
-const QString sudo_prog{QStringLiteral("sudo")};
+const QString sudo_prog{QStringLiteral("doas")};
 
 #ifdef __FreeBSD__
     const QString pwd_prompt_end_c_locale{QStringLiteral(":")};
@@ -273,11 +273,11 @@ void Sudo::child()
   switch (mBackend)
   {
   case BACK_SUDO:
-    preserve_env_param = "--preserve-env=";
+    /*preserve_env_param = "--preserve-env=";
 
     preserve_env_param += env_workarounds();
 
-    *(param_arg++) = preserve_env_param.c_str(); //preserve environment
+    *(param_arg++) = preserve_env_param.c_str();*/ //preserve environment
     *(param_arg++) = "/bin/sh";
     break;
   case BACK_SU:

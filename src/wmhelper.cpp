@@ -330,7 +330,7 @@ QString WMHelper::getGKSUCommand(){
  * The generic SU get method. It retrieves the SU you have installed in your system!
  */
 QString WMHelper::getSUCommand(){
-  return "/usr/lib/octopkg/octopkg-sudo -d ";
+  return "/usr/lib/octopkg/octopkg-doas -d ";
 }
 
 /*

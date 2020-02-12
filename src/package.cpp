@@ -1215,11 +1215,6 @@ bool Package::hasPkgNGDatabase()
         answer = f.exists();
       }
     }
-    /*else if (UnixCommand::getBSDFlavour() == ectn_TRUEOS)
-    {
-      QFile f(ctn_PKGNG_TRUEOS_CORE_DB_FILE);
-      answer = f.exists();
-    }*/
     else
     {
       QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
@@ -1237,6 +1232,6 @@ bool Package::hasPkgNGDatabase()
  */
 bool Package::isForbidden(const QString pkgName)
 {
-  QStringList forbiddenPkgs = { "pcbsd-base", "pcbsd-meta-kde", "pcbsd-meta-virtualboxguest", "pkg", "xorg" };
+  QStringList forbiddenPkgs = { "pkg", "xorg" };
   return forbiddenPkgs.contains(pkgName);
 }
