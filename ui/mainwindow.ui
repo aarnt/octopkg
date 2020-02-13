@@ -151,6 +151,7 @@
     </property>
     <addaction name="actionHelpUsage"/>
     <addaction name="separator"/>
+    <addaction name="actionDonate"/>
     <addaction name="actionHelpAbout"/>
    </widget>
    <widget class="QMenu" name="menuView">
@@ -345,7 +346,7 @@
      <normaloff>:/resources/images/rss.png</normaloff>:/resources/images/rss.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Get latest distro news</string>
+    <string>&amp;Get latest BSD news</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
@@ -557,6 +558,11 @@
    </property>
    <property name="text">
     <string>Cl&amp;ean packages' cache</string>
+   </property>
+  </action>
+  <action name="actionDonate">
+   <property name="text">
+    <string>&amp;Donate</string>
    </property>
   </action>
  </widget>

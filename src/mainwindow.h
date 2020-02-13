@@ -301,7 +301,6 @@ private slots:
 
   //TreeView methods
   void copyFullPathToClipboard();
-
   void collapseAllContentItems();
   void collapseThisContentItems();
   void expandAllContentItems();
@@ -407,6 +406,7 @@ private slots:
   void postRefreshDistroNews();
 
   void onHelpUsage();
+  void onHelpDonate();
   void onHelpAbout();
   void onPressDelete();
 

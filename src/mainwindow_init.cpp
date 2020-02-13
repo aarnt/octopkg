@@ -312,6 +312,7 @@ void MainWindow::initToolButtonPacman()
   m_menuToolButtonPacman->addAction(m_actionInstallPacmanUpdates);
   m_toolButtonPacman->setPopupMode(QToolButton::MenuButtonPopup);
   m_toolButtonPacman->setMenu(m_menuToolButtonPacman);
+
   connect(m_toolButtonPacman, SIGNAL(clicked()), this, SLOT(outputOutdatedPackageList()));
 }
 
@@ -662,6 +663,7 @@ void MainWindow::initActions()
   connect(ui->actionGetNews, SIGNAL(triggered()), this, SLOT(refreshDistroNews()));
   connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
   connect(ui->actionHelpUsage, SIGNAL(triggered()), this, SLOT(onHelpUsage()));
+  connect(ui->actionDonate, SIGNAL(triggered(bool)), this, SLOT(onHelpDonate()));
   connect(ui->actionHelpAbout, SIGNAL(triggered()), this, SLOT(onHelpAbout()));
   connect(m_actionPackageInfo, SIGNAL(triggered()), this, SLOT(showPackageInfo()));
 

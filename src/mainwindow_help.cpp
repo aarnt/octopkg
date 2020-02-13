@@ -32,6 +32,7 @@
 #include <QString>
 #include <QTextBrowser>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 /*
  * Initialize the Help tab with basic information about using OctoPkg
@@ -59,20 +60,10 @@ void MainWindow::initTabHelpUsage()
     QString("<h3><p>") + tr("A Qt5-based pkgng front-end,") + " " +
     tr("licensed under the terms of") + " ";
 
-  /*if ((!WMHelper::isKDERunning() && (!WMHelper::isRazorQtRunning())))
-  {
-    html +=
+  html +=
       QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
       QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
-  }
-  else*/
-  {
-    html +=
-      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
-      QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
-  }
 
   html += tr("Package classification:") +
   QString("<ul type=\"square\"><li>") + iconPath + "installed.png\"/> " +
@@ -88,9 +79,6 @@ void MainWindow::initTabHelpUsage()
      tr("An outdated package") +
   QString("</li>") +
   QString("</li></ul>") +
-  /*QString("<li>") + iconPath + "newer.png\"/> " +
-           tr("A newer than repository package") +
-  QString("</li></ul>") +*/
 
      tr("Basic usage help:") +
   QString("<ul><li>") +
@@ -126,9 +114,9 @@ void MainWindow::initTabHelpUsage()
 
      tr("Control+key sequences:") +
   QString("<ul><li>") +
-     tr("Ctrl+D or 'File/Sync database' to sync the local database with latest remote changes") +
+     tr("Ctrl+D or 'File/Check updates' to search for latest package updates") +
   QString("</li><li>") +
-     tr("Ctrl+U or 'File/System upgrade' to make a full system upgrade") +
+     tr("Ctrl+U or 'File/Install updates' to install available package updates") +
   QString("</li><li>") +
      tr("Ctrl+L to find a package in the package list") +
   QString("</li><li>") +
@@ -138,9 +126,9 @@ void MainWindow::initTabHelpUsage()
   QString("</li><li>") +
      tr("Ctrl+M or 'Actions/Apply' to start installation/removal of selected packages") +
   QString("</li><li>") +
-     tr("Ctrl+E or 'Actions/Cancel' to clear the selection of to be removed/installed packages") +
+     tr("Ctrl+E or 'Actions/Cancel' to clear the selection of \"to be removed\" and \"to be installed\" packages") +
   QString("</li><li>") +
-     tr("Ctrl+G or 'File/Get latest distro news' to retrieve the latest RSS based distro news") +
+     tr("Ctrl+G or 'File/Get latest BSD news' to retrieve latest RSS based BSD news") +
   QString("</li><li>") +
      tr("Ctrl+Q or 'File/Exit' to exit the application") +
   QString("</li></ul>") +
@@ -150,12 +138,8 @@ void MainWindow::initTabHelpUsage()
      tr("Ctrl+Shift+C to clean local packages' cache (pkg clean)") +
   /*QString("</li><li>") +
      tr("Ctrl+Shift+G to display all package groups") +
-  QString("</li><li>") +
-     tr("Ctrl+Shift+R to remove Pacman's transaction lock file") +
-  QString("</li><li>") +
-     tr("Ctrl+Shift+Y to display %1 group").arg(StrConstants::getForeignRepositoryGroupName()) +*/
+  QString("</li>") +*/
   QString("</li></ul>") +
-
      tr("F+key sequences:") +
   QString("<ul><li>") +
      tr("F1 to show this help page") +
@@ -191,6 +175,15 @@ void MainWindow::initTabHelpUsage()
 void MainWindow::onHelpUsage()
 {
   changeTabWidgetPropertiesIndex(ctn_TABINDEX_HELPUSAGE);
+}
+
+/*
+ * Slot to open author's Paypal donation page
+ */
+void MainWindow::onHelpDonate()
+{
+  const QString url="http://sourceforge.net/donate/index.php?group_id=186459";
+  QDesktopServices::openUrl(QUrl(url));
 }
 
 /*
