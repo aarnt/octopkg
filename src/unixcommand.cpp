@@ -120,7 +120,7 @@ QString UnixCommand::discoverBinaryPath(const QString& binary){
 bool UnixCommand::cleanPacmanCache()
 {
   QProcess pacman;
-  QString commandStr = "pkg clean -a -y";
+  QString commandStr = "/usr/sbin/pkg clean -a -y";
 
   QString command = WMHelper::getSUCommand() + " \"" + commandStr + "\"";
   pacman.start(command);
@@ -142,7 +142,7 @@ QByteArray UnixCommand::performQuery(const QStringList args)
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
 
-  pacman.start("pkg", args);
+  pacman.start("/usr/sbin/pkg", args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
   pacman.close();
@@ -164,33 +164,11 @@ QByteArray UnixCommand::performQuery(const QString &args)
   env.insert("LC_MESSAGES", "C");
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
-
-  pacman.start("pkg " + args);
+  pacman.start("/usr/sbin/pkg " + args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
 
   pacman.close();
-  return result;
-}
-
-/*
- * Performs a yourt command
- */
-QByteArray UnixCommand::performAURCommand(const QString &args)
-{
-  QByteArray result("");
-  QProcess aur;
-
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-  aur.setProcessEnvironment(env);
-
-  aur.start(StrConstants::getForeignRepositoryToolName() + " " + args);
-  aur.waitForFinished(-1);
-  result = aur.readAllStandardOutput();
-
-  aur.close();
   return result;
 }
 
@@ -225,25 +203,6 @@ QByteArray UnixCommand::getUnrequiredPackageList()
 QByteArray UnixCommand::getOutdatedPackageList()
 {
   QByteArray result = performQuery("upgrade -n");
-  return result;
-}
-
-/*
- * Returns a string containing all AUR outdated packages
- */
-QByteArray UnixCommand::getOutdatedAURPackageList()
-{
-  QByteArray result;
-
-  if (StrConstants::getForeignRepositoryToolName() == "kcp")
-  {
-    result = performAURCommand("-lO");
-  }
-  else if (StrConstants::getForeignRepositoryToolName() != "kcp")
-  {
-    result = performAURCommand("-Qua");
-  }
-
   return result;
 }
 
@@ -306,30 +265,7 @@ QByteArray UnixCommand::getPackageInformation(const QString &pkgName, bool forei
     args = "info " + pkgName;
   }
 
-  //if (pkgName.isEmpty() == false) // enables get for all ("")
-  //  args << pkgName;
-
   QByteArray result = performQuery(args);
-  return result;
-}
-
-/*
- * Given an AUR package name, returns a string containing all of its information fields
- * (ex: name, description, version, dependsOn...)
- */
-QByteArray UnixCommand::getAURPackageVersionInformation()
-{
-  QByteArray result;
-
-  if (StrConstants::getForeignRepositoryToolName() == "kcp")
-  {
-    result = performAURCommand("-lO");
-  }
-  else if (StrConstants::getForeignRepositoryToolName() != "kcp")
-  {
-    result = performAURCommand("-Qua");
-  }
-
   return result;
 }
 
@@ -579,11 +515,7 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
   proc.setProcessChannelMode(QProcess::MergedChannels);
   QString sParam = "\"which " + exeName + "\"";
 
-  if (getBSDFlavour() == ectn_PCBSD)
-    proc.start("/usr/local/bin/bash -c " + sParam);
-  else /*if (getBSDFlavour() == ectn_FREEBSD || getBSDFlavour() == ectn_GHOSTBSD)*/
-    proc.start("/bin/sh -c " + sParam);
-
+  proc.start("/bin/sh -c " + sParam);
   proc.waitForFinished();
 
   QString out = proc.readAllStandardOutput();
@@ -661,11 +593,6 @@ void UnixCommand::terminateCommand()
 QByteArray UnixCommand::getCommandOutput(const QString &pCommand)
 {
   QProcess p;
-  /*QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-  p.setProcessEnvironment(env);*/
-
   p.start(pCommand);
   p.waitForFinished(-1);
   return p.readAllStandardOutput();
@@ -1050,11 +977,7 @@ BSDFlavour UnixCommand::getBSDFlavour()
 
   if (firstTime)
   {
-    if (QFile::exists("/etc/rc.conf.pcbsd"))
-    {
-      ret = ectn_PCBSD;
-    }
-    else if (QFile::exists("/etc/rc.conf.ghostbsd"))
+    if (QFile::exists("/etc/rc.conf.ghostbsd"))
     {
       ret = ectn_GHOSTBSD;
     }

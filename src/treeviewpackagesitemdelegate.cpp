@@ -57,7 +57,7 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
       gPoint = tvPackages->mapToGlobal(event->pos());
       QFuture<QString> f;
       disconnect(&g_fwToolTip, SIGNAL(finished()), this, SLOT(execToolTip()));
-      f = QtConcurrent::run(showPackageInfo, si->name);
+      f = QtConcurrent::run(showPackageDescription, si->name);
       g_fwToolTip.setFuture(f);
       connect(&g_fwToolTip, SIGNAL(finished()), this, SLOT(execToolTip()));
     }
@@ -67,7 +67,6 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
   {
     QTreeView* tvTransaction = qobject_cast<QTreeView*>(this->parent());
     QStandardItemModel *sim = qobject_cast<QStandardItemModel*>(tvTransaction->model());
-
     if (sim->rowCount() == 0) return false;
 
     QStandardItem *si = sim->itemFromIndex(index);
@@ -77,22 +76,15 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
       //If it's really a package in the Transaction treeview...
       QString pkgName=si->text();
 
-      //We have to separate Repository from Package Name, first
-      int slash = pkgName.indexOf("/");
-      if (slash != -1)
-      {
-        pkgName = pkgName.mid(slash+1);
-      }
-
       if (si->icon().pixmap(22, 22).toImage() ==
-          IconHelper::getIconInstallItem().pixmap(22, 22).toImage() ||
+          IconHelper::getIconToInstall().pixmap(22, 22).toImage() ||
           si->icon().pixmap(22, 22).toImage() ==
-          IconHelper::getIconRemoveItem().pixmap(22, 22).toImage())
+          IconHelper::getIconToRemove().pixmap(22, 22).toImage())
       {
         gPoint = tvTransaction->mapToGlobal(event->pos());
         QFuture<QString> f;
         disconnect(&g_fwToolTip, SIGNAL(finished()), this, SLOT(execToolTip()));
-        f = QtConcurrent::run(showPackageInfo, pkgName);
+        f = QtConcurrent::run(showPackageDescription, pkgName);
         g_fwToolTip.setFuture(f);
         connect(&g_fwToolTip, SIGNAL(finished()), this, SLOT(execToolTip()));
       }

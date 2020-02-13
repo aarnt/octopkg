@@ -37,7 +37,6 @@ const QString ctn_PACMAN_DATABASE_DIR = "/var/lib/pacman";
 const QString ctn_PKGNG_FREEBSD_CORE_DB_FILE = "/var/db/pkg/repo-FreeBSD.sqlite";
 const QString ctn_PKGNG_GHOSTBSD_CORE_DB_FILE = "/var/db/pkg/repo-GhostBSD.sqlite";
 const QString ctn_PKGNG_PCBSD_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
-//const QString ctn_PKGNG_TRUEOS_CORE_DB_FILE = "/var/db/pkg/repo-trueos-major.sqlite";
 const QString ctn_PKGNG_FAKE_REPOSITORY = "_WWW";
 
 enum PackageStatus { ectn_INSTALLED, ectn_NON_INSTALLED, ectn_OUTDATED, ectn_NEWER,

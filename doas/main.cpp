@@ -36,8 +36,7 @@
  */
 
 #include "sudo.h"
-#include "../src/argumentlist.h"
-#include <unistd.h>
+//#include "../src/argumentlist.h"
 #include <iostream>
 
 #include <QApplication>
@@ -45,55 +44,12 @@
 #include <QFile>
 #include <QTextStream>
 
-/*
- * Saves a file called "octopihelper" at /etc/sudoers.d so any user member of wheel group can run Octopi without entering a password
- */
-void setNoPasswdUse()
-{
-  QString cmd = "Cmnd_Alias  OCTOPIHELPER = /bin/sh -c unset LC_ALL; "
-      "exec '/usr/lib/octopi/octopi-helper' '-ts', "
-      "/usr/lib/octopi/octopi-helper\n\n";
-  cmd += "%wheel ALL=(root) NOPASSWD:SETENV:OCTOPIHELPER\n";
-
-  QFile file("/etc/sudoers.d/octopihelper");
-
-  if (file.exists()) file.remove();
-
-  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    QTextStream out(&file);
-    out << cmd;
-    file.close();
-
-    std::cout << "octopkg-sudo" << ": \"/etc/sudoers.d/octopihelper\" was created successfully." << std::endl;
-  }
-  else
-  {
-    std::cout << "octopkg-sudo" << ": \"/etc/sudoers.d/octopihelper\" could not be created." << std::endl;
-  }
-}
-
 int main(int argc, char **argv)
 {
   //ArgumentList *argList = new ArgumentList(argc, argv);
   QApplication app(argc, argv, true);
   app.setQuitOnLastWindowClosed(false);
   app.setAttribute(Qt::AA_UseHighDpiPixmaps, true);
-
-  /*if (argList->getSwitch("-setnopasswd"))
-  {
-    int uid = geteuid();
-    if (uid == 0) //octopi-sudo is running as root
-    {
-      setNoPasswdUse();
-      return 0;
-    }
-    else
-    {
-      std::cout << "octopi-sudo" << ": You need to run as root to exec with this parameter." << std::endl;
-      return -1;
-    }
-  }*/
 
   QTranslator translator;
   // look up e.g. :/translations/myapp_de.qm

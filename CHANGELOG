@@ -5,9 +5,12 @@
   BugFix: Do not offer to open "LSB relocatable" files at File tab.
   BugFix: anchor output when pkg list is empty.
   BugFix: TransactionDialog was size constrained.
+  BugFix: Use of "ReInstall" and "Update" texts instead of just generic "Install" text 
+	on package list context menus.
+  Added Info option on package list context menu.
   Changed some ui icons.
   Added plasma5 support.
-  Added a custom sudo tool to execute actions: octopkg-sudo, a lxqt-sudo clone.
+  Added a custom doas tool to execute actions: octopkg-doas, a lxqt-sudo clone.
   Abort show file content when file list is greater than 1MB of text.
   Changed F12 key behaviour to F11.
   Added the option to terminate the current transaction being executed, by pressing 

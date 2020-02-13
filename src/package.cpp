@@ -1073,7 +1073,6 @@ QString Package::getDependencies(const QString &pkgName)
 {
   QStringList pkgList;
   QString res;
-
   QString aux = UnixCommand::getDependenciesList(pkgName);
   pkgList = aux.split("\n", QString::SkipEmptyParts);
   pkgList.sort();
@@ -1197,13 +1196,8 @@ bool Package::hasPkgNGDatabase()
 
   if (!done)
   {
-    if (UnixCommand::getBSDFlavour() == ectn_PCBSD)
-    {
-      QFile f(ctn_PKGNG_PCBSD_CORE_DB_FILE);
-      answer = f.exists();
-    }
     //If we're running inside a GhostBSD OS, let's check which repo file we get
-    else if (UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
+    if (UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
     {
       QFile f(ctn_PKGNG_GHOSTBSD_CORE_DB_FILE);
       answer = f.exists();

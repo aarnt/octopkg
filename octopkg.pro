@@ -17,6 +17,7 @@ MOC_DIR += build
 UI_DIR += build
 
 HEADERS += src/QtSolutions/qtsingleapplication.h \
+        src/packagetreeview.h \
         src/QtSolutions/qtlocalpeer.h \
         src/constants.h \
         src/mainwindow.h \
@@ -40,6 +41,7 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/terminal.h
 
 SOURCES += src/QtSolutions/qtsingleapplication.cpp \
+        src/packagetreeview.cpp \
         src/QtSolutions/qtlocalpeer.cpp \
         src/main.cpp\
         src/mainwindow.cpp \
@@ -75,7 +77,6 @@ RESOURCES += resources.qrc
 
 #TRANSLATIONS += resources/translations/octopkg_pt_BR.ts
 
-# install
 isEmpty(PREFIX) {
     PREFIX = /usr/local
 }

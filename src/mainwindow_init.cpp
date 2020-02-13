@@ -57,10 +57,6 @@ void MainWindow::loadSettings(){
 
     ui->tvPackages->header()->setSortIndicator( packageListOrderedCol, packageListSortOrder );
     ui->tvPackages->sortByColumn( packageListOrderedCol, packageListSortOrder );
-
-    /*if (!SettingsManager::isValidTerminalSelected()){
-      SettingsManager::setTerminal(ctn_AUTOMATIC);
-    }*/
   }
   else assert(false);
 }
@@ -159,30 +155,6 @@ void MainWindow::initAppIcon()
 
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
   refreshAppIcon();
-}
-
-/*
- * Whenever user clicks the SystemTrayIcon area...
- */
-void MainWindow::execSystemTrayActivated(QSystemTrayIcon::ActivationReason ar)
-{
-  if (!m_initializationCompleted) return;
-
-  switch (ar)
-  {
-  case QSystemTrayIcon::Trigger:
-  case QSystemTrayIcon::DoubleClick:
-    if ( this->isHidden() ){
-      if (this->isMinimized()) this->setWindowState(Qt::WindowNoState);
-      this->show();
-    }
-    else {
-      this->hide();
-    }
-    break;
-
-  default: break;
-  }
 }
 
 /*
@@ -302,16 +274,8 @@ void MainWindow::initToolBar()
   ui->mainToolBar->addAction(m_dummyAction);
   m_leFilterPackage->setMinimumHeight(24);
   ui->mainToolBar->addWidget(m_leFilterPackage);
-
-  /*QWidget * hSpacer = new QWidget(this);
-  hSpacer->setMinimumHeight(22);
-  hSpacer->setMinimumWidth(3);
-  hSpacer->setVisible(true);
-  ui->mainToolBar->addWidget(hSpacer);
-  ui->mainToolBar->addAction(m_actionShowGroups);*/
   ui->mainToolBar->toggleViewAction()->setEnabled(false);
   ui->mainToolBar->toggleViewAction()->setVisible(false);
-
   ui->mainToolBar->setStyleSheet(StrConstants::getToolBarCSS());
 
   m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextLocal());
@@ -348,7 +312,6 @@ void MainWindow::initToolButtonPacman()
   m_menuToolButtonPacman->addAction(m_actionInstallPacmanUpdates);
   m_toolButtonPacman->setPopupMode(QToolButton::MenuButtonPopup);
   m_toolButtonPacman->setMenu(m_menuToolButtonPacman);
-
   connect(m_toolButtonPacman, SIGNAL(clicked()), this, SLOT(outputOutdatedPackageList()));
 }
 
@@ -461,22 +424,9 @@ void MainWindow::initLineEditFilterPackages(){
  */
 void MainWindow::initPackageTreeView()
 {
-  //ui->tvPackages->setAlternatingRowColors(true);
-  ui->tvPackages->setItemDelegate(new TreeViewPackagesItemDelegate(ui->tvPackages));
-  ui->tvPackages->setContextMenuPolicy(Qt::CustomContextMenu);
-  ui->tvPackages->setSelectionMode(QAbstractItemView::ExtendedSelection);
-  ui->tvPackages->setEditTriggers(QAbstractItemView::NoEditTriggers);
-  ui->tvPackages->setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-  ui->tvPackages->setAllColumnsShowFocus( true );
+  ui->tvPackages->init();
   ui->tvPackages->setModel(m_packageModel.get());
-  ui->tvPackages->setSortingEnabled( true );
-  ui->tvPackages->setIndentation( 0 );
-  ui->tvPackages->header()->setSortIndicatorShown(true);
-  ui->tvPackages->header()->setSectionsClickable(true);
-  ui->tvPackages->header()->setSectionsMovable(false);
-  ui->tvPackages->header()->setSectionResizeMode(QHeaderView::Interactive);
-  ui->tvPackages->header()->setDefaultAlignment( Qt::AlignLeft );
-  resizePackageTreeView();
+  ui->tvPackages->resizePackageView();
 
   connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(tvPackagesSelectionChanged(QItemSelection,QItemSelection)));
@@ -500,16 +450,6 @@ void MainWindow::removePackageTreeViewConnections()
   disconnect(ui->tvPackages, SIGNAL(customContextMenuRequested(QPoint)), this,
           SLOT(execContextMenuPackages(QPoint)));
   disconnect(ui->tvPackages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClickPackageList()));
-}
-
-void MainWindow::resizePackageTreeView()
-{
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_ICON_COLUMN,
-                                 SettingsManager::getPackageIconColumnWidth());
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_NAME_COLUMN,
-                                 SettingsManager::getPackageNameColumnWidth());
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_VERSION_COLUMN,
-                                 SettingsManager::getPackageVersionColumnWidth());
 }
 
 /*
@@ -645,6 +585,9 @@ void MainWindow::initActions()
   m_hasMirrorCheck = false; //UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
   m_actionSysInfo = new QAction(this);
 
+  m_actionPackageInfo = new QAction(this);
+  m_actionPackageInfo->setText(StrConstants::getTabInfoName());
+
   if(m_hasMirrorCheck)
   {
     m_actionMirrorCheck = new QAction(this);
@@ -720,6 +663,7 @@ void MainWindow::initActions()
   connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
   connect(ui->actionHelpUsage, SIGNAL(triggered()), this, SLOT(onHelpUsage()));
   connect(ui->actionHelpAbout, SIGNAL(triggered()), this, SLOT(onHelpAbout()));
+  connect(m_actionPackageInfo, SIGNAL(triggered()), this, SLOT(showPackageInfo()));
 
   //Actions from tvPkgFileList context menu
   connect(ui->actionCollapseAllItems, SIGNAL(triggered()), this, SLOT(collapseAllContentItems()));

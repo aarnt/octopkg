@@ -131,7 +131,7 @@ void MainWindow::insertRemovePackageIntoTransaction(const QString &pkgName)
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
-  QStandardItem * siPackageToRemove = new QStandardItem(/*IconHelper::getIconRemoveItem(),*/ pkgName);
+  QStandardItem * siPackageToRemove = new QStandardItem(IconHelper::getIconToRemove(), pkgName);
   QStandardItemModel *sim = qobject_cast<QStandardItemModel *>(siRemoveParent->model());
   QList<QStandardItem *> foundItems = sim->findItems(pkgName, Qt::MatchRecursive | Qt::MatchExactly);
 
@@ -167,7 +167,7 @@ void MainWindow::insertInstallPackageIntoTransaction(const QString &pkgName)
   QTreeView *tvTransaction =
       ui->twProperties->widget(ctn_TABINDEX_TRANSACTION)->findChild<QTreeView*>("tvTransaction");
   QStandardItem * siInstallParent = getInstallTransactionParentItem();
-  QStandardItem * siPackageToInstall = new QStandardItem(/*IconHelper::getIconInstallItem(),*/ pkgName);
+  QStandardItem * siPackageToInstall = new QStandardItem(IconHelper::getIconToInstall(), pkgName);
   QStandardItem * siRemoveParent = getRemoveTransactionParentItem();
   QStandardItemModel *sim = qobject_cast<QStandardItemModel *>(siInstallParent->model());
   QList<QStandardItem *> foundItems = sim->findItems(pkgName, Qt::MatchRecursive | Qt::MatchExactly);
@@ -262,9 +262,6 @@ QString MainWindow::getTobeInstalledPackages()
 void MainWindow::insertIntoRemovePackage()
 {
   qApp->processEvents();
-  //bool checkDependencies=false;
-  //QStringList dependencies;
-
   ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
@@ -468,12 +465,6 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
       QString desc = dep->description;
       int space = desc.indexOf(" ");
       desc = desc.mid(space+1);
-
-      if(dep->repository == StrConstants::getForeignRepositoryName() && dep->description.isEmpty())
-      {
-        desc = Package::getInformationDescription(dep->name, true);
-      }
-
       msd->addPackageItem(dep->name, desc, dep->repository);
     }
 
@@ -663,7 +654,7 @@ void MainWindow::doSyncDatabase()
   QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
                    this, SLOT( actionsProcessRaisedError() ));
 
-  QString command = "pkg update -f";
+  QString command = "/usr/sbin/pkg update -f";
   m_unixCommand->executeCommand(command);
 }
 
@@ -676,7 +667,7 @@ void MainWindow::prepareSystemUpgrade()
   if (!doRemovePacmanLockFile()) return;
 
   m_lastCommandList.clear();
-  m_lastCommandList.append("pkg upgrade;");
+  m_lastCommandList.append("/usr/sbin/pkg upgrade;");
   m_lastCommandList.append("echo -e;");
   m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -795,7 +786,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
     QString command;
-    command = "pkg upgrade -y";
+    command = "/usr/sbin/pkg upgrade -y";
 
     m_unixCommand->executeCommand(command);
     m_commandQueued = ectn_NONE;
@@ -835,7 +826,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       {
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
         QString command;
-        command = "pkg upgrade -y";
+        command = "/usr/sbin/pkg upgrade -y";
 
         m_unixCommand->executeCommand(command);
         m_commandQueued = ectn_NONE;
@@ -932,11 +923,11 @@ void MainWindow::doRemoveAndInstall()
     disableTransactionButtons();
 
     QString command;
-    command = "pkg remove -f -y " + listOfRemoveTargets;
+    command = "/usr/sbin/pkg remove -f -y " + listOfRemoveTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pkg remove -f " + listOfRemoveTargets + ";");
-    m_lastCommandList.append("pkg install -f " + listOfInstallTargets + ";");
+    m_lastCommandList.append("/usr/sbin/pkg remove -f " + listOfRemoveTargets + ";");
+    m_lastCommandList.append("/usr/sbin/pkg install -f " + listOfInstallTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1016,10 +1007,10 @@ void MainWindow::doRemove()
     //disableTransactionButtons();
 
     QString command;
-    command = "pkg remove -R -f -y " + listOfTargets;
+    command = "/usr/sbin/pkg remove -R -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pkg remove -R -f " + listOfTargets + ";");
+    m_lastCommandList.append("/usr/sbin/pkg remove -R -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1114,10 +1105,10 @@ void MainWindow::doInstall()
     disableTransactionButtons();
 
     QString command;
-    command = "pkg install -f -y " + listOfTargets;
+    command = "/usr/sbin/pkg install -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("pkg install -f " + listOfTargets + ";");
+    m_lastCommandList.append("/usr/sbin/pkg install -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1280,7 +1271,7 @@ void MainWindow::doCleanCache()
 
     clearTabOutput();
     writeToTabOutputExt("<b>" + StrConstants::getCleaningPackageCache() + "</b>");
-    QString command = "pkg clean -a -y";
+    QString command = "/usr/sbin/pkg clean -a -y";
     m_unixCommand->executeCommand(command);
   }
 }

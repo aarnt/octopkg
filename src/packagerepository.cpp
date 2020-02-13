@@ -204,14 +204,12 @@ const QList<PackageRepository::PackageData*>& PackageRepository::getPackageList(
       if (list != NULL) return *list;
     }
   }*/
-
   // Workaround for AUR filter -> pre-built AUR packageList
   if (group == StrConstants::getForeignToolGroup())
   {
     //qDebug() << "Will return this list: " << m_listOfAURPackages.count();
     return m_listOfAURPackages;
   }
-
   // if no group found or not loaded yet. default to all packages
   else return m_listOfPackages;
 }

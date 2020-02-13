@@ -187,7 +187,7 @@ void MainWindow::showAnchorDescription(const QUrl &link)
 
     QFuture<QString> f;
     disconnect(&g_fwToolTipInfo, SIGNAL(finished()), this, SLOT(execToolTip()));
-    f = QtConcurrent::run(showPackageInfo, pkgName);
+    f = QtConcurrent::run(showPackageDescription, pkgName);
     g_fwToolTipInfo.setFuture(f);
     connect(&g_fwToolTipInfo, SIGNAL(finished()), this, SLOT(execToolTip()));
   }
@@ -597,10 +597,17 @@ void MainWindow::execContextMenuPackages(QPoint point)
   {
     QMenu* menu = new QMenu(this);
     QModelIndexList selectedRows = selectionModel->selectedRows();
+
     if (selectedRows.count() == 1) // enable entry "browse installed files" ?
     {
       QModelIndex item = selectedRows.at(0);
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+
+      if (package)
+      {
+        menu->addAction(m_actionPackageInfo);
+      }
+
       if (package && package->installed()) {
         menu->addAction(ui->actionFindFileInPackage);
         menu->addSeparator();
@@ -610,15 +617,16 @@ void MainWindow::execContextMenuPackages(QPoint point)
     bool allInstallable = true;
     bool allRemovable = true;    
     int numberOfSelPkgs = selectedRows.count();
+    int numberOfOutdated = 0;
 
     foreach(QModelIndex item, selectedRows)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
-      if (UnixCommand::getBSDFlavour() == ectn_PCBSD ||
-          UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
+      if (UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
           UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
       {
+        if (package->outdated()) numberOfOutdated++;
         if (package->installed() == false /*|| package->required*/ || Package::isForbidden(package->name))
         {
           allRemovable = false;
@@ -631,8 +639,9 @@ void MainWindow::execContextMenuPackages(QPoint point)
       //if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
       menu->addAction(ui->actionInstall);
 
-      if (!isAllCategoriesSelected() && !isRemoteSearchSelected()) //&& numberOfSelPkgs > 1)
+      if (allRemovable == false && !isAllCategoriesSelected() && !isRemoteSearchSelected()) //&& numberOfSelPkgs > 1)
       {
+        ui->actionInstall->setText(StrConstants::getInstallPkg());
         //Is this group already installed?
         const QList<PackageRepository::PackageData*> packageList = m_packageRepo.getPackageList(getSelectedCategory());
         if (packageList.size() == numberOfSelPkgs)
@@ -641,11 +650,29 @@ void MainWindow::execContextMenuPackages(QPoint point)
           menu->removeAction(ui->actionInstall);
         }
       }
+      else if (allRemovable == false) //Remote search here!
+      {
+        int justInstalled=0;
+        foreach(QModelIndex item, selectedRows)
+        {
+          const PackageRepository::PackageData*const aux = m_packageModel->getData(item);
+          if (aux->installed()) justInstalled++;
+        }
+
+        if (justInstalled == selectedRows.count())
+          ui->actionInstall->setText(StrConstants::getReinstall());
+        else
+          ui->actionInstall->setText(StrConstants::getInstallPkg());
+      }
+      else if (allRemovable == true && numberOfOutdated == numberOfSelPkgs)
+      {
+        ui->actionInstall->setText(StrConstants::getUpdate());
+      }
+      else if (allRemovable == true)
+      {
+        ui->actionInstall->setText(StrConstants::getReinstall());
+      }
     }
-    /*else if (allInstallable == false && numberOfAUR == numberOfSelPkgs)
-    {
-      menu->addAction(ui->actionInstallAUR); // installs directly
-    }*/
 
     if (allRemovable)
     {
@@ -671,6 +698,14 @@ void MainWindow::execContextMenuPackages(QPoint point)
       menu->exec(pt2);
     }
   }
+}
+
+/*
+ * Brings the user to the Info tab
+ */
+void MainWindow::showPackageInfo()
+{
+  refreshTabInfo(false, true);
 }
 
 /*

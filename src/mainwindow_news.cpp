@@ -71,11 +71,6 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
       writeToTabOutputExt("<b>" +
                           StrConstants::getSearchingForBSDNews().arg("GhostBSD") + "</b>");
     }
-    else if (gotoNewsTab && bsd == ectn_PCBSD)
-    {
-      writeToTabOutputExt("<b>" +
-                          StrConstants::getSearchingForBSDNews().arg("PC-BSD") + "</b>");
-    }
 
     /*
      * Here, we retrieve BSD's latest news without
@@ -203,20 +198,12 @@ void MainWindow::initTabNews()
   gridLayoutX->addWidget(text, 0, 0, 1, 1);
   text->show();
 
-#if QT_VERSION > 0x050000
   int tindex = ui->twProperties->insertTab(ctn_TABINDEX_NEWS, tabNews, QApplication::translate (
       "MainWindow", aux.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ) );
   ui->twProperties->setTabText(ui->twProperties->indexOf(tabNews), QApplication::translate(
       "MainWindow", aux.toUtf8(), 0/*, QApplication::UnicodeUTF8*/));
-#else
-  int tindex = ui->twProperties->insertTab(ctn_TABINDEX_NEWS, tabNews, QApplication::translate (
-      "MainWindow", aux.toUtf8(), 0, QApplication::UnicodeUTF8 ) );
-  ui->twProperties->setTabText(ui->twProperties->indexOf(tabNews), QApplication::translate(
-      "MainWindow", aux.toUtf8(), 0, QApplication::UnicodeUTF8));
-#endif
 
   SearchBar *searchBar = new SearchBar(this);
-
   connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(searchBarTextChangedInTextBrowser(QString)));
   connect(searchBar, SIGNAL(closed()), this, SLOT(searchBarClosedInTextBrowser()));
   connect(searchBar, SIGNAL(findNext()), this, SLOT(searchBarFindNextInTextBrowser()));
@@ -227,7 +214,6 @@ void MainWindow::initTabNews()
   connect(text, SIGNAL(sourceChanged(QUrl)), this, SLOT(onTabNewsSourceChanged(QUrl)));
 
   text->show();
-
   ui->twProperties->setCurrentIndex(tindex);
   text->setFocus();
 }

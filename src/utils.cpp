@@ -405,10 +405,6 @@ QString utils::parseDistroNews()
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getGhostBSDNews() + "</h2></p><ul>";
   }
-  else if (bsd == ectn_PCBSD)
-  {
-    html = "<p align=\"center\"><h2>" + StrConstants::getPCBSDNews() + "</h2></p><ul>";
-  }
 
   QString rssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/distro_rss.xml";
   QDomDocument doc("rss");

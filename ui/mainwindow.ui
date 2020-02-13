@@ -46,7 +46,7 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QTreeView" name="tvPackages">
+       <widget class="PackageTreeView" name="tvPackages">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
           <horstretch>0</horstretch>
@@ -561,6 +561,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PackageTreeView</class>
+   <extends>QTreeView</extends>
+   <header>src/packagetreeview.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>tvPackages</tabstop>
   <tabstop>twProperties</tabstop>

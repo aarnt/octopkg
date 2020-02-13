@@ -27,7 +27,6 @@
 
 #include <QApplication>
 #include <QItemSelection>
-#include <QSystemTrayIcon>
 #include <QMainWindow>
 #include <QToolButton>
 #include <QList>
@@ -180,6 +179,7 @@ private:
   QAction *m_actionRepositoryAll;  
   QAction *m_actionCopyFullPath;
   QAction *m_actionSysInfo;
+  QAction *m_actionPackageInfo;
 
   //Toggles use of Remote package search
   QActionGroup *m_actionGroupSearch;
@@ -228,7 +228,6 @@ private:
   bool isPackageTreeViewVisible();
   void initPackageTreeView();
   void removePackageTreeViewConnections();
-  void resizePackageTreeView();
   void changeTabWidgetPropertiesIndex(const int newIndex);
   void initTabWidgetPropertiesIndex();
   void initTabInfo();
@@ -345,12 +344,12 @@ private slots:
   void execContextMenuPackages(QPoint point);
   void execContextMenuPkgFileList(QPoint point);
   void execContextMenuTransaction(QPoint point);
-  void execSystemTrayActivated(QSystemTrayIcon::ActivationReason);
 
   //SearchLineEdit methods
   void reapplyPackageFilter();
 
   //TabWidget methods
+  void showPackageInfo();
   void refreshTabInfo(QString pkgName);
   void refreshTabInfo(bool clearContents=false, bool neverQuit=false);
   void refreshTabFiles(bool clearContents=false, bool neverQuit=false);
@@ -369,7 +368,6 @@ private slots:
   //void doAURUpgrade();
   //void doInstallAURPackage();
   //void doRemoveAURPackage();
-
   void disableTransactionActions();
   void enableTransactionActions();
   void toggleTransactionActions(const bool value);

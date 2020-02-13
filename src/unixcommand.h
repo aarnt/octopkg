@@ -37,7 +37,7 @@ enum CommandExecuting { ectn_NONE, ectn_CLEAN_CACHE, ectn_MIRROR_CHECK,
                         ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
                         ectn_RUN_IN_TERMINAL, ectn_LOCAL_PKG_REFRESH };
 
-enum BSDFlavour { ectn_DRAGONFLYBSD, ectn_FREEBSD, ectn_GHOSTBSD, ectn_PCBSD, /*ectn_TRUEOS,*/ ectn_UNKNOWN };
+enum BSDFlavour { ectn_DRAGONFLYBSD, ectn_FREEBSD, ectn_GHOSTBSD, ectn_UNKNOWN };
 
 enum Language { ectn_LANG_ENGLISH, ectn_LANG_USER_DEFINED };
 
@@ -82,19 +82,16 @@ public:
 
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
-  static QByteArray performAURCommand(const QString &args);
   static QByteArray getRemotePackageList(const QString &searchString, bool useCommentSearch = true);
   static QByteArray getUnrequiredPackageList();
   static QByteArray getOutdatedPackageList();
-  static QByteArray getOutdatedAURPackageList();
   static QByteArray getForeignPackageList();
   static QByteArray getDependenciesList(const QString &pkgName);
   static QByteArray getPackageList(const QString &pkgName = "");
   static QByteArray getPackageInformation(const QString &pkgName, bool foreignPackage);
-  static QByteArray getAURPackageVersionInformation();
   static QByteArray getPackageContentsUsingPacman(const QString &pkgName);
-  static bool isPkgfileInstalled();
   static QByteArray getPackageContentsUsingPkgfile(const QString &pkgName);
+  static bool isPkgfileInstalled();
 
   static QString getPackageByFilePath(const QString &filePath);
   static QStringList getFilePathSuggestions(const QString &file);
@@ -110,7 +107,6 @@ public:
   static bool doInternetPingTest();
   static bool isTextFile( const QString& fileName ); //fileName is Path + Name
   static bool isLSBRelated(const QString& fileName);
-
   static QString getPkgNGVersion();
   static bool hasTheExecutable( const QString& exeName );
   static bool isAppRunning(const QString &appName, bool justOneInstance = false);
@@ -123,7 +119,6 @@ public:
   static QFile* getTemporaryFile(){
     QTime time = QTime::currentTime();
     qsrand(time.minute() + time.second() + time.msec());
-
     m_temporaryFile = new QFile(ctn_TEMP_ACTIONS_FILE + QString::number(qrand()));
     m_temporaryFile->open(QIODevice::ReadWrite|QIODevice::Text);
     m_temporaryFile->setPermissions(QFile::Permissions(QFile::ExeOwner|QFile::ReadOwner));

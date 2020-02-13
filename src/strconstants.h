@@ -42,66 +42,12 @@ public:
     QString str =
         "\n" + QObject::tr("OctoPkg usage help:") + "\n\n" +
         "-version: " + QObject::tr("show application version."); /*+ "\n" +
-        "-style <Qt4-style>: " + QObject::tr("use a different Qt4 style (ex: -style gtk).") + "\n" +
-        "-removecmd <Remove-command>: " + QObject::tr("use a different remove command (ex: -removecmd R).") + "\n" +
         "-sysupgrade: " + QObject::tr("force a system upgrade at startup.") + "\n";*/
-
     return str;
   }
 
   static QString getAll(){
     return QObject::tr("All");
-  }
-
-  static QString getForeignRepositoryName(){
-    return "ALL";
-  }
-
-  static QString getForeignPkgRepositoryName(){
-    return QLatin1String( "NONE" );
-  }
-
-  static QString getForeignRepositoryToolName()
-  {
-    static bool first=true;
-    static QString ret;
-
-    if (first)
-    {
-      ret = QLatin1String( "NONE" );
-
-      first = false;
-    }
-
-    return ret;
-  }
-
-  static QString getAntergosNews(){
-    return QObject::tr("Antergos news");
-  }
-
-  static QString getArchBSDNews(){
-    return QObject::tr("ArchBSD news");
-  }
-
-  static QString getArchLinuxNews(){
-    return QObject::tr("Arch Linux news");
-  }
-
-  static QString getChakraNews(){
-    return QObject::tr("Chakra news");
-  }
-
-  static QString getKaOSNews(){
-    return QObject::tr("KaOS news");
-  }
-
-  static QString getManjaroLinuxNews(){
-    return QObject::tr("Manjaro Linux news");
-  }
-
-  static QString getNetrunnerNews(){
-    return QObject::tr("Netrunner Rolling news");
   }
 
   static QString getDragonFlyBSDNews(){
@@ -114,10 +60,6 @@ public:
 
   static QString getGhostBSDNews(){
     return QObject::tr("GhostBSD news");
-  }
-
-  static QString getPCBSDNews(){
-    return QObject::tr("PC-BSD news");
   }
 
   static QString getNewsErrorMessage(){
@@ -134,15 +76,6 @@ public:
 
   static QString getDisplayAllCategories(){
     return QObject::tr("Display all categories");
-  }
-
-  static QString getForeignToolGroup(){
-    /*QString tool = getForeignRepositoryToolName();
-    tool[0] = tool[0].toUpper();
-    tool = "<" + tool + ">";
-    return tool.toLatin1();*/
-
-    return "NONE";
   }
 
   static QString getHelpUsage(){
@@ -225,16 +158,8 @@ public:
     return QObject::tr("Replaces");
   }
 
-  static QString getPopularityHeader(){
-    return QObject::tr("Popularity");
-  }
-
   static QString getOptions(){
     return QObject::tr("Options");
-  }
-
-  static QString getVotes(){
-    return QObject::tr("votes");
   }
 
   static QString getSize(){
@@ -596,6 +521,20 @@ public:
     return QObject::tr("install");
   }
 
+  static QString getInstallPkg(){
+    return QObject::tr("Install");
+  }
+
+  static QString getReinstall()
+  {
+    return QObject::tr("Reinstall");
+  }
+
+  static QString getUpdate()
+  {
+    return QObject::tr("Update");
+  }
+
   static QString getRemoveItem(){
     return QObject::tr("Remove item");
   }
@@ -606,10 +545,6 @@ public:
 
   static QString getPressCtrlAToSelectAll(){
     return QObject::tr("Press Ctrl+A to select/deselect all");
-  }
-
-  static QString getUseAURTool(){
-    return QObject::tr("Use \"%1\" tool").arg(getForeignRepositoryToolName());
   }
 
   static QString getFilterLocalPackages(){
@@ -660,44 +595,20 @@ public:
     return QObject::tr("Set interval...");
   }
 
+  static QString getForeignToolGroup(){
+    /*QString tool = getForeignRepositoryToolName();
+    tool[0] = tool[0].toUpper();
+    tool = "<" + tool + ">";
+    return tool.toLatin1();*/
+
+    return "NONE";
+  }
+
   //Style Sheets ---------------------------------
 
   static QString getToolBarCSS(){
     return QString("QToolBar { border: 5px; } "
                    "QToolTip {}");
-  }
-
-  static QString getFilterPackageNotFoundCSS(){
-    return QString("QLineEdit{ color: white; "
-                   "background-color: rgb(207, 135, 142);"
-                   "border-color: rgb(206, 204, 197);}"
-                   );
-  }
-
-  static QString getFilterPackageFoundCSS(){
-    return QString("QLineEdit, SearchLineEdit{ color: black; "
-                   "background-color: rgb(255, 255, 200);"
-                   "border-color: rgb(206, 204, 197);}"
-                   );
-  }
-
-  static QString getDockWidgetTitleCSS(){
-    return QString("QDockWidget::title { "
-                   "text-align: right;"
-                   "background: transparent;"
-                   "padding-right: 5px;}"
-                   );
-  }
-
-  static QString getTabBarCSS(){
-    return QString("QTabBar::close-button {"
-                   "image: url(:/resources/images/window-close.png);"
-                   "border-radius: 4px}"
-                   "QTabBar::close-button:hover {"
-                   "background-color: palette(light)}"
-                   "QTabBar::close-button:pressed {"
-                   "background-color: palette(mid)}"
-                   );
   }
 
   static QString getTreeViewCSS(){

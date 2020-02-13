@@ -265,8 +265,7 @@ QString WMHelper::getXFCEEditor(){
 QString WMHelper::getKDESUCommand(){
   QString result = "";
 
-  if (UnixCommand::getBSDFlavour() == ectn_PCBSD ||
-      UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
+  if (UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
       UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
       UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
   {
@@ -307,7 +306,6 @@ QString WMHelper::getQSUDOCommand()
  */
 QString WMHelper::getTDESUCommand(){
   QString result = ctn_TDESU;
-
   result += " -d ";
   result += " -t ";
   result += " --noignorebutton ";
