@@ -168,17 +168,9 @@ void MainWindow::initPackageGroups()
   /*ui->twGroups->setColumnCount(1);
   ui->twGroups->setHeaderLabel(StrConstants::getCategories());
   ui->twGroups->header()->setSortIndicatorShown(false);
-
-  #if QT_VERSION < 0x050000
-    ui->twGroups->header()->setClickable(false);
-    ui->twGroups->header()->setMovable(false);
-    ui->twGroups->header()->setResizeMode(QHeaderView::Fixed);
-  #else
-    ui->twGroups->header()->setSectionsClickable(false);
-    ui->twGroups->header()->setSectionsMovable(false);
-    ui->twGroups->header()->setSectionResizeMode(QHeaderView::Fixed);
-  #endif
-
+  ui->twGroups->header()->setSectionsClickable(false);
+  ui->twGroups->header()->setSectionsMovable(false);
+  ui->twGroups->header()->setSectionResizeMode(QHeaderView::Fixed);
   ui->twGroups->setFrameShape(QFrame::NoFrame);
   ui->twGroups->setFrameShadow(QFrame::Plain);
   ui->twGroups->setStyleSheet(StrConstants::getTreeViewCSS());
@@ -585,7 +577,6 @@ void MainWindow::initActions()
   m_hasSLocate = false; //UnixCommand::hasTheExecutable("slocate");
   m_hasMirrorCheck = false; //UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
   m_actionSysInfo = new QAction(this);
-
   m_actionPackageInfo = new QAction(this);
   m_actionPackageInfo->setText(StrConstants::getTabInfoName());
 
@@ -643,13 +634,13 @@ void MainWindow::initActions()
   actionGroup->setExclusive(true);
   connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(tvPackagesSearchColumnChanged(QAction*)));
 
-  ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
+  //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
   ui->actionOpenDirectory->setIcon(IconHelper::getIconFolder());
 
   connect(ui->actionCleanPackagesCache, SIGNAL(triggered(bool)), this, SLOT(doCleanCache()));
   connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(invalidateTabs()));
-  connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
+  //connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
   connect(ui->actionRemoveTransactionItem, SIGNAL(triggered()), this, SLOT(onPressDelete()));
   connect(ui->actionRemoveTransactionItems, SIGNAL(triggered()), this, SLOT(onPressDelete()));
   connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
@@ -676,7 +667,7 @@ void MainWindow::initActions()
   connect(ui->actionEditFile, SIGNAL(triggered()), this, SLOT(editFile()));
   connect(ui->actionOpenDirectory, SIGNAL(triggered()), this, SLOT(openDirectory()));
   connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
-  connect(ui->actionOpenRootTerminal, SIGNAL(triggered()), this, SLOT(openRootTerminal()));
+  //connect(ui->actionOpenRootTerminal, SIGNAL(triggered()), this, SLOT(openRootTerminal()));
 
   // Use theme icons for QActions
   ui->actionSyncPackages->setIcon(IconHelper::getIconSyncDatabase());
@@ -698,7 +689,7 @@ void MainWindow::initActions()
   ui->actionRemoveTransactionItem->setIcon(IconHelper::getIconClose());
   ui->actionRemoveTransactionItems->setIcon(IconHelper::getIconClose());
   ui->actionFindFileInPackage->setIcon(IconHelper::getIconFindFileInPackage());
-  ui->actionOpenRootTerminal->setIcon(IconHelper::getIconTerminal());
+  //ui->actionOpenRootTerminal->setIcon(IconHelper::getIconTerminal());
 
   //Actions for the View menu
   connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
@@ -709,7 +700,7 @@ void MainWindow::initActions()
   {
     ui->actionHelpAbout->setIcon(IconHelper::getIconHelpAbout());
     ui->actionHelpUsage->setIcon(IconHelper::getIconHelpUsage());
-    ui->actionInstallLocalPackage->setIcon(IconHelper::getIconInstallLocalPackage());
+    //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconInstallLocalPackage());
   }
 
   // Populate Tools menu
@@ -733,5 +724,6 @@ void MainWindow::initActions()
   }*/
 
   ui->actionInstallLocalPackage->setVisible(false);
+  ui->actionOpenRootTerminal->setVisible(false);
   toggleTransactionActions(true);
 }
