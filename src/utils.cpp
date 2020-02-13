@@ -27,6 +27,8 @@
 #include "utils.h"
 #include "strconstants.h"
 #include "constants.h"
+#include "package.h"
+#include "unixcommand.h"
 #include <iostream>
 
 #include <QStandardItemModel>
@@ -38,6 +40,7 @@
 #include <QTimer>
 #include <QRegularExpression>
 #include <QDebug>
+#include <QDir>
 
 /*
  * The needed constructor

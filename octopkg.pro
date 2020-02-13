@@ -45,6 +45,7 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/QtSolutions/qtlocalpeer.cpp \
         src/main.cpp\
         src/mainwindow.cpp \
+        src/strconstants.cpp \
         src/searchlineedit.cpp \
         src/argumentlist.cpp \
         src/settingsmanager.cpp \
@@ -74,7 +75,6 @@ FORMS   += ui/mainwindow.ui \
         ui/multiselectiondialog.ui
 
 RESOURCES += resources.qrc
-
 #TRANSLATIONS += resources/translations/octopkg_pt_BR.ts
 
 isEmpty(PREFIX) {
