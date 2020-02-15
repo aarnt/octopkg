@@ -106,6 +106,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
 {
   if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     //We are searching for AUR foreign packages...
     if (isRemoteSearchSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
@@ -160,6 +162,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_Delete)
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     onPressDelete();
   }    
   else if(ke->key() == Qt::Key_1 && ke->modifiers() == Qt::AltModifier)
@@ -193,6 +197,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_F5)
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     metaBuildPackageList();
   }
   else if(ke->key() == Qt::Key_F6)
@@ -229,6 +235,8 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_F && ke->modifiers() == Qt::ControlModifier)
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     if (isPropertiesTabWidgetVisible() &&
         (ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION ||
          ui->twProperties->currentIndex() == ctn_TABINDEX_OUTPUT ||
@@ -256,11 +264,15 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     //The user wants to know which packages have no description!
     showPackagesWithNoDescription();
   }
   else if(ke->key() == Qt::Key_G && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
+    if (m_commandExecuting != ectn_NONE) return;
+
     //The user wants to go to "Display All groups"
     if (!isAllCategoriesSelected())
     {
@@ -269,18 +281,16 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   else if(ke->key() == Qt::Key_C && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
-    if (m_commandExecuting == ectn_NONE)
-    {
-      doCleanCache(); //If we are not executing any command, let's clean the cache
-    }
+    if (m_commandExecuting != ectn_NONE) return;
+
+    doCleanCache(); //If we are not executing any command, let's clean the cache
   }
-  else if(ke->key() == Qt::Key_R && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
+  /*else if(ke->key() == Qt::Key_R && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
-    if (m_commandExecuting == ectn_NONE)
-    {
-      doRemovePacmanLockFile(); //If we are not executing any command, let's remove Pacman's lock file
-    }
-  } 
+    if (m_commandExecuting != ectn_NONE) return;
+
+    doRemovePacmanLockFile(); //If we are not executing any command, let's remove Pacman's lock file
+  }*/
   else ke->ignore();
 }
 
