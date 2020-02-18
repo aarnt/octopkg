@@ -4,7 +4,7 @@
 
 You'll need "git", "curl" and "qt5" packages in order to get latest dev version running!
 
-To download the source code, type:
+To download and build the source code, type:
 
 ```
 $ git clone https://github.com/aarnt/octopkg
