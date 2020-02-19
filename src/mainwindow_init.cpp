@@ -232,12 +232,12 @@ void MainWindow::initMenuBar()
 
   ui->menuView->menuAction()->setVisible(false);
 
-  /*foreach (QAction * act,  ui->menuBar->actions())
+  foreach (QAction * act,  ui->menuBar->actions())
   {
     QString text = act->text();
-    text = text.remove("&");
+    //text = text.remove("&");
     act->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
-  }*/
+  }
 }
 
 /*
@@ -716,12 +716,17 @@ void MainWindow::initActions()
     }
   }
 
-  /*QString text;
+  QString text;
   foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
   {
-    text = ac->text().remove("&");
+    text = ac->text();
     ac->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
-  }*/
+
+    if (!ac->shortcut().isEmpty())
+    {
+      ac->setToolTip(ac->toolTip() + " (" + ac->shortcut().toString() + ")");
+    }
+  }
 
   ui->actionInstallLocalPackage->setVisible(false);
   ui->actionOpenRootTerminal->setVisible(false);

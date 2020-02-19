@@ -1129,6 +1129,9 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     return;
   }
 
+  bool filterHasFocus = m_leFilterPackage->hasFocus();
+  bool tvPackagesHasFocus = ui->tvPackages->hasFocus();
+
   QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
   if (clearContents || selectionModel == NULL ||
       selectionModel->selectedRows(PackageModel::ctn_PACKAGE_NAME_COLUMN).count() == 0)
@@ -1141,8 +1144,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
       QStandardItemModel*const modelPkgFileList = qobject_cast<QStandardItemModel*>(tvPkgFileList->model());
       modelPkgFileList->clear();
       m_cachedPackageInFiles = "";
-      bool filterHasFocus = m_leFilterPackage->hasFocus();
-      bool tvPackagesHasFocus = ui->tvPackages->hasFocus();
       closeTabFilesSearchBar();
 
       if (filterHasFocus) m_leFilterPackage->setFocus();
@@ -1344,6 +1345,9 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
   }
 
   closeTabFilesSearchBar();
+
+  if (filterHasFocus) m_leFilterPackage->setFocus();
+  else if (tvPackagesHasFocus) ui->tvPackages->setFocus();
 }
 
 /*

@@ -1744,7 +1744,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       pcbsd-major repository update completed. 24141 packages processed.
     */
 
-    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
+    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")) && !msg.contains("["))
     {
       int p = msg.indexOf(":");
       if (p == -1) return; //Guard!
@@ -2020,11 +2020,11 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       {
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
-      else if(newMsg.contains(QRegularExpression("REINSTALLED")) ||
+      else if(/*newMsg.contains(QRegularExpression("REINSTALLED")) ||
               newMsg.contains(QRegularExpression("INSTALLED")) ||
               newMsg.contains(QRegularExpression("UPGRADED")) ||
               newMsg.contains(QRegularExpression("UPDATED")) ||
-              newMsg.contains(QRegularExpression("[Cc]hecking")) ||
+              newMsg.contains(QRegularExpression("[Cc]hecking")) ||*/
               newMsg.contains(QRegularExpression("[Rr]einstalling")) ||
               newMsg.contains(QRegularExpression("[Ii]nstalling")) ||
               newMsg.contains(QRegularExpression("[Uu]pgrading")) ||
@@ -2040,7 +2040,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
                (!newMsg.contains(QRegularExpression("(is|are) up-to-date"))) &&
                (!newMsg.contains(QRegularExpression("\\s"))))
       {
-        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
+        newMsg = "<b><font color=\"#B4AB58\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
       }
       else if (newMsg.contains(":") &&
                (!newMsg.contains(QRegularExpression("->"))) &&
@@ -2048,7 +2048,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
                (!newMsg.contains(QRegularExpression("\\):"))) &&
                (!newMsg.contains(QRegularExpression(":$"))))
       {
-        newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
+        newMsg = "<b><font color=\"#B4AB58\">" + newMsg + "</font></b>"; //IT'S A PKGNAME!
       }
     }
 

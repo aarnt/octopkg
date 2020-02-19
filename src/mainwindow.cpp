@@ -779,7 +779,7 @@ void MainWindow::collapseItem(QTreeView* tv, QStandardItemModel* sim, QModelInde
     {
       QCoreApplication::processEvents();
       tv->collapse(mi);
-      QModelIndex mi2 = mi.child(i, 0);
+      QModelIndex mi2 = sim->index(i, 0, mi);
       collapseItem(tv, sim, mi2);
     }
   }
@@ -792,7 +792,7 @@ void MainWindow::expandItem(QTreeView* tv, QStandardItemModel* sim, QModelIndex*
   for (int i=0; i<sim->rowCount(*mi); i++){
     if (sim->hasChildren(*mi)){
       tv->expand(*mi);
-      QModelIndex mi2 = mi->child(i, 0);
+      QModelIndex mi2 = sim->index(i, 0, *mi);
       expandItem(tv, sim, &mi2);
     }
   }
@@ -1014,7 +1014,7 @@ void MainWindow::invalidateTabs()
   }
   else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
   {
-    refreshTabFiles(true);
+    refreshTabFiles();
     return;
   }
 }
