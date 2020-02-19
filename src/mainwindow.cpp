@@ -63,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent) :
   m_refreshPackageLists = false;
   m_cic = NULL;
   m_outdatedStringList = new QStringList();
+  //m_outdatedList = new QMap<QString, OutdatedPackageInfo>();
+  //m_outdatedList->clear();
   m_outdatedRemoteStringList = new QStringList();
   m_selectedViewOption = ectn_ALL_PKGS;
   m_selectedRepository = "";

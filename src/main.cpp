@@ -56,10 +56,10 @@ int main(int argc, char *argv[])
   //This sends a message just to enable the socket-based QtSingleApplication engine
   app.sendMessage("RAISE");
 
-  QTranslator appTranslator;
+  /*QTranslator appTranslator;
   appTranslator.load(":/resources/translations/octopkg_" +
                      QLocale::system().name());
-  app.installTranslator(&appTranslator);
+  app.installTranslator(&appTranslator);*/
 
   if (argList->getSwitch("-help")){
     std::cout << StrConstants::getApplicationCliHelp().toLatin1().data() << std::endl;
@@ -80,14 +80,14 @@ int main(int argc, char *argv[])
   app.setActivationWindow(&w);
   app.setQuitOnLastWindowClosed(false);
 
-  if (argList->getSwitch("-sysupgrade-noconfirm"))
+  /*if (argList->getSwitch("-sysupgrade-noconfirm"))
   {
     w.setCallSystemUpgradeNoConfirm();
   }
   else if (argList->getSwitch("-sysupgrade"))
   {
     w.setCallSystemUpgrade();
-  }
+  }*/
 
   if (argList->getSwitch("-d"))
   {

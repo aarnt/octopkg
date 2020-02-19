@@ -1744,7 +1744,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       pcbsd-major repository update completed. 24141 packages processed.
     */
 
-    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")) && !msg.contains("["))
+    if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
     {
       int p = msg.indexOf(":");
       if (p == -1) return; //Guard!
@@ -1759,7 +1759,12 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       }
 
       if(!textInTabOutput(pName))
-        writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
+      {
+        if (!msg.contains("["))
+          writeToTabOutputExt("<b><font color=\"#FF8040\">Fetching " + target + "</font></b>");
+        else
+          writeToTabOutputExt("<b><font color=\"#B4AB58\">Fetching " + target + "</font></b>");
+      }
     }
     else if (msg.contains("Processing"))
     {
@@ -1769,7 +1774,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       target = msg.left(p).remove("Processing").trimmed();
 
       if(!textInTabOutput(target))
-        writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
+        writeToTabOutputExt("Processing " + target + "<br>");
+        //writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
     }
 
     //Here we print the transaction percentage updating
@@ -1972,14 +1978,16 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     if ((msg.contains(QRegularExpression("\\(\\d")) &&
          (!msg.contains("target", Qt::CaseInsensitive)) &&
          (!msg.contains("package", Qt::CaseInsensitive))) ||
-       (msg.contains(QRegularExpression("\\d\\)")) &&
+
+        (msg.contains(QRegularExpression("\\d\\)")) &&
         (!msg.contains("target", Qt::CaseInsensitive)) &&
         (!msg.contains("package", Qt::CaseInsensitive))) ||
 
         msg.indexOf("Enter a selection", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("Proceed with", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("%") != -1 ||
-        msg.indexOf("---") != -1)
+        msg.indexOf("---") != -1 ||
+        msg == "[1/")
     {
       return;
     }
