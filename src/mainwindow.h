@@ -205,13 +205,12 @@ private:
   QStringList m_listOfVisitedPackages;
   int m_indOfVisitedPackage;
 
+  void getOutdatedPackageListThreaded();
   void loadSettings();
   void loadPanelSettings();
   void saveSettings(SaveSettingsReason saveSettingsReason);
   void savePackageColumnWidths();
 
-  void initAppIcon();
-  void refreshAppIcon();
   //void refreshMenuTools();
   void initMenuBar();
   void initPackageGroups();
@@ -298,7 +297,9 @@ private:
 
 private slots:
   void initToolButtonPacman();
-
+  void deferredInitAppIcon();
+  void initAppIcon();
+  void refreshAppIcon();
   //TreeView methods
   void copyFullPathToClipboard();
   void collapseAllContentItems();
@@ -364,9 +365,6 @@ private slots:
   void doInstall();
   void doCleanCache();
   void doSyncDatabase();
-  //void doAURUpgrade();
-  //void doInstallAURPackage();
-  //void doRemoveAURPackage();
   void disableTransactionActions();
   void enableTransactionActions();
   void toggleTransactionActions(const bool value);

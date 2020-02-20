@@ -24,26 +24,17 @@
 #include "strconstants.h"
 #include "model/packagemodel.h"
 
-#include <QStandardItem>
 #include <QFutureWatcher>
-
-struct AUROutdatedPackages
-{
-  public:
-    QHash<QString, QString> content;
-};
 
 typedef std::pair<QString, QStringList*> GroupMemberPair;
 
 extern QFutureWatcher<QString> g_fwToolTip;
 extern QFutureWatcher<QString> g_fwToolTipInfo;
-extern QFutureWatcher<QList<PackageListData> *> g_fwPacman;
-extern QFutureWatcher<QList<PackageListData> *> g_fwForeignPacman;
+extern QFutureWatcher<QList<PackageListData> *> g_fwPkg;
 extern QFutureWatcher<QSet<QString> *> g_fwUnrequiredPacman;
 extern QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
 extern QFutureWatcher<QList<PackageListData> *> g_fwRemote;
 extern QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
-//extern QFutureWatcher<QList<PackageListData> *> g_fwMarkForeignPackages;
 extern QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
 extern QFutureWatcher<QString> g_fwDistroNews;
 extern QFutureWatcher<QString> g_fwPackageOwnsFile;
@@ -53,7 +44,6 @@ QString showPackageDescription(QString pkgName);
 TransactionInfo getTargetUpgradeList(const QString &pkgName);
 QList<PackageListData> * searchPkgPackages();
 QSet<QString> * searchUnrequiredPacmanPackages();
-QList<PackageListData> * searchForeignPackages();
 QList<PackageListData> * searchRemotePackages(QString searchString);
 QString searchPacmanPackagesByFile(const QString &file);
 GroupMemberPair          searchPacmanPackagesFromGroup(QString groupName);

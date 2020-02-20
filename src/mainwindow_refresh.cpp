@@ -358,7 +358,7 @@ void MainWindow::preBuildUnrequiredPackageList()
  */
 void MainWindow::preBuildPackageList()
 {
-  m_listOfPackages.reset(g_fwPacman.result());
+  m_listOfPackages.reset(g_fwPkg.result());
 
   if(m_debugInfo)
     std::cout << "Time elapsed obtaining pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
@@ -395,9 +395,9 @@ void MainWindow::searchForPkgPackages()
 {
   QFuture<QList<PackageListData> *> f;
   f = QtConcurrent::run(searchPkgPackages);
-  disconnect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
-  connect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
-  g_fwPacman.setFuture(f);
+  disconnect(&g_fwPkg, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
+  connect(&g_fwPkg, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
+  g_fwPkg.setFuture(f);
 }
 
 /*
@@ -451,7 +451,7 @@ void MainWindow::metaBuildPackageList()
 
     //disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
     //connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    disconnect(&g_fwPacman, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
+    disconnect(&g_fwPkg, SIGNAL(finished()), this, SLOT(preBuildPackageList()));
 
     if (m_refreshPackageLists)
     {
@@ -797,7 +797,8 @@ void MainWindow::buildPackageList()
   delete list;
   list = NULL;
 
-  foreach(QString k, m_outdatedList->keys())
+  if(g_fwOutdatedList.isFinished())
+  {foreach(QString k, m_outdatedList->keys())
   {
     OutdatedPackageInfo opi = m_outdatedList->value(k);
     PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(k);
@@ -806,6 +807,7 @@ void MainWindow::buildPackageList()
       package->status = ectn_OUTDATED;
       package->outdatedVersion = opi.oldVersion;
     }
+  }
   }
 
   if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");
@@ -996,7 +998,7 @@ void MainWindow::refreshStatusBar()
   m_lblTotalCounters->setText(text);
   ui->statusBar->addWidget(m_lblTotalCounters);
 
-  if (m_numberOfOutdatedPackages > 0)
+  if (g_fwOutdatedList.isFinished() && m_numberOfOutdatedPackages > 0)
   {
     m_toolButtonPacman->show();
 

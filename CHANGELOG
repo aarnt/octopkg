@@ -6,6 +6,7 @@
   BugFix: TransactionDialog was size constrained.
   BugFix: Use of "ReInstall" and "Update" texts instead of just generic "Install" text 
 	on package list context menus.
+  Faster startup time thanks to deferred retrieval of outdated packages.
   Added Info option on package list context menu.
   Changed some ui icons.
   Added plasma5 support.

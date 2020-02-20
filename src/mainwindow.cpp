@@ -63,8 +63,6 @@ MainWindow::MainWindow(QWidget *parent) :
   m_refreshPackageLists = false;
   m_cic = NULL;
   m_outdatedStringList = new QStringList();
-  //m_outdatedList = new QMap<QString, OutdatedPackageInfo>();
-  //m_outdatedList->clear();
   m_outdatedRemoteStringList = new QStringList();
   m_selectedViewOption = ectn_ALL_PKGS;
   m_selectedRepository = "";
@@ -74,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;
 
+  getOutdatedPackageListThreaded();
   //Here we try to speed up first pkg list build!
   //m_time->start();
 
@@ -124,7 +123,7 @@ void MainWindow::show()
     loadPanelSettings();
     initStatusBar();
     initToolButtonPacman();
-    initAppIcon();
+    //initAppIcon();
     initMenuBar();
     initToolBar();
     initTabWidgetPropertiesIndex();
@@ -148,6 +147,37 @@ void MainWindow::show()
   }
   else
     QMainWindow::show();
+}
+
+/*
+ * Retrieves outdated pkg list on another thread
+ */
+void MainWindow::getOutdatedPackageListThreaded()
+{
+  QFuture<QMap<QString, OutdatedPackageInfo> *> f;
+  f = QtConcurrent::run(getOutdatedList);
+  disconnect(&g_fwOutdatedList, SIGNAL(finished()), this, SLOT(searchForPkgPackages()));
+  connect(&g_fwOutdatedList, SIGNAL(finished()), this, SLOT(deferredInitAppIcon()));
+  g_fwOutdatedList.setFuture(f);
+}
+
+void MainWindow::deferredInitAppIcon()
+{
+  m_outdatedList = g_fwOutdatedList.result();
+
+  foreach(QString k, m_outdatedList->keys())
+  {
+    m_outdatedStringList->append(k);
+  }
+
+  m_numberOfOutdatedPackages = m_outdatedStringList->count();
+  refreshAppIcon();
+  refreshStatusBar();
+
+  if (m_numberOfOutdatedPackages > 0)
+  {
+    m_packageRepo.markOutdatedPackages(*m_outdatedStringList);
+  }
 }
 
 /*

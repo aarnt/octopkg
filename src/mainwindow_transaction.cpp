@@ -1774,7 +1774,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       target = msg.left(p).remove("Processing").trimmed();
 
       if(!textInTabOutput(target))
-        writeToTabOutputExt("Processing " + target + "<br>");
+        writeToTabOutputExt("Processing " + target + "...");
         //writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
     }
 
