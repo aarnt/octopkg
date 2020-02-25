@@ -89,7 +89,6 @@ private:
   CPUIntensiveComputing *m_cic;
   UnixCommand *m_unixCommand;
   bool m_initializationCompleted;
-
   SearchLineEdit *m_leFilterPackage;
   QList<QModelIndex> *m_foundFilesInPkgFileList;
   int m_indFoundFilesInPkgFileList;
@@ -360,7 +359,6 @@ private slots:
   void doPreRemoveAndInstall();
   void doRemoveAndInstall();
   void doRemove();
-  bool doRemovePacmanLockFile();
   void doPreInstall();
   void doInstall();
   void doCleanCache();

@@ -134,7 +134,6 @@ void MainWindow::insertRemovePackageIntoTransaction(const QString &pkgName)
   QStandardItem * siPackageToRemove = new QStandardItem(IconHelper::getIconToRemove(), pkgName);
   QStandardItemModel *sim = qobject_cast<QStandardItemModel *>(siRemoveParent->model());
   QList<QStandardItem *> foundItems = sim->findItems(pkgName, Qt::MatchRecursive | Qt::MatchExactly);
-
   int slash = pkgName.indexOf("/");
   QString pkg = pkgName.mid(slash+1);
   siPackageToRemove->setText(pkg);
@@ -640,8 +639,6 @@ bool MainWindow::isSUAvailable()
  */
 void MainWindow::doSyncDatabase()
 {
-  if (!doRemovePacmanLockFile()) return;
-
   m_commandExecuting = ectn_SYNC_DATABASE;
   disableTransactionActions();
   m_unixCommand = new UnixCommand(this);
@@ -664,7 +661,6 @@ void MainWindow::doSyncDatabase()
 void MainWindow::prepareSystemUpgrade()
 {
   m_systemUpgradeDialog = false;
-  if (!doRemovePacmanLockFile()) return;
 
   m_lastCommandList.clear();
   m_lastCommandList.append("/usr/sbin/pkg upgrade;");
@@ -918,8 +914,6 @@ void MainWindow::doRemoveAndInstall()
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
-    if (!doRemovePacmanLockFile()) return;
-
     disableTransactionButtons();
 
     QString command;
@@ -1002,10 +996,6 @@ void MainWindow::doRemove()
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
-    if (!doRemovePacmanLockFile()) return;
-
-    //disableTransactionButtons();
-
     QString command;
     command = "/usr/sbin/pkg remove -R -f -y " + listOfTargets;
 
@@ -1100,8 +1090,6 @@ void MainWindow::doInstall()
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
-    if (!doRemovePacmanLockFile()) return;
-
     disableTransactionButtons();
 
     QString command;
@@ -1139,37 +1127,6 @@ void MainWindow::doInstall()
     m_commandExecuting = ectn_NONE;
     enableTransactionActions();
   }
-}
-
-/*
- * If the Pacman lock file exists ("/var/run/pacman.lck"), removes it!
- */
-bool MainWindow::doRemovePacmanLockFile()
-{
-  //If there are no means to run the actions, we must warn!
-  if (!isSUAvailable()) return false;
-
-  /*QString lockFilePath("/var/lib/pacman/db.lck");
-  QFile lockFile(lockFilePath);
-
-  if (lockFile.exists())
-  {
-    int res = QMessageBox::question(this, StrConstants::getConfirmation(),
-                                    StrConstants::getRemovePacmanTransactionLockFileConfirmation(),
-                                    QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
-
-    if (res == QMessageBox::Yes)
-    {
-      qApp->processEvents();
-
-      clearTabOutput();
-      writeToTabOutputExt("<b>" + StrConstants::getRemovingPacmanTransactionLockFile() + "</b>");
-      UnixCommand::execCommand("rm " + lockFilePath);
-      writeToTabOutputExt("<b>" + StrConstants::getCommandFinishedOK() + "</b>");
-    }
-  }*/
-
-  return true;
 }
 
 /*
@@ -1214,8 +1171,6 @@ void MainWindow::doInstallLocalPackages()
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
-    if (!doRemovePacmanLockFile()) return;
-
     QString command;
     command = "pacman -U --force --noconfirm " + listOfTargets;
 
@@ -1254,8 +1209,6 @@ void MainWindow::doInstallLocalPackages()
  */
 void MainWindow::doCleanCache()
 {
-  if (!doRemovePacmanLockFile()) return;
-
   int res = QMessageBox::question(this, StrConstants::getConfirmation(),
                                   StrConstants::getCleanCacheConfirmation(),
                                   QMessageBox::Yes|QMessageBox::No, QMessageBox::No);
@@ -1303,10 +1256,8 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
-
     m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
-
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
   }
@@ -1314,11 +1265,10 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
-
     m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
-
     ui->actionSyncPackages->setEnabled(true);
+
     if (value == true && m_outdatedStringList->count() > 0)
       ui->actionSystemUpgrade->setEnabled(true);
   }
@@ -1326,7 +1276,6 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     m_actionSwitchToLocalSearch->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(false);
-
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
   }
@@ -1343,6 +1292,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionCleanPackagesCache->setEnabled(value);
   ui->actionOpenRootTerminal->setEnabled(value);
   ui->actionHelpUsage->setEnabled(value);
+  ui->actionDonate->setEnabled(value);
   ui->actionHelpAbout->setEnabled(value);
   ui->actionExit->setEnabled(value);
 
