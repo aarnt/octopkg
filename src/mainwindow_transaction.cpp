@@ -31,6 +31,7 @@
 #include "multiselectiondialog.h"
 #include "globals.h"
 #include "searchlineedit.h"
+#include "constants.h"
 #include <iostream>
 #include <cassert>
 
@@ -651,7 +652,7 @@ void MainWindow::doSyncDatabase()
   QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
                    this, SLOT( actionsProcessRaisedError() ));
 
-  QString command = "/usr/sbin/pkg update -f";
+  QString command = ctn_PKG_BIN + " update -f";
   m_unixCommand->executeCommand(command);
 }
 
@@ -663,7 +664,7 @@ void MainWindow::prepareSystemUpgrade()
   m_systemUpgradeDialog = false;
 
   m_lastCommandList.clear();
-  m_lastCommandList.append("/usr/sbin/pkg upgrade;");
+  m_lastCommandList.append(ctn_PKG_BIN + " upgrade;");
   m_lastCommandList.append("echo -e;");
   m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -782,7 +783,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
     QString command;
-    command = "/usr/sbin/pkg upgrade -y";
+    command = ctn_PKG_BIN + " upgrade -y";
 
     m_unixCommand->executeCommand(command);
     m_commandQueued = ectn_NONE;
@@ -822,7 +823,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       {
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
         QString command;
-        command = "/usr/sbin/pkg upgrade -y";
+        command = ctn_PKG_BIN + " upgrade -y";
 
         m_unixCommand->executeCommand(command);
         m_commandQueued = ectn_NONE;
@@ -917,11 +918,11 @@ void MainWindow::doRemoveAndInstall()
     disableTransactionButtons();
 
     QString command;
-    command = "/usr/sbin/pkg remove -f -y " + listOfRemoveTargets;
+    command = ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("/usr/sbin/pkg remove -f " + listOfRemoveTargets + ";");
-    m_lastCommandList.append("/usr/sbin/pkg install -f " + listOfInstallTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " remove -f " + listOfRemoveTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " install -f " + listOfInstallTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -997,10 +998,10 @@ void MainWindow::doRemove()
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
     QString command;
-    command = "/usr/sbin/pkg remove -R -f -y " + listOfTargets;
+    command = ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("/usr/sbin/pkg remove -R -f " + listOfTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " remove -R -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1093,10 +1094,10 @@ void MainWindow::doInstall()
     disableTransactionButtons();
 
     QString command;
-    command = "/usr/sbin/pkg install -f -y " + listOfTargets;
+    command = ctn_PKG_BIN + " install -f -y " + listOfTargets;
 
     m_lastCommandList.clear();
-    m_lastCommandList.append("/usr/sbin/pkg install -f " + listOfTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " install -f " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
@@ -1224,7 +1225,7 @@ void MainWindow::doCleanCache()
 
     clearTabOutput();
     writeToTabOutputExt("<b>" + StrConstants::getCleaningPackageCache() + "</b>");
-    QString command = "/usr/sbin/pkg clean -a -y";
+    QString command = ctn_PKG_BIN + " clean -a -y";
     m_unixCommand->executeCommand(command);
   }
 }

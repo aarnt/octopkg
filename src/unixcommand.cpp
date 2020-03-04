@@ -22,6 +22,7 @@
 #include "strconstants.h"
 #include "wmhelper.h"
 #include "terminal.h"
+#include "constants.h"
 #include <iostream>
 
 #include <QProcess>
@@ -120,7 +121,7 @@ QString UnixCommand::discoverBinaryPath(const QString& binary){
 bool UnixCommand::cleanPacmanCache()
 {
   QProcess pacman;
-  QString commandStr = "/usr/sbin/pkg clean -a -y";
+  QString commandStr = ctn_PKG_BIN + " clean -a -y";
 
   QString command = WMHelper::getSUCommand() + " \"" + commandStr + "\"";
   pacman.start(command);
@@ -142,7 +143,7 @@ QByteArray UnixCommand::performQuery(const QStringList args)
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
 
-  pacman.start("/usr/sbin/pkg", args);
+  pacman.start(ctn_PKG_BIN, args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
   pacman.close();
@@ -164,7 +165,7 @@ QByteArray UnixCommand::performQuery(const QString &args)
   env.insert("LC_MESSAGES", "C");
   env.insert("LC_ALL", "C");
   pacman.setProcessEnvironment(env);
-  pacman.start("/usr/sbin/pkg " + args);
+  pacman.start(ctn_PKG_BIN + " " + args);
   pacman.waitForFinished();
   result = pacman.readAllStandardOutput();
 

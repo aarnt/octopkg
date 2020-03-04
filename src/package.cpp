@@ -1209,6 +1209,11 @@ bool Package::hasPkgNGDatabase()
         answer = f.exists();
       }
     }
+    else if (UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
+    {
+      QFile f(ctn_PKGNG_DRAGONFLYBSD_CORE_DB_FILE);
+      answer = f.exists();        
+    }
     else
     {
       QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui network xml dbus widgets quick quickwidgets
+QT += core gui network xml widgets
 DEFINES += OCTOPKG_EXTENSIONS
 CONFIG += qt warn_on debug
 LIBS += -L/usr/local/lib

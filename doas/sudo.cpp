@@ -44,7 +44,7 @@
 #include <QTimer>
 #if defined(__linux__)
 #include <pty.h>
-#elif defined(__FreeBSD__)
+#elif defined(__DragonFly__) || defined(__FreeBSD__)
 #include <libutil.h>
 #include <errno.h>
 #include <termios.h>
@@ -68,7 +68,7 @@ const QString app_lxsudo{QStringLiteral("doas")};
 const QString su_prog{QStringLiteral("su")};
 const QString sudo_prog{QStringLiteral("doas")};
 
-#ifdef __FreeBSD__
+#if defined(__DragonFly__) || defined(__FreeBSD__)
     const QString pwd_prompt_end_c_locale{QStringLiteral(":")};
 #endif
 
@@ -259,7 +259,7 @@ QString Sudo::backendName (backend_t backEnd)
 void Sudo::child()
 {
   int params_cnt = 3 //1. su/sudo & "shell command" & last nullptr
-#ifndef __FreeBSD__
+#if defined(__DragonFly__) || defined(__FreeBSD__)
         + (BACK_SU == mBackend ? 1 : 3); //-c for su | -E /bin/sh -c for sudo
 #else
       + (BACK_SU == mBackend ? 3 : 3);
@@ -294,7 +294,7 @@ void Sudo::child()
   // locale and then set the locale back for the command
  
   std::string command;
- #ifndef __FreeBSD__
+ #if defined(__DragonFly__) || defined(__FreeBSD__)
     char const * const env_lc_all = getenv("LC_ALL");
     if (env_lc_all == nullptr)
     {
@@ -394,7 +394,7 @@ int Sudo::parent()
       }
     } else
     {
-#ifdef __FreeBSD__
+#if defined(__DragonFly__) || defined(__FreeBSD__)
      if( line.endsWith(pwd_prompt_end_c_locale)  || line.endsWith(pwd_prompt_end))
 #else
      if (line.endsWith(pwd_prompt_end))
