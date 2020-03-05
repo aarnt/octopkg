@@ -5,7 +5,7 @@
 
 #if defined(__DragonFly__)
   const QString ctn_PKG_BIN = "/usr/local/sbin/pkg";
-#elif
+#else
   const QString ctn_PKG_BIN = "/usr/sbin/pkg";
 #endif
 
