@@ -700,23 +700,7 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
     m_process->setProcessEnvironment(env);
   }
 
-  if(isRootRunning())
-  {
-    command += "dbus-launch " + pCommand;
-  }
-  else
-  {
-    if (WMHelper::getSUCommand() == ctn_KDESU)
-    {
-      command = WMHelper::getSUCommand() + pCommand;
-    }
-    else
-    {
-      //command = WMHelper::getSUCommand() + "\"" + pCommand + "\"";
-      command = WMHelper::getSUCommand() + pCommand;
-    }
-  }
-
+  command = WMHelper::getSUCommand() + pCommand;
   m_process->start(command);
 }
 
