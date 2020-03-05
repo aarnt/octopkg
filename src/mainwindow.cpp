@@ -656,7 +656,8 @@ void MainWindow::execContextMenuPackages(QPoint point)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
-      if (UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
+      if (UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD ||
+          UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
           UnixCommand::getBSDFlavour() == ectn_GHOSTBSD)
       {
         if (package->outdated()) numberOfOutdated++;
