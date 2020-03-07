@@ -74,6 +74,11 @@ const QString ctn_LXQT_TERMINAL("qterminal");
 const QString ctn_LXQT_FILE_MANAGER("pcmanfm-qt");
 const QString ctn_LXQT_EDITOR("juffed");
 
+const QString ctn_LUMINA_DESKTOP("lumina-desktop");
+const QString ctn_LUMINA_EDITOR("lumina-textedit");
+const QString ctn_LUMINA_FILE_MANAGER("lumina-fm");
+const QString ctn_LUMINA_OPEN("lumina-open");
+
 const QString ctn_MATE_DESKTOP("mate-session");
 const QString ctn_MATE_EDITOR("mate-open");
 const QString ctn_MATE_FILE_MANAGER("caja");
@@ -105,12 +110,9 @@ public:
   static bool isLXQTRunning();
   static bool isMATERunning();
   static bool isCinnamonRunning();
-  static bool isRazorQtRunning();
+  static bool isLuminaRunning();
 
   static QString getKDEOpenHelper();
-
-  static QString getQSUDOCommand();
-
   static QString getKDESUCommand();
   static QString getTDESUCommand();
   static QString getGKSUCommand();

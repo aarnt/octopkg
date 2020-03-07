@@ -7,7 +7,9 @@
   BugFix: Use of "ReInstall" and "Update" texts instead of just generic "Install" text 
 	on package list context menus.
   BugFix: DragonFlyBSD support updated!
+  BugFix: Let exit menu and close button enabled for cancelling running actions.
   Faster startup time thanks to deferred retrieval of outdated packages.
+  Added Lumina desktop support.
   Added Info option on package list context menu.
   Changed some ui icons.
   Added plasma5 support.

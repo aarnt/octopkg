@@ -50,12 +50,26 @@ void MainWindow::closeEvent(QCloseEvent *event)
   //We cannot quit while there is a running transaction!
   if(m_commandExecuting != ectn_NONE)
   {
-    event->ignore();
+    int res = QMessageBox::question(this, StrConstants::getConfirmation(),
+                          StrConstants::getThereIsARunningTransaction() + "\n" +
+                          StrConstants::getDoYouReallyWantToQuit(),
+                          QMessageBox::Yes | QMessageBox::No,
+                          QMessageBox::No);
+    if (res == QMessageBox::Yes)
+    {
+      //UnixCommand::execCommand("killall pkg");
+      event->accept();
+      qApp->quit();
+    }
+    else
+    {
+      event->ignore();
+    }
   }
   else if(isThereAPendingTransaction())
   {
     int res = QMessageBox::question(this, StrConstants::getConfirmation(),
-                                    StrConstants::getThereIsAPendingTransaction() + "\n" +
+                                    StrConstants::getThereArePendingActions() + "\n" +
                                     StrConstants::getDoYouReallyWantToQuit(),
                                     QMessageBox::Yes | QMessageBox::No,
                                     QMessageBox::No);
@@ -66,7 +80,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
       SettingsManager::setWindowSize(windowSize);
       SettingsManager::setSplitterHorizontalState(ui->splitterHorizontal->saveState());
       event->accept();
-
       qApp->quit();
     }
     else
@@ -80,7 +93,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     SettingsManager::setWindowSize(windowSize);
     SettingsManager::setSplitterHorizontalState(ui->splitterHorizontal->saveState());
     event->accept();
-
     qApp->quit();
   }
 }
@@ -118,7 +130,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
 
       //ui->twGroups->setEnabled(false);
-
       QFuture<QList<PackageListData> *> f;
       disconnect(&g_fwRemote, SIGNAL(finished()), this, SLOT(preBuildRemotePackageList()));
       m_cic = new CPUIntensiveComputing();
@@ -130,7 +141,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     else if (isSearchByFileSelected() && m_leFilterPackage->hasFocus() && m_cic == NULL)
     {
       //ui->twGroups->setEnabled(false);
-
       QFuture<QString> f;
       disconnect(&g_fwPackageOwnsFile, SIGNAL(finished()), this, SLOT(positionInPkgListSearchByFile()));
       m_cic = new CPUIntensiveComputing();
@@ -285,12 +295,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
 
     doCleanCache(); //If we are not executing any command, let's clean the cache
   }
-  /*else if(ke->key() == Qt::Key_R && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
-  {
-    if (m_commandExecuting != ectn_NONE) return;
-
-    doRemovePacmanLockFile(); //If we are not executing any command, let's remove Pacman's lock file
-  }*/
   else ke->ignore();
 }
 
@@ -299,8 +303,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
  */
 void MainWindow::keyReleaseEvent(QKeyEvent* ke)
 {
-  //qDebug() << "StringList: " << m_listOfVisitedPackages;
-
   if ((ui->tvPackages->hasFocus()) && (
       ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
       ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||

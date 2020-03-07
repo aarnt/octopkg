@@ -468,7 +468,11 @@ QString StrConstants::getErrorRunningWithRoot(){
   return QObject::tr("You can not run OctoPkg with administrator's credentials.");
 }
 
-QString StrConstants::getThereIsAPendingTransaction(){
+QString StrConstants::getThereIsARunningTransaction(){
+  return QObject::tr("Canceling the running transaction may damage your system!");
+}
+
+QString StrConstants::getThereArePendingActions(){
   return QObject::tr("There are pending actions");
 }
 

@@ -136,7 +136,8 @@ public:
   static QString getErrorNoPkgFound();
   static QString getErrorNoBashFound();
   static QString getErrorRunningWithRoot();
-  static QString getThereIsAPendingTransaction();
+  static QString getThereIsARunningTransaction();
+  static QString getThereArePendingActions();
   static QString getDoYouReallyWantToQuit();
   static QString getExecutingCommand();
   static QString getRunInTerminal();
