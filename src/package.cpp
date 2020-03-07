@@ -66,7 +66,7 @@ QString Package::makeURLClickable( const QString &s )
   if (s.trimmed().isEmpty() || s == "UNKNOWN" || s == "unknown") return s;
 
   QString sb = s;
-  QRegExp rx("(((ht|f)tp(s?)):)?//(\\S)+[^\"|)|(|.|\\s|\\n]");
+  QRegExp rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
 
   rx.setCaseSensitivity( Qt::CaseInsensitive );
   int search = 0;
