@@ -63,42 +63,24 @@ QString Package::getBaseName( const QString& p )
  */
 QString Package::makeURLClickable( const QString &s )
 {
-	QString sb = s;
-  QRegExp rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
-  QRegExp rx1("^|[\\s]+(www\\.)(\\S)+[^\"|)|(|.|\\s|\\n]");
+  if (s.trimmed().isEmpty() || s == "UNKNOWN" || s == "unknown") return s;
+
+  QString sb = s;
+  QRegExp rx("(((ht|f)tp(s?)):)?//(\\S)+[^\"|)|(|.|\\s|\\n]");
 
   rx.setCaseSensitivity( Qt::CaseInsensitive );
-	rx1.setCaseSensitivity( Qt::CaseInsensitive );
-	int search = 0;
-	int ini = 0;
+  int search = 0;
+  int ini = 0;
 
-	//First we search for the 1st pattern: rx
-	while ( (ini = rx.indexIn( sb, search )) != -1 ){
-		QString s1 = rx.cap();
+  //First we search for the 1st pattern: rx
+  while ( (ini = rx.indexIn( sb, search )) != -1 ){
+    QString s1 = rx.cap();
     QString ns;
 
     ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
     sb.replace( ini, s1.length(), ns);
-		search = ini + (2*s1.length()) + 15;	
-	}
-
-	search = 0;
-	ini = 0;
-
-  //Now, we search for the 2nd pattern: rx1
-	while ( (ini = rx1.indexIn( sb, search )) != -1 ){
-		QString s1 = rx1.cap();
-		QString ns;
-		if (s1[0] == '\n') ns += "\n";
-
-    int blanks = s1.count(QRegExp("^|[\\s]+"));
-		for (int i=0; i<blanks; i++) ns += " ";
-
-    ns += "<a href=\"http://" + s1.trimmed() + "\">" + s1.trimmed() + "</a>";
-
-		sb.replace( ini, s1.length(), ns);
-		search = ini + (2*s1.length()) + 15;	
-	}
+    search = ini + (2*s1.length()) + 15;
+  }
 
   return sb;
 }
@@ -589,7 +571,6 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   QString pkgList = UnixCommand::getRemotePackageList(searchString, false);
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   res = parsePackageTuple(packageTuples, packageCache);
-
   QString pkgListComment = UnixCommand::getRemotePackageList(searchString, true);
   QStringList packageTuplesComment = pkgListComment.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   resComment = parsePackageTuple(packageTuplesComment, packageCache);
