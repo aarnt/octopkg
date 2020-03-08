@@ -276,7 +276,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
   const QString ctn_DRAGONFLYBSD_RSS_URL = "https://www.dragonflydigest.com/feed";
   const QString ctn_FREEBSD_RSS_URL = "https://www.freebsd.org/news/rss.xml";
   const QString ctn_GHOSTBSD_RSS_URL = "http://www.ghostbsd.org/rss.xml";
-  //const QString ctn_PCBSD_RSS_URL = "https://www.trueos.org/feed/";
+  const QString ctn_HARDENEDBSD_RSS_URL = "https://www.hardenedbsd.org/rss.xml";
 
   BSDFlavour bsd = UnixCommand::getBSDFlavour();
   QString res;
@@ -309,10 +309,10 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     {
       curlCommand = curlCommand.arg(ctn_GHOSTBSD_RSS_URL).arg(tmpRssPath);
     }
-    /*else if (bsd == ectn_PCBSD)
+    else if (bsd == ectn_HARDENEDBSD)
     {
-      curlCommand = curlCommand.arg(ctn_PCBSD_RSS_URL).arg(tmpRssPath);
-    }*/
+      curlCommand = curlCommand.arg(ctn_HARDENEDBSD_RSS_URL).arg(tmpRssPath);
+    }
 
     if (UnixCommand::runCurlCommand(curlCommand).isEmpty())
     {
@@ -407,6 +407,10 @@ QString utils::parseDistroNews()
   else if (bsd == ectn_GHOSTBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getGhostBSDNews() + "</h2></p><ul>";
+  }
+  else if (bsd == ectn_HARDENEDBSD)
+  {
+    html = "<p align=\"center\"><h2>" + StrConstants::getHardenedBSDNews() + "</h2></p><ul>";
   }
 
   QString rssPath = QDir::homePath() + QDir::separator() + ".config/octopkg/distro_rss.xml";

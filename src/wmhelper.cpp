@@ -262,7 +262,8 @@ QString WMHelper::getKDESUCommand(){
 
   if (UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
       UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
-      UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
+      UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD ||
+      UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
   {
     QFile f ("/usr/local/lib/kde4/libexec/kdesu");
     if (f.exists())

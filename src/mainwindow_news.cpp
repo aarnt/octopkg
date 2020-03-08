@@ -71,6 +71,11 @@ void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
       writeToTabOutputExt("<b>" +
                           StrConstants::getSearchingForBSDNews().arg("GhostBSD") + "</b>");
     }
+    else if (gotoNewsTab && bsd == ectn_HARDENEDBSD)
+    {
+      writeToTabOutputExt("<b>" +
+                          StrConstants::getSearchingForBSDNews().arg("HardenedBSD") + "</b>");
+    }
 
     /*
      * Here, we retrieve BSD's latest news without

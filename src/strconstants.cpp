@@ -58,6 +58,10 @@ QString StrConstants::getGhostBSDNews(){
   return QObject::tr("GhostBSD news");
 }
 
+QString StrConstants::getHardenedBSDNews(){
+  return QObject::tr("HardenedBSD news");
+}
+
 QString StrConstants::getNewsErrorMessage(){
   return QObject::tr("No news could be found! Press Ctrl+G to download the latest news.");
 }

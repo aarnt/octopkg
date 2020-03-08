@@ -9,6 +9,7 @@
   BugFix: DragonFlyBSD support updated!
   BugFix: Let exit menu and close button enabled for cancelling running actions.
   Faster startup time thanks to deferred retrieval of outdated packages.
+  Added support to HardenedBSD.
   Added Lumina desktop support.
   Added Info option on package list context menu.
   Changed some ui icons.

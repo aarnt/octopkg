@@ -34,6 +34,7 @@ public:
   static QString getDragonFlyBSDNews();
   static QString getFreeBSDNews();
   static QString getGhostBSDNews();
+  static QString getHardenedBSDNews();
   static QString getNewsErrorMessage();
   static QString getIncompatibleBSDFlavourError();
   static QString getInternetUnavailableError();

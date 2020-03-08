@@ -36,6 +36,7 @@ const QString ctn_TEMP_ACTIONS_FILE ( QDir::homePath() + QDir::separator() + ".c
 const QString ctn_PACMAN_DATABASE_DIR = "/var/lib/pacman";
 const QString ctn_PKGNG_DRAGONFLYBSD_CORE_DB_FILE = "/var/db/pkg/repo-Avalon.sqlite";
 const QString ctn_PKGNG_FREEBSD_CORE_DB_FILE = "/var/db/pkg/repo-FreeBSD.sqlite";
+const QString ctn_PKGNG_HARDENEDBSD_CORE_DB_FILE = "/var/db/pkg/repo-HardenedBSD.sqlite";
 const QString ctn_PKGNG_GHOSTBSD_CORE_DB_FILE = "/var/db/pkg/repo-GhostBSD.sqlite";
 const QString ctn_PKGNG_PCBSD_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
 const QString ctn_PKGNG_FAKE_REPOSITORY = "_WWW";

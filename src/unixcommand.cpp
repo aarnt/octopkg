@@ -122,7 +122,6 @@ bool UnixCommand::cleanPacmanCache()
 {
   QProcess pacman;
   QString commandStr = ctn_PKG_BIN + " clean -a -y";
-
   QString command = WMHelper::getSUCommand() + " \"" + commandStr + "\"";
   pacman.start(command);
   pacman.waitForFinished();
@@ -969,11 +968,15 @@ BSDFlavour UnixCommand::getBSDFlavour()
     else
     {
       QProcess p;
-      p.start("uname");
+      p.start("uname -a");
       p.waitForFinished();
       QString out = p.readAllStandardOutput();
 
-      if (out.contains("FreeBSD"))
+      if (out.contains("FreeBSD HBSD"))
+      {
+        ret = ectn_HARDENEDBSD;
+      }
+      else if (out.contains("FreeBSD"))
       {
         ret = ectn_FREEBSD;
       }
