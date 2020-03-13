@@ -364,7 +364,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
       int colon = infoTuple.indexOf(":");
       if (colon != -1)
       {
-        res->append(infoTuple.mid(colon-1).trimmed());
+        res->append(infoTuple.mid(0, colon-1).trimmed());
       }
       else
       {
