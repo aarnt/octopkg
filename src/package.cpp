@@ -361,7 +361,15 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
     int tab = infoTuple.indexOf("\t");
     if (tab != -1) //We are dealing with packages HERE!
     {
-      res->append(infoTuple.remove(QRegularExpression("\t")).trimmed());
+      int colon = infoTuple.indexOf(":");
+      if (colon != -1)
+      {
+        res->append(infoTuple.mid(colon-1).trimmed());
+      }
+      else
+      {
+        res->append(infoTuple.remove(QRegularExpression("\t")).trimmed());
+      }
     }
   }
 
