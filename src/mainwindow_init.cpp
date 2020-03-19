@@ -44,6 +44,7 @@
 #include <QProgressBar>
 #include <QSystemTrayIcon>
 #include <QToolButton>
+#include <QScreen>
 #include <QDebug>
 
 /*
@@ -246,7 +247,16 @@ void MainWindow::initMenuBar()
 void MainWindow::initToolBar()
 {
   initPackageGroups();
-  ui->mainToolBar->setIconSize(QSize(22, 22));
+
+  if (QApplication::screens().count() == 1)
+  {
+    QScreen *sc = QApplication::screens().first();
+    if (sc->size().width() >= 1920)
+      ui->mainToolBar->setIconSize(QSize(32, 32));
+    else
+      ui->mainToolBar->setIconSize(QSize(22, 22));
+  }
+
   ui->mainToolBar->addAction(ui->actionSyncPackages);
   ui->mainToolBar->addAction(ui->actionSystemUpgrade);
 
