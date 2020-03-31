@@ -9,7 +9,7 @@ DEFINES += OCTOPKG_EXTENSIONS
 CONFIG += qt warn_on debug
 LIBS += -L/usr/local/lib
 INCLUDEPATH += /usr/local/include
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++17
 TEMPLATE = app
 DESTDIR += bin
 OBJECTS_DIR += build

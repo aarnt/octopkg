@@ -40,7 +40,8 @@ PackageModel::PackageModel(const PackageRepository& repo, QObject *parent)
   m_iconNotInstalled(IconHelper::getIconNonInstalled()), m_iconInstalled(IconHelper::getIconInstalled()),
   m_iconInstalledUnrequired(IconHelper::getIconUnrequired()),
   m_iconNewer(IconHelper::getIconNewer()), m_iconOutdated(IconHelper::getIconOutdated()),
-  m_iconForeign(IconHelper::getIconForeignGreen()), m_iconForeignOutdated(IconHelper::getIconForeignRed())
+  m_iconLocked(IconHelper::getIconLocked())
+  //m_iconForeign(IconHelper::getIconForeignGreen()), m_iconForeignOutdated(IconHelper::getIconForeignRed())
 {
   m_showColumnPopularity = false;
 }
@@ -319,10 +320,10 @@ const QIcon& PackageModel::getIconFor(const PackageRepository::PackageData& pack
 {
   switch (package.status)
   {
-    case ectn_FOREIGN:
+    /*case ectn_FOREIGN:
       return m_iconForeign;
     case ectn_FOREIGN_OUTDATED:
-      return m_iconForeignOutdated;
+      return m_iconForeignOutdated;*/
     case ectn_OUTDATED:
     {
       //TODO: potential refactoring for performance if necessary
@@ -360,6 +361,8 @@ const QIcon& PackageModel::getIconFor(const PackageRepository::PackageData& pack
     case ectn_NON_INSTALLED:
 //      if (package.required == false) std::cout << "not installed not required" << std::endl; // doesn't happen with pacman
       return m_iconNotInstalled;
+    case ectn_LOCKED:
+      return m_iconLocked;
     default:
       assert(false);
   }

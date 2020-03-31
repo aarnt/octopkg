@@ -24,6 +24,8 @@
 #include <memory>
 #include "unixcommand.h"
 #include "uihelper.h"
+#include "model/packagemodel.h"
+#include "packagerepository.h"
 
 #include <QApplication>
 #include <QItemSelection>
@@ -48,9 +50,6 @@ class QAction;
 class QActionGroup;
 class QTreeWidgetItem;
 class QTime;
-
-#include "src/model/packagemodel.h"
-#include "src/packagerepository.h"
 
 //Tab indices for Properties' tabview
 const int ctn_TABINDEX_INFORMATION(0);
@@ -140,9 +139,6 @@ private:
   //This member holds the list of Pacman packages from the selected group
   std::unique_ptr<QList<QString> > m_listOfPackagesFromGroup;
 
-  //This member holds the target list retrieved by the pacman command which will be executed
-  //QStringList *m_targets;
-
   //This member holds the list of packages to install with "pacman -U" command
   QStringList m_packagesToInstallList;
 
@@ -162,7 +158,6 @@ private:
   QLabel *m_lblSelCounter;    //Holds the number of selected packages
   QLabel *m_lblTotalCounters; //Holds the total number of packages
   QProgressBar *m_progressWidget;
-
   QToolButton *m_toolButtonPacman;
   QMenu *m_menuToolButtonPacman;
 
@@ -171,7 +166,6 @@ private:
 
   QAction *m_dummyAction;
   QAction *m_actionInstallPacmanUpdates;
-  //QAction *m_actionInstallAURUpdates;
   QAction *m_actionShowGroups;
   QAction *m_actionMirrorCheck;
   QAction *m_actionMenuRepository;
@@ -179,6 +173,8 @@ private:
   QAction *m_actionCopyFullPath;
   QAction *m_actionSysInfo;
   QAction *m_actionPackageInfo;
+  QAction *m_actionLockPackage;
+  QAction *m_actionUnlockPackage;
 
   //Toggles use of Remote package search
   QActionGroup *m_actionGroupSearch;
@@ -199,6 +195,7 @@ private:
   QString m_cachedPackageInInfo;  //Used in Info tab
   QString m_cachedPackageInFiles; //Used in Files tab
 
+  QSet<QString> * m_lockedPackageList;
   QSet<QString> * m_unrequiredPackageList;
 
   QStringList m_listOfVisitedPackages;
@@ -291,7 +288,7 @@ private:
 
   void switchToViewAllPackages();
 
-  //void retrieveForeignPackageList();
+  void retrieveLockedPackageList();
   void retrieveUnrequiredPackageList();
 
 private slots:
@@ -332,7 +329,7 @@ private slots:
 
   void preBuildRemotePackageList();
   void preBuildRemotePackageListMeta();
-  //void preBuildForeignPackageList();
+  void preBuildLockedPackageList();
   void preBuildUnrequiredPackageList();
   void preBuildPackageList();
   void preBuildPackagesFromGroupList();
@@ -363,6 +360,8 @@ private slots:
   void doInstall();
   void doCleanCache();
   void doSyncDatabase();
+  void doLock();
+  void doUnlock();
   void disableTransactionActions();
   void enableTransactionActions();
   void toggleTransactionActions(const bool value);
@@ -383,7 +382,6 @@ private slots:
   void actionsProcessReadOutputErrorMirrorCheck();
   void actionsProcessReadOutputMirrorCheck();
   void actionsProcessRaisedError();
-
   void insertIntoRemovePackage();
   void insertIntoInstallPackage();
   void insertIntoInstallPackageOptDeps(const QString &packageName);

@@ -103,6 +103,8 @@ public:
   static QString getSyncDatabase();
   static QString getSyncDatabases();
   static QString getIsUpToDate();
+  static QString getLockingPackage();
+  static QString getUnlockingPackage();
   static QString getSystemUpgrade();
   static QString getInstallingPackages();
   static QString getRemovingPackages();
@@ -153,6 +155,8 @@ public:
   static QString getInstallPkg();
   static QString getReinstall();
   static QString getUpdate();
+  static QString getLock();
+  static QString getUnlock();
   static QString getRemoveItem();
   static QString getRemoveItems();
   static QString getPressCtrlAToSelectAll();

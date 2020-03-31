@@ -210,6 +210,25 @@ double Package::strToKBytes2(QString size)
 }
 
 /*
+ * Retrieves the list of locked packages
+ */
+QSet<QString> *Package::getLockedPackageList()
+{
+  QString lockedPkgList = UnixCommand::getLockedPackageList();
+  QStringList packageTuples = lockedPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  packageTuples.removeFirst(); //Removes string -> "Currently locked packages:"
+  QSet<QString>* res = new QSet<QString>();
+
+  foreach(QString packageTuple, packageTuples)
+  {
+    int lastsep = packageTuple.lastIndexOf("-");
+    res->insert(packageTuple.left(lastsep));
+  }
+
+  return res;
+}
+
+/*
  * Retrieves the list of unrequired packages (those no other packages depends on)
  */
 QSet<QString>* Package::getUnrequiredPackageList()

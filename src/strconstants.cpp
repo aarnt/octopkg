@@ -334,6 +334,16 @@ QString StrConstants::getIsUpToDate(){
   return QObject::tr("is up to date");
 }
 
+QString StrConstants::getLockingPackage()
+{
+  return QObject::tr("Locking package...");
+}
+
+QString StrConstants::getUnlockingPackage()
+{
+  return QObject::tr("Unlocking package...");
+}
+
 QString StrConstants::getSystemUpgrade(){
   return QObject::tr("Installing updates...");
 }
@@ -537,6 +547,16 @@ QString StrConstants::getReinstall()
 QString StrConstants::getUpdate()
 {
   return QObject::tr("Update");
+}
+
+QString StrConstants::getLock()
+{
+  return QObject::tr("Lock");
+}
+
+QString StrConstants::getUnlock()
+{
+  return QObject::tr("Unlock");
 }
 
 QString StrConstants::getRemoveItem(){

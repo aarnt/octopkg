@@ -585,19 +585,18 @@ void MainWindow::initTabOutput()
 void MainWindow::initActions()
 {
   m_hasSLocate = false; //UnixCommand::hasTheExecutable("slocate");
-  m_hasMirrorCheck = false; //UnixCommand::hasTheExecutable(ctn_MIRROR_CHECK_APP);
+  m_hasMirrorCheck = false;
   m_actionSysInfo = new QAction(this);
   m_actionPackageInfo = new QAction(this);
   m_actionPackageInfo->setText(StrConstants::getTabInfoName());
 
-  if(m_hasMirrorCheck)
-  {
-    m_actionMirrorCheck = new QAction(this);
-    m_actionMirrorCheck->setShortcut(QKeySequence(Qt::ControlModifier|Qt::ShiftModifier|Qt::Key_M));
-    m_actionMirrorCheck->setText("Mirror-Check");
-    m_actionMirrorCheck->setIcon(IconHelper::getIconMirrorCheck());
-    connect(m_actionMirrorCheck, SIGNAL(triggered()), this, SLOT(doMirrorCheck()));
-  }  
+  m_actionLockPackage = new QAction(this);
+  m_actionLockPackage->setText(StrConstants::getLock());
+  m_actionLockPackage->setIcon(IconHelper::getIconLocked());
+
+  m_actionUnlockPackage = new QAction(this);
+  m_actionUnlockPackage->setText(StrConstants::getUnlock());
+  m_actionUnlockPackage->setIcon(IconHelper::getIconUnlock());
 
   m_actionSwitchToLocalSearch = new QAction(this);
   m_actionSwitchToLocalSearch->setIcon(IconHelper::getIconHardDrive());
@@ -658,6 +657,8 @@ void MainWindow::initActions()
   connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
   connect(ui->actionRemove, SIGNAL(triggered()), this, SLOT(insertIntoRemovePackage()));
   connect(ui->actionInstall, SIGNAL(triggered()), this, SLOT(insertIntoInstallPackage()));
+  connect(m_actionLockPackage, SIGNAL(triggered()), this, SLOT(doLock()));
+  connect(m_actionUnlockPackage, SIGNAL(triggered()), this, SLOT(doUnlock()));
   connect(ui->actionFindFileInPackage, SIGNAL(triggered()), this, SLOT(findFileInPackage()));
   connect(ui->actionCommit, SIGNAL(triggered()), this, SLOT(commitTransaction()));
   connect(ui->actionCancel, SIGNAL(triggered()), this, SLOT(cancelTransaction()));

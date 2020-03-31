@@ -41,8 +41,7 @@ const QString ctn_PKGNG_GHOSTBSD_CORE_DB_FILE = "/var/db/pkg/repo-GhostBSD.sqlit
 const QString ctn_PKGNG_PCBSD_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
 const QString ctn_PKGNG_FAKE_REPOSITORY = "_WWW";
 
-enum PackageStatus { ectn_INSTALLED, ectn_NON_INSTALLED, ectn_OUTDATED, ectn_NEWER,
-                     ectn_FOREIGN, ectn_FOREIGN_OUTDATED };
+enum PackageStatus { ectn_LOCKED, ectn_INSTALLED, ectn_NON_INSTALLED, ectn_OUTDATED, ectn_NEWER };
 
 enum ViewOptions { ectn_ALL_PKGS, ectn_INSTALLED_PKGS, ectn_NON_INSTALLED_PKGS };
 
@@ -169,19 +168,18 @@ class Package{
 
 	public:
     static int rpmvercmp(const char *a, const char *b);
+    static QSet<QString>* getLockedPackageList();
     static QSet<QString>* getUnrequiredPackageList();
     static QMap<QString, OutdatedPackageInfo> *getOutdatedStringList();
     static QStringList * getPackageGroups();
     static QStringList * getPackagesOfGroup(const QString &groupName);
     static TransactionInfo getTargetUpgradeList(const QString &pkgName = "");
     static QStringList * getTargetRemovalList(const QString &pkgName);
-    //static QList<PackageListData> *getForeignPackageList();
     static QList<PackageListData> * parsePackageTuple(const QStringList &packageTuples, QStringList &packageCache);
     static QList<PackageListData> *getPackageList(const QString &packageName = "");
 
     //Remote package methods
     static QList<PackageListData> * getRemotePackageList(const QString& searchString);
-
     static PackageInfoData getInformation(const QString &pkgName, bool foreignPackage = false);
     static double getDownloadSizeDescription(const QString &pkgName);
     static QString getInformationDescription(const QString &pkgName, bool foreignPackage = false);

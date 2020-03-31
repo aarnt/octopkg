@@ -12,6 +12,7 @@
   Added support to HardenedBSD.
   Added Lumina desktop support.
   Added Info option on package list context menu.
+  Added lock/unlock actions on installed packages.
   Changed some ui icons.
   Added plasma5 support.
   Added a custom doas tool to execute actions: octopkg-doas, a lxqt-sudo clone.

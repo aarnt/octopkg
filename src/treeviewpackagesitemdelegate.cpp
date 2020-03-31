@@ -24,11 +24,12 @@
 #include "mainwindow.h"
 #include "strconstants.h"
 #include "uihelper.h"
+#include <iostream>
+
 #include <QHelpEvent>
 #include <QFutureWatcher>
 #include <QTreeWidget>
 #include <QToolTip>
-#include <iostream>
 #include <QtConcurrent/QtConcurrentRun>
 
 QPoint gPoint;
@@ -53,7 +54,6 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
     const PackageRepository::PackageData*const si = sim->getData(index);
     if (si != NULL)
     {
-      QPoint p;
       gPoint = tvPackages->mapToGlobal(event->pos());
       QFuture<QString> f;
       disconnect(&g_fwToolTip, SIGNAL(finished()), this, SLOT(execToolTip()));

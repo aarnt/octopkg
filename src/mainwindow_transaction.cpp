@@ -657,6 +657,66 @@ void MainWindow::doSyncDatabase()
 }
 
 /*
+ * Does a pkg lock on the selected packages
+ */
+void MainWindow::doLock()
+{
+  QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
+
+  if (selectedRows.count() == 1)
+  {
+    const PackageRepository::PackageData*const package = m_packageModel->getData(selectedRows.at(0));
+    if (package)
+    {
+      m_commandExecuting = ectn_LOCK;
+      disableTransactionActions();
+      m_unixCommand = new UnixCommand(this);
+
+      QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
+      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
+                       this, SLOT( actionsProcessReadOutput() ));
+      QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
+                       this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
+      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
+                       this, SLOT( actionsProcessRaisedError() ));
+
+      QString command = ctn_PKG_BIN + " lock -y " + package->name;
+      m_unixCommand->executeCommand(command);
+    }
+  }
+}
+
+/*
+ * Does a pkg unlock on the selected packages
+ */
+void MainWindow::doUnlock()
+{
+  QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
+
+  if (selectedRows.count() == 1)
+  {
+    const PackageRepository::PackageData*const package = m_packageModel->getData(selectedRows.at(0));
+    if (package)
+    {
+      m_commandExecuting = ectn_UNLOCK;
+      disableTransactionActions();
+      m_unixCommand = new UnixCommand(this);
+
+      QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
+      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
+                       this, SLOT( actionsProcessReadOutput() ));
+      QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
+                       this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
+      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
+                       this, SLOT( actionsProcessRaisedError() ));
+
+      QString command = ctn_PKG_BIN + " unlock -y " + package->name;
+      m_unixCommand->executeCommand(command);
+    }
+  }
+}
+
+/*
  * doSystemUpgrade shared code ...
  */
 void MainWindow::prepareSystemUpgrade()
@@ -1387,6 +1447,14 @@ void MainWindow::actionsProcessStarted()
   {
     writeToTabOutput("<b>" + StrConstants::getSystemUpgrade() + "</b><br><br>");
   }
+  else if (m_commandExecuting == ectn_LOCK)
+  {
+    writeToTabOutput("<b>" + StrConstants::getLockingPackage() + "</b><br><br>");
+  }
+  else if (m_commandExecuting == ectn_UNLOCK)
+  {
+    writeToTabOutput("<b>" + StrConstants::getUnlockingPackage() + "</b><br><br>");
+  }
   else if (m_commandExecuting == ectn_REMOVE)
   {
     writeToTabOutput("<b>" + StrConstants::getRemovingPackages() + "</b><br><br>");
@@ -1593,28 +1661,8 @@ void MainWindow::actionsProcessReadOutputMirrorCheck()
  */
 void MainWindow::actionsProcessReadOutput()
 {
-  if (WMHelper::getSUCommand().contains("qsudo"))
-  {
-    QString msg = m_unixCommand->readAllStandardOutput();
-    splitOutputStrings(msg);
-  }
-  else if (WMHelper::getSUCommand().contains("kdesu"))
-  {
-    QString msg = m_unixCommand->readAllStandardOutput();
-    splitOutputStrings(msg);
-  }
-  else if (WMHelper::getSUCommand().contains("gksu"))
-  {
-    QString msg = m_unixCommand->readAllStandardOutput();
-    msg = msg.trimmed();
-
-    if(!msg.isEmpty() &&
-       msg.indexOf(":: Synchronizing package databases...") == -1 &&
-       msg.indexOf(":: Starting full system upgrade...") == -1)
-    {
-      writeToTabOutputExt(msg);
-    }
-  }
+  QString msg = m_unixCommand->readAllStandardOutput();
+  splitOutputStrings(msg);
 }
 
 /*
@@ -1752,7 +1800,6 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("\\(process.+"));
     msg.remove(QRegularExpression("Using the fallback.+"));
     msg.remove(QRegularExpression("Gkr-Message:.+"));
-    msg.remove(QRegularExpression("kdesu.+"));
     msg.remove(QRegularExpression("kbuildsycoca.+"));
     msg.remove(QRegularExpression("Connecting to deprecated signal.+"));
     msg.remove(QRegularExpression("QVariant.+"));

@@ -188,6 +188,15 @@ QByteArray UnixCommand::getRemotePackageList(const QString &searchString, bool u
 }
 
 /*
+ * Returns a string containing all locked packages
+ */
+QByteArray UnixCommand::getLockedPackageList()
+{
+  QByteArray result = performQuery("lock --show-locked");
+  return result;
+}
+
+/*
  * Returns a string containing all packages no one depends on
  */
 QByteArray UnixCommand::getUnrequiredPackageList()

@@ -69,6 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_numberOfInstalledPackages = 0;
   m_debugInfo = false;
   m_time = new QTime();
+  m_lockedPackageList = NULL;
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;
 
@@ -76,6 +77,7 @@ MainWindow::MainWindow(QWidget *parent) :
   //Here we try to speed up first pkg list build!
   //m_time->start();
 
+  retrieveLockedPackageList();
   retrieveUnrequiredPackageList();
 
   ui->setupUi(this);
@@ -645,6 +647,11 @@ void MainWindow::execContextMenuPackages(QPoint point)
         menu->addAction(ui->actionFindFileInPackage);
         menu->addSeparator();
       }
+
+      if (package && package->status == ectn_LOCKED)
+      {
+        menu->addAction(m_actionUnlockPackage);
+      }
     }
 
     bool allInstallable = true;
@@ -662,7 +669,12 @@ void MainWindow::execContextMenuPackages(QPoint point)
           UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
       {
         if (package->outdated()) numberOfOutdated++;
-        if (package->installed() == false /*|| package->required*/ || Package::isForbidden(package->name))
+        if (package->status == ectn_LOCKED)
+        {
+          allRemovable = false;
+          allInstallable = false;
+        }
+        else if (package->installed() == false || Package::isForbidden(package->name))
         {
           allRemovable = false;
         }
@@ -672,6 +684,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
     if (allInstallable) // implicitly foreign packages == 0
     {
       //if (!isAllCategoriesSelected() && !isAURGroupSelected()) menu->addAction(ui->actionInstallGroup);
+
       menu->addAction(ui->actionInstall);
 
       if (allRemovable == false && !isAllCategoriesSelected() && !isRemoteSearchSelected()) //&& numberOfSelPkgs > 1)
@@ -711,6 +724,13 @@ void MainWindow::execContextMenuPackages(QPoint point)
 
     if (allRemovable)
     {
+      if (selectedRows.count() == 1)
+      {
+        menu->removeAction(ui->actionInstall);
+        menu->addAction(m_actionLockPackage);
+        menu->addAction(ui->actionInstall);
+      }
+
       menu->addAction(ui->actionRemove);
 
       if (!isAllCategoriesSelected() && !isRemoteSearchSelected())
@@ -1043,12 +1063,12 @@ void MainWindow::invalidateTabs()
 {
   if(ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION) //This is TabInfo
   {
-    refreshTabInfo(false, false);
+    refreshTabInfo(true, false);
     return;
   }
   else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
   {
-    refreshTabFiles();
+    refreshTabFiles(true, false);
     return;
   }
 }

@@ -28,21 +28,23 @@
 
 typedef std::pair<QString, QStringList*> GroupMemberPair;
 
-extern QFutureWatcher<QString> g_fwToolTip;
-extern QFutureWatcher<QString> g_fwToolTipInfo;
-extern QFutureWatcher<QList<PackageListData> *> g_fwPkg;
-extern QFutureWatcher<QSet<QString> *> g_fwUnrequiredPacman;
-extern QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
-extern QFutureWatcher<QList<PackageListData> *> g_fwRemote;
-extern QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
-extern QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
-extern QFutureWatcher<QString> g_fwDistroNews;
-extern QFutureWatcher<QString> g_fwPackageOwnsFile;
-extern QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
+inline QFutureWatcher<QString> g_fwToolTip;
+inline QFutureWatcher<QString> g_fwToolTipInfo;
+inline QFutureWatcher<QList<PackageListData> *> g_fwPkg;
+inline QFutureWatcher<QSet<QString> *> g_fwLockedPkg;
+inline QFutureWatcher<QSet<QString> *> g_fwUnrequiredPacman;
+inline QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
+inline QFutureWatcher<QList<PackageListData> *> g_fwRemote;
+inline QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
+inline QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
+inline QFutureWatcher<QString> g_fwDistroNews;
+inline QFutureWatcher<QString> g_fwPackageOwnsFile;
+inline QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
 
 QString showPackageDescription(QString pkgName);
 TransactionInfo getTargetUpgradeList(const QString &pkgName);
 QList<PackageListData> * searchPkgPackages();
+QSet<QString> * searchLockedPkgPackages();
 QSet<QString> * searchUnrequiredPacmanPackages();
 QList<PackageListData> * searchRemotePackages(QString searchString);
 QString searchPacmanPackagesByFile(const QString &file);

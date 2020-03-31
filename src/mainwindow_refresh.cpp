@@ -300,20 +300,18 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
 }
 
 /*
- * Executes QFuture to retrive Outdated AUR list of packages
+ * Executes QFuture to retrieve list of locked packages
  */
-/*void MainWindow::retrieveForeignPackageList()
+void MainWindow::retrieveLockedPackageList()
 {
   QEventLoop el;
-  QFuture<QList<PackageListData> *> f;
-  f = QtConcurrent::run(searchForeignPackages);
-  connect(&g_fwForeignPacman, SIGNAL(finished()), this, SLOT(preBuildForeignPackageList()));
-  connect(&g_fwForeignPacman, SIGNAL(finished()), &el, SLOT(quit()));
-  g_fwForeignPacman.setFuture(f);
+  QFuture<QSet<QString> *> f;
+  f = QtConcurrent::run(searchLockedPkgPackages);
+  connect(&g_fwLockedPkg, SIGNAL(finished()), this, SLOT(preBuildLockedPackageList()));
+  connect(&g_fwLockedPkg, SIGNAL(finished()), &el, SLOT(quit()));
+  g_fwLockedPkg.setFuture(f);
   el.exec();
-
-  assert(m_foreignPackageList != NULL);
-}*/
+}
 
 /*
  * Executes QFuture to retrive Unrequired Pacman list of packages
@@ -331,15 +329,15 @@ void MainWindow::retrieveUnrequiredPackageList()
 }
 
 /*
- * Helper method to assign QFuture for list of outdated packages
+ * Helper method to assign QFuture for Locked Pkg list of packages
  */
-/*void MainWindow::preBuildForeignPackageList()
+void MainWindow::preBuildLockedPackageList()
 {
-  m_foreignPackageList = g_fwForeignPacman.result();
+  m_lockedPackageList = g_fwLockedPkg.result();
 
   if(m_debugInfo)
-    std::cout << "Time elapsed obtaining Foreign pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
-}*/
+    std::cout << "Time elapsed obtaining Locked pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
+}
 
 /*
  * Helper method to assign QFuture for Unrequired Pacman list of packages
@@ -745,9 +743,12 @@ void MainWindow::buildPackageList()
 
     m_numberOfOutdatedPackages = m_outdatedStringList->count();
 
+    delete m_lockedPackageList;
+    m_lockedPackageList = NULL;
+    m_lockedPackageList = Package::getLockedPackageList();
+
     delete m_unrequiredPackageList;
     m_unrequiredPackageList = NULL;
-
     m_unrequiredPackageList = Package::getUnrequiredPackageList();   
 
     if(m_debugInfo)
@@ -797,17 +798,30 @@ void MainWindow::buildPackageList()
   delete list;
   list = NULL;
 
-  if(g_fwOutdatedList.isFinished())
-  {foreach(QString k, m_outdatedList->keys())
+  if (g_fwLockedPkg.isFinished())
   {
-    OutdatedPackageInfo opi = m_outdatedList->value(k);
-    PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(k);
-    if (package != NULL)
+    foreach(QString locked, *m_lockedPackageList)
     {
-      package->status = ectn_OUTDATED;
-      package->outdatedVersion = opi.oldVersion;
+      PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(locked);
+      if (package != NULL)
+      {
+        package->status = ectn_LOCKED;
+      }
     }
   }
+
+  if(g_fwOutdatedList.isFinished())
+  {
+    foreach(QString k, m_outdatedList->keys())
+    {
+      OutdatedPackageInfo opi = m_outdatedList->value(k);
+      PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(k);
+      if (package != NULL)
+      {
+        package->status = ectn_OUTDATED;
+        package->outdatedVersion = opi.oldVersion;
+      }
+    }
   }
 
   if (isAllCategoriesSelected()) m_packageModel->applyFilter(m_selectedViewOption, m_selectedRepository, "");

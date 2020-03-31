@@ -24,6 +24,8 @@
         <file>resources/images/binary.png</file>
         <file>resources/images/outdated.png</file>
         <file>resources/images/unrequired.png</file>
+        <file>resources/images/locker-key.png</file>
+        <file>resources/images/unlock.png</file>
         <file>resources/images/commit.png</file>
         <file>resources/images/refresh.png</file>
         <file>resources/images/fast_forward.png</file>

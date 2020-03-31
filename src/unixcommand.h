@@ -34,6 +34,7 @@ const QString ctn_MIRROR_CHECK_APP("mirror-check");
 enum CommandExecuting { ectn_NONE, ectn_CLEAN_CACHE, ectn_MIRROR_CHECK,
                         ectn_SYNC_DATABASE, ectn_SYSTEM_UPGRADE, ectn_INSTALL,
                         ectn_REMOVE, ectn_REMOVE_INSTALL,
+                        ectn_LOCK, ectn_UNLOCK,
                         ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,
                         ectn_RUN_IN_TERMINAL, ectn_LOCAL_PKG_REFRESH };
 
@@ -83,6 +84,7 @@ public:
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
   static QByteArray getRemotePackageList(const QString &searchString, bool useCommentSearch = true);
+  static QByteArray getLockedPackageList();
   static QByteArray getUnrequiredPackageList();
   static QByteArray getOutdatedPackageList();
   static QByteArray getForeignPackageList();
@@ -97,7 +99,6 @@ public:
   static QStringList getFilePathSuggestions(const QString &file);
   static QByteArray getPackageGroups();
   static QByteArray getPackagesFromGroup(const QString &groupName);
-
   static QByteArray getInstalledPackages();
   static QByteArray getTargetUpgradeList(const QString &pkgName = "");
   static QByteArray getTargetRemovalList(const QString &pkgName);

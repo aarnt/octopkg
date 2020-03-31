@@ -25,23 +25,6 @@
 #include <QtConcurrent/QtConcurrentMap>
 
 /*
- * Global functions related to OctoPkg's multithread code
- */
-
-QFutureWatcher<QString> g_fwToolTip;
-QFutureWatcher<QString> g_fwToolTipInfo;
-QFutureWatcher<QList<PackageListData> *> g_fwPkg;
-QFutureWatcher<GroupMemberPair>          g_fwPacmanGroup;
-QFutureWatcher<QList<PackageListData> *> g_fwRemote;
-QFutureWatcher<QList<PackageListData> *> g_fwRemoteMeta;
-QFutureWatcher<QString> g_fwDistroNews;
-QFutureWatcher<QString> g_fwPackageOwnsFile;
-QFutureWatcher<QMap<QString, OutdatedPackageInfo> *> g_fwOutdatedList;
-QFutureWatcher<QList<PackageListData> *> g_fwMarkOutdatedPackages;
-QFutureWatcher<QSet<QString> *> g_fwUnrequiredPacman;
-QFutureWatcher<TransactionInfo> g_fwTargetUpgradeList;
-
-/*
  * Given a packageName, returns its description
  */
 QString showPackageDescription(QString pkgName)
@@ -79,6 +62,14 @@ QString showPackageDescription(QString pkgName)
 QList<PackageListData> * searchPkgPackages()
 {
   return Package::getPackageList("");
+}
+
+/*
+ * Starts the non blocking search for Locked Pkg packages...
+ */
+QSet<QString> *searchLockedPkgPackages()
+{
+  return Package::getLockedPackageList();
 }
 
 /*
