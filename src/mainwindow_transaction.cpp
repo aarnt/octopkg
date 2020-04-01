@@ -1487,7 +1487,7 @@ void MainWindow::actionsProcessStarted()
  */
 void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
-  bool bRefreshGroups = true;
+  //bool bRefreshGroups = true;
   m_progressWidget->close();
   ui->twProperties->setTabText(ctn_TABINDEX_OUTPUT, StrConstants::getTabOutputName());
 
@@ -1536,7 +1536,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         //Retrieves the RSS News from respective Distro site...
         if (isRemoteSearchSelected())
         {
-          bRefreshGroups = false;
+          //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
           m_actionSwitchToLocalSearch->setChecked(true);
@@ -1557,7 +1557,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       {
         if (isRemoteSearchSelected())
         {
-          bRefreshGroups = false;
+          //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
           m_actionSwitchToLocalSearch->setChecked(true);
@@ -1575,7 +1575,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       {
         if (isRemoteSearchSelected())
         {
-          bRefreshGroups = false;
+          //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);          
           m_actionSwitchToLocalSearch->setChecked(true);
