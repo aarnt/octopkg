@@ -27,6 +27,8 @@
 
 #include "passworddialog.h"
 #include "ui_passworddialog.h"
+
+#include <QFile>
 #include <QIcon>
 #include <QClipboard>
 #include <QToolButton>
@@ -49,6 +51,11 @@ PasswordDialog::PasswordDialog(const QString & cmd
   ui->backendL->setText(backendName);
   ui->iconL->setPixmap(QIcon::fromTheme("dialog-password").pixmap(64, 64));
   setWindowIcon(QIcon::fromTheme("security-high"));
+
+  if (QFile::exists("/usr/local/bin/doas"))
+    setWindowTitle(QString::fromUtf8("OctoPkg doas"));
+  else
+    setWindowTitle(QString::fromUtf8("OctoPkg sudo"));
 }
 
 PasswordDialog::~PasswordDialog()
