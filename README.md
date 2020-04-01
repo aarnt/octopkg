@@ -24,6 +24,6 @@ To run it:
 $ octopkg
 ```
 
-Remember: OctoPkg needs doas tool to work.
+Remember: OctoPkg needs doas or sudo tool to work.
 
 Enjoy!
