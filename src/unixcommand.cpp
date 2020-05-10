@@ -843,6 +843,43 @@ bool UnixCommand::isAppRunning(const QString &appName, bool justOneInstance)
 }
 
 /*
+ * Returns the SHELL environment variable, if not set defaults to bash.
+ */
+QString UnixCommand::getShell()
+{
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  QString shell = env.value(QStringLiteral("SHELL"), QStringLiteral("/bin/sh"));
+
+  QFileInfo fi(shell);
+
+  if (fi.fileName() == QLatin1String("fish"))
+    return QStringLiteral("/bin/sh");
+  else
+    return fi.fileName();
+}
+
+/*
+ * Checks if "/" partition is mount using ZFS filesystem
+ */
+bool UnixCommand::isRootOnZFS()
+{
+  bool res = false;
+
+  QProcess proc;
+  proc.start("mount");
+  proc.waitForFinished();
+  QString out = proc.readAll();
+  proc.close();
+
+  if (out.contains(QLatin1String("/ROOT/default on / (zfs")))
+  {
+    res = true;
+  }
+
+  return res;
+}
+
+/*
  * Searches "/etc/pacman.conf" to see if ILoveCandy is enabled
  */
 bool UnixCommand::isILoveCandyEnabled()

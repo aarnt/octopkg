@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-<class>TransactionDialog</class>
+ <class>TransactionDialog</class>
  <widget class="QWidget" name="TransactionDialog">
   <property name="geometry">
    <rect>
@@ -39,6 +39,37 @@
      </property>
      <property name="margin">
       <number>10</number>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="cbCreateBootEnv">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">padding-top: 6px; padding-left: 18px;</string>
+     </property>
+     <property name="text">
+      <string>Create a backup boot environment before upgrading</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -86,13 +117,13 @@
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
-	<property name="sizePolicy">
-	<sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-	<horstretch>0</horstretch>
-	<verstretch>0</verstretch>
-	</sizepolicy>
-	</property>
-<property name="standardButtons">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="standardButtons">
       <set>QDialogButtonBox::No|QDialogButtonBox::Yes</set>
      </property>
     </widget>

@@ -865,10 +865,6 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
                        "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
 
     question.setWindowTitle(StrConstants::getConfirmation());
-
-    //IMPORTANT: Let's have the YES button out of "pkg upgrade" for the moment!
-    //question.removeYesButton();
-
     question.setInformativeText(StrConstants::getConfirmationQuestion());
     question.setDetailedText(list);
 
@@ -883,7 +879,14 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       {
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
         QString command;
-        command = ctn_PKG_BIN + " upgrade -y";
+
+        if (question.isBootEnvChecked())
+        {
+          QString beName = "octo-" + QDateTime::currentDateTime().toString(QLatin1String("yyyyMMddhhmmss"));
+          command = UnixCommand::getShell() + " -c \"bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y \"";
+        }
+        else
+          command = ctn_PKG_BIN + " upgrade -y";
 
         m_unixCommand->executeCommand(command);
         m_commandQueued = ectn_NONE;

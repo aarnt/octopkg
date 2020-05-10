@@ -44,9 +44,13 @@ TransactionDialog::TransactionDialog(QWidget* parent) :
       new QPushButton(IconHelper::getIconTerminal(), StrConstants::getRunInTerminal());
 
   //ui->buttonBox->addButton(m_runInTerminalButton, QDialogButtonBox::AcceptRole);
-
   QPushButton *yesButton = ui->buttonBox->button(QDialogButtonBox::Yes);
   QPushButton *noButton = ui->buttonBox->button(QDialogButtonBox::No);
+
+  if (!UnixCommand::isRootOnZFS())
+  {
+    ui->cbCreateBootEnv->setVisible(false);
+  }
 
   noButton->setFocus();
 
@@ -80,6 +84,11 @@ void TransactionDialog::setDetailedText(const QString detailedtext)
   {
     removeYesButton();
   }
+}
+
+bool TransactionDialog::isBootEnvChecked()
+{
+  return ui->cbCreateBootEnv->isChecked();
 }
 
 /*

@@ -34,10 +34,10 @@ class TransactionDialog : public QDialog
 public:
   TransactionDialog(QWidget * parent);
   virtual ~TransactionDialog(){}
-
   void setText(const QString text);
   void setInformativeText(const QString text);
   void setDetailedText(const QString detailedtext);
+  bool isBootEnvChecked();
   void removeYesButton();
 
 public slots:
