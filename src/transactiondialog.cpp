@@ -88,7 +88,7 @@ void TransactionDialog::setDetailedText(const QString detailedtext)
 
 bool TransactionDialog::isBootEnvChecked()
 {
-  return ui->cbCreateBootEnv->isChecked();
+  return (ui->cbCreateBootEnv->isVisible() && ui->cbCreateBootEnv->isChecked());
 }
 
 /*
