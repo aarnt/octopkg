@@ -883,7 +883,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
         if (question.isBootEnvChecked())
         {
           QString beName = "octo-" + QDateTime::currentDateTime().toString(QLatin1String("yyyyMMddhhmmss"));
-          command = UnixCommand::getShell() + " -c \"bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y \"";
+          command = UnixCommand::getShell() + " -c \"bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y\"";
         }
         else
           command = ctn_PKG_BIN + " upgrade -y";

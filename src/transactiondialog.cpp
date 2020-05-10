@@ -80,15 +80,15 @@ void TransactionDialog::setDetailedText(const QString detailedtext)
   ui->detailedText->setText(detailedtext);
 
   //We must search for a 'pacman-version-number' pkg to force terminal upgrade use
-  if (detailedtext.contains(QRegularExpression("pacman-[0-9]+")))
+  /*if (detailedtext.contains(QRegularExpression("pacman-[0-9]+")))
   {
     removeYesButton();
-  }
+  }*/
 }
 
 bool TransactionDialog::isBootEnvChecked()
 {
-  return (ui->cbCreateBootEnv->isVisible() && ui->cbCreateBootEnv->isChecked());
+  return (!ui->cbCreateBootEnv->isHidden() && ui->cbCreateBootEnv->isChecked());
 }
 
 /*
