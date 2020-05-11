@@ -871,7 +871,7 @@ bool UnixCommand::isRootOnZFS()
   QString out = proc.readAll();
   proc.close();
 
-  if (out.contains(QLatin1String("/ROOT/default on / (zfs")) && QFile::exists(QLatin1String("/sbin/bectl")))
+  if (out.contains(QLatin1String(" on / (zfs")) && QFile::exists(QLatin1String("/sbin/bectl")))
   {
     res = true;
   }
