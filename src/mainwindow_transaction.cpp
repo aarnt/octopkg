@@ -815,7 +815,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
   if (targets->count() == 0 && m_outdatedStringList->count() == 0)
   {
     clearTabOutput();
-    writeToTabOutputExt("<b>" + StrConstants::getNoNewUpdatesAvailable() + "</b>");
+    writeToTabOutputExt(QLatin1String("<b>") + StrConstants::getNoNewUpdatesAvailable() + QLatin1String("</b>"));
     return;
   }
   else if (targets->count() == 0 && m_outdatedStringList->count() > 0)
@@ -843,7 +843,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     m_commandExecuting = ectn_SYSTEM_UPGRADE;
 
     QString command;
-    command = ctn_PKG_BIN + " upgrade -y";
+    command = ctn_PKG_BIN + QLatin1String(" upgrade -y");
 
     m_unixCommand->executeCommand(command);
     m_commandQueued = ectn_NONE;
@@ -859,10 +859,10 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 
     if(targets->count()==1)
       question.setText(StrConstants::getRetrievePackage() +
-                       "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
+                       QLatin1String("\n\n") + StrConstants::getTotalDownloadSize().arg(ds).remove(QLatin1String(" KB")));
     else
       question.setText(StrConstants::getRetrievePackages(targets->count()) +
-                       "\n\n" + StrConstants::getTotalDownloadSize().arg(ds).remove(" KB"));
+                       QLatin1String("\n\n") + StrConstants::getTotalDownloadSize().arg(ds).remove(QLatin1String(" KB")));
 
     question.setWindowTitle(StrConstants::getConfirmation());
     question.setInformativeText(StrConstants::getConfirmationQuestion());
@@ -882,11 +882,11 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 
         if (question.isBootEnvChecked())
         {
-          QString beName = "octo-" + QDateTime::currentDateTime().toString(QLatin1String("yyyyMMddhhmmss"));
-          command = UnixCommand::getShell() + " -c \"bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y\"";
+          QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
+          command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + QLatin1String(" upgrade -y\"");
         }
         else
-          command = ctn_PKG_BIN + " upgrade -y";
+          command = ctn_PKG_BIN + QLatin1String(" upgrade -y");
 
         m_unixCommand->executeCommand(command);
         m_commandQueued = ectn_NONE;

@@ -49,10 +49,10 @@ PasswordDialog::PasswordDialog(const QString & cmd
   });
 
   ui->backendL->setText(backendName);
-  ui->iconL->setPixmap(QIcon::fromTheme("dialog-password").pixmap(64, 64));
-  setWindowIcon(QIcon::fromTheme("security-high"));
+  ui->iconL->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-password")).pixmap(64, 64));
+  setWindowIcon(QIcon::fromTheme(QStringLiteral("security-high")));
 
-  if (QFile::exists("/usr/local/bin/doas"))
+  if (QFile::exists(QStringLiteral("/usr/local/bin/doas")))
     setWindowTitle(QString::fromUtf8("OctoPkg doas"));
   else
     setWindowTitle(QString::fromUtf8("OctoPkg sudo"));

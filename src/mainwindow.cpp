@@ -44,6 +44,7 @@
 #include <QFileDialog>
 #include <QHash>
 #include <QToolTip>
+#include <QElapsedTimer>
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrentRun>
 
@@ -68,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_selectedRepository = "";
   m_numberOfInstalledPackages = 0;
   m_debugInfo = false;
-  m_time = new QTime();
+  m_time = new QElapsedTimer();
   m_lockedPackageList = NULL;
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;

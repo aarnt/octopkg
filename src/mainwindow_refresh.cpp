@@ -32,7 +32,7 @@
 #include <iostream>
 #include <cassert>
 
-#include <QTimer>
+#include <QElapsedTimer>
 #include <QLabel>
 #include <QProgressBar>
 #include <QComboBox>

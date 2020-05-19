@@ -36,13 +36,9 @@
  */
 
 #include "sudo.h"
-//#include "../src/argumentlist.h"
-#include <iostream>
 
 #include <QApplication>
 #include <QTranslator>
-#include <QFile>
-#include <QTextStream>
 
 int main(int argc, char **argv)
 {

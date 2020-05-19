@@ -251,7 +251,9 @@ void MainWindow::initToolBar()
   if (QApplication::screens().count() == 1)
   {
     QScreen *sc = QApplication::screens().first();
-    if (sc->size().width() >= 1920)
+
+    //if (sc->size().width() >= 1920)
+    if (sc->devicePixelRatio() > 1.0)
       ui->mainToolBar->setIconSize(QSize(32, 32));
     else
       ui->mainToolBar->setIconSize(QSize(22, 22));

@@ -49,7 +49,7 @@ class SearchLineEdit;
 class QAction;
 class QActionGroup;
 class QTreeWidgetItem;
-class QTime;
+class QElapsedTimer;
 
 //Tab indices for Properties' tabview
 const int ctn_TABINDEX_INFORMATION(0);
@@ -162,7 +162,7 @@ private:
   QMenu *m_menuToolButtonPacman;
 
   //This is a means for measuring the program's speed at some tasks
-  QTime *m_time;
+  QElapsedTimer *m_time;
 
   QAction *m_dummyAction;
   QAction *m_actionInstallPacmanUpdates;
