@@ -311,7 +311,7 @@ void MainWindow::insertIntoRemovePackage()
         }
       }*/
 
-    insertRemovePackageIntoTransaction(package->repository + "/" + package->name);
+    insertRemovePackageIntoTransaction(/*package->repository + "/" + */package->name);
   }
 }
 
@@ -974,6 +974,7 @@ void MainWindow::doRemoveAndInstall()
   question.setWindowTitle(StrConstants::getConfirmation());
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(allLists);
+  question.disableBootEnv();
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
@@ -981,7 +982,16 @@ void MainWindow::doRemoveAndInstall()
     disableTransactionButtons();
 
     QString command;
-    command = ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
+
+    if (question.isBootEnvChecked())
+    {
+      QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
+      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
+    }
+    else
+    {
+      command = ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
+    }
 
     m_lastCommandList.clear();
     m_lastCommandList.append(ctn_PKG_BIN + " remove -f " + listOfRemoveTargets + ";");
@@ -1056,12 +1066,22 @@ void MainWindow::doRemove()
 
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(list);
+  question.uncheckBootEnv();
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
     QString command;
-    command = ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
+
+    if (question.isBootEnvChecked())
+    {
+      QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
+      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + QLatin1String(" remove -R -f -y ") + listOfTargets;
+    }
+    else
+    {
+      command = ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
+    }
 
     m_lastCommandList.clear();
     m_lastCommandList.append(ctn_PKG_BIN + " remove -R -f " + listOfTargets + ";");
@@ -1150,6 +1170,7 @@ void MainWindow::doInstall()
   question.setWindowTitle(StrConstants::getConfirmation());
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(list);
+  question.uncheckBootEnv();
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)

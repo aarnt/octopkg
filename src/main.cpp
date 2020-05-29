@@ -27,7 +27,7 @@
 
 #include "QtSolutions/qtsingleapplication.h"
 #include <QMessageBox>
-#include <QTranslator>
+//#include <QTranslator>
 #include <QResource>
 
 int main(int argc, char *argv[])
@@ -47,10 +47,12 @@ int main(int argc, char *argv[])
   if(!QFile::exists("/bin/sh"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
+    return 1;
   }
   if(!QFile::exists("/usr/lib/octopkg/octopkg-doas"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
+    return 1;
   }
 
   //This sends a message just to enable the socket-based QtSingleApplication engine
@@ -73,21 +75,12 @@ int main(int argc, char *argv[])
 
   if (UnixCommand::isRootRunning()){
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorRunningWithRoot());
-    return ( -2 );
+    return (-2);
   }
 
   MainWindow w;
   app.setActivationWindow(&w);
   app.setQuitOnLastWindowClosed(false);
-
-  /*if (argList->getSwitch("-sysupgrade-noconfirm"))
-  {
-    w.setCallSystemUpgradeNoConfirm();
-  }
-  else if (argList->getSwitch("-sysupgrade"))
-  {
-    w.setCallSystemUpgrade();
-  }*/
 
   if (argList->getSwitch("-d"))
   {
@@ -104,7 +97,6 @@ int main(int argc, char *argv[])
   }
 
   w.show();
-
   QResource::registerResource("./resources.qrc");
 
   return app.exec();

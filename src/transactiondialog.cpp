@@ -39,7 +39,6 @@ TransactionDialog::TransactionDialog(QWidget* parent) :
   ui->setupUi(this);
 
   ui->actionRunInTerminal->setIcon(IconHelper::getIconTerminal());
-
   m_runInTerminalButton =
       new QPushButton(IconHelper::getIconTerminal(), StrConstants::getRunInTerminal());
 
@@ -89,6 +88,17 @@ void TransactionDialog::setDetailedText(const QString detailedtext)
 bool TransactionDialog::isBootEnvChecked()
 {
   return (!ui->cbCreateBootEnv->isHidden() && ui->cbCreateBootEnv->isChecked());
+}
+
+void TransactionDialog::uncheckBootEnv()
+{
+  ui->cbCreateBootEnv->setChecked(false);
+}
+
+void TransactionDialog::disableBootEnv()
+{
+  ui->cbCreateBootEnv->setChecked(false);
+  ui->cbCreateBootEnv->setVisible(false);
 }
 
 /*

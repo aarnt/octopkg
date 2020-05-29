@@ -38,6 +38,8 @@ public:
   void setInformativeText(const QString text);
   void setDetailedText(const QString detailedtext);
   bool isBootEnvChecked();
+  void uncheckBootEnv();
+  void disableBootEnv();
   void removeYesButton();
 
 public slots:
