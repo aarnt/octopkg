@@ -24,6 +24,7 @@
   Added "pkg clean" support (Ctrl+Shift+C and menu item).
   Now the size of TransactionDialog is saved between calls.
   Now tab Files shows progress bar while building pkg list.
+  Maximization of lower panel now hides tabbar.
 
 0.2.0
   BugFix: anchor navigation fixes.

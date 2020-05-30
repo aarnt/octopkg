@@ -318,6 +318,7 @@ private slots:
 
   void buildPackagesFromGroupList(const QString group);
   void buildPackageList();
+  void horizontalSplitterMoved(int pos, int index);
   void buildRemotePackageList();
   void searchForPkgPackages();
   void prepareTargetUpgradeList(const QString &pkgName="", CommandExecuting type=ectn_SYSTEM_UPGRADE);
@@ -389,8 +390,10 @@ private slots:
   void insertGroupIntoRemovePackage();
   void insertGroupIntoInstallPackage();
   void hideGroupsWidget(bool pSaveSettings = true);
-  void maximizePackagesTreeView(bool pSaveSettings = true);
-  void maximizePropertiesTabWidget(bool pSaveSettings = true);
+  void maximizePackagesTreeView();
+  void maxDemaxPackagesTreeView(bool pSaveSettings = true);
+  void maximizePropertiesTabWidget();
+  void maxDemaxPropertiesTabWidget(bool pSaveSettings = true);
   QString getOutdatedPkgOldVersion(const QString& pkgName);
   QString getOutdatedPkgNewVersion(const QString& pkgName);
   void outputOutdatedPackageList();

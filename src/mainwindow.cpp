@@ -1114,9 +1114,18 @@ void MainWindow::hideGroupsWidget(bool pSaveSettings)
 }
 
 /*
+ * Maximizes the upper pane (tvPackages)
+ */
+void MainWindow::maximizePackagesTreeView()
+{
+  QList<int> l;
+  ui->splitterHorizontal->setSizes( l << ui->tvPackages->maximumHeight() << 0);
+}
+
+/*
  * Maximizes/de-maximizes the upper pane (tvPackages)
  */
-void MainWindow::maximizePackagesTreeView(bool pSaveSettings)
+void MainWindow::maxDemaxPackagesTreeView(bool pSaveSettings)
 {
   QList<int> savedSizes;
   savedSizes << 200 << 235;
@@ -1145,9 +1154,20 @@ void MainWindow::maximizePackagesTreeView(bool pSaveSettings)
 }
 
 /*
+ * Maximizes the lower pane (tabwidget)
+ */
+void MainWindow::maximizePropertiesTabWidget()
+{
+  QList<int> l;
+  ui->splitterHorizontal->setSizes( l << 0 << ui->twProperties->maximumHeight());
+  ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
+  ui->twProperties->tabBar()->hide();
+}
+
+/*
  * Maximizes/de-maximizes the lower pane (tabwidget)
  */
-void MainWindow::maximizePropertiesTabWidget(bool pSaveSettings)
+void MainWindow::maxDemaxPropertiesTabWidget(bool pSaveSettings)
 {
   QList<int> savedSizes;
   savedSizes << 200 << 235;
@@ -1155,16 +1175,18 @@ void MainWindow::maximizePropertiesTabWidget(bool pSaveSettings)
   QList<int> l, rl;
   rl = ui->splitterHorizontal->sizes();
 
-  if ( rl[0] != 0 )
+  if ( rl[0] != 0 ) //Maximizes
   {
     ui->splitterHorizontal->setSizes( l << 0 << ui->twProperties->maximumHeight());
     ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
+    ui->twProperties->tabBar()->hide();
 
     if(pSaveSettings)
       saveSettings(ectn_MAXIMIZE_PROPERTIES);
   }
-  else
+  else //Demaximizes
   {
+    ui->twProperties->tabBar()->show();
     ui->splitterHorizontal->setSizes(savedSizes);
     ui->tvPackages->scrollTo(ui->tvPackages->currentIndex());
     ui->tvPackages->setFocus();
