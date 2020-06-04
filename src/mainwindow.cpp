@@ -75,9 +75,6 @@ MainWindow::MainWindow(QWidget *parent) :
   m_foreignPackageList = NULL;
 
   getOutdatedPackageListThreaded();
-  //Here we try to speed up first pkg list build!
-  //m_time->start();
-
   retrieveLockedPackageList();
   retrieveUnrequiredPackageList();
 
@@ -166,6 +163,7 @@ void MainWindow::getOutdatedPackageListThreaded()
 
 void MainWindow::deferredInitAppIcon()
 {
+  disconnect(&g_fwOutdatedList, SIGNAL(finished()), this, SLOT(deferredInitAppIcon()));
   m_outdatedList = g_fwOutdatedList.result();
 
   foreach(QString k, m_outdatedList->keys())
