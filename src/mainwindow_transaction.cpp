@@ -917,8 +917,7 @@ void MainWindow::doPreRemoveAndInstall()
 }
 
 /*
- * Removes and Installs all selected packages in two transactions using
- * a QUEUED remove command: *
+ * Removes and Installs all selected packages
  */
 void MainWindow::doRemoveAndInstall()
 {
@@ -929,13 +928,13 @@ void MainWindow::doRemoveAndInstall()
   QString dialogText;
 
   QStringList removeTargets = listOfRemoveTargets.split(" ", QString::SkipEmptyParts);
-  foreach(QString target, removeTargets)
+  for(QString target: removeTargets)
   {
     removeList = removeList + StrConstants::getRemove() + " "  + target + "\n";
   }
 
   QString listOfInstallTargets = getTobeInstalledPackages();
-  TransactionInfo ti = g_fwTargetUpgradeList.result(); //Package::getTargetUpgradeList(listOfInstallTargets);
+  TransactionInfo ti = g_fwTargetUpgradeList.result();
   QStringList *installTargets = ti.packages;
   QString ds = ti.sizeToDownload;
 
@@ -943,7 +942,7 @@ void MainWindow::doRemoveAndInstall()
 
   QString installList;
 
-  foreach(QString target, *installTargets)
+  for(QString target: *installTargets)
   {
     installList = installList + StrConstants::getInstall() + " " + target + "\n";
   }
@@ -974,7 +973,7 @@ void MainWindow::doRemoveAndInstall()
   question.setWindowTitle(StrConstants::getConfirmation());
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(allLists);
-  question.disableBootEnv();
+  question.uncheckBootEnv();
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
@@ -986,11 +985,15 @@ void MainWindow::doRemoveAndInstall()
     if (question.isBootEnvChecked())
     {
       QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
-      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
+      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " +
+          ctn_PKG_BIN + QLatin1String(" remove -f -y ") + listOfRemoveTargets + QLatin1String(";") +
+          ctn_PKG_BIN + QLatin1String(" install -f -y ") + listOfInstallTargets + QLatin1String("\"");
     }
     else
     {
-      command = ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets;
+      command = UnixCommand::getShell() + QLatin1String(" -c \"") +
+          ctn_PKG_BIN + QLatin1String(" remove -f -y ") + listOfRemoveTargets + QLatin1String(";") +
+          ctn_PKG_BIN + QLatin1String(" install -f -y ") + listOfInstallTargets + QLatin1String("\"");
     }
 
     m_lastCommandList.clear();
@@ -1013,12 +1016,8 @@ void MainWindow::doRemoveAndInstall()
 
     if (result == QDialogButtonBox::Yes)
     {
-      m_commandExecuting = ectn_REMOVE;
-      m_commandQueued = ectn_INSTALL;
-      doRemove();
-
-      //qDebug() << command;
-      //m_unixCommand->executeCommand(command);
+      m_commandExecuting = ectn_REMOVE_INSTALL;
+      m_unixCommand->executeCommand(command);
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {

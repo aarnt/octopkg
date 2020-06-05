@@ -27,7 +27,7 @@ QString StrConstants::getApplicationName(){
 }
 
 QString StrConstants::getApplicationVersion(){
-  return "0.3.0-dev";
+  return "0.3.0";
 }
 
 QString StrConstants::getQtVersion(){

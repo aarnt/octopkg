@@ -193,13 +193,19 @@ void MainWindow::onHelpDonate()
  */
 void MainWindow::onHelpAbout()
 {
-  QString aboutText = "<b>" + StrConstants::getApplicationName() +
-      " - " + StrConstants::getApplicationVersion() + "</b>" + " (" + StrConstants::getQtVersion() + ")<br>";
-  aboutText += "<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>";
-  aboutText += "&copy; Alexandre Albuquerque Arnt<br><br>";
-  aboutText += "<b>pkgng - " + UnixCommand::getPkgNGVersion() + "</b><br>";
-  aboutText += "<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>";
-  aboutText += "&copy; FreeBSD";
+  QString aboutText = "<b>" + StrConstants::getApplicationName() + QLatin1String("</b><br>");
+  aboutText += StrConstants::getVersion() + QLatin1String(": ") + StrConstants::getApplicationVersion() +
+      QLatin1String(" - ") + StrConstants::getQtVersion() + QLatin1String("<br>");
+  aboutText += StrConstants::getURL() + QLatin1String(": ") +
+    QStringLiteral("<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>");
+  aboutText += StrConstants::getLicenses() + QLatin1String(": ") +
+      QStringLiteral("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a><br>");
+  aboutText += QStringLiteral("&copy; Alexandre Albuquerque Arnt<br><br>");
+  aboutText += QStringLiteral("<b>pkgng</b><br>");
+  aboutText += StrConstants::getVersion() + QLatin1String(": ") + UnixCommand::getPkgNGVersion() + QStringLiteral("<br>");
+  aboutText += StrConstants::getURL() + QLatin1String(": ") +
+    QStringLiteral("<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>");
+  aboutText += QStringLiteral("&copy; FreeBSD");
 
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);
 }
