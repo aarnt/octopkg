@@ -652,7 +652,7 @@ void MainWindow::doSyncDatabase()
   QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
                    this, SLOT( actionsProcessRaisedError() ));
 
-  QString command = ctn_PKG_BIN + " update -f";
+  QString command = QLatin1Literal("env ASSUME_ALWAYS_YES=yes ") + ctn_PKG_BIN + QLatin1Literal(" update -f");
   m_unixCommand->executeCommand(command);
 }
 
