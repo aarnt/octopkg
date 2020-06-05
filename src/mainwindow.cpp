@@ -166,7 +166,7 @@ void MainWindow::deferredInitAppIcon()
   disconnect(&g_fwOutdatedList, SIGNAL(finished()), this, SLOT(deferredInitAppIcon()));
   m_outdatedList = g_fwOutdatedList.result();
 
-  foreach(QString k, m_outdatedList->keys())
+  for(QString k: m_outdatedList->keys())
   {
     m_outdatedStringList->append(k);
   }

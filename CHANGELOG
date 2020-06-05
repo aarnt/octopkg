@@ -8,6 +8,7 @@
 	on package list context menus.
   BugFix: DragonFlyBSD support updated!
   BugFix: Let exit menu and close button enabled for cancelling running actions.
+  BugFix: Sort by icon column works better now.
   Faster startup time thanks to deferred retrieval of outdated packages.
   Added option to create backup boot environments before upgrades when root is on ZFS.
   Added support to HardenedBSD.

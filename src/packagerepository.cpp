@@ -82,32 +82,23 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
 void PackageRepository::setAURData(const QList<PackageListData>*const listOfForeignPackages,
                                    const QSet<QString>& unrequiredPackages)
 {
-  //  std::cout << "received new foreign package list" << std::endl;
+  std::for_each(m_dependingModels.begin(), m_dependingModels.end(), BeginResetModel());
 
-    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), BeginResetModel());
+  m_listOfAURPackages.clear();
 
-    // delete AUR items in list
-    /*for (TListOfPackages::iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
-      if (*it != NULL && (*it)->managedByAUR) {
-        delete *it;
-        it = m_listOfPackages.erase(it);
-      }
-    }*/
-    m_listOfAURPackages.clear();
+  for (QList<PackageListData>::const_iterator it = listOfForeignPackages->begin();
+       it != listOfForeignPackages->end(); ++it)
+  {
+    //qDebug() << "Status: " << (*it).status;
 
-    for (QList<PackageListData>::const_iterator it = listOfForeignPackages->begin();
-         it != listOfForeignPackages->end(); ++it)
-    {
-      //qDebug() << "Status: " << (*it).status;
+    PackageData*const pkg = new PackageData(*it, unrequiredPackages.contains(it->name) == false);
+    m_listOfPackages.push_back(pkg);
+    m_listOfAURPackages.push_back(pkg);
+  }
 
-      PackageData*const pkg = new PackageData(*it, unrequiredPackages.contains(it->name) == false);
-      m_listOfPackages.push_back(pkg);
-      m_listOfAURPackages.push_back(pkg);
-    }   
-
-    std::sort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
-    std::sort(m_listOfAURPackages.begin(), m_listOfAURPackages.end(), TSort());
-    std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
+  std::sort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
+  std::sort(m_listOfAURPackages.begin(), m_listOfAURPackages.end(), TSort());
+  std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 }
 
 /**
@@ -184,10 +175,18 @@ void PackageRepository::checkAndSetMembersOfGroup(const QString& groupName, cons
 
 void PackageRepository::markOutdatedPackages(const QStringList &outdatedStringList)
 {
+  std::for_each(m_dependingModels.begin(), m_dependingModels.end(), BeginResetModel());
+
   for (TListOfPackages::iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it)
   {
-    if (outdatedStringList.contains((*it)->name)) (*it)->status = ectn_OUTDATED;
+    if (outdatedStringList.contains((*it)->name))
+    {
+      (*it)->status = ectn_OUTDATED;
+    }
   }
+
+  std::sort(m_listOfPackages.begin(), m_listOfPackages.end(), TSort());
+  std::for_each(m_dependingModels.begin(), m_dependingModels.end(), EndResetModel());
 }
 
 const PackageRepository::TListOfPackages& PackageRepository::getPackageList() const
@@ -318,8 +317,6 @@ void PackageRepository::Group::addPackage(PackageRepository::PackageData& packag
 
 void PackageRepository::Group::invalidateList()
 {
-//  std::cout << "invalidate group " << name.toStdString() << std::endl;
-
   if (m_listOfPackages == NULL)
     return;
 
