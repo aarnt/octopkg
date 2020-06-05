@@ -295,7 +295,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
 
   if(searchForLatestNews && UnixCommand::hasInternetConnection() && bsd != ectn_UNKNOWN)
   {
-    QString curlCommand = "curl %1 -o %2";
+    QString curlCommand = "curl -k %1 -o %2";
 
     if (bsd == ectn_FREEBSD)
     {
