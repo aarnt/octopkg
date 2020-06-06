@@ -28,7 +28,7 @@
 #include "wmhelper.h"
 #include "strconstants.h"
 #include "transactiondialog.h"
-#include "multiselectiondialog.h"
+//#include "multiselectiondialog.h"
 #include "globals.h"
 #include "searchlineedit.h"
 #include "constants.h"
@@ -400,7 +400,7 @@ void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
     }
   }
 
-  if(optionalPackages.count() > 0)
+  /*if(optionalPackages.count() > 0)
   {
     MultiSelectionDialog *msd = new MultiSelectionDialog(this);
     msd->setWindowTitle(packageName + ": " + StrConstants::getOptionalDeps());
@@ -428,7 +428,7 @@ void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
 
     delete msd;
   }
-  else
+  else*/
   {
     delete cic;
   }
@@ -451,7 +451,7 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
     }
   }
 
-  if (newDeps.count() > 0)
+  /*if (newDeps.count() > 0)
   {
     CPUIntensiveComputing *cic = new CPUIntensiveComputing;
 
@@ -485,7 +485,7 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
 
     return (res == QMessageBox::Ok && selectedPackages.count() >= 0);
   }
-  else return true;
+  else*/ return true;
 }
 
 /*

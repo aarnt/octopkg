@@ -33,7 +33,6 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/searchbar.h \
         src/transactiondialog.h \
         src/globals.h \
-        src/multiselectiondialog.h \
         src/packagerepository.h \
         src/model/packagemodel.h \
         src/ui/octopkgtabinfo.h \
@@ -63,7 +62,6 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/mainwindow_news.cpp \
         src/mainwindow_refresh.cpp \
         src/globals.cpp \
-        src/multiselectiondialog.cpp \
         src/packagerepository.cpp \
         src/model/packagemodel.cpp \
         src/ui/octopkgtabinfo.cpp \
@@ -71,8 +69,7 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/terminal.cpp
 
 FORMS   += ui/mainwindow.ui \
-        ui/transactiondialog.ui \
-        ui/multiselectiondialog.ui
+        ui/transactiondialog.ui
 
 RESOURCES += resources.qrc
 #TRANSLATIONS += resources/translations/octopkg_pt_BR.ts

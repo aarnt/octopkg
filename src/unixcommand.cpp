@@ -863,20 +863,16 @@ QString UnixCommand::getShell()
  */
 bool UnixCommand::isRootOnZFS()
 {
-  bool res = false;
+  bool tools = QFile::exists(QLatin1String("/sbin/bectl")) && QFile::exists(QLatin1String("/sbin/zfs"));
+  if (!tools) return false;
 
   QProcess proc;
-  proc.start("mount");
+  proc.start(QLatin1String("zfs list -S mountpoint /"));
   proc.waitForFinished();
-  QString out = proc.readAll();
+  int exitCode=proc.exitCode();
   proc.close();
 
-  if (out.contains(QLatin1String(" on / (zfs")) && QFile::exists(QLatin1String("/sbin/bectl")))
-  {
-    res = true;
-  }
-
-  return res;
+  return (exitCode == 0);
 }
 
 /*
