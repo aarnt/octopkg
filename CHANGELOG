@@ -23,6 +23,8 @@
   Added the option to terminate the current transaction being executed, by pressing 
 	"Ctrl+Z".
   Added "pkg clean" support (Ctrl+Shift+C and menu item).
+  Added "Ctrl+I" shortcut to view installed packages.
+  Added "Ctrl+R" shortcut to search for remote packages.
   Now the size of TransactionDialog is saved between calls.
   Now tab Files shows progress bar while building pkg list.
   Maximization of lower panel now hides tabbar.

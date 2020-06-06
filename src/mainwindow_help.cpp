@@ -122,6 +122,10 @@ void MainWindow::initTabHelpUsage()
   QString("</li><li>") +
      tr("Ctrl+L to find a package in the package list") +
   QString("</li><li>") +
+     tr("Ctrl+I to view installed packages") +
+  QString("</li><li>") +
+     tr("Ctrl+R to search for remote packages") +
+  QString("</li><li>") +
      tr("Ctrl+F to search for text inside tab Files, News and Usage") +
   //QString("</li><li>") +
   //   tr("Ctrl+N or 'View/Non installed' to show/hide non installed packages") +

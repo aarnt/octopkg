@@ -602,14 +602,20 @@ void MainWindow::initActions()
   m_actionUnlockPackage->setIcon(IconHelper::getIconUnlock());
 
   m_actionSwitchToLocalSearch = new QAction(this);
+  m_actionSwitchToLocalSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_I));
   m_actionSwitchToLocalSearch->setIcon(IconHelper::getIconHardDrive());
   m_actionSwitchToLocalSearch->setText(StrConstants::getFilterLocalPackages());
+  m_actionSwitchToLocalSearch->setToolTip(m_actionSwitchToLocalSearch->toolTip() + QLatin1String(" (") +
+                                          m_actionSwitchToLocalSearch->shortcut().toString() + QLatin1String(")"));
   m_actionSwitchToLocalSearch->setCheckable(true);
   m_actionSwitchToLocalSearch->setChecked(true);
 
   m_actionSwitchToRemoteSearch = new QAction(this);
+  m_actionSwitchToRemoteSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_R));
   m_actionSwitchToRemoteSearch->setIcon(IconHelper::getIconInternet());
   m_actionSwitchToRemoteSearch->setText(StrConstants::getSearchForPackages());
+  m_actionSwitchToRemoteSearch->setToolTip(m_actionSwitchToRemoteSearch->toolTip() + QLatin1String(" (") +
+                                           m_actionSwitchToRemoteSearch->shortcut().toString() + QLatin1String(")"));
   m_actionSwitchToRemoteSearch->setCheckable(true);
   m_actionSwitchToRemoteSearch->setChecked(false);
 
@@ -681,7 +687,6 @@ void MainWindow::initActions()
   connect(ui->actionEditFile, SIGNAL(triggered()), this, SLOT(editFile()));
   connect(ui->actionOpenDirectory, SIGNAL(triggered()), this, SLOT(openDirectory()));
   connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
-  //connect(ui->actionOpenRootTerminal, SIGNAL(triggered()), this, SLOT(openRootTerminal()));
 
   // Use theme icons for QActions
   ui->actionSyncPackages->setIcon(IconHelper::getIconSyncDatabase());
@@ -689,8 +694,8 @@ void MainWindow::initActions()
   ui->actionCancel->setIcon(IconHelper::getIconRollback());
   ui->actionExit->setIcon(IconHelper::getIconExit());
   ui->actionSystemUpgrade->setIcon(IconHelper::getIconSystemUpgrade());
-  ui->actionInstall->setIcon(IconHelper::getIconToInstall()); //getIconInstallItem());
-  ui->actionRemove->setIcon(IconHelper::getIconToRemove()); //getIconRemoveItem());
+  ui->actionInstall->setIcon(IconHelper::getIconToInstall());
+  ui->actionRemove->setIcon(IconHelper::getIconToRemove());
   ui->actionGetNews->setIcon(IconHelper::getIconGetNews());
   ui->actionCollapseItem->setIcon(IconHelper::getIconCollapse());
   ui->actionExpandItem->setIcon(IconHelper::getIconExpand());
