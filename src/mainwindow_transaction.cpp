@@ -28,7 +28,6 @@
 #include "wmhelper.h"
 #include "strconstants.h"
 #include "transactiondialog.h"
-//#include "multiselectiondialog.h"
 #include "globals.h"
 #include "searchlineedit.h"
 #include "constants.h"
@@ -1340,7 +1339,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
-    m_actionSwitchToLocalSearch->setEnabled(true);
+    //m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1349,7 +1348,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
-    m_actionSwitchToLocalSearch->setEnabled(true);
+    //m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
     ui->actionSyncPackages->setEnabled(true);
 
@@ -1358,7 +1357,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   }
   else if (value == false && state == false)
   {
-    m_actionSwitchToLocalSearch->setEnabled(false);
+    //m_actionSwitchToLocalSearch->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(false);
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1563,7 +1562,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
-          m_actionSwitchToLocalSearch->setChecked(true);
+          //m_actionSwitchToLocalSearch->setChecked(true);
           refreshDistroNews(true, false);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
@@ -1584,7 +1583,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);
-          m_actionSwitchToLocalSearch->setChecked(true);
+          //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
         }
@@ -1602,7 +1601,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
           m_actionSwitchToRemoteSearch->setChecked(false);          
-          m_actionSwitchToLocalSearch->setChecked(true);
+          //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
         }

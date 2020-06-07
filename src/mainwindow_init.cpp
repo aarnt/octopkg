@@ -270,7 +270,7 @@ void MainWindow::initToolBar()
   ui->mainToolBar->addAction(ui->actionCommit);
   ui->mainToolBar->addAction(ui->actionCancel);
   m_separatorForActionRemoteSearch = ui->mainToolBar->addSeparator();
-  ui->mainToolBar->addAction(m_actionSwitchToLocalSearch);
+  //ui->mainToolBar->addAction(m_actionSwitchToLocalSearch);
   ui->mainToolBar->addAction(m_actionSwitchToRemoteSearch);
 
   m_dummyAction = new QAction(this);
@@ -601,14 +601,14 @@ void MainWindow::initActions()
   m_actionUnlockPackage->setText(StrConstants::getUnlock());
   m_actionUnlockPackage->setIcon(IconHelper::getIconUnlock());
 
-  m_actionSwitchToLocalSearch = new QAction(this);
+  /*m_actionSwitchToLocalSearch = new QAction(this);
   m_actionSwitchToLocalSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_I));
   m_actionSwitchToLocalSearch->setIcon(IconHelper::getIconHardDrive());
   m_actionSwitchToLocalSearch->setText(StrConstants::getFilterLocalPackages());
   m_actionSwitchToLocalSearch->setToolTip(m_actionSwitchToLocalSearch->toolTip() + QLatin1String(" (") +
                                           m_actionSwitchToLocalSearch->shortcut().toString() + QLatin1String(")"));
   m_actionSwitchToLocalSearch->setCheckable(true);
-  m_actionSwitchToLocalSearch->setChecked(true);
+  m_actionSwitchToLocalSearch->setChecked(true);*/
 
   m_actionSwitchToRemoteSearch = new QAction(this);
   m_actionSwitchToRemoteSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_R));
@@ -620,7 +620,7 @@ void MainWindow::initActions()
   m_actionSwitchToRemoteSearch->setChecked(false);
 
   m_actionGroupSearch = new QActionGroup(this);
-  m_actionGroupSearch->addAction(m_actionSwitchToLocalSearch);
+  //m_actionGroupSearch->addAction(m_actionSwitchToLocalSearch);
   m_actionGroupSearch->addAction(m_actionSwitchToRemoteSearch);
   m_actionGroupSearch->setExclusive(true);
   connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));

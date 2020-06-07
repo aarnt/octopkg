@@ -63,7 +63,7 @@ void MainWindow::initTabHelpUsage()
   html +=
       QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
-      QString("<a href=\"http://octopkg.wordpress.com\">http://octopkg.wordpress.com</a>.</p></h4><br>");
+      QString("<a href=\"https://tintaescura.com/projects/octopkg\">https://tintaescura.com/projects/octopkg</a>.</p></h4><br>");
 
   html += tr("Package classification:") +
   QString("<ul type=\"square\"><li>") + iconPath + "installed.png\"/> " +
@@ -122,8 +122,8 @@ void MainWindow::initTabHelpUsage()
   QString("</li><li>") +
      tr("Ctrl+L to find a package in the package list") +
   QString("</li><li>") +
-     tr("Ctrl+I to view installed packages") +
-  QString("</li><li>") +
+  //   tr("Ctrl+I to view installed packages") +
+  //QString("</li><li>") +
      tr("Ctrl+R to search for remote packages") +
   QString("</li><li>") +
      tr("Ctrl+F to search for text inside tab Files, News and Usage") +
@@ -201,7 +201,7 @@ void MainWindow::onHelpAbout()
   aboutText += StrConstants::getVersion() + QLatin1String(": ") + StrConstants::getApplicationVersion() +
       QLatin1String(" - ") + StrConstants::getQtVersion() + QLatin1String("<br>");
   aboutText += StrConstants::getURL() + QLatin1String(": ") +
-    QStringLiteral("<a href=\"http://octopkg.wordpress.com/\">http://octopkg.wordpress.com</a><br>");
+    QStringLiteral("<a href=\"https://tintaescura.com/projects/octopkg/\">https://tintaescura.com/projects/octopkg</a><br>");
   aboutText += StrConstants::getLicenses() + QLatin1String(": ") +
       QStringLiteral("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a><br>");
   aboutText += QStringLiteral("&copy; Alexandre Albuquerque Arnt<br><br>");

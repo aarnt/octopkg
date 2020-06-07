@@ -138,13 +138,13 @@ void MainWindow::remoteSearchClicked()
   {
     disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
     m_actionSwitchToRemoteSearch->setChecked(false);
-    m_actionSwitchToLocalSearch->setChecked(true);
+    //m_actionSwitchToLocalSearch->setChecked(true);
     connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
   }
-  else if (!lastPkgButtonClickedWasRemote && m_actionSwitchToLocalSearch->isChecked())
+  else/* if (!lastPkgButtonClickedWasRemote && m_actionSwitchToLocalSearch->isChecked())*/
   {
     disconnect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
-    m_actionSwitchToLocalSearch->setChecked(false);
+    //m_actionSwitchToLocalSearch->setChecked(false);
     m_actionSwitchToRemoteSearch->setChecked(true);
     connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
   }
@@ -366,7 +366,7 @@ void MainWindow::preBuildPackageList()
 
   if (!m_initializationCompleted)
   {
-    remoteSearchClicked();
+    //remoteSearchClicked();
     m_initializationCompleted = true;
   }
 }
@@ -715,12 +715,12 @@ void MainWindow::showPackagesWithNoDescription()
 void MainWindow::buildPackageList()
 {
   CPUIntensiveComputing cic;
-  static QStandardItemModel emptyModel;
+  /*static QStandardItemModel emptyModel;
   if (!m_initializationCompleted)
   {
     ui->tvPackages->setModel(&emptyModel);
     removePackageTreeViewConnections();
-  }
+  }*/
 
   static bool firstTime = true;
 
