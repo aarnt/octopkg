@@ -66,7 +66,7 @@
       <string notr="true">padding-top: 6px; padding-left: 18px;</string>
      </property>
      <property name="text">
-      <string>Create a backup boot environment before upgrading</string>
+      <string>Create a backup boot environment before installing updates</string>
      </property>
      <property name="checked">
       <bool>true</bool>

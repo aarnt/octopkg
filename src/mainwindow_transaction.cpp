@@ -283,33 +283,6 @@ void MainWindow::insertIntoRemovePackage()
       continue;
     }
 
-    /*if(checkDependencies)
-      {
-        QStringList *targets = Package::getTargetRemovalList(package->name);
-
-        foreach(QString target, *targets)
-        {
-          int separator = target.lastIndexOf("-");
-          QString candidate = target.left(separator);
-          separator = candidate.lastIndexOf("-");
-          candidate = candidate.left(separator);
-
-          if (candidate != package->name)
-          {
-            dependencies.append(candidate);
-          }
-        }
-
-        if (dependencies.count() > 0)
-        {
-          if (!dependencies.at(0).contains("HoldPkg was found in"))
-          {
-            if (!insertIntoRemovePackageDeps(dependencies))
-              return;
-          }
-        }
-      }*/
-
     insertRemovePackageIntoTransaction(/*package->repository + "/" + */package->name);
   }
 }
@@ -377,7 +350,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
 /*
  * Inserts all optional deps of the current select package into the Transaction Treeview
  */
-void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
+/*void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
 {
   CPUIntensiveComputing *cic = new CPUIntensiveComputing;
 
@@ -399,7 +372,7 @@ void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
     }
   }
 
-  /*if(optionalPackages.count() > 0)
+  if(optionalPackages.count() > 0)
   {
     MultiSelectionDialog *msd = new MultiSelectionDialog(this);
     msd->setWindowTitle(packageName + ": " + StrConstants::getOptionalDeps());
@@ -427,18 +400,18 @@ void MainWindow::insertIntoInstallPackageOptDeps(const QString &packageName)
 
     delete msd;
   }
-  else*/
+  else
   {
     delete cic;
   }
-}
+}*/
 
 /*
  * Inserts all remove dependencies of the current select package into the Transaction Treeview
  * Returns TRUE if the user click OK or ENTER and number of selected packages > 0.
  * Returns FALSE otherwise.
  */
-bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
+/*bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
 {
   QList<const PackageRepository::PackageData*> newDeps;
   foreach(QString dep, dependencies)
@@ -450,7 +423,7 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
     }
   }
 
-  /*if (newDeps.count() > 0)
+  if (newDeps.count() > 0)
   {
     CPUIntensiveComputing *cic = new CPUIntensiveComputing;
 
@@ -484,8 +457,8 @@ bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
 
     return (res == QMessageBox::Ok && selectedPackages.count() >= 0);
   }
-  else*/ return true;
-}
+  else return true;
+}*/
 
 /*
  * Inserts the current selected group for removal into the Transaction Treeview
@@ -1539,15 +1512,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
     return;
   }
 
-  if(m_commandQueued == ectn_INSTALL)
-  {
-    m_commandQueued = ectn_NONE;
-    //Let's first remove all remove targets...
-    removePackagesFromRemoveTransaction();
-    doPreInstall();
-    return;
-  }
-  else if (m_commandQueued == ectn_NONE)
+  if (m_commandQueued == ectn_NONE)
   {
     if(exitCode == 0 || exitCode == 255) //mate-terminal is returning code 255 sometimes...
     {
@@ -1561,7 +1526,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          m_actionSwitchToRemoteSearch->setChecked(false);
+          //m_actionSwitchToRemoteSearch->setChecked(false);
           //m_actionSwitchToLocalSearch->setChecked(true);
           refreshDistroNews(true, false);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
@@ -1582,7 +1547,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          m_actionSwitchToRemoteSearch->setChecked(false);
+          //m_actionSwitchToRemoteSearch->setChecked(false);
           //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
@@ -1600,7 +1565,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           //bRefreshGroups = false;
           m_leFilterPackage->clear();
-          m_actionSwitchToRemoteSearch->setChecked(false);          
+          //m_actionSwitchToRemoteSearch->setChecked(false);
           //m_actionSwitchToLocalSearch->setChecked(true);
           m_commandExecuting = ectn_LOCAL_PKG_REFRESH;
           remoteSearchClicked();
