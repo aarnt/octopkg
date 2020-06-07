@@ -523,7 +523,7 @@ void MainWindow::preBuildRemotePackageListMeta()
     m_cic = 0;
   }
 
-  if (m_packageModel->getPackageCount() == 0)
+  //if (m_packageModel->getPackageCount() == 0)
   {
     m_leFilterPackage->setFocus();
   }
