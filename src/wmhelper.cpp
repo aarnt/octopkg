@@ -18,6 +18,7 @@
 *
 */
 
+#include "constants.h"
 #include "wmhelper.h"
 #include "unixcommand.h"
 #include "strconstants.h"
@@ -41,41 +42,7 @@
  * Checks if KDE is running
  */
 bool WMHelper::isKDERunning(){
-  static bool ret;
-  static bool firstTime = true;
-
-  if (firstTime)
-  {
-    QStringList slParam;
-    QProcess proc;
-    ret = false;
-    QStringList kdeDesktops = QStringList() << ctn_KDE_DESKTOP << ctn_KDE_X11_DESKTOP << ctn_KDE_WAYLAND_DESKTOP;
-    QStringList::const_iterator constIterator;
-
-    for (constIterator = kdeDesktops.constBegin(); constIterator != kdeDesktops.constEnd(); ++constIterator) {
-      QString desktop = (*constIterator).toLocal8Bit().constData();
-      slParam.clear();
-      slParam << "-A";
-      slParam << "-o command";
-      proc.start("ps", slParam);
-      proc.waitForStarted();
-      proc.waitForFinished();
-
-      QString out = proc.readAll();
-
-      proc.close();
-
-      if (out.count(desktop)>0)
-      {
-        ret = true;
-        break;
-      }
-    }
-
-    firstTime = false;
-  }
-
-  return ret;
+  return (qgetenv("XDG_CURRENT_DESKTOP").toLower() == QByteArray("kde"));
 }
 
 /*
@@ -84,14 +51,14 @@ bool WMHelper::isKDERunning(){
 bool WMHelper::isTDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
+  slParam << QStringLiteral("-C");
+  slParam << ctn_TDE_DESKTOP;
 
-  proc.start("ps", slParam);
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
 
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_TDE_DESKTOP)>0)
@@ -106,13 +73,13 @@ bool WMHelper::isTDERunning(){
 bool WMHelper::isXFCERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
+  slParam << QStringLiteral("-C");
+  slParam << ctn_XFCE_DESKTOP;
 
-  proc.start("ps", slParam);
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_XFCE_DESKTOP)>0)
@@ -127,13 +94,13 @@ bool WMHelper::isXFCERunning(){
 bool WMHelper::isLXDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
+  slParam << QStringLiteral("-C");
+  slParam << ctn_LXDE_DESKTOP;
 
-  proc.start("ps", slParam);
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_LXDE_DESKTOP)>0)
@@ -147,21 +114,7 @@ bool WMHelper::isLXDERunning(){
  */
 bool WMHelper::isLXQTRunning()
 {
-  QStringList slParam;
-  QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
-
-  proc.start("ps", slParam);
-  proc.waitForStarted();
-  proc.waitForFinished();
-  QString out = proc.readAll();
-  proc.close();
-
-  if (out.count(ctn_LXQT_DESKTOP)>0)
-    return true;
-  else
-    return false;
+  return (qgetenv("XDG_CURRENT_DESKTOP").toLower() == QByteArray("lxqt"));
 }
 
 /*
@@ -170,13 +123,13 @@ bool WMHelper::isLXQTRunning()
 bool WMHelper::isOPENBOXRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
+  slParam << QStringLiteral("-C");
+  slParam << ctn_OPENBOX_DESKTOP;
 
-  proc.start("ps", slParam);
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_OPENBOX_DESKTOP)>0)
@@ -191,13 +144,13 @@ bool WMHelper::isOPENBOXRunning(){
 bool WMHelper::isMATERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
+  slParam << QStringLiteral("-C");
+  slParam << ctn_MATE_DESKTOP;
 
-  proc.start("ps", slParam);
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_MATE_DESKTOP)>0)
@@ -212,12 +165,13 @@ bool WMHelper::isMATERunning(){
 bool WMHelper::isCinnamonRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << "-A";
-  slParam << "-o command";
-  proc.start("ps", slParam);
+  slParam << QStringLiteral("-fC");
+  slParam << ctn_CINNAMON_DESKTOP;
+
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_CINNAMON_DESKTOP)>0)
@@ -231,11 +185,15 @@ bool WMHelper::isCinnamonRunning(){
  */
 bool WMHelper::isLuminaRunning()
 {
+  QStringList slParam;
   QProcess proc;
-  proc.start("ps -A -o command");
+  slParam << QStringLiteral("-C");
+  slParam << ctn_LUMINA_DESKTOP;
+
+  proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
   proc.waitForFinished();
-  QString out = proc.readAll();
+  QString out = QString::fromUtf8(proc.readAll());
   proc.close();
 
   if (out.count(ctn_LUMINA_DESKTOP)>0)
@@ -255,67 +213,10 @@ QString WMHelper::getXFCEEditor(){
 }
 
 /*
- * Retrieves the KDESU command...
- */
-QString WMHelper::getKDESUCommand(){
-  QString result = "";
-
-  if (UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
-      UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
-      UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD ||
-      UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
-  {
-    QFile f ("/usr/local/lib/kde4/libexec/kdesu");
-    if (f.exists())
-      result = "/usr/local/lib/kde4/libexec/kdesu";
-    else
-    {
-      f.setFileName("/usr/local/lib/libexec/kf5/kdesu");
-      if (f.exists())
-        result = "/usr/local/lib/libexec/kf5/kdesu";
-      else
-        result = "";
-    }
-  }
-  else
-    result = ctn_KDESU;
-
-  result += " -d ";
-  result += " -t ";
-  result += " --noignorebutton ";
-  result += " -c";
-
-  return result;
-}
-
-/*
- * Retrieves the TDESU command...
- */
-QString WMHelper::getTDESUCommand(){
-  QString result = ctn_TDESU;
-  result += " -d ";
-  result += " -t ";
-  result += " --noignorebutton ";
-
-  return result;
-}
-
-/*
- * Retrieves the GKSU command...
- */
-QString WMHelper::getGKSUCommand(){
-  QString result;
-  result = UnixCommand::discoverBinaryPath(ctn_GKSU_2);
-  result += " -u root -m " + QString("\"") + StrConstants::getEnterAdministratorsPassword() + QString("\" ");
-
-  return result;
-}
-
-/*
  * The generic SU get method. It retrieves the SU you have installed in your system!
  */
 QString WMHelper::getSUCommand(){
-  return "/usr/lib/octopkg/octopkg-doas -d ";
+  return ctn_OCTOPKG_DOAS;
 }
 
 /*

@@ -305,8 +305,7 @@ private slots:
   void openFile();
   void editFile();
   void openTerminal();
-  void openDirectory();
-  void openRootTerminal();
+  void openDirectory();  
   void installLocalPackage();
   void findFileInPackage();
 

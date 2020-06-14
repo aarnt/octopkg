@@ -295,26 +295,39 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
 
   if(searchForLatestNews && UnixCommand::hasInternetConnection() && bsd != ectn_UNKNOWN)
   {
-    QString curlCommand = "curl -k %1 -o %2";
+    //QString curlCommand = "curl -k %1 -o %2";
+    QStringList params;
 
     if (bsd == ectn_FREEBSD)
     {
-      curlCommand = curlCommand.arg(ctn_FREEBSD_RSS_URL).arg(tmpRssPath);
+      params << QStringLiteral("-k");
+      params << ctn_FREEBSD_RSS_URL;
+      params << QStringLiteral("-o");
+      params << tmpRssPath;
     }
     else if (bsd == ectn_DRAGONFLYBSD)
     {
-      curlCommand = curlCommand.arg(ctn_DRAGONFLYBSD_RSS_URL).arg(tmpRssPath);
+      params << QStringLiteral("-k");
+      params << ctn_DRAGONFLYBSD_RSS_URL;
+      params << QStringLiteral("-o");
+      params << tmpRssPath;
     }
     else if (bsd == ectn_GHOSTBSD)
     {
-      curlCommand = curlCommand.arg(ctn_GHOSTBSD_RSS_URL).arg(tmpRssPath);
+      params << QStringLiteral("-k");
+      params << ctn_GHOSTBSD_RSS_URL;
+      params << QStringLiteral("-o");
+      params << tmpRssPath;
     }
     else if (bsd == ectn_HARDENEDBSD)
     {
-      curlCommand = curlCommand.arg(ctn_HARDENEDBSD_RSS_URL).arg(tmpRssPath);
+      params << QStringLiteral("-k");
+      params << ctn_HARDENEDBSD_RSS_URL;
+      params << QStringLiteral("-o");
+      params << tmpRssPath;
     }
 
-    if (UnixCommand::runCurlCommand(curlCommand).isEmpty())
+    if (UnixCommand::runCurlCommand(params).isEmpty())
     {
       QFile fileTmpRss(tmpRssPath);
       QFile fileRss(rssPath);

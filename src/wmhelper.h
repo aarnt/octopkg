@@ -113,9 +113,6 @@ public:
   static bool isLuminaRunning();
 
   static QString getKDEOpenHelper();
-  static QString getKDESUCommand();
-  static QString getTDESUCommand();
-  static QString getGKSUCommand();
   static QString getXFCEEditor();
   static QString getSUCommand();
   static void openFile(const QString& fileName); //fileName is Path + Name

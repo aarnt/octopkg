@@ -1429,7 +1429,6 @@ void MainWindow::actionsProcessStarted()
 {
   m_progressWidget->setValue(0);
   m_progressWidget->setMaximum(100);
-  m_iLoveCandy = UnixCommand::isILoveCandyEnabled();
 
   clearTabOutput();
 

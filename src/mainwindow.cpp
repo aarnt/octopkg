@@ -1364,18 +1364,6 @@ void MainWindow::openDirectory(){
 }
 
 /*
- * Helper method which opens a root terminal
- */
-void MainWindow::openRootTerminal()
-{
-  //If there are no means to run the actions, we must warn!
-  if (!isSUAvailable()) return;
-
-  m_unixCommand = new UnixCommand(this);
-  m_unixCommand->openRootTerminal();
-}
-
-/*
  * Open a file chooser dialog for the user to select local packages to install (pacman -U)
  */
 void MainWindow::installLocalPackage()

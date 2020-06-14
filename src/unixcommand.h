@@ -63,23 +63,12 @@ public:
 
   inline QProcess * getProcess(){ return m_process; }
 
-  //Returns true if ILoveCandy is enabled in "/etc/pacman.conf"
-  static bool isILoveCandyEnabled();
-
-  //Returns "fieldName" strings from "/etc/pacman.conf"
-  static QStringList getFieldFromPacmanConf(const QString &fieldName);
-  //Returns the list of ignored packages in "/etc/pacman.conf"
-  static QStringList getIgnorePkgsFromPacmanConf();
-
   //Returns the BSD Flavour where OctoPkg is running on
   static BSDFlavour getBSDFlavour();
 
   //Delegations from Package class (due to QProcess use)
-  static QString runCommand(const QString& commandToRun);
-  static QString runCurlCommand(const QString& commandToRun);
-  static QString discoverBinaryPath(const QString&);
-
-  static bool cleanPacmanCache();
+  //static QString runCommand(const QString& commandToRun);
+  static QString runCurlCommand(const QStringList &params);
 
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
@@ -91,8 +80,7 @@ public:
   static QByteArray getDependenciesList(const QString &pkgName);
   static QByteArray getPackageList(const QString &pkgName = "");
   static QByteArray getPackageInformation(const QString &pkgName, bool foreignPackage);
-  static QByteArray getPackageContentsUsingPacman(const QString &pkgName);
-  static QByteArray getPackageContentsUsingPkgfile(const QString &pkgName);
+  static QByteArray getPackageContentsUsingPacman(const QString &pkgName);  
   static bool isPkgfileInstalled();
 
   static QString getPackageByFilePath(const QString &filePath);
@@ -103,7 +91,7 @@ public:
   static QByteArray getTargetUpgradeList(const QString &pkgName = "");
   static QByteArray getTargetRemovalList(const QString &pkgName);
 
-  static QString getSystemArchitecture();
+  //static QString getSystemArchitecture();
   static bool hasInternetConnection();
   static bool doInternetPingTest();
   static bool isTextFile( const QString& fileName ); //fileName is Path + Name
@@ -144,7 +132,6 @@ public:
   static QByteArray getCommandOutput(const QString &pCommand);
   static void removeTemporaryFiles();
 
-  void openRootTerminal();
   void runCommandInTerminal(const QStringList& commandList);
   void runCommandInTerminalAsNormalUser(const QStringList& commandList);
   void terminateCommand();

@@ -299,7 +299,7 @@ QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 /*
  * Retrieves the list of all package groups available
  */
-QStringList *Package::getPackageGroups()
+/*QStringList *Package::getPackageGroups()
 {
   QString packagesFromGroup = UnixCommand::getPackageGroups();
   QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
@@ -317,14 +317,14 @@ QStringList *Package::getPackageGroups()
   res->removeDuplicates();
   res->sort();
   return res;
-}
+}*/
 
 /*
  * Retrieves the list of packages from a given group name
  */
 QStringList *Package::getPackagesOfGroup(const QString &groupName)
 {
-  QString packagesFromGroup = UnixCommand::getPackagesFromGroup(groupName);
+  /*QString packagesFromGroup = UnixCommand::getPackagesFromGroup(groupName);
   QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
@@ -334,7 +334,7 @@ QStringList *Package::getPackagesOfGroup(const QString &groupName)
     res->append(parts[1]); //We only need the package name!
   }
 
-  return res;
+  return res;*/
 }
 
 /*
