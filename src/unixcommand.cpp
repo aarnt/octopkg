@@ -32,6 +32,7 @@
 #include <QTextStream>
 #include <QtNetwork/QNetworkInterface>
 #include <QRegularExpression>
+#include <QTcpSocket>
 #include <QDebug>
 
 /*
@@ -434,19 +435,21 @@ bool UnixCommand::hasInternetConnection()
  */
 bool UnixCommand::doInternetPingTest()
 {
-  QProcess ping;
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-  ping.setProcessEnvironment(env);
-  ping.start("ping -c 1 -W 3 www.google.com");
+  QTcpSocket socket;
+  QString hostname = QStringLiteral("www.google.com");
 
-  ping.waitForFinished();
-
-  int res = ping.exitCode();
-  ping.close();
-
-  return (res == 0);
+  socket.connectToHost(hostname, 80);
+  if (socket.waitForConnected(5000))
+    return true;
+  else
+  {
+    hostname = QStringLiteral("www.baidu.com");
+    socket.connectToHost(hostname, 80);
+    if (socket.waitForConnected(5000))
+      return true;
+    else
+      return false;
+  }
 }
 
 /*
@@ -462,7 +465,6 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
 
   proc.start("/bin/sh -c " + sParam);
   proc.waitForFinished();
-
   QString out = proc.readAllStandardOutput();
   proc.close();
 
