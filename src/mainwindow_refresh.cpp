@@ -53,7 +53,7 @@ void MainWindow::refreshAppIcon()
   {
     setWindowIcon(IconHelper::getIconOctopiRed());
 
-    if(m_commandExecuting != ectn_MIRROR_CHECK && !isThereAPendingTransaction())
+    if(!isThereAPendingTransaction())
       enableSystemUpgrade=true;
   }
   else

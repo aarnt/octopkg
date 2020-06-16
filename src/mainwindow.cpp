@@ -1072,12 +1072,12 @@ void MainWindow::invalidateTabs()
 {
   if(ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION) //This is TabInfo
   {
-    refreshTabInfo(true, false);
+    refreshTabInfo(false, false);
     return;
   }
   else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
   {
-    refreshTabFiles(true, false);
+    refreshTabFiles(false, false);
     return;
   }
 }

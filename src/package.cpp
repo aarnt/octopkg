@@ -1102,7 +1102,7 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
 
   if (isInstalled)
   {
-    result = UnixCommand::getPackageContentsUsingPacman(pkgName);
+    result = UnixCommand::getPackageContentsUsingPkg(pkgName);
   }
 
   QString aux(result);

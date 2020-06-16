@@ -42,28 +42,6 @@
 QFile *UnixCommand::m_temporaryFile = 0;
 
 /*
- * Executes given command and returns the StandardError Output.
- */
-/*QString UnixCommand::runCommand(const QString& commandToRun)
-{
-  QProcess proc;
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  env.remove("LANG");
-  env.remove("LC_MESSAGES");
-  env.insert("LANG", "C");
-  env.insert("LC_MESSAGES", "C");
-  proc.setProcessEnvironment(env);
-  proc.start(commandToRun);
-  proc.waitForStarted();
-  proc.waitForFinished(-1);
-
-  QString res = proc.readAllStandardError();
-  proc.close();
-
-  return res;
-}*/
-
-/*
  * Executes the CURL command and returns the StandardError Output, if result code <> 0.
  */
 QString UnixCommand::runCurlCommand(const QStringList& params){
@@ -88,7 +66,7 @@ QString UnixCommand::runCurlCommand(const QStringList& params){
 }
 
 /*
- * Performs a pacman query
+ * Performs a pkg query
  */
 QByteArray UnixCommand::performQuery(const QStringList args)
 {
@@ -109,7 +87,7 @@ QByteArray UnixCommand::performQuery(const QStringList args)
 }
 
 /*
- * Performs a pacman query
+ * Performs a pkg query
  * Overloaded with QString parameter
  */
 QByteArray UnixCommand::performQuery(const QString &args)
@@ -251,9 +229,13 @@ QByteArray UnixCommand::getPackageInformation(const QString &pkgName, bool forei
 /*
  * Given a package name, returns a string containing all the files inside it
  */
-QByteArray UnixCommand::getPackageContentsUsingPacman(const QString& pkgName)
+QByteArray UnixCommand::getPackageContentsUsingPkg(const QString& pkgName)
 {
-  QByteArray res = performQuery("query \"%Fp\" " + pkgName);
+  QStringList params;
+  params << QStringLiteral("query");
+  params << QStringLiteral("%Fp");
+  params << pkgName;
+  QByteArray res = performQuery(params);
 
   //if the pkg is more than a MEGABYTE big, let's abort it!
   if (res.size() > 1048576) return "";

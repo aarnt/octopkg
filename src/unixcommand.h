@@ -67,7 +67,6 @@ public:
   static BSDFlavour getBSDFlavour();
 
   //Delegations from Package class (due to QProcess use)
-  //static QString runCommand(const QString& commandToRun);
   static QString runCurlCommand(const QStringList &params);
 
   static QByteArray performQuery(const QStringList args);
@@ -80,7 +79,7 @@ public:
   static QByteArray getDependenciesList(const QString &pkgName);
   static QByteArray getPackageList(const QString &pkgName = "");
   static QByteArray getPackageInformation(const QString &pkgName, bool foreignPackage);
-  static QByteArray getPackageContentsUsingPacman(const QString &pkgName);  
+  static QByteArray getPackageContentsUsingPkg(const QString &pkgName);
   static bool isPkgfileInstalled();
 
   static QString getPackageByFilePath(const QString &filePath);
