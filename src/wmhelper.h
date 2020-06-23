@@ -69,6 +69,8 @@ const QString ctn_LXDE_DESKTOP("lxsession");
 const QString ctn_LXDE_TERMINAL("lxterminal");
 const QString ctn_LXDE_FILE_MANAGER("pcmanfm");
 
+const QString ctn_XDG_OPEN(QStringLiteral("xdg-open"));
+
 const QString ctn_LXQT_DESKTOP("lxqt-session");
 const QString ctn_LXQT_TERMINAL("qterminal");
 const QString ctn_LXQT_FILE_MANAGER("pcmanfm-qt");

@@ -304,6 +304,10 @@ void WMHelper::openFile(const QString& fileName){
     s << fileToOpen;
     p->startDetached( ctn_LXDE_FILE_MANAGER, s );
   }
+  else if (UnixCommand::hasTheExecutable(ctn_XDG_OPEN)){
+    s << fileToOpen;
+    p->startDetached( ctn_XDG_OPEN, s );
+  }
 }
 
 /*
@@ -348,13 +352,18 @@ void WMHelper::editFile( const QString& fileName, EditOptions opt ){
     p = getXFCEEditor() + " " + fileName;
   }
 
-  if (UnixCommand::isRootRunning() || opt == ectn_EDIT_AS_NORMAL_USER)
+  if (opt == ectn_EDIT_AS_NORMAL_USER)
   {
-    process->startDetached("/bin/sh -c \"" + p + "\"");
+    QStringList sl;
+    sl << QStringLiteral("-c");
+    QStringList params = p.split(QStringLiteral(" "), QString::SkipEmptyParts);
+    sl << params;
+    process->startDetached(UnixCommand::getShell(), sl);
   }
   else
   {
-    process->startDetached(getSUCommand() + p);
+    QStringList params = p.split(QStringLiteral(" "), QString::SkipEmptyParts);
+    process->startDetached(getSUCommand(), params);
   }
 }
 

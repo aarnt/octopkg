@@ -307,7 +307,7 @@ QString StrConstants::getLineEditTextLocal(){
 }
 
 QString StrConstants::getLineEditTextRemote(){
-  return QObject::tr("Enter your search and press ENTER");
+  return QObject::tr("Type the package name/description and press ENTER");
 }
 
 QString StrConstants::getRemotePackageSearchTip(){
@@ -576,7 +576,7 @@ QString StrConstants::getFilterLocalPackages(){
 }
 
 QString StrConstants::getSearchForPackages(){
-  return QObject::tr("Search for remote packages");
+  return QObject::tr("Install a new package");
 }
 
 QString StrConstants::getSearchStringIsShort(){

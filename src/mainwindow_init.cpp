@@ -611,7 +611,7 @@ void MainWindow::initActions()
   m_actionSwitchToLocalSearch->setChecked(true);*/
 
   m_actionSwitchToRemoteSearch = new QAction(this);
-  m_actionSwitchToRemoteSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_R));
+  m_actionSwitchToRemoteSearch->setShortcut(QKeySequence(Qt::ControlModifier | Qt::Key_I));
   m_actionSwitchToRemoteSearch->setIcon(IconHelper::getIconInternet());
   m_actionSwitchToRemoteSearch->setText(StrConstants::getSearchForPackages());
   m_actionSwitchToRemoteSearch->setToolTip(m_actionSwitchToRemoteSearch->toolTip() + QLatin1String(" (") +
