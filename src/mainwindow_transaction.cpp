@@ -1312,7 +1312,6 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
-    //m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
@@ -1321,7 +1320,6 @@ void MainWindow::toggleTransactionActions(const bool value)
   {
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
-    //m_actionSwitchToLocalSearch->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
     ui->actionSyncPackages->setEnabled(true);
 
@@ -1330,14 +1328,13 @@ void MainWindow::toggleTransactionActions(const bool value)
   }
   else if (value == false && state == false)
   {
-    //m_actionSwitchToLocalSearch->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(false);
     ui->actionSyncPackages->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
   }
 
   ui->actionInstall->setEnabled(value);
-  m_actionInstallPacmanUpdates->setEnabled(value);
+  m_actionInstallPkgUpdates->setEnabled(value);
   ui->actionRemoveTransactionItem->setEnabled(value);
   ui->actionRemoveTransactionItems->setEnabled(value);
   ui->actionRemove->setEnabled(value);
@@ -1378,6 +1375,7 @@ void MainWindow::toggleSystemActions(const bool value)
   ui->actionInstallLocalPackage->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
   ui->actionCleanPackagesCache->setEnabled(value);
+  m_actionSwitchToRemoteSearch->setEnabled(value);
 
   if (value == true && !state && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);

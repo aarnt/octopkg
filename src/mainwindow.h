@@ -165,7 +165,7 @@ private:
   QElapsedTimer *m_time;
 
   QAction *m_dummyAction;
-  QAction *m_actionInstallPacmanUpdates;
+  QAction *m_actionInstallPkgUpdates;
   QAction *m_actionShowGroups;
   QAction *m_actionMirrorCheck;
   QAction *m_actionMenuRepository;

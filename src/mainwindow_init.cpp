@@ -313,7 +313,7 @@ void MainWindow::initToolButtonPacman()
   m_toolButtonPacman->setAutoRaise(true);
   m_toolButtonPacman->hide();
   m_menuToolButtonPacman = new QMenu(this);
-  m_menuToolButtonPacman->addAction(m_actionInstallPacmanUpdates);
+  m_menuToolButtonPacman->addAction(m_actionInstallPkgUpdates);
   m_toolButtonPacman->setPopupMode(QToolButton::MenuButtonPopup);
   m_toolButtonPacman->setMenu(m_menuToolButtonPacman);
 
@@ -625,11 +625,11 @@ void MainWindow::initActions()
   m_actionGroupSearch->setExclusive(true);
   connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
 
-  m_actionInstallPacmanUpdates = new QAction(this);
-  m_actionInstallPacmanUpdates->setIcon(IconHelper::getIconToInstall());
-  m_actionInstallPacmanUpdates->setText(ui->actionInstall->text());
-  m_actionInstallPacmanUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallPacmanUpdates, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
+  m_actionInstallPkgUpdates = new QAction(this);
+  m_actionInstallPkgUpdates->setIcon(IconHelper::getIconToInstall());
+  m_actionInstallPkgUpdates->setText(ui->actionInstall->text());
+  m_actionInstallPkgUpdates->setIconVisibleInMenu(true);
+  connect(m_actionInstallPkgUpdates, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());
