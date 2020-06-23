@@ -584,6 +584,24 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
 }
 
 /*
+ * Executes the given command using QProcess async technology with ROOT credentials
+ */
+void UnixCommand::executeCommand(QStringList &params)
+{
+  QString command;
+
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.remove("LANG");
+  env.remove("LC_MESSAGES");
+  env.insert("LANG", QLocale::system().name() + ".UTF-8");
+  env.insert("LC_MESSAGES", QLocale::system().name() + ".UTF-8");
+  m_process->setProcessEnvironment(env);
+
+  params.insert(0, ctn_OCTOPKG_DOAS_PARAMS);
+  m_process->start(WMHelper::getSUCommand(), params);
+}
+
+/*
  * Puts all Standard output of the member process into a member string
  */
 void UnixCommand::processReadyReadStandardOutput()

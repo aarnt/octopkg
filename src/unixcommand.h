@@ -135,6 +135,7 @@ public:
   void runCommandInTerminalAsNormalUser(const QStringList& commandList);
   void terminateCommand();
   void executeCommand(const QString &pCommand, Language lang=ectn_LANG_ENGLISH);
+  void executeCommand(QStringList &params);
   void executeCommandAsNormalUser(const QString &pCommand);
 
   QString readAllStandardOutput();

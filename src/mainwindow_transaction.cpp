@@ -850,17 +850,23 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
       if (result == QDialogButtonBox::Yes)
       {
         m_commandExecuting = ectn_SYSTEM_UPGRADE;
-        QString command;
+        QStringList params;
 
         if (question.isBootEnvChecked())
         {
           QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
-          command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + QLatin1String(" upgrade -y\"");
+          params << UnixCommand::getShell();
+          params << "-c";
+          params << "bectl create " + beName + "; " + ctn_PKG_BIN + " upgrade -y";
         }
         else
-          command = ctn_PKG_BIN + QLatin1String(" upgrade -y");
+        {
+          params << ctn_PKG_BIN;
+          params << "upgrade";
+          params << "-y";
+        }
 
-        m_unixCommand->executeCommand(command);
+        m_unixCommand->executeCommand(params);
         m_commandQueued = ectn_NONE;
       }
       else if (result == QDialogButtonBox::AcceptRole)
@@ -952,20 +958,23 @@ void MainWindow::doRemoveAndInstall()
   {
     disableTransactionButtons();
 
-    QString command;
+    QStringList params;
 
     if (question.isBootEnvChecked())
     {
       QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
-      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " +
-          ctn_PKG_BIN + QLatin1String(" remove -f -y ") + listOfRemoveTargets + QLatin1String(";") +
-          ctn_PKG_BIN + QLatin1String(" install -f -y ") + listOfInstallTargets + QLatin1String("\"");
+      params << UnixCommand::getShell();
+      params << "-c";
+      params << "bectl create " + beName + "; " +
+        ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets + "; " +
+        ctn_PKG_BIN + " install -f -y " + listOfInstallTargets;
     }
     else
     {
-      command = UnixCommand::getShell() + QLatin1String(" -c \"") +
-          ctn_PKG_BIN + QLatin1String(" remove -f -y ") + listOfRemoveTargets + QLatin1String(";") +
-          ctn_PKG_BIN + QLatin1String(" install -f -y ") + listOfInstallTargets + QLatin1String("\"");
+      params << UnixCommand::getShell();
+      params << "-c";
+      params << ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets + "; " +
+        ctn_PKG_BIN + " install -f -y " + listOfInstallTargets;
     }
 
     m_lastCommandList.clear();
@@ -989,7 +998,7 @@ void MainWindow::doRemoveAndInstall()
     if (result == QDialogButtonBox::Yes)
     {
       m_commandExecuting = ectn_REMOVE_INSTALL;
-      m_unixCommand->executeCommand(command);
+      m_unixCommand->executeCommand(params);
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {
@@ -1043,11 +1052,14 @@ void MainWindow::doRemove()
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
   {
     QString command;
+    QStringList params;
 
     if (question.isBootEnvChecked())
     {
       QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
-      command = UnixCommand::getShell() + QLatin1String(" -c \"bectl create ") + beName + "; " + ctn_PKG_BIN + QLatin1String(" remove -R -f -y ") + listOfTargets;
+      params << UnixCommand::getShell();
+      params << "-c";
+      params << "bectl create " + beName + "; " + ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
     }
     else
     {
@@ -1074,7 +1086,10 @@ void MainWindow::doRemove()
     if (result == QDialogButtonBox::Yes)
     {
       m_commandExecuting = ectn_REMOVE;
-      m_unixCommand->executeCommand(command);
+      if (params.count() > 0)
+        m_unixCommand->executeCommand(params);
+      else
+        m_unixCommand->executeCommand(command);
     }
 
     if (result == QDialogButtonBox::AcceptRole)
