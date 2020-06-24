@@ -237,7 +237,9 @@ QString WMHelper::getKDEOpenHelper(){
 void WMHelper::openFile(const QString& fileName){
   QString fileToOpen(fileName);
 
-  if (!UnixCommand::isTextFile(fileToOpen)){
+  bool isTextFile = UnixCommand::isTextFile(fileToOpen);
+
+  if (!isTextFile){
     int res = QMessageBox::question(qApp->activeWindow(), StrConstants::getConfirmation(),
                                     StrConstants::getThisIsNotATextFile(),
                                     QMessageBox::Yes | QMessageBox::No,
@@ -249,7 +251,6 @@ void WMHelper::openFile(const QString& fileName){
   QProcess *p = new QProcess(qApp->activeWindow());
   QStringList s;
 
-  //BSDFlavour distro = UnixCommand::getBSDFlavour();
   if (isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
     s << fileToOpen;
     p->startDetached( ctn_XFCE_FILE_MANAGER, s );
@@ -303,6 +304,13 @@ void WMHelper::openFile(const QString& fileName){
   else if (UnixCommand::hasTheExecutable(ctn_LXDE_FILE_MANAGER)){
     s << fileToOpen;
     p->startDetached( ctn_LXDE_FILE_MANAGER, s );
+  }
+  else if (UnixCommand::hasTheExecutable(ctn_GNOME_FILE_MANAGER)){
+    s << fileToOpen;
+    if (isTextFile)
+      p->startDetached( ctn_GNOME_EDITOR, s );
+    else
+      p->startDetached( ctn_GNOME_FILE_MANAGER, s );
   }
   else if (UnixCommand::hasTheExecutable(ctn_XDG_OPEN)){
     s << fileToOpen;
@@ -460,6 +468,11 @@ void WMHelper::openDirectory( const QString& dirName ){
     {
       s << dir;
       p->startDetached( ctn_LXDE_FILE_MANAGER, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_GNOME_FILE_MANAGER))
+    {
+      s << dir;
+      p->startDetached( ctn_GNOME_FILE_MANAGER, s );
     }
   }
 }

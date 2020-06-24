@@ -12,6 +12,7 @@
   Faster startup time thanks to deferred retrieval of outdated packages.
   Added option to create backup boot environments before upgrades when root is on ZFS.
   Added support to HardenedBSD.
+  Added GNOME desktop support.
   Added Lumina desktop support.
   Added Info option on package list context menu.
   Added lock/unlock actions on installed packages.
