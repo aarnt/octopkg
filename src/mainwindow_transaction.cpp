@@ -1163,8 +1163,20 @@ void MainWindow::doInstall()
   {
     disableTransactionButtons();
 
+    QStringList params;
     QString command;
-    command = ctn_PKG_BIN + " install -f -y " + listOfTargets;
+
+    if (question.isBootEnvChecked())
+    {
+      QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
+      params << UnixCommand::getShell();
+      params << "-c";
+      params << "bectl create " + beName + "; " + ctn_PKG_BIN + " install -f -y " + listOfTargets;
+    }
+    else
+    {
+      command = ctn_PKG_BIN + " install -f -y " + listOfTargets;
+    }
 
     m_lastCommandList.clear();
     m_lastCommandList.append(ctn_PKG_BIN + " install -f " + listOfTargets + ";");
@@ -1185,7 +1197,10 @@ void MainWindow::doInstall()
     if (result == QDialogButtonBox::Yes)
     {
       m_commandExecuting = ectn_INSTALL;
-      m_unixCommand->executeCommand(command);
+      if (params.count() > 0)
+        m_unixCommand->executeCommand(params);
+      else
+        m_unixCommand->executeCommand(command);
     }
     else if (result == QDialogButtonBox::AcceptRole)
     {
