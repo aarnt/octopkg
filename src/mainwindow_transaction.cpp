@@ -1377,8 +1377,19 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionHelpUsage->setEnabled(value);
   ui->actionDonate->setEnabled(value);
   ui->actionHelpAbout->setEnabled(value);
+  m_actionPackageInfo->setEnabled(value);
+  ui->actionFindFileInPackage->setEnabled(value);
   m_actionLockPackage->setEnabled(value);
   m_actionUnlockPackage->setEnabled(value);
+
+  //Search menu
+  ui->actionSearchByFile->setEnabled(value);
+  ui->actionSearchByName->setEnabled(value);
+  ui->actionSearchByDescription->setEnabled(value);
+
+  m_leFilterPackage->setEnabled(value);
+  ui->twProperties->setTabEnabled(ctn_TABINDEX_INFORMATION, value);
+  ui->twProperties->setTabEnabled(ctn_TABINDEX_FILES, value);
 
   //We have to toggle the combobox groups as well
   if (m_initializationCompleted) ui->twGroups->setEnabled(value);
