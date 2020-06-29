@@ -560,11 +560,7 @@ void MainWindow::preBuildRemotePackageList()
     m_cic = NULL;
   }
 
-  if (m_packageModel->getPackageCount() == 0)
-  {
-    m_leFilterPackage->setFocus();
-  }
-
+  m_leFilterPackage->setFocus();
   emit buildRemotePackageListDone();
 }
 
