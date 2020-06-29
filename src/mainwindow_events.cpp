@@ -173,7 +173,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   else if(ke->key() == Qt::Key_Delete)
   {
     if (m_commandExecuting != ectn_NONE) return;
-
     onPressDelete();
   }    
   else if(ke->key() == Qt::Key_1 && ke->modifiers() == Qt::AltModifier)
@@ -237,6 +236,11 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     {
       m_unixCommand->terminateCommand();
     }
+  }
+  else if (ke->key() == Qt::Key_P && ke->modifiers() == Qt::ControlModifier)
+  {
+    if (!ui->tvPackages->hasFocus())
+      ui->tvPackages->setFocus();
   }
   else if(ke->key() == Qt::Key_L && ke->modifiers() == Qt::ControlModifier)
   {
