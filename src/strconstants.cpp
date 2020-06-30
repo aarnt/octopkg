@@ -295,7 +295,7 @@ QString StrConstants::getNumberAvailablePackages(int availablePackagesCount){
 }
 
 QString StrConstants::getCleaningPackageCache(){
-  return QObject::tr("Cleaning package cache...");
+  return QObject::tr("Cleaning the local cache...");
 }
 
 QString StrConstants::getRemovingPacmanTransactionLockFile(){
@@ -437,7 +437,7 @@ QString StrConstants::getConfirmExecuteTransactionInTerminal(){
 }
 
 QString StrConstants::getCleanCacheConfirmation(){
-  return QObject::tr("Do you really want to clean the package cache?");
+  return QObject::tr("Do you really want to clean the local package cache?");
 }
 
 QString StrConstants::getRemovePacmanTransactionLockFileConfirmation(){

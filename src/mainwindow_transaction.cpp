@@ -1372,7 +1372,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionRepositoryEditor->setEnabled(value);  
   m_actionSysInfo->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
-  ui->actionCleanPackagesCache->setEnabled(value);
+  ui->actionCleanLocalCache->setEnabled(value);
   ui->actionOpenRootTerminal->setEnabled(value);
   ui->actionHelpUsage->setEnabled(value);
   ui->actionDonate->setEnabled(value);
@@ -1415,7 +1415,7 @@ void MainWindow::toggleSystemActions(const bool value)
 
   ui->actionInstallLocalPackage->setEnabled(value);
   ui->actionGetNews->setEnabled(value);
-  ui->actionCleanPackagesCache->setEnabled(value);
+  ui->actionCleanLocalCache->setEnabled(value);
   m_actionSwitchToRemoteSearch->setEnabled(value);
 
   if (value == true && !state && m_outdatedStringList->count() > 0)

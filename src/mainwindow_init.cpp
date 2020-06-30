@@ -655,7 +655,7 @@ void MainWindow::initActions()
   //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
   ui->actionOpenDirectory->setIcon(IconHelper::getIconFolder());
 
-  connect(ui->actionCleanPackagesCache, SIGNAL(triggered(bool)), this, SLOT(doCleanCache()));
+  connect(ui->actionCleanLocalCache, SIGNAL(triggered(bool)), this, SLOT(doCleanCache()));
   connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(invalidateTabs()));
   //connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
