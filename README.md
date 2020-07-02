@@ -1,4 +1,4 @@
-## This is OctoPkg, a powerful pkgng front-end using Qt libs.
+## This is OctoPkg, a powerful pkgng front end using Qt libs.
 
 ![Main window](https://raw.githubusercontent.com/aarnt/octopkg/master/octopkg-mainwindow.png)
 
