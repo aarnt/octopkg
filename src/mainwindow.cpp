@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_indFoundFilesInPkgFileList = 0;
   m_callSystemUpgrade = false;
   m_callSystemUpgradeNoConfirm = false;
-  m_initializationCompleted=false;
+  m_initializationCompleted = false;
   m_systemUpgradeDialog = false;
   m_refreshPackageLists = false;
   m_cic = NULL;
@@ -175,8 +175,6 @@ void MainWindow::deferredInitAppIcon()
           this, SLOT(invalidateTabs()));
 
   m_numberOfOutdatedPackages = m_outdatedStringList->count();
-  refreshAppIcon();
-  refreshStatusBar();
 
   if (m_numberOfOutdatedPackages > 0)
   {
@@ -186,6 +184,10 @@ void MainWindow::deferredInitAppIcon()
     ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
     ui->tvPackages->setCurrentIndex(maux);
   }
+
+  invalidateTabs();
+  refreshAppIcon();
+  refreshStatusBar();
 
   connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
           this, SLOT(invalidateTabs()));
@@ -197,6 +199,7 @@ void MainWindow::deferredInitAppIcon()
 void MainWindow::switchToViewAllPackages()
 {
   m_selectedViewOption = ectn_ALL_PKGS;
+
   /*disconnect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
   ui->actionViewAllPackages->setChecked(true);
   connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));*/

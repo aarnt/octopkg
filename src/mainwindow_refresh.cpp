@@ -829,8 +829,11 @@ void MainWindow::buildPackageList()
   ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
   ui->tvPackages->setCurrentIndex(maux);
 
-  refreshTabInfo();
-  refreshTabFiles();
+  if (m_initializationCompleted)
+  {
+    refreshTabInfo();
+    refreshTabFiles();
+  }
 
   if (isPackageTreeViewVisible())
   {
@@ -1155,7 +1158,7 @@ void MainWindow::refreshTabInfo(bool clearContents, bool neverQuit)
  */
 void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 {  
-  if (m_progressWidget->isVisible()) return;
+  if (m_progressWidget->isVisible() || !m_initializationCompleted) return;
 
   if(neverQuit == false &&
      (ui->twProperties->currentIndex() != ctn_TABINDEX_FILES || !isPropertiesTabWidgetVisible()))
