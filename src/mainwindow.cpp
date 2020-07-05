@@ -189,8 +189,9 @@ void MainWindow::deferredInitAppIcon()
   refreshAppIcon();
   refreshStatusBar();
 
-  connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(invalidateTabs()));
+  connect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(invalidateTabs()));
+  //connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+  //        this, SLOT(invalidateTabs()));
 }
 
 /*

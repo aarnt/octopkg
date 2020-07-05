@@ -65,38 +65,6 @@ void MainWindow::refreshAppIcon()
 }
 
 /*
- * Reconfigure Tools menu according available tools in the system
- */
-/*void MainWindow::refreshMenuTools()
-{
-  static bool connectorPlv=false;
-  int availableTools=0;
-
-  if(UnixCommand::hasTheExecutable("plv"))
-  {
-    availableTools++;
-    ui->menuTools->menuAction()->setVisible(true);
-    ui->actionPacmanLogViewer->setVisible(true);
-    ui->actionPacmanLogViewer->setIcon(QIcon::fromTheme("plv"));
-
-    if (!connectorPlv)
-    {
-      connect(ui->actionPacmanLogViewer, SIGNAL(triggered()), this, SLOT(launchPLV()));
-      connectorPlv=true;
-    }
-  }
-  else
-    ui->actionPacmanLogViewer->setVisible(false);
-
-  foreach (QAction * act,  ui->menuBar->actions())
-  {
-    QString text = act->text();
-    text = text.remove("&");
-    act->setText(qApp->translate("MainWindow", text.toUtf8(), 0));
-  }
-}*/
-
-/*
  * Inserts the group names into the Groups treeView
  */
 void MainWindow::refreshGroupsWidget()
@@ -131,8 +99,6 @@ void MainWindow::remoteSearchClicked()
   if (m_commandExecuting != ectn_NONE && m_commandExecuting != ectn_LOCAL_PKG_REFRESH) return;
 
   static bool lastPkgButtonClickedWasRemote = false;
-
-  invalidateTabs();
 
   if (lastPkgButtonClickedWasRemote && m_actionSwitchToRemoteSearch->isChecked())
   {
@@ -172,6 +138,9 @@ void MainWindow::remoteSearchClicked()
     m_refreshPackageLists = true;
 
   metaBuildPackageList();
+  m_cachedPackageInInfo = "";
+  m_cachedPackageInFiles = "";
+  invalidateTabs();
 
   if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)
   {
@@ -289,8 +258,7 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
   ui->tvPackages->setCurrentIndex(maux);
 
   m_listOfPackagesFromGroup.reset();
-  refreshTabInfo();
-  refreshTabFiles();
+  invalidateTabs();
   ui->tvPackages->setFocus();
 
   refreshToolBar();
@@ -883,50 +851,6 @@ void MainWindow::buildPackageList()
   emit buildPackageListDone();
   m_leFilterPackage->setFocus();
 }
-
-/*
- * Repopulates the list of available packages (installed [+ non-installed])
- */
-/*void MainWindow::refreshPackageList()
-{
-  CPUIntensiveComputing cic;
-  const std::unique_ptr<const QSet<QString> > unrequiredPackageList(Package::getUnrequiredPackageList());
-  QList<PackageListData> *list = Package::getPackageList();
-
-  // Fetch foreign package list
-  std::unique_ptr<QList<PackageListData> > listForeign(Package::getForeignPackageList());
-  PackageListData pld;
-  QList<PackageListData>::const_iterator itForeign = listForeign->begin();
-
-  if (!isSearchByFileSelected())
-  {
-    while (itForeign != listForeign->end())
-    {
-      if (!m_hasAURTool || !m_outdatedAURStringList->contains(itForeign->name))
-      {
-        pld = PackageListData(
-              itForeign->name, itForeign->repository, itForeign->version,
-              itForeign->name + " " + Package::getInformationDescription(itForeign->name, true),
-              ectn_FOREIGN);
-      }
-      else
-      {
-        pld = PackageListData(
-              itForeign->name, itForeign->repository, itForeign->version,
-              itForeign->name + " " + Package::getInformationDescription(itForeign->name, true),
-              ectn_FOREIGN_OUTDATED);
-      }
-
-      list->append(pld);
-      ++itForeign;
-    }
-  }
-
-  m_packageRepo.setData(list, *unrequiredPackageList);
-  delete list;
-  list = NULL;
-}
-*/
 
 /*
  * Whenever horizontal splitter handler is moved
