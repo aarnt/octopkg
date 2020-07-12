@@ -774,7 +774,7 @@ void MainWindow::buildPackageList()
     }
   }
 
-  if(g_fwOutdatedList.isFinished())
+  if(!firstTime && g_fwOutdatedList.isFinished())
   {
     foreach(QString k, m_outdatedList->keys())
     {
@@ -815,6 +815,8 @@ void MainWindow::buildPackageList()
 
   if (firstTime)
   {
+    getOutdatedPackageListThreaded();
+
     if (isPackageTreeViewVisible())
     {
       m_leFilterPackage->setFocus();

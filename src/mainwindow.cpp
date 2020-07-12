@@ -74,7 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;
 
-  getOutdatedPackageListThreaded();
+  //getOutdatedPackageListThreaded();
   retrieveLockedPackageList();
   retrieveUnrequiredPackageList();
 
