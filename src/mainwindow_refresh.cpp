@@ -262,7 +262,7 @@ void MainWindow::buildPackagesFromGroupList(const QString group)
   ui->tvPackages->setFocus();
 
   refreshToolBar();
-  refreshStatusBarToolButtons();
+  //refreshStatusBarToolButtons();
 
   tvPackagesSelectionChanged(QItemSelection(),QItemSelection());
 }
@@ -622,7 +622,7 @@ void MainWindow::buildRemotePackageList()
   //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, true);
 
   refreshToolBar();
-  refreshStatusBarToolButtons();
+  //refreshStatusBarToolButtons();
 
   //If we found no packages, let's make another search, this time 'by name'...
   if (!m_leFilterPackage->text().isEmpty() &&
@@ -847,7 +847,7 @@ void MainWindow::buildPackageList()
 
   ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN, 10);
   refreshToolBar();
-  refreshStatusBarToolButtons();
+  //refreshStatusBarToolButtons();
   m_refreshPackageLists = true;  
 
   emit buildPackageListDone();
