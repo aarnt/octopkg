@@ -36,8 +36,8 @@ HEADERS += src/QtSolutions/qtsingleapplication.h \
         src/packagerepository.h \
         src/model/packagemodel.h \
         src/ui/octopkgtabinfo.h \
-        src/utils.h \
-        src/terminal.h
+        src/utils.h
+        #src/terminal.h
 
 SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/packagetreeview.cpp \
@@ -65,8 +65,8 @@ SOURCES += src/QtSolutions/qtsingleapplication.cpp \
         src/packagerepository.cpp \
         src/model/packagemodel.cpp \
         src/ui/octopkgtabinfo.cpp \
-        src/utils.cpp \
-        src/terminal.cpp
+        src/utils.cpp
+        #src/terminal.cpp
 
 FORMS   += ui/mainwindow.ui \
         ui/transactiondialog.ui

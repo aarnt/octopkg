@@ -23,7 +23,7 @@
 #include "unixcommand.h"
 #include "strconstants.h"
 #include "settingsmanager.h"
-#include "terminal.h"
+//#include "terminal.h"
 #include <iostream>
 
 #include <QApplication>
@@ -482,10 +482,10 @@ void WMHelper::openDirectory( const QString& dirName ){
  */
 void WMHelper::openTerminal(const QString& dirName)
 {
-  QFileInfo f(dirName);
+  /*QFileInfo f(dirName);
   if (f.exists())
   {
     Terminal *term = new Terminal(0, SettingsManager::getTerminal());
     term->openTerminal(dirName);
-  }
+  }*/
 }

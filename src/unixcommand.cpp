@@ -21,7 +21,7 @@
 #include "unixcommand.h"
 #include "strconstants.h"
 #include "wmhelper.h"
-#include "terminal.h"
+//#include "terminal.h"
 #include "constants.h"
 #include <iostream>
 
@@ -558,7 +558,7 @@ QString UnixCommand::getPkgNGVersion()
  * Executes given commandToRun inside a terminal, so the user can interact
  */
 void UnixCommand::runCommandInTerminal(const QStringList& commandList){
-  m_terminal->runCommandInTerminal(commandList);
+  //m_terminal->runCommandInTerminal(commandList);
 }
 
 /*
@@ -652,7 +652,7 @@ QString UnixCommand::errorString()
 UnixCommand::UnixCommand(QObject *parent): QObject()
 {
   m_process = new QProcess(parent);
-  m_terminal = new Terminal(parent, SettingsManager::getTerminal());
+  //m_terminal = new Terminal(parent, SettingsManager::getTerminal());
 
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("LANG", "C");
@@ -680,7 +680,7 @@ UnixCommand::UnixCommand(QObject *parent): QObject()
                    SLOT( processReadyReadStandardError() ));
 
   //Terminal signals
-  QObject::connect(m_terminal, SIGNAL( started()), this,
+  /*QObject::connect(m_terminal, SIGNAL( started()), this,
                    SIGNAL( started()));
   QObject::connect(m_terminal, SIGNAL( finished ( int, QProcess::ExitStatus )), this,
                    SIGNAL( finished ( int, QProcess::ExitStatus )) );
@@ -688,7 +688,7 @@ UnixCommand::UnixCommand(QObject *parent): QObject()
   QObject::connect(m_terminal, SIGNAL( startedTerminal()), this,
                    SIGNAL( startedTerminal()));
   QObject::connect(m_terminal, SIGNAL( finishedTerminal(int,QProcess::ExitStatus)), this,
-                   SIGNAL( finishedTerminal(int,QProcess::ExitStatus)));
+                   SIGNAL( finishedTerminal(int,QProcess::ExitStatus)));*/
 }
 
 /*

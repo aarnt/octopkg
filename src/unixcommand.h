@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QProcess>
+#include <QRandomGenerator>
 #include <QTime>
 #include <unistd.h>
 
@@ -105,9 +106,8 @@ public:
   }
 
   static QFile* getTemporaryFile(){
-    QTime time = QTime::currentTime();
-    qsrand(time.minute() + time.second() + time.msec());
-    m_temporaryFile = new QFile(ctn_TEMP_ACTIONS_FILE + QString::number(qrand()));
+    quint32 gen = QRandomGenerator::global()->generate();
+    m_temporaryFile = new QFile(ctn_TEMP_ACTIONS_FILE + QString::number(gen));
     m_temporaryFile->open(QIODevice::ReadWrite|QIODevice::Text);
     m_temporaryFile->setPermissions(QFile::Permissions(QFile::ExeOwner|QFile::ReadOwner));
 
