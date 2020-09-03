@@ -101,7 +101,12 @@ QByteArray UnixCommand::performQuery(const QString &args)
   env.insert("LC_ALL", "C");
 
   pkg.setProcessEnvironment(env);
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList params = args.split(QStringLiteral(" "), QString::SkipEmptyParts);
+#else
+  QStringList params = args.split(QStringLiteral(" "), Qt::SkipEmptyParts);
+#endif  
   pkg.start(ctn_PKG_BIN, params);
   pkg.waitForFinished();
   result = pkg.readAllStandardOutput();
@@ -275,11 +280,22 @@ QStringList UnixCommand::getFilePathSuggestions(const QString &file)
   env.insert("LANG", "C");
   env.insert("LC_MESSAGES", "C");
   slocate.setProcessEnvironment(env);
-  slocate.start("slocate -l 8 " + file);
+  
+  QStringList params;
+  params << QStringLiteral("-l");
+  params << QStringLiteral("8");
+  params << file;
+  
+  slocate.start("slocate", params);
   slocate.waitForFinished();
 
   QString ba = slocate.readAllStandardOutput();
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   return ba.split("\n", QString::SkipEmptyParts);
+#else
+  return ba.split("\n", Qt::SkipEmptyParts);
+#endif  
 }
 
 /*
@@ -443,9 +459,12 @@ bool UnixCommand::hasTheExecutable( const QString& exeName )
 
   QProcess proc;
   proc.setProcessChannelMode(QProcess::MergedChannels);
-  QString sParam = "\"which " + exeName + "\"";
-
-  proc.start("/bin/sh -c " + sParam);
+  QString sParam = QStringLiteral("which ") + exeName;
+  QStringList params;
+  params << QStringLiteral("-c");
+  params << sParam;
+  
+  proc.start("/bin/sh", params);
   proc.waitForFinished();
   QString out = proc.readAllStandardOutput();
   proc.close();
@@ -558,6 +577,7 @@ QString UnixCommand::getPkgNGVersion()
  * Executes given commandToRun inside a terminal, so the user can interact
  */
 void UnixCommand::runCommandInTerminal(const QStringList& commandList){
+  Q_UNUSED(commandList)
   //m_terminal->runCommandInTerminal(commandList);
 }
 
@@ -578,7 +598,12 @@ void UnixCommand::executeCommand(const QString &pCommand, Language lang)
     m_process->setProcessEnvironment(env);
   }
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList params = pCommand.split(QStringLiteral(" "), QString::SkipEmptyParts);
+#else
+  QStringList params = pCommand.split(QStringLiteral(" "), Qt::SkipEmptyParts);
+#endif
+
   params.insert(0, ctn_OCTOPKG_DOAS_PARAMS);
   m_process->start(WMHelper::getSUCommand(), params);
 }

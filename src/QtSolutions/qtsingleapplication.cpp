@@ -387,7 +387,12 @@ void QtSingleApplication::activateWindow(const QString &message)
       actWin->activateWindow();
 
     QStringList packagesToInstallList =
+    
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)        
         message.split(",", QString::SkipEmptyParts);
+#else
+        message.split(",", Qt::SkipEmptyParts);
+#endif
 
     MainWindow *mw = qobject_cast<MainWindow *>(actWin);
 

@@ -262,15 +262,7 @@ void WMHelper::openFile(const QString& fileName){
   }
   else if (UnixCommand::hasTheExecutable(ctn_KDE4_FILE_MANAGER)){
     s << fileToOpen;
-
-    if (UnixCommand::isRootRunning())
-    {
-      p->startDetached( "dbus-launch " + getKDEOpenHelper() + " " + fileToOpen );
-    }
-    else
-    {
-      p->startDetached( getKDEOpenHelper(), s );
-    }
+    p->startDetached( getKDEOpenHelper(), s );
   }
   else if (isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_FILE_MANAGER)){
     s << "exec";
@@ -334,6 +326,9 @@ void WMHelper::editFile( const QString& fileName, EditOptions opt ){
   else if (isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_EDITOR)){
     p = ctn_LXQT_EDITOR + " " + fileName;
   }
+  else if (isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_EDITOR_ALT)){
+    p = ctn_LXQT_EDITOR_ALT + " " + fileName;
+  }
   else if (isLuminaRunning() && UnixCommand::hasTheExecutable(ctn_LUMINA_EDITOR)){
     p += ctn_LUMINA_EDITOR + " " + fileName;
   }
@@ -364,13 +359,25 @@ void WMHelper::editFile( const QString& fileName, EditOptions opt ){
   {
     QStringList sl;
     sl << QStringLiteral("-c");
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList params = p.split(QStringLiteral(" "), QString::SkipEmptyParts);
+#else
+    QStringList params = p.split(QStringLiteral(" "), Qt::SkipEmptyParts);
+#endif
+
     sl << params;
     process->startDetached(UnixCommand::getShell(), sl);
   }
   else
   {
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList params = p.split(QStringLiteral(" "), QString::SkipEmptyParts);
+#else
+    QStringList params = p.split(QStringLiteral(" "), Qt::SkipEmptyParts);
+#endif
+
     process->startDetached(getSUCommand(), params);
   }
 }
@@ -408,15 +415,7 @@ void WMHelper::openDirectory( const QString& dirName ){
       if (UnixCommand::hasTheExecutable(ctn_KDE4_FILE_MANAGER))
       {
         s << dir;
-
-        if (UnixCommand::isRootRunning())
-        {
-          p->startDetached( "dbus-launch " + ctn_KDE4_FILE_MANAGER + " " + dir);
-        }
-        else
-        {
-          p->startDetached( ctn_KDE4_FILE_MANAGER, s);
-        }
+        p->startDetached( ctn_KDE4_FILE_MANAGER, s);
       }
       else if (UnixCommand::hasTheExecutable(ctn_KDE_FILE_MANAGER))
       {
@@ -482,10 +481,97 @@ void WMHelper::openDirectory( const QString& dirName ){
  */
 void WMHelper::openTerminal(const QString& dirName)
 {
-  /*QFileInfo f(dirName);
-  if (f.exists())
-  {
-    Terminal *term = new Terminal(0, SettingsManager::getTerminal());
-    term->openTerminal(dirName);
-  }*/
+  QFileInfo f(dirName);
+  if (!f.exists()) return;
+  
+  QStringList s;
+  QProcess *m_process = new QProcess(qApp->activeWindow());
+
+    if(WMHelper::isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_XFCE_TERMINAL, s );
+    }
+    else if (WMHelper::isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_TERMINAL)){
+      s << "--workdir";
+      s << dirName;
+      m_process->startDetached( ctn_KDE_TERMINAL, s );
+    }
+    else if (WMHelper::isTDERunning() && UnixCommand::hasTheExecutable(ctn_TDE_TERMINAL)){
+      s << "--workdir";
+      s << dirName;
+      m_process->startDetached( ctn_TDE_TERMINAL, s );
+    }
+    else if (WMHelper::isLXDERunning() && UnixCommand::hasTheExecutable(ctn_LXDE_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_LXDE_TERMINAL, s );
+    }
+    else if (WMHelper::isMATERunning() && UnixCommand::hasTheExecutable(ctn_MATE_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_MATE_TERMINAL, s );
+    }
+    else if (WMHelper::isCinnamonRunning() && UnixCommand::hasTheExecutable(ctn_CINNAMON_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_CINNAMON_TERMINAL, s );
+    }
+    else if (WMHelper::isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_TERMINAL)){
+      s << "--workdir";
+      s << dirName;
+      m_process->startDetached( ctn_LXQT_TERMINAL, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_PEK_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_PEK_TERMINAL, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_XFCE_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_XFCE_TERMINAL, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_LXDE_TERMINAL)){
+      s << "--working-directory=" + dirName;
+      m_process->startDetached( ctn_LXDE_TERMINAL, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_RXVT_TERMINAL)){
+      QString cmd;
+
+      if (UnixCommand::isAppRunning("urxvtd"))
+      {
+        cmd = "urxvtc";
+
+        s << "-name";
+        s << "Urxvt";
+        s << "-title";
+        s << "Urxvt";
+        s << "-cd";
+        s << dirName;
+      }
+      else
+      {
+        cmd = ctn_RXVT_TERMINAL;
+
+        s << "-name";
+        s << "Urxvt";
+        s << "-title";
+        s << "Urxvt";
+        s << "-cd";
+        s << dirName;
+      }
+
+      m_process->startDetached(cmd, s);
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_XTERM)){
+      QString cmd = ctn_XTERM;
+
+      s << "-fn";
+      s << "*-fixed-*-*-*-18-*";
+      s << "-fg";
+      s << "White";
+      s << "-bg";
+      s << "Black";
+      s << "-title";
+      s << "xterm";
+      s << "-e";
+      s << "cd " + dirName + " && /bin/sh";
+
+      m_process->startDetached(cmd, s);
+    }
 }

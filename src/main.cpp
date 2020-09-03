@@ -91,7 +91,12 @@ int main(int argc, char *argv[])
   if (!packagesToInstall.isEmpty())
   {
     QStringList packagesToInstallList =
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         packagesToInstall.split(",", QString::SkipEmptyParts);
+#else
+        packagesToInstall.split(",", Qt::SkipEmptyParts);
+#endif
 
     w.setPackagesToInstallList(packagesToInstallList);
   }

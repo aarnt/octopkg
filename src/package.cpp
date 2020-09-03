@@ -215,7 +215,13 @@ double Package::strToKBytes2(QString size)
 QSet<QString> *Package::getLockedPackageList()
 {
   QString lockedPkgList = UnixCommand::getLockedPackageList();
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuples = lockedPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList packageTuples = lockedPkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+  
   packageTuples.removeFirst(); //Removes string -> "Currently locked packages:"
   QSet<QString>* res = new QSet<QString>();
 
@@ -234,7 +240,13 @@ QSet<QString> *Package::getLockedPackageList()
 QSet<QString>* Package::getUnrequiredPackageList()
 {
   QString unrequiredPkgList = UnixCommand::getUnrequiredPackageList();
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuples = unrequiredPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList packageTuples = unrequiredPkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+  
   QSet<QString>* res = new QSet<QString>();
 
   foreach(QString packageTuple, packageTuples)
@@ -252,7 +264,13 @@ QSet<QString>* Package::getUnrequiredPackageList()
 QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 {
   QString outPkgList = UnixCommand::getOutdatedPackageList();
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList packageTuples = outPkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+  
   QMap<QString, OutdatedPackageInfo>* res = new QMap<QString, OutdatedPackageInfo>();
   bool pkgsToUpgrade = false;
 
@@ -324,6 +342,9 @@ QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
  */
 QStringList *Package::getPackagesOfGroup(const QString &groupName)
 {
+  Q_UNUSED(groupName)
+  return nullptr;
+  
   /*QString packagesFromGroup = UnixCommand::getPackagesFromGroup(groupName);
   QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
@@ -344,7 +365,13 @@ QStringList *Package::getPackagesOfGroup(const QString &groupName)
 TransactionInfo Package::getTargetUpgradeList(const QString &pkgName)
 {
   QString targets = UnixCommand::getTargetUpgradeList(pkgName);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList infoTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList infoTuples = targets.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+  
   TransactionInfo res;
   res.packages = new QStringList();
 
@@ -372,7 +399,13 @@ TransactionInfo Package::getTargetUpgradeList(const QString &pkgName)
 QStringList *Package::getTargetRemovalList(const QString &pkgName)
 {
   QString targets = UnixCommand::getTargetRemovalList(pkgName);
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList infoTuples = targets.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList infoTuples = targets.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+  
   QStringList *res = new QStringList();
 
   foreach(QString infoTuple, infoTuples)
@@ -426,7 +459,13 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
   double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
   QString pkgList = UnixCommand::getPackageList(packageName);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+
   QList<PackageListData> * res = new QList<PackageListData>();
 
   if(!pkgList.isEmpty())
@@ -596,10 +635,22 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
     return res;
 
   QString pkgList = UnixCommand::getRemotePackageList(searchString, false);
-  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QtString::SkipEmptyParts);
+#else
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+
   res = parsePackageTuple(packageTuples, packageCache);
   QString pkgListComment = UnixCommand::getRemotePackageList(searchString, true);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuplesComment = pkgListComment.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList packageTuplesComment = pkgListComment.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
+
   resComment = parsePackageTuple(packageTuplesComment, packageCache);
 
   foreach(PackageListData pld, *resComment)
@@ -1082,7 +1133,13 @@ QString Package::getDependencies(const QString &pkgName)
   QStringList pkgList;
   QString res;
   QString aux = UnixCommand::getDependenciesList(pkgName);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   pkgList = aux.split("\n", QString::SkipEmptyParts);
+#else
+  pkgList = aux.split("\n", Qt::SkipEmptyParts);
+#endif
+
   pkgList.sort();
 
   foreach(QString dependency, pkgList)
@@ -1106,13 +1163,23 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
   }
 
   QString aux(result);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList fileList = aux.split("\n", QString::SkipEmptyParts);
+#else
+  QStringList fileList = aux.split("\n", Qt::SkipEmptyParts);
+#endif
 
   //Let's change that listing a bit...
   QStringList auxList;
   foreach(QString file, fileList)
   {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList parts = file.split("/", QString::SkipEmptyParts);
+#else
+    QStringList parts = file.split("/", Qt::SkipEmptyParts);
+#endif
+
     navigateThroughDirs(parts, auxList, 0);
   }
 
@@ -1129,7 +1196,13 @@ QStringList Package::getOptionalDeps(const QString &pkgName)
 {
   QString pkgInfo = UnixCommand::getPackageInformation(pkgName, false);
   QString aux = Package::getOptDepends(pkgInfo);
+
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList result = aux.split("<br>", QString::SkipEmptyParts);
+#else
+  QStringList result = aux.split("<br>", Qt::SkipEmptyParts);
+#endif
+
   result.removeAll("None");
 
   return result;

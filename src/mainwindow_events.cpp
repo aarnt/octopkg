@@ -30,7 +30,7 @@
 #include "uihelper.h"
 #include "searchbar.h"
 #include "globals.h"
-#include "terminal.h"
+//#include "terminal.h"
 
 #include <QCloseEvent>
 #include <QMessageBox>

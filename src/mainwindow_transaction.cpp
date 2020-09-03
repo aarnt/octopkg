@@ -905,7 +905,12 @@ void MainWindow::doRemoveAndInstall()
   TransactionDialog question(this);
   QString dialogText;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList removeTargets = listOfRemoveTargets.split(" ", QString::SkipEmptyParts);
+#else
+  QStringList removeTargets = listOfRemoveTargets.split(" ", Qt::SkipEmptyParts);
+#endif 
+  
   for(QString target: removeTargets)
   {
     removeList = removeList + StrConstants::getRemove() + " "  + target + "\n";
@@ -1904,16 +1909,30 @@ bool MainWindow::splitOutputStrings(const QString &output)
 {
   bool res = true;
   QString msg = output.trimmed();
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList msgs = msg.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
+#else
+  QStringList msgs = msg.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
+#endif
 
   foreach (QString m, msgs)
   {
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList m2 = m.split(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "), QString::SkipEmptyParts);
+#else
+    QStringList m2 = m.split(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "), Qt::SkipEmptyParts);
+#endif
 
     if (m2.count() == 1)
     {
       //Let's try another test... if it doesn't work, we give up.
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
       QStringList maux = m.split(QRegularExpression("%"), QString::SkipEmptyParts);
+#else
+      QStringList maux = m.split(QRegularExpression("%"), Qt::SkipEmptyParts);
+#endif
+
       if (maux.count() > 1)
       {
         foreach (QString aux, maux)

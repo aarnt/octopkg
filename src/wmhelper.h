@@ -79,6 +79,7 @@ const QString ctn_LXQT_DESKTOP("lxqt-session");
 const QString ctn_LXQT_TERMINAL("qterminal");
 const QString ctn_LXQT_FILE_MANAGER("pcmanfm-qt");
 const QString ctn_LXQT_EDITOR("juffed");
+const QString ctn_LXQT_EDITOR_ALT("featherpad");
 
 const QString ctn_LUMINA_DESKTOP("lumina-desktop");
 const QString ctn_LUMINA_EDITOR("lumina-textedit");
