@@ -94,8 +94,13 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
   {
     return res;
   }
-
+  
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+  foundItems = sim->findItems(Package::parseSearchString(name), Qt::MatchRegExp|Qt::MatchRecursive);
+#else
   foundItems = sim->findItems(Package::parseSearchString(name), Qt::MatchRegularExpression|Qt::MatchRecursive);
+#endif 
+
   foreach(QStandardItem *item, foundItems)
   {
     res->append(item->index());

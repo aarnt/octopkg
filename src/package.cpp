@@ -637,7 +637,7 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   QString pkgList = UnixCommand::getRemotePackageList(searchString, false);
   
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QtString::SkipEmptyParts);
+  QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
 #else
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
 #endif
