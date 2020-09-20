@@ -28,7 +28,7 @@ SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
   m_completerModel = new QStringListModel(this);
   m_completer = new QCompleter(m_completerModel, this);
   m_completer->setCaseSensitivity(Qt::CaseInsensitive);
-  m_completer->setCompletionMode(QCompleter::PopupCompletion);
+  m_completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
   m_completer->setCompletionColumn(0);
   m_completer->setMaxVisibleItems(10);
   setCompleter(m_completer);
@@ -66,11 +66,17 @@ SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
 void SearchLineEdit::setRefreshValidator(ValidatorType validatorType)
 {
   if (validatorType == ectn_AUR_VALIDATOR)
+  {
+    m_completerModel->setStringList(QStringList());
     setValidator(m_aurValidator);
+  }
   else if (validatorType == ectn_FILE_VALIDATOR)
     setValidator(m_fileValidator);
   else if (validatorType == ectn_DEFAULT_VALIDATOR)
+  {
+    m_completerModel->setStringList(QStringList());
     setValidator(m_defaultValidator);
+  }
 
   //If the current string is not valid anymore, let's erase it!
   int pos = 0;

@@ -105,7 +105,7 @@ void MainWindow::show()
     restoreGeometry(SettingsManager::getWindowSize());
     m_commandExecuting=ectn_NONE;
     m_commandQueued=ectn_NONE;
-    m_leFilterPackage = new SearchLineEdit(this, m_hasSLocate);
+    m_leFilterPackage = new SearchLineEdit(this, true);
 
     setWindowTitle(StrConstants::getApplicationName());
     setMinimumSize(QSize(820, 520));

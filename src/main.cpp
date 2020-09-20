@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
     return 1;
   }
-  if(!QFile::exists("/usr/lib/octopkg/octopkg-doas"))
+  if(!QFile::exists("/usr/local/lib/octopkg/octopkg-doas"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
     return 1;

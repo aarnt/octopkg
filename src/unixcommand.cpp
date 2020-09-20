@@ -275,27 +275,34 @@ QString UnixCommand::getPackageByFilePath(const QString &filePath)
  */
 QStringList UnixCommand::getFilePathSuggestions(const QString &file)
 {
-  QProcess slocate;
+  QProcess locate;
   QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
   env.insert("LANG", "C");
   env.insert("LC_MESSAGES", "C");
-  slocate.setProcessEnvironment(env);
+  locate.setProcessEnvironment(env);
   
   QStringList params;
-  params << QStringLiteral("-l");
-  params << QStringLiteral("8");
+  params << QStringLiteral("-l10");
   params << file;
   
-  slocate.start("slocate", params);
-  slocate.waitForFinished();
+  locate.start("locate", params);
+  locate.waitForFinished();
 
-  QString ba = slocate.readAllStandardOutput();
+  QString ba = locate.readAllStandardOutput();
 
+  QStringList res;
+  if (!ba.isEmpty())
+  {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-  return ba.split("\n", QString::SkipEmptyParts);
+  res=ba.split("\n", QString::SkipEmptyParts);
+  if (res.contains("locate: [show only 10 lines]")) res.removeLast();
 #else
-  return ba.split("\n", Qt::SkipEmptyParts);
-#endif  
+   res=ba.split("\n", Qt::SkipEmptyParts);
+   if (res.contains("locate: [show only 10 lines]")) res.removeLast();
+#endif
+  }
+
+  return res;
 }
 
 /*

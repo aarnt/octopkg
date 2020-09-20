@@ -1,3 +1,8 @@
+0.3.1
+  Make locate work with "search by file", giving suggestions on a popup window.
+  Make code compatible with Qt 5.15 version. 
+  BugFix: updated install dir of octopkg-doas to /usr/local/lib/octopkg.
+
 0.3.0
   BugFix in GhostBSD repo guessing;
   BugFix: Package list does not flashes at program startup anymore.

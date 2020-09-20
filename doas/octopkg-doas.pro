@@ -73,7 +73,7 @@ TRANSLATIONS += translations/lxqt-sudo_arn.ts \
 
 # install
 isEmpty(PREFIX) {
-    PREFIX = /usr
+    PREFIX = /usr/local
 }
 
 isEmpty(LIBDIR) {
