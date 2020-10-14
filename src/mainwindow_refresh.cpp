@@ -78,7 +78,7 @@ void MainWindow::refreshGroupsWidget()
   items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList("<" + StrConstants::getDisplayAllCategories() + ">")));
   m_AllGroupsItem = items.at(0);
   const QStringList*const packageGroups = Package::getPackageGroups();
-  foreach(QString group, *packageGroups)
+  for(QString group: *packageGroups)
   {
     items.append(new QTreeWidgetItem((QTreeWidget*)0, QStringList(group)));
   }
@@ -119,12 +119,14 @@ void MainWindow::remoteSearchClicked()
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
+    m_packageModel->setShowColumnInstalledOn(false);
     m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextRemote());
     m_leFilterPackage->setToolTip(StrConstants::getRemotePackageSearchTip());
     ui->menuSearch->setEnabled(false);
   }
   else
   {
+    m_packageModel->setShowColumnInstalledOn(true);
     m_leFilterPackage->setPlaceholderText(StrConstants::getLineEditTextLocal());
     m_leFilterPackage->setToolTip("");
     ui->menuSearch->setEnabled(true);
@@ -697,7 +699,7 @@ void MainWindow::buildPackageList()
     if(m_debugInfo)
       std::cout << "Time elapsed retrieving outdated pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl;
 
-    foreach(QString k, m_outdatedList->keys())
+    for(QString k: m_outdatedList->keys())
     {
       m_outdatedStringList->append(k);
     }
@@ -764,7 +766,7 @@ void MainWindow::buildPackageList()
 
   if (g_fwLockedPkg.isFinished())
   {
-    foreach(QString locked, *m_lockedPackageList)
+    for(QString locked: *m_lockedPackageList)
     {
       PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(locked);
       if (package != NULL)
@@ -776,7 +778,7 @@ void MainWindow::buildPackageList()
 
   if(!firstTime && g_fwOutdatedList.isFinished())
   {
-    foreach(QString k, m_outdatedList->keys())
+    for(QString k: m_outdatedList->keys())
     {
       OutdatedPackageInfo opi = m_outdatedList->value(k);
       PackageRepository::PackageData* package = m_packageRepo.getFirstPackageByNameEx(k);
@@ -845,7 +847,7 @@ void MainWindow::buildPackageList()
     }
   }
 
-  ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN, 10);
+  //ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN, 10);
   refreshToolBar();
   //refreshStatusBarToolButtons();
   m_refreshPackageLists = true;  
@@ -1178,7 +1180,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     m_progressWidget->setValue(0);
     m_progressWidget->show();
 
-    foreach ( QString file, fileList )
+    for ( QString file: fileList )
     {
       bool isDir = file.endsWith('/');
       isSymLinkToDir = false;

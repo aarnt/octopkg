@@ -269,6 +269,7 @@ PackageRepository::PackageData::PackageData(const PackageListData& pkg, const bo
     origin(pkg.origin),
     version(pkg.version), description(pkg.description.toLatin1()), // octoPkg wants it converted to utf8
     outdatedVersion(pkg.outatedVersion), downloadSize(pkg.downloadSize), installedSize(pkg.installedSize),
+    installedOn(pkg.installedOn),
     status(pkg.status != ectn_OUTDATED ?
            pkg.status :
            (Package::rpmvercmp(pkg.outatedVersion.toLatin1().data(), pkg.version.toLatin1().data()) == 1 ?

@@ -140,6 +140,12 @@ void MainWindow::savePackageColumnWidths()
         ui->tvPackages->columnWidth(PackageModel::ctn_PACKAGE_NAME_COLUMN));
   SettingsManager::setPackageVersionColumnWidth(
         ui->tvPackages->columnWidth(PackageModel::ctn_PACKAGE_VERSION_COLUMN));
+
+  if (!m_actionSwitchToRemoteSearch->isChecked())
+  {
+    SettingsManager::setPackageSizeColumnWidth(
+        ui->tvPackages->columnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN));
+  }
 }
 
 /*
@@ -149,7 +155,7 @@ void MainWindow::initAppIcon()
 {
   m_outdatedStringList->clear();
   m_outdatedList = Package::getOutdatedStringList();
-  foreach(QString k, m_outdatedList->keys())
+  for(QString k: m_outdatedList->keys())
   {
     m_outdatedStringList->append(k);
   }
@@ -219,7 +225,7 @@ void MainWindow::initMenuBar()
   RepoConf *repoConf = new RepoConf();
   QStringList repos = repoConf->getRepos();
 
-  foreach(QString repo, repos)
+  for(QString repo: repos)
   {
     QAction * createdAction = subMenu->addAction(repo);
     createdAction->setCheckable(true);
@@ -233,7 +239,7 @@ void MainWindow::initMenuBar()
 
   ui->menuView->menuAction()->setVisible(false);
 
-  foreach (QAction * act,  ui->menuBar->actions())
+  for (QAction * act: ui->menuBar->actions())
   {
     QString text = act->text();
     //text = text.remove("&");
@@ -729,14 +735,14 @@ void MainWindow::initActions()
   if (WMHelper::isXFCERunning())
   {
     //Loop through all actions and set their icons (if any) visible to menus.
-    foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
+    for(QAction* ac: this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
     {
       if (ac) ac->setIconVisibleInMenu(true);
     }
   }
 
   QString text;
-  foreach(QAction* ac, this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
+  for(QAction* ac: this->findChildren<QAction*>(QRegularExpression("(m_a|a)ction\\S*")))
   {
     text = ac->text();
     ac->setText(qApp->translate("MainWindow", text.toUtf8(), 0));

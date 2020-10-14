@@ -184,6 +184,12 @@ int SettingsManager::getPackageVersionColumnWidth()
         ctn_KEY_PACKAGE_VERSION_COLUMN_WIDTH, 260).toInt();
 }
 
+int SettingsManager::getPackageSizeColumnWidth()
+{
+  return instance()->getSYSsettings()->value(
+        ctn_KEY_PACKAGE_SIZE_COLUMN_WIDTH, 120).toInt();
+}
+
 bool SettingsManager::getSkipMirrorCheckAtStartup(){
   if (!instance()->getSYSsettings()->contains(ctn_KEY_SKIP_MIRRORCHECK_ON_STARTUP)){
     instance()->getSYSsettings()->setValue(ctn_KEY_SKIP_MIRRORCHECK_ON_STARTUP, 0);
@@ -301,6 +307,12 @@ void SettingsManager::setPackageNameColumnWidth(int newValue)
 void SettingsManager::setPackageVersionColumnWidth(int newValue)
 {
   instance()->getSYSsettings()->setValue(ctn_KEY_PACKAGE_VERSION_COLUMN_WIDTH, newValue);
+  instance()->getSYSsettings()->sync();
+}
+
+void SettingsManager::setPackageSizeColumnWidth(int newValue)
+{
+  instance()->getSYSsettings()->setValue(ctn_KEY_PACKAGE_SIZE_COLUMN_WIDTH, newValue);
   instance()->getSYSsettings()->sync();
 }
 

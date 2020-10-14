@@ -197,7 +197,7 @@ QByteArray UnixCommand::getPackageList(const QString &pkgName)
   {
     QStringList params;
     params << QStringLiteral("query");
-    params << QStringLiteral("%n %v %o %sh %c");
+    params << QStringLiteral("%n %v %o %sh %t %c");
 
     result = performQuery(params);
   }
@@ -490,7 +490,7 @@ void UnixCommand::removeTemporaryFiles()
   nameFilters << "qtsingleapp*" << "gpg*" << ".qt_temp_*";
   QFileInfoList list = tempDir.entryInfoList(nameFilters, QDir::Dirs | QDir::Files | QDir::System | QDir::Hidden);
 
-  foreach(QFileInfo file, list){
+  for(QFileInfo file: list){
     QFile fileAux(file.filePath());
 
     if (!file.isDir()){
@@ -500,7 +500,7 @@ void UnixCommand::removeTemporaryFiles()
       QDir dir(file.filePath());
       QFileInfoList listd = dir.entryInfoList(QDir::Files | QDir::System);
 
-      foreach(QFileInfo filed, listd){
+      for(QFileInfo filed: listd){
         QFile fileAuxd(filed.filePath());
         fileAuxd.remove();
       }

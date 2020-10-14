@@ -275,7 +275,7 @@ void MainWindow::insertIntoRemovePackage()
     }
   }
 
-  foreach(QModelIndex item, selectedRows)
+  for(QModelIndex item: selectedRows)
   {
     const PackageRepository::PackageData*const package = m_packageModel->getData(item);
     if (package == NULL) {
@@ -306,7 +306,7 @@ void MainWindow::insertIntoInstallPackage()
   ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
-  foreach(QModelIndex item, selectedRows)
+  for(QModelIndex item: selectedRows)
   {
     const PackageRepository::PackageData*const package = m_packageModel->getData(item);
     if (package == NULL) {
@@ -358,7 +358,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
   QStringList optDeps = Package::getOptionalDeps(packageName); //si->text());
   QList<const PackageRepository::PackageData*> optionalPackages;
 
-  foreach(QString optDep, optDeps)
+  for(QString optDep: optDeps)
   {
     QString candidate = optDep;
     int points = candidate.indexOf(":");
@@ -379,7 +379,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
     msd->setWindowIcon(windowIcon());
     QStringList selectedPackages;
 
-    foreach(const PackageRepository::PackageData* candidate, optionalPackages)
+    for(const PackageRepository::PackageData* candidate: optionalPackages)
     {
       QString desc = candidate->description;
       int space = desc.indexOf(" ");
@@ -392,7 +392,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
     if (msd->exec() == QMessageBox::Ok)
     {
       selectedPackages = msd->getSelectedPackages();
-      foreach(QString pkg, selectedPackages)
+      for(QString pkg: selectedPackages)
       {
         insertInstallPackageIntoTransaction(pkg);
       }
@@ -414,7 +414,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
 /*bool MainWindow::insertIntoRemovePackageDeps(const QStringList &dependencies)
 {
   QList<const PackageRepository::PackageData*> newDeps;
-  foreach(QString dep, dependencies)
+  for(QString dep: dependencies)
   {
     const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(dep);
     if (package != NULL && package->installed() && !isPackageInRemoveTransaction(dep))
@@ -432,7 +432,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
     msd->setWindowIcon(windowIcon());
     QStringList selectedPackages;
 
-    foreach(const PackageRepository::PackageData* dep, newDeps)
+    for(const PackageRepository::PackageData* dep: newDeps)
     {
       QString desc = dep->description;
       int space = desc.indexOf(" ");
@@ -447,7 +447,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
     if (res == QMessageBox::Ok)
     {
       selectedPackages = msd->getSelectedPackages();
-      foreach(QString pkg, selectedPackages)
+      for(QString pkg: selectedPackages)
       {
         insertRemovePackageIntoTransaction(pkg);
       }
@@ -802,7 +802,7 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
 
   QString list;
 
-  foreach(QString target, *targets)
+  for(QString target: *targets)
   {
     list = list + target + "\n";
   }
@@ -1028,7 +1028,7 @@ void MainWindow::doRemove()
   listOfTargets = "";
   QString list;
 
-  foreach(QString target, *_targets)
+  for(QString target: *_targets)
   {
     list = list + target + "\n";
     listOfTargets += target + " ";
@@ -1144,7 +1144,7 @@ void MainWindow::doInstall()
 
   TransactionDialog question(this);
 
-  foreach(QString target, *targets)
+  for(QString target: *targets)
   {
     list = list + target + "\n";
   }
@@ -1229,13 +1229,13 @@ void MainWindow::doInstallLocalPackages()
   QString list;
   QFileInfo fi;
 
-  foreach(QString target, m_packagesToInstallList)
+  for(QString target: m_packagesToInstallList)
   {
     fi.setFile(target);
     list = list + fi.fileName() + "\n";
   }
 
-  foreach(QString pkgToInstall, m_packagesToInstallList)
+  for(QString pkgToInstall: m_packagesToInstallList)
   {
     listOfTargets += pkgToInstall + " ";
   }
@@ -1916,7 +1916,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
   QStringList msgs = msg.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
 #endif
 
-  foreach (QString m, msgs)
+  for (QString m: msgs)
   {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList m2 = m.split(QRegularExpression("\\(\\s{0,3}[0-9]{1,4}/[0-9]{1,4}\\) "), QString::SkipEmptyParts);
@@ -1935,7 +1935,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
 
       if (maux.count() > 1)
       {
-        foreach (QString aux, maux)
+        for (QString aux: maux)
         {
           aux = aux.trimmed();
           if (!aux.isEmpty())
@@ -1961,7 +1961,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
     }
     else if (m2.count() > 1)
     {
-      foreach (QString m3, m2)
+      for (QString m3: m2)
       {
         if (!m3.isEmpty())
         {

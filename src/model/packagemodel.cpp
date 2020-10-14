@@ -33,7 +33,7 @@
  */
 
 PackageModel::PackageModel(const PackageRepository& repo, QObject *parent)
-: QAbstractItemModel(parent), m_installedPackagesCount(0), m_showColumnPopularity(false), m_packageRepo(repo),
+: QAbstractItemModel(parent), m_installedPackagesCount(0), m_showColumnInstalledOn(true), m_packageRepo(repo),
   m_sortOrder(Qt::AscendingOrder), m_sortColumn(1), m_filterPackagesInstalled(false),
   m_filterPackagesNotInstalled(false), m_filterPackagesNotInThisGroup(""),
   m_filterColumn(-1), m_filterRegExp("", Qt::CaseInsensitive, QRegExp::RegExp),
@@ -43,7 +43,7 @@ PackageModel::PackageModel(const PackageRepository& repo, QObject *parent)
   m_iconLocked(IconHelper::getIconLocked())
   //m_iconForeign(IconHelper::getIconForeignGreen()), m_iconForeignOutdated(IconHelper::getIconForeignRed())
 {
-  m_showColumnPopularity = false;
+
 }
 
 QModelIndex PackageModel::index(int row, int column, const QModelIndex &parent) const
@@ -74,9 +74,11 @@ int PackageModel::rowCount(const QModelIndex &parent) const
 
 int PackageModel::columnCount(const QModelIndex &parent) const
 {
-  if (!parent.isValid()) {
-    return 4;
+  if (!parent.isValid() && m_showColumnInstalledOn==true) {
+    return 5;
   }
+  else if (!parent.isValid() && m_showColumnInstalledOn==false)
+    return 4;
   else return 0;
 }
 
@@ -103,7 +105,16 @@ QVariant PackageModel::data(const QModelIndex &index, int role) const
             else
               return QVariant(Package::kbytesToSize(package->downloadSize));
           }
+          case ctn_PACKAGE_INSTALLEDON_COLUMN:
+          {
+            bool ok;
+            long idate=package->installedOn.toLong(&ok);
+            if (idate <=0) return QVariant(QStringLiteral(""));
 
+            QString dateTimeFormat = QLocale().dateTimeFormat(QLocale::ShortFormat);
+            QDateTime idt = QDateTime::fromSecsSinceEpoch(idate);
+            return QVariant(idt.toString(dateTimeFormat));
+          }
           break;
           default:
             assert(false);
@@ -146,6 +157,8 @@ QVariant PackageModel::headerData(int section, Qt::Orientation orientation, int 
         return QVariant(StrConstants::getOrigin());*/
       case ctn_PACKAGE_SIZE_COLUMN:
         return QVariant(StrConstants::getSize());
+      case ctn_PACKAGE_INSTALLEDON_COLUMN:
+        return QVariant(StrConstants::getInstalledOn());
       default:
         break;
       }
@@ -311,9 +324,9 @@ void PackageModel::applyFilter(const int filterColumn, const QString& filterExp)
 /*
  * Toggles the view of column popularity, which shows number of votes for AUR pkgs
  */
-void PackageModel::setShowColumnPopularity(bool value)
+void PackageModel::setShowColumnInstalledOn(bool value)
 {
-  m_showColumnPopularity = value;
+  m_showColumnInstalledOn = value;
 }
 
 const QIcon& PackageModel::getIconFor(const PackageRepository::PackageData& package) const
@@ -478,6 +491,19 @@ struct TSort4 {
   }
 };
 
+struct TSort5 {
+  bool operator()(const PackageRepository::PackageData* a, const PackageRepository::PackageData* b) const {
+    if (a->installedOn < b->installedOn) return true;
+
+    if (a->installedOn == b->installedOn)
+    {
+      return a->name < b->name;
+    }
+
+    return false;
+  }
+};
+
 void PackageModel::sort()
 {
   switch (m_sortColumn) {
@@ -495,6 +521,9 @@ void PackageModel::sort()
     return;*/
   case ctn_PACKAGE_SIZE_COLUMN:
     std::sort(m_columnSortedlistOfPackages.begin(), m_columnSortedlistOfPackages.end(), TSort4());
+    return;
+  case ctn_PACKAGE_INSTALLEDON_COLUMN:
+    std::sort(m_columnSortedlistOfPackages.begin(), m_columnSortedlistOfPackages.end(), TSort5());
     return;
   default:
     return;

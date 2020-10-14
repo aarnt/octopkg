@@ -67,6 +67,8 @@ void PackageTreeView::resizePackageView()
                                  SettingsManager::getPackageNameColumnWidth());
   setColumnWidth(PackageModel::ctn_PACKAGE_VERSION_COLUMN,
                                  SettingsManager::getPackageVersionColumnWidth());
+  setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN,
+                                 SettingsManager::getPackageSizeColumnWidth());
 }
 
 /*

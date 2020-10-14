@@ -40,6 +40,7 @@ const QString ctn_KEY_SHOW_GROUPS_PANEL("Show_Groups_Panel");
 const QString ctn_KEY_PACKAGE_ICON_COLUMN_WIDTH("Package_Icon_Column_Width");
 const QString ctn_KEY_PACKAGE_NAME_COLUMN_WIDTH("Package_Name_Column_Width");
 const QString ctn_KEY_PACKAGE_VERSION_COLUMN_WIDTH("Package_Version_Column_Width");
+const QString ctn_KEY_PACKAGE_SIZE_COLUMN_WIDTH("Package_Size_Column_Width");
 const QString ctn_KEY_TERMINAL("Terminal");
 const QString ctn_AUTOMATIC("automatic");
 
@@ -87,6 +88,7 @@ class SettingsManager
     static int getPackageIconColumnWidth();
     static int getPackageNameColumnWidth();
     static int getPackageVersionColumnWidth();
+    static int getPackageSizeColumnWidth();
 
     //Notifier related
     static int getSyncDbHour();
@@ -124,6 +126,7 @@ class SettingsManager
     static void setPackageIconColumnWidth(int newValue);
     static void setPackageNameColumnWidth(int newValue);
     static void setPackageVersionColumnWidth(int newValue);
+    static void setPackageSizeColumnWidth(int newValue);
 };
 
 #endif // SETTINGSMANAGER_H

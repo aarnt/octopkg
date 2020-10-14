@@ -225,7 +225,7 @@ QSet<QString> *Package::getLockedPackageList()
   packageTuples.removeFirst(); //Removes string -> "Currently locked packages:"
   QSet<QString>* res = new QSet<QString>();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple: packageTuples)
   {
     int lastsep = packageTuple.lastIndexOf("-");
     res->insert(packageTuple.left(lastsep));
@@ -249,7 +249,7 @@ QSet<QString>* Package::getUnrequiredPackageList()
   
   QSet<QString>* res = new QSet<QString>();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple: packageTuples)
   {
     res->insert(packageTuple);
     //qDebug() << packageTuple;
@@ -276,7 +276,7 @@ QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
 
   if (packageTuples.contains("Installed packages to be UPGRADED:", Qt::CaseInsensitive))
   {
-    foreach(QString packageTuple, packageTuples)
+    for(QString packageTuple: packageTuples)
     {
       if (packageTuple.contains("packages to be") &&
           !packageTuple.contains("Installed packages to be UPGRADED:"))
@@ -323,7 +323,7 @@ QMap<QString, OutdatedPackageInfo> *Package::getOutdatedStringList()
   QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple, packageTuples)
   {
     packageTuple = packageTuple.trimmed();
     if (!packageTuple.isEmpty())
@@ -349,7 +349,7 @@ QStringList *Package::getPackagesOfGroup(const QString &groupName)
   QStringList packageTuples = packagesFromGroup.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QStringList * res = new QStringList();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple, packageTuples)
   {
     QStringList parts = packageTuple.split(' ');
     res->append(parts[1]); //We only need the package name!
@@ -375,7 +375,7 @@ TransactionInfo Package::getTargetUpgradeList(const QString &pkgName)
   TransactionInfo res;
   res.packages = new QStringList();
 
-  foreach(QString infoTuple, infoTuples)
+  for(QString infoTuple: infoTuples)
   {
     int pos = infoTuple.indexOf("to be downloaded");
     int tab = infoTuple.indexOf("\t");
@@ -408,7 +408,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
   
   QStringList *res = new QStringList();
 
-  foreach(QString infoTuple, infoTuples)
+  for(QString infoTuple: infoTuples)
   {
     int tab = infoTuple.indexOf("\t");
     if (tab != -1) //We are dealing with packages HERE!
@@ -438,7 +438,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
   QStringList packageTuples = foreignPkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
   QList<PackageListData> * res = new QList<PackageListData>();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple, packageTuples)
   {
     QStringList parts = packageTuple.split(' ');
     if (parts.size() == 2)
@@ -455,7 +455,7 @@ QStringList *Package::getTargetRemovalList(const QString &pkgName)
  */
 QList<PackageListData> * Package::getPackageList(const QString &packageName)
 {
-  QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription;
+  QString pkgName, pkgOrigin, pkgVersion, pkgComment, pkgDescription, pkgInstallDate;
   double pkgInstalledSize, pkgDownloadedSize;
   PackageStatus pkgStatus;
   QString pkgList = UnixCommand::getPackageList(packageName);
@@ -471,7 +471,8 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
   if(!pkgList.isEmpty())
   {
     pkgDescription = "";
-    foreach(QString packageTuple, packageTuples)
+
+    for(QString packageTuple: packageTuples)
     {
       pkgComment = "";
       QStringList parts = packageTuple.split(' ');
@@ -488,7 +489,10 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
       if (pkgInstalledSize == 0)
         pkgInstalledSize = strToKBytes2(parts[3]);
 
-      for(int c=4; c<parts.count(); c++)
+      pkgInstallDate = parts[4];
+      if (pkgInstallDate.isEmpty()) pkgInstallDate = QStringLiteral("0");
+
+      for(int c=5; c<parts.count(); c++)
       {
         pkgComment += " " + parts[c];
       }
@@ -498,7 +502,7 @@ QList<PackageListData> * Package::getPackageList(const QString &packageName)
       pkgDescription = pkgComment;
 
       PackageListData pld =
-          PackageListData(pkgName, pkgOrigin, pkgVersion, pkgComment, pkgStatus, pkgInstalledSize, pkgDownloadedSize);
+          PackageListData(pkgName, pkgOrigin, pkgVersion, pkgComment, pkgStatus, pkgInstalledSize, pkgDownloadedSize, pkgInstallDate);
 
       res->append(pld);
     }
@@ -518,7 +522,7 @@ QList<PackageListData> * Package::parsePackageTuple(const QStringList &packageTu
   const int cSpaces = 16;
   QList<PackageListData> * res = new QList<PackageListData>();
 
-  foreach(QString packageTuple, packageTuples)
+  for(QString packageTuple: packageTuples)
   {
     if (packageTuple.at(0).isLower())
     {
@@ -653,7 +657,7 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
 
   resComment = parsePackageTuple(packageTuplesComment, packageCache);
 
-  foreach(PackageListData pld, *resComment)
+  for(PackageListData pld: *resComment)
   {
     res->append(pld);
   }
@@ -1142,7 +1146,7 @@ QString Package::getDependencies(const QString &pkgName)
 
   pkgList.sort();
 
-  foreach(QString dependency, pkgList)
+  for(QString dependency: pkgList)
   {
     res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
   }
@@ -1172,7 +1176,7 @@ QStringList Package::getContents(const QString& pkgName, bool isInstalled)
 
   //Let's change that listing a bit...
   QStringList auxList;
-  foreach(QString file, fileList)
+  for(QString file: fileList)
   {
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
     QStringList parts = file.split("/", QString::SkipEmptyParts);

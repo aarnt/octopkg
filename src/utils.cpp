@@ -101,7 +101,7 @@ QList<QModelIndex> * utils::findFileInTreeView( const QString& name, const QStan
   foundItems = sim->findItems(Package::parseSearchString(name), Qt::MatchRegularExpression|Qt::MatchRecursive);
 #endif 
 
-  foreach(QStandardItem *item, foundItems)
+  for(QStandardItem *item: foundItems)
   {
     res->append(item->index());
   }

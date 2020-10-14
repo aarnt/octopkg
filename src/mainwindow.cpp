@@ -672,7 +672,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
     int numberOfSelPkgs = selectedRows.count();
     int numberOfOutdated = 0;
 
-    foreach(QModelIndex item, selectedRows)
+    for(QModelIndex item: selectedRows)
     {
       const PackageRepository::PackageData*const package = m_packageModel->getData(item);
 
@@ -714,7 +714,7 @@ void MainWindow::execContextMenuPackages(QPoint point)
       else if (allRemovable == false) //Remote search here!
       {
         int justInstalled=0;
-        foreach(QModelIndex item, selectedRows)
+        for(QModelIndex item: selectedRows)
         {
           const PackageRepository::PackageData*const aux = m_packageModel->getData(item);
           if (aux->installed()) justInstalled++;

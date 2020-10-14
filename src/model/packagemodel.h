@@ -33,11 +33,12 @@ class PackageModel : public QAbstractItemModel, public PackageRepository::IDepen
 
 public:
   // Column indices for Package's treeview
-  static const int ctn_PACKAGE_ICON_COLUMN        = 0;
-  static const int ctn_PACKAGE_NAME_COLUMN        = 1;
-  static const int ctn_PACKAGE_VERSION_COLUMN     = 2;
-  //static const int ctn_PACKAGE_ORIGIN_COLUMN      = 3;
-  static const int ctn_PACKAGE_SIZE_COLUMN        = 3;
+  static const int ctn_PACKAGE_ICON_COLUMN                  = 0;
+  static const int ctn_PACKAGE_NAME_COLUMN                  = 1;
+  static const int ctn_PACKAGE_VERSION_COLUMN               = 2;
+  //static const int ctn_PACKAGE_ORIGIN_COLUMN              = 3;
+  static const int ctn_PACKAGE_SIZE_COLUMN                  = 3;
+  static const int ctn_PACKAGE_INSTALLEDON_COLUMN           = 4;
   // Pseudo Column indices for additional filter criterias
   static const int ctn_PACKAGE_DESCRIPTION_FILTER_NO_COLUMN = 5;
 
@@ -79,9 +80,9 @@ public:
   void applyFilter(bool packagesNotInstalled, const QString& group);
   void applyFilter(const int filterColumn);
   void applyFilter(const QString& filterExp);
-  void applyFilter(const int filterColumn, const QString& filterExp);
+  void applyFilter(const int filterColumn, const QString& filterExp);  
 
-  void setShowColumnPopularity(bool value);
+  void setShowColumnInstalledOn(bool value);
 
 private:
   const QIcon& getIconFor(const PackageRepository::PackageData& package) const;
@@ -89,7 +90,7 @@ private:
 
 private:
   int                                     m_installedPackagesCount;
-  bool                                    m_showColumnPopularity;
+  bool                                    m_showColumnInstalledOn;
   const PackageRepository&                m_packageRepo;
   QList<PackageRepository::PackageData*>  m_listOfPackages;             // should be provided sorted by name (by repo)
   QList<PackageRepository::PackageData*>  m_columnSortedlistOfPackages; // sorted by column

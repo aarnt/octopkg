@@ -434,7 +434,7 @@ public:
   {
     static MainWindow *w=0;
     if (w != 0) return w;
-    foreach (QWidget *widget, QApplication::topLevelWidgets())
+    for (QWidget *widget: QApplication::topLevelWidgets())
     {
       if (widget->objectName() == "MainWindow")
         w = dynamic_cast<MainWindow*>(widget);

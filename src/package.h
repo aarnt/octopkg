@@ -105,7 +105,7 @@ struct PackageListData{
                                     status(pkgStatus){
   }
 
-  PackageListData(QString n, QString o, QString v, QString c, PackageStatus pkgStatus, double iSize, double dSize)
+  PackageListData(QString n, QString o, QString v, QString c, PackageStatus pkgStatus, double iSize, double dSize, QString iDate)
                                     : name(n),
                                     repository(""),
                                     origin(o),
@@ -113,6 +113,7 @@ struct PackageListData{
                                     comment(c),
                                     installedSize(iSize),
                                     downloadSize(dSize),
+                                    installedOn(iDate),
                                     status(pkgStatus){
   }
 };
