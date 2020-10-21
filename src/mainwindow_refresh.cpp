@@ -541,7 +541,8 @@ void MainWindow::preBuildRemotePackageList()
  */
 void MainWindow::buildRemotePackageList()
 {
-  //ui->actionSearchByDescription->setChecked(true);
+  ui->actionSearchByDescription->setChecked(true);
+  m_leFilterPackage->setRefreshValidator(ectn_AUR_VALIDATOR);
   m_progressWidget->show();
 
   const QSet<QString>*const unrequiredPackageList = Package::getUnrequiredPackageList();

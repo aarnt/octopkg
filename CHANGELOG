@@ -3,6 +3,8 @@
   Make locate work with "search by file", giving suggestions on a popup window.
   Make code compatible with Qt 5.15 version. 
   BugFix: updated install dir of octopkg-doas to /usr/local/lib/octopkg.
+  BugFix: removed "/" char option when "Search by File" was selected before searching 
+  	for a remote pkg.
 
 0.3.0
   BugFix in GhostBSD repo guessing;
