@@ -37,8 +37,8 @@ QString StrConstants::getQtVersion(){
 QString StrConstants::getApplicationCliHelp(){
   QString str =
       "\n" + QObject::tr("OctoPkg usage help:") + "\n\n" +
-      "-version: " + QObject::tr("show application version."); /*+ "\n" +
-        "-sysupgrade: " + QObject::tr("force a system upgrade at startup.") + "\n";*/
+      "-version: " + QObject::tr("show application version.") + "\n"; /*+
+      "-sysupgrade: " + QObject::tr("force a system upgrade at startup.") + "\n";*/
   return str;
 }
 
