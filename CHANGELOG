@@ -1,4 +1,4 @@
-0.3.1
+0.3.1 (2020/10/29)
   Added "Installed On" column on installed package list.
   Make locate work with "search by file", giving suggestions on a popup window.
   Make code compatible with Qt 5.15 version. 
@@ -6,7 +6,7 @@
   BugFix: removed "/" char option when "Search by File" was selected before searching 
   	for a remote pkg.
 
-0.3.0
+0.3.0 (2020/07/18)
   BugFix in GhostBSD repo guessing;
   BugFix: Package list does not flashes at program startup anymore.
   BugFix: Do not offer to open "LSB relocatable" files at File tab.
@@ -39,7 +39,7 @@
   Now tab Files shows progress bar while building pkg list.
   Maximization of lower panel now hides tabbar.
 
-0.2.0
+0.2.0 (2015/07/25)
   BugFix: anchor navigation fixes.
   BugFix: the name of some dependencies were not being shown correctly.
   BugFix: list of dependencies was not sorted.
@@ -57,5 +57,5 @@
   Added search feature also in Information tab.
   Heavily threaded version, minimizing interface freezing.
 
-0.1.0 
+0.1.0 (2015/06/30)
   Initial Proof of Concept release.
