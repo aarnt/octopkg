@@ -1,3 +1,6 @@
+0.3.2 (dev)
+  BugFix: Disable Info/Files tab refresh while typing in filter/search line edit.
+
 0.3.1
   Added "Installed On" column on installed package list.
   Make locate work with "search by file", giving suggestions on a popup window.
