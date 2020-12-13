@@ -250,7 +250,8 @@ QString Sudo::backendName (backend_t backEnd)
   switch (backEnd) {
   case BACK_SU   : rv = su_prog;   break;
   case BACK_SUDO :
-    if (QFile::exists(QStringLiteral("/usr/local/bin/doas")))
+    if (QFile::exists(QStringLiteral("/usr/local/bin/doas")) &&
+        QFile::exists(QStringLiteral("/usr/local/etc/doas.conf")))
       rv = doas_prog;
     else rv = sudo_prog;
     break;

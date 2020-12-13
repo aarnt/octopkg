@@ -52,7 +52,8 @@ PasswordDialog::PasswordDialog(const QString & cmd
   ui->iconL->setPixmap(QIcon::fromTheme(QStringLiteral("dialog-password")).pixmap(64, 64));
   setWindowIcon(QIcon::fromTheme(QStringLiteral("security-high")));
 
-  if (QFile::exists(QStringLiteral("/usr/local/bin/doas")))
+  if (QFile::exists(QStringLiteral("/usr/local/bin/doas")) &&
+      QFile::exists(QStringLiteral("/usr/local/etc/doas.conf")))
     setWindowTitle(QString::fromUtf8("OctoPkg doas"));
   else
     setWindowTitle(QString::fromUtf8("OctoPkg sudo"));

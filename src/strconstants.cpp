@@ -474,7 +474,11 @@ QString StrConstants::getErrorNoPkgFound(){
   return QObject::tr("'pkg' binary was not found.");
 }
 
-QString StrConstants::getErrorNoBashFound(){
+QString StrConstants::getErrorNoDoasSudoFound(){
+  return QObject::tr("Neither 'doas' or 'sudo' were found or configured in your system.");
+}
+
+QString StrConstants::getErrorNoSHFound(){
   return QObject::tr("'sh' binary was not found.");
 }
 

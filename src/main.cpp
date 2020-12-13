@@ -46,9 +46,20 @@ int main(int argc, char *argv[])
 
   if(!QFile::exists("/bin/sh"))
   {
-    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoBashFound());
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoSHFound());
     return 1;
   }
+
+  bool doas = (QFile::exists(QStringLiteral("/usr/local/bin/doas")) &&
+      QFile::exists(QStringLiteral("/usr/local/etc/doas.conf")));
+  bool sudo = QFile::exists(QStringLiteral("/usr/local/bin/sudo"));
+
+  if (!doas && !sudo)
+  {
+    QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoDoasSudoFound());
+    return 1;
+  }
+
   if(!QFile::exists("/usr/local/lib/octopkg/octopkg-doas"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());

@@ -438,6 +438,26 @@ void WMHelper::openDirectory( const QString& dirName ){
       s << dir;
       p->startDetached( ctn_MATE_FILE_MANAGER, s );
     }
+    else if (UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER))
+    {
+      s << dir;
+      p->startDetached( ctn_XFCE_FILE_MANAGER, s );
+    }
+    else if (isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_FILE_MANAGER))
+    {
+      s << dir;
+      p->startDetached( ctn_LXQT_FILE_MANAGER, s );
+    }
+    else if (UnixCommand::hasTheExecutable(ctn_LXDE_FILE_MANAGER))
+    {
+      s << dir;
+      p->startDetached( ctn_LXDE_FILE_MANAGER, s );
+    }
+    else if (isLuminaRunning() && UnixCommand::hasTheExecutable(ctn_LUMINA_FILE_MANAGER))
+    {
+      s << dir;
+      p->startDetached( ctn_LUMINA_FILE_MANAGER, s );
+    }
     else if (UnixCommand::hasTheExecutable(ctn_ANTERGOS_FILE_MANAGER))
     {
       s << dir;
@@ -447,26 +467,6 @@ void WMHelper::openDirectory( const QString& dirName ){
     {
       s << dir;
       p->startDetached( ctn_CINNAMON_FILE_MANAGER, s );
-    }
-    else if (isLXQTRunning() && UnixCommand::hasTheExecutable(ctn_LXQT_FILE_MANAGER))
-    {
-      s << dir;
-      p->startDetached( ctn_LXQT_FILE_MANAGER, s );
-    }
-    else if (isLuminaRunning() && UnixCommand::hasTheExecutable(ctn_LUMINA_FILE_MANAGER))
-    {
-      s << dir;
-      p->startDetached( ctn_LUMINA_FILE_MANAGER, s );
-    }
-    else if (UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER))
-    {
-      s << dir;
-      p->startDetached( ctn_XFCE_FILE_MANAGER, s );
-    }
-    else if (UnixCommand::hasTheExecutable(ctn_LXDE_FILE_MANAGER))
-    {
-      s << dir;
-      p->startDetached( ctn_LXDE_FILE_MANAGER, s );
     }
     else if (UnixCommand::hasTheExecutable(ctn_GNOME_FILE_MANAGER))
     {

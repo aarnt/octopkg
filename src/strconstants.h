@@ -137,7 +137,8 @@ public:
   static QString getYoullNeedSuFrontend();
   static QString getOctoPKGDoasNotFound();
   static QString getErrorNoPkgFound();
-  static QString getErrorNoBashFound();
+  static QString getErrorNoDoasSudoFound();
+  static QString getErrorNoSHFound();
   static QString getErrorRunningWithRoot();
   static QString getThereIsARunningTransaction();
   static QString getThereArePendingActions();
