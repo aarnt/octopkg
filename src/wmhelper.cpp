@@ -51,8 +51,8 @@ bool WMHelper::isKDERunning(){
 bool WMHelper::isTDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_TDE_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_TDE_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -73,8 +73,8 @@ bool WMHelper::isTDERunning(){
 bool WMHelper::isXFCERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_XFCE_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_XFCE_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -94,8 +94,8 @@ bool WMHelper::isXFCERunning(){
 bool WMHelper::isLXDERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_LXDE_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_LXDE_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -123,8 +123,8 @@ bool WMHelper::isLXQTRunning()
 bool WMHelper::isOPENBOXRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_OPENBOX_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_OPENBOX_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -144,8 +144,8 @@ bool WMHelper::isOPENBOXRunning(){
 bool WMHelper::isMATERunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_MATE_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_MATE_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -165,8 +165,8 @@ bool WMHelper::isMATERunning(){
 bool WMHelper::isCinnamonRunning(){
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-fC");
-  slParam << ctn_CINNAMON_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_CINNAMON_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
@@ -187,8 +187,8 @@ bool WMHelper::isLuminaRunning()
 {
   QStringList slParam;
   QProcess proc;
-  slParam << QStringLiteral("-C");
-  slParam << ctn_LUMINA_DESKTOP;
+  slParam << QStringLiteral("-aux");
+  //slParam << ctn_LUMINA_DESKTOP;
 
   proc.start(QStringLiteral("ps"), slParam);
   proc.waitForStarted();
