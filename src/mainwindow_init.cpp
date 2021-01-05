@@ -323,7 +323,7 @@ void MainWindow::initToolButtonPacman()
   m_toolButtonPacman->setPopupMode(QToolButton::MenuButtonPopup);
   m_toolButtonPacman->setMenu(m_menuToolButtonPacman);
 
-  connect(m_toolButtonPacman, SIGNAL(clicked()), this, SLOT(outputOutdatedPackageList()));
+  connect(m_toolButtonPacman, &QAbstractButton::clicked, this, &MainWindow::outputOutdatedPackageList);
 }
 
 /*
@@ -359,7 +359,7 @@ void MainWindow::changeTabWidgetPropertiesIndex(const int newIndex)
  */
 void MainWindow::initTabWidgetPropertiesIndex()
 {
-  connect(ui->splitterHorizontal, SIGNAL(splitterMoved(int, int)), this, SLOT(horizontalSplitterMoved(int, int)));
+  connect(ui->splitterHorizontal, &QSplitter::splitterMoved, this, &MainWindow::horizontalSplitterMoved);
   ui->twProperties->setCurrentIndex(SettingsManager::getCurrentTabIndex());
 }
 
@@ -414,21 +414,21 @@ void MainWindow::initTabTransaction()
   ui->twProperties->insertTab(ctn_TABINDEX_TRANSACTION, tabTransaction, QApplication::translate (
                                 "MainWindow", aux.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ));
 
-  connect(tvTransaction, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(execContextMenuTransaction(QPoint)));
-  connect(tvTransaction->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(tvTransactionSelectionChanged(QItemSelection,QItemSelection)));
+  connect(tvTransaction, &QWidget::customContextMenuRequested, this, &MainWindow::execContextMenuTransaction);
+  connect(tvTransaction->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &MainWindow::tvTransactionSelectionChanged);
 
-  connect(tvTransaction->model(), SIGNAL(rowsInserted ( const QModelIndex , int, int )),
-          this, SLOT(tvTransactionRowsInserted(QModelIndex,int,int)));
-  connect(tvTransaction->model(), SIGNAL(rowsRemoved ( const QModelIndex , int, int )),
-          this, SLOT(tvTransactionRowsRemoved(QModelIndex,int,int)));
+  connect(tvTransaction->model(), &QAbstractItemModel::rowsInserted,
+          this, &MainWindow::tvTransactionRowsInserted);
+  connect(tvTransaction->model(), &QAbstractItemModel::rowsRemoved,
+          this, &MainWindow::tvTransactionRowsRemoved);
 }
 
 /*
  * This is the LineEdit widget used to filter the package list
  */
 void MainWindow::initLineEditFilterPackages(){
-  connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
+  connect(m_leFilterPackage, &QLineEdit::textChanged, this, &MainWindow::reapplyPackageFilter);
 }
 
 /*
@@ -440,28 +440,28 @@ void MainWindow::initPackageTreeView()
   ui->tvPackages->setModel(m_packageModel.get());
   ui->tvPackages->resizePackageView();
 
-  connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(tvPackagesSelectionChanged(QItemSelection,QItemSelection)));
+  connect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &MainWindow::tvPackagesSelectionChanged);
   //connect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(changedTabIndex()));
   //connect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(changedTabIndex()));
-  connect(ui->tvPackages->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this,
-          SLOT(headerViewPackageListSortIndicatorClicked(int,Qt::SortOrder)));
-  connect(ui->tvPackages, SIGNAL(customContextMenuRequested(QPoint)), this,
-          SLOT(execContextMenuPackages(QPoint)));
-  connect(ui->tvPackages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClickPackageList()));
+  connect(ui->tvPackages->header(), &QHeaderView::sortIndicatorChanged, this,
+          &MainWindow::headerViewPackageListSortIndicatorClicked);
+  connect(ui->tvPackages, &QWidget::customContextMenuRequested, this,
+          &MainWindow::execContextMenuPackages);
+  connect(ui->tvPackages, &QAbstractItemView::doubleClicked, this, &MainWindow::onDoubleClickPackageList);
 }
 
 void MainWindow::removePackageTreeViewConnections()
 {
-  disconnect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(tvPackagesSelectionChanged(QItemSelection,QItemSelection)));
+  disconnect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &MainWindow::tvPackagesSelectionChanged);
   //disconnect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(changedTabIndex()));
   //disconnect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(changedTabIndex()));
-  disconnect(ui->tvPackages->header(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this,
-          SLOT(headerViewPackageListSortIndicatorClicked(int,Qt::SortOrder)));
-  disconnect(ui->tvPackages, SIGNAL(customContextMenuRequested(QPoint)), this,
-          SLOT(execContextMenuPackages(QPoint)));
-  disconnect(ui->tvPackages, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onDoubleClickPackageList()));
+  disconnect(ui->tvPackages->header(), &QHeaderView::sortIndicatorChanged, this,
+          &MainWindow::headerViewPackageListSortIndicatorClicked);
+  disconnect(ui->tvPackages, &QWidget::customContextMenuRequested, this,
+          &MainWindow::execContextMenuPackages);
+  disconnect(ui->tvPackages, &QAbstractItemView::doubleClicked, this, &MainWindow::onDoubleClickPackageList);
 }
 
 /*
@@ -479,8 +479,8 @@ void MainWindow::initTabInfo(){
   text->setFrameShape(QFrame::NoFrame);
   text->setFrameShadow(QFrame::Plain);
   text->setOpenLinks(false);
-  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
-  connect(text, SIGNAL(highlighted(QUrl)), this, SLOT(showAnchorDescription(QUrl)));
+  connect(text, &QTextBrowser::anchorClicked, this, &MainWindow::outputTextBrowserAnchorClicked);
+  connect(text, qOverload<const QUrl&>(&QTextBrowser::highlighted), this, &MainWindow::showAnchorDescription);
   gridLayoutX->addWidget ( text, 0, 0, 1, 1 );
 
   QString tabName(StrConstants::getTabInfoName());
@@ -490,10 +490,10 @@ void MainWindow::initTabInfo(){
   ui->twProperties->setUsesScrollButtons(false);
 
   SearchBar *searchBar = new SearchBar(this);
-  connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(searchBarTextChangedInTextBrowser(QString)));
-  connect(searchBar, SIGNAL(closed()), this, SLOT(searchBarClosedInTextBrowser()));
-  connect(searchBar, SIGNAL(findNext()), this, SLOT(searchBarFindNextInTextBrowser()));
-  connect(searchBar, SIGNAL(findPrevious()), this, SLOT(searchBarFindPreviousInTextBrowser()));
+  connect(searchBar, &SearchBar::textChanged, this, &MainWindow::searchBarTextChangedInTextBrowser);
+  connect(searchBar, &SearchBar::closed, this, &MainWindow::searchBarClosedInTextBrowser);
+  connect(searchBar, &SearchBar::findNext, this, &MainWindow::searchBarFindNextInTextBrowser);
+  connect(searchBar, &SearchBar::findPrevious, this, &MainWindow::searchBarFindPreviousInTextBrowser);
   gridLayoutX->addWidget(searchBar, 1, 0, 1, 1);
 
   ui->twProperties->setCurrentIndex(ctn_TABINDEX_INFORMATION);
@@ -537,17 +537,17 @@ void MainWindow::initTabFiles()
   tvPkgFileList->setContextMenuPolicy(Qt::CustomContextMenu);
   SearchBar *searchBar = new SearchBar(this);
 
-  connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(searchBarTextChangedInTreeView(QString)));
-  connect(searchBar, SIGNAL(closed()), this, SLOT(searchBarClosedInTreeView()));
-  connect(searchBar, SIGNAL(findNext()), this, SLOT(searchBarFindNextInTreeView()));
-  connect(searchBar, SIGNAL(findPrevious()), this, SLOT(searchBarFindPreviousInTreeView()));
+  connect(searchBar, &SearchBar::textChanged, this, &MainWindow::searchBarTextChangedInTreeView);
+  connect(searchBar, &SearchBar::closed, this, &MainWindow::searchBarClosedInTreeView);
+  connect(searchBar, &SearchBar::findNext, this, &MainWindow::searchBarFindNextInTreeView);
+  connect(searchBar, &SearchBar::findPrevious, this, &MainWindow::searchBarFindPreviousInTreeView);
 
   gridLayoutX->addWidget(searchBar, 1, 0, 1, 1);
 
-  connect(tvPkgFileList, SIGNAL(customContextMenuRequested(QPoint)),
-          this, SLOT(execContextMenuPkgFileList(QPoint)));
-  connect(tvPkgFileList, SIGNAL(doubleClicked (const QModelIndex&)),
-          this, SLOT(openFile()));
+  connect(tvPkgFileList, &QWidget::customContextMenuRequested,
+          this, &MainWindow::execContextMenuPkgFileList);
+  connect(tvPkgFileList, &QAbstractItemView::doubleClicked,
+          this, &MainWindow::openFile);
 }
 
 /*
@@ -567,8 +567,8 @@ void MainWindow::initTabOutput()
   text->setFrameShape(QFrame::NoFrame);
   text->setFrameShadow(QFrame::Plain);
 
-  connect(text, SIGNAL(anchorClicked(QUrl)), this, SLOT(outputTextBrowserAnchorClicked(QUrl)));
-  connect(text, SIGNAL(highlighted(QUrl)), this, SLOT(showAnchorDescription(QUrl)));
+  connect(text, &QTextBrowser::anchorClicked, this, &MainWindow::outputTextBrowserAnchorClicked);
+  connect(text, qOverload<const QUrl&>(&QTextBrowser::highlighted), this, &MainWindow::showAnchorDescription);
   gridLayoutX->addWidget (text, 0, 0, 1, 1);
 
   QString aux(StrConstants::getTabOutputName());
@@ -577,10 +577,10 @@ void MainWindow::initTabOutput()
       "MainWindow", aux.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ) );
 
   SearchBar *searchBar = new SearchBar(this);
-  connect(searchBar, SIGNAL(textChanged(QString)), this, SLOT(searchBarTextChangedInTextBrowser(QString)));
-  connect(searchBar, SIGNAL(closed()), this, SLOT(searchBarClosedInTextBrowser()));
-  connect(searchBar, SIGNAL(findNext()), this, SLOT(searchBarFindNextInTextBrowser()));
-  connect(searchBar, SIGNAL(findPrevious()), this, SLOT(searchBarFindPreviousInTextBrowser()));
+  connect(searchBar, &SearchBar::textChanged, this, &MainWindow::searchBarTextChangedInTextBrowser);
+  connect(searchBar, &SearchBar::closed, this, &MainWindow::searchBarClosedInTextBrowser);
+  connect(searchBar, &SearchBar::findNext, this, &MainWindow::searchBarFindNextInTextBrowser);
+  connect(searchBar, &SearchBar::findPrevious, this, &MainWindow::searchBarFindPreviousInTextBrowser);
   gridLayoutX->addWidget(searchBar, 1, 0, 1, 1);
 
   ui->twProperties->setCurrentIndex(ctn_TABINDEX_OUTPUT);
@@ -629,13 +629,13 @@ void MainWindow::initActions()
   //m_actionGroupSearch->addAction(m_actionSwitchToLocalSearch);
   m_actionGroupSearch->addAction(m_actionSwitchToRemoteSearch);
   m_actionGroupSearch->setExclusive(true);
-  connect(m_actionGroupSearch, SIGNAL(triggered(QAction*)), this, SLOT(remoteSearchClicked()));
+  connect(m_actionGroupSearch, &QActionGroup::triggered, this, &MainWindow::remoteSearchClicked);
 
   m_actionInstallPkgUpdates = new QAction(this);
   m_actionInstallPkgUpdates->setIcon(IconHelper::getIconToInstall());
   m_actionInstallPkgUpdates->setText(ui->actionInstall->text());
   m_actionInstallPkgUpdates->setIconVisibleInMenu(true);
-  connect(m_actionInstallPkgUpdates, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
+  connect(m_actionInstallPkgUpdates, &QAction::triggered, this, &MainWindow::doPreSystemUpgrade);
 
   m_actionShowGroups = new QAction(this);
   m_actionShowGroups->setIcon(IconHelper::getIconShowGroups());
@@ -643,12 +643,12 @@ void MainWindow::initActions()
   m_actionShowGroups->setCheckable(true);
   m_actionShowGroups->setChecked(true);
   m_actionShowGroups->setShortcut(QKeySequence(Qt::Key_F9));
-  connect(m_actionShowGroups, SIGNAL(triggered()), this, SLOT(hideGroupsWidget()));
+  connect(m_actionShowGroups, &QAction::triggered, this, &MainWindow::hideGroupsWidget);
 
   m_actionCopyFullPath = new QAction(this);
   m_actionCopyFullPath->setText(StrConstants::getCopyFullPath());
   m_actionCopyFullPath->setIcon(IconHelper::getIconEditCopy());
-  connect(m_actionCopyFullPath, SIGNAL(triggered()), this, SLOT(copyFullPathToClipboard()));
+  connect(m_actionCopyFullPath, &QAction::triggered, this, &MainWindow::copyFullPathToClipboard);
 
   QActionGroup *actionGroup = new QActionGroup(this);
   actionGroup->addAction(ui->actionSearchByDescription);
@@ -656,43 +656,43 @@ void MainWindow::initActions()
   actionGroup->addAction(ui->actionSearchByFile);
   ui->actionSearchByName->setChecked(true);
   actionGroup->setExclusive(true);
-  connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(tvPackagesSearchColumnChanged(QAction*)));
+  connect(actionGroup, &QActionGroup::triggered, this, &MainWindow::tvPackagesSearchColumnChanged);
 
   //ui->actionInstallLocalPackage->setIcon(IconHelper::getIconFolder());
   ui->actionOpenDirectory->setIcon(IconHelper::getIconFolder());
 
-  connect(ui->actionCleanLocalCache, SIGNAL(triggered(bool)), this, SLOT(doCleanCache()));
-  connect(ui->tvPackages->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-          this, SLOT(invalidateTabs()));
+  connect(ui->actionCleanLocalCache, &QAction::triggered, this, &MainWindow::doCleanCache);
+  connect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
+          this, &MainWindow::invalidateTabs);
   //connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
-  connect(ui->actionRemoveTransactionItem, SIGNAL(triggered()), this, SLOT(onPressDelete()));
-  connect(ui->actionRemoveTransactionItems, SIGNAL(triggered()), this, SLOT(onPressDelete()));
-  connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(close()));
-  connect(ui->actionSyncPackages, SIGNAL(triggered()), this, SLOT(doSyncDatabase()));
-  connect(ui->actionSystemUpgrade, SIGNAL(triggered()), this, SLOT(doPreSystemUpgrade()));
-  connect(ui->actionRemove, SIGNAL(triggered()), this, SLOT(insertIntoRemovePackage()));
-  connect(ui->actionInstall, SIGNAL(triggered()), this, SLOT(insertIntoInstallPackage()));
-  connect(m_actionLockPackage, SIGNAL(triggered()), this, SLOT(doLock()));
-  connect(m_actionUnlockPackage, SIGNAL(triggered()), this, SLOT(doUnlock()));
-  connect(ui->actionFindFileInPackage, SIGNAL(triggered()), this, SLOT(findFileInPackage()));
-  connect(ui->actionCommit, SIGNAL(triggered()), this, SLOT(commitTransaction()));
-  connect(ui->actionCancel, SIGNAL(triggered()), this, SLOT(cancelTransaction()));
+  connect(ui->actionRemoveTransactionItem, &QAction::triggered, this, &MainWindow::onPressDelete);
+  connect(ui->actionRemoveTransactionItems, &QAction::triggered, this, &MainWindow::onPressDelete);
+  connect(ui->actionExit, &QAction::triggered, this, &MainWindow::close);
+  connect(ui->actionSyncPackages, &QAction::triggered, this, &MainWindow::doSyncDatabase);
+  connect(ui->actionSystemUpgrade, &QAction::triggered, this, &MainWindow::doPreSystemUpgrade);
+  connect(ui->actionRemove, &QAction::triggered, this, &MainWindow::insertIntoRemovePackage);
+  connect(ui->actionInstall, &QAction::triggered, this, &MainWindow::insertIntoInstallPackage);
+  connect(m_actionLockPackage, &QAction::triggered, this, &MainWindow::doLock);
+  connect(m_actionUnlockPackage, &QAction::triggered, this, &MainWindow::doUnlock);
+  connect(ui->actionFindFileInPackage, &QAction::triggered, this, &MainWindow::findFileInPackage);
+  connect(ui->actionCommit, &QAction::triggered, this, &MainWindow::commitTransaction);
+  connect(ui->actionCancel, &QAction::triggered, this, &MainWindow::cancelTransaction);
   connect(ui->actionGetNews, SIGNAL(triggered()), this, SLOT(refreshDistroNews()));
-  connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
-  connect(ui->actionHelpUsage, SIGNAL(triggered()), this, SLOT(onHelpUsage()));
-  connect(ui->actionDonate, SIGNAL(triggered(bool)), this, SLOT(onHelpDonate()));
-  connect(ui->actionHelpAbout, SIGNAL(triggered()), this, SLOT(onHelpAbout()));
-  connect(m_actionPackageInfo, SIGNAL(triggered()), this, SLOT(showPackageInfo()));
+  connect(ui->twProperties, &QTabWidget::currentChanged, this, &MainWindow::changedTabIndex);
+  connect(ui->actionHelpUsage, &QAction::triggered, this, &MainWindow::onHelpUsage);
+  connect(ui->actionDonate, &QAction::triggered, this, &MainWindow::onHelpDonate);
+  connect(ui->actionHelpAbout, &QAction::triggered, this, &MainWindow::onHelpAbout);
+  connect(m_actionPackageInfo, &QAction::triggered, this, &MainWindow::showPackageInfo);
 
   //Actions from tvPkgFileList context menu
-  connect(ui->actionCollapseAllItems, SIGNAL(triggered()), this, SLOT(collapseAllContentItems()));
-  connect(ui->actionExpandAllItems, SIGNAL(triggered()), this, SLOT(expandAllContentItems()));
-  connect(ui->actionCollapseItem, SIGNAL(triggered()), this, SLOT(collapseThisContentItems()));
-  connect(ui->actionExpandItem, SIGNAL(triggered()), this, SLOT(expandThisContentItems()));
-  connect(ui->actionOpenFile, SIGNAL(triggered()), this, SLOT(openFile()));
-  connect(ui->actionEditFile, SIGNAL(triggered()), this, SLOT(editFile()));
-  connect(ui->actionOpenDirectory, SIGNAL(triggered()), this, SLOT(openDirectory()));
-  connect(ui->actionOpenTerminal, SIGNAL(triggered()), this, SLOT(openTerminal()));
+  connect(ui->actionCollapseAllItems, &QAction::triggered, this, &MainWindow::collapseAllContentItems);
+  connect(ui->actionExpandAllItems, &QAction::triggered, this, &MainWindow::expandAllContentItems);
+  connect(ui->actionCollapseItem, &QAction::triggered, this, &MainWindow::collapseThisContentItems);
+  connect(ui->actionExpandItem, &QAction::triggered, this, &MainWindow::expandThisContentItems);
+  connect(ui->actionOpenFile, &QAction::triggered, this, &MainWindow::openFile);
+  connect(ui->actionEditFile, &QAction::triggered, this, &MainWindow::editFile);
+  connect(ui->actionOpenDirectory, &QAction::triggered, this, &MainWindow::openDirectory);
+  connect(ui->actionOpenTerminal, &QAction::triggered, this, &MainWindow::openTerminal);
 
   // Use theme icons for QActions
   ui->actionSyncPackages->setIcon(IconHelper::getIconSyncDatabase());
@@ -717,9 +717,9 @@ void MainWindow::initActions()
   //ui->actionOpenRootTerminal->setIcon(IconHelper::getIconTerminal());
 
   //Actions for the View menu
-  connect(ui->actionViewAllPackages, SIGNAL(triggered()), this, SLOT(selectedAllPackagesMenu()));
-  connect(ui->actionViewInstalledPackages, SIGNAL(triggered()), this, SLOT(selectedInstalledPackagesMenu()));
-  connect(ui->actionViewNonInstalledPackages, SIGNAL(triggered()), this, SLOT(selectedNonInstalledPackagesMenu()));
+  connect(ui->actionViewAllPackages, &QAction::triggered, this, &MainWindow::selectedAllPackagesMenu);
+  connect(ui->actionViewInstalledPackages, &QAction::triggered, this, &MainWindow::selectedInstalledPackagesMenu);
+  connect(ui->actionViewNonInstalledPackages, &QAction::triggered, this, &MainWindow::selectedNonInstalledPackagesMenu);
 
   if (WMHelper::isKDERunning())
   {

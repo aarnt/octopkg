@@ -691,25 +691,25 @@ UnixCommand::UnixCommand(QObject *parent): QObject()
   env.insert("LC_MESSAGES", "C");
   m_process->setProcessEnvironment(env);
 
-  QObject::connect(m_process, SIGNAL( started() ), this,
-                   SIGNAL( started() ));
-  QObject::connect(this, SIGNAL( started() ), this,
-                   SLOT( processReadyReadStandardOutput() ));
+  QObject::connect(m_process, &QProcess::started, this,
+                   &UnixCommand::started);
+  QObject::connect(this, &UnixCommand::started, this,
+                   &UnixCommand::processReadyReadStandardOutput);
 
-  QObject::connect(m_process, SIGNAL( readyReadStandardOutput() ), this,
-                   SIGNAL( readyReadStandardOutput() ));
-  QObject::connect(this, SIGNAL( readyReadStandardOutput() ), this,
-                   SLOT( processReadyReadStandardOutput() ));
+  QObject::connect(m_process, &QProcess::readyReadStandardOutput, this,
+                   &UnixCommand::readyReadStandardOutput);
+  QObject::connect(this, &UnixCommand::readyReadStandardOutput, this,
+                   &UnixCommand::processReadyReadStandardOutput);
 
-  QObject::connect(m_process, SIGNAL( finished ( int, QProcess::ExitStatus )), this,
-                   SIGNAL( finished ( int, QProcess::ExitStatus )) );
-  QObject::connect(this, SIGNAL( finished ( int, QProcess::ExitStatus )), this,
-                   SLOT( processReadyReadStandardOutput() ));
+  QObject::connect(m_process, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), this,
+                   &UnixCommand::finished);
+  QObject::connect(this, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished), this,
+                   &UnixCommand::processReadyReadStandardOutput);
 
-  QObject::connect(m_process, SIGNAL( readyReadStandardError() ), this,
-                   SIGNAL( readyReadStandardError() ));
-  QObject::connect(this, SIGNAL( readyReadStandardError() ), this,
-                   SLOT( processReadyReadStandardError() ));
+  QObject::connect(m_process, &QProcess::readyReadStandardError, this,
+                   &UnixCommand::readyReadStandardError);
+  QObject::connect(this, &UnixCommand::readyReadStandardError, this,
+                   &UnixCommand::processReadyReadStandardError);
 
   //Terminal signals
   /*QObject::connect(m_terminal, SIGNAL( started()), this,
