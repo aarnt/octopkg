@@ -677,7 +677,7 @@ void MainWindow::initActions()
   connect(ui->actionFindFileInPackage, &QAction::triggered, this, &MainWindow::findFileInPackage);
   connect(ui->actionCommit, &QAction::triggered, this, &MainWindow::commitTransaction);
   connect(ui->actionCancel, &QAction::triggered, this, &MainWindow::cancelTransaction);
-  connect(ui->actionGetNews, SIGNAL(triggered()), this, SLOT(refreshDistroNews()));
+  connect(ui->actionGetNews, &QAction::triggered, this, [=]() { refreshDistroNews(); });
   connect(ui->twProperties, &QTabWidget::currentChanged, this, &MainWindow::changedTabIndex);
   connect(ui->actionHelpUsage, &QAction::triggered, this, &MainWindow::onHelpUsage);
   connect(ui->actionDonate, &QAction::triggered, this, &MainWindow::onHelpDonate);
