@@ -616,13 +616,13 @@ void MainWindow::doSyncDatabase()
   disableTransactionActions();
   m_unixCommand = new UnixCommand(this);
 
-  QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                   this, SLOT( actionsProcessReadOutput() ));
-  QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                   this, SLOT( actionsProcessRaisedError() ));
+  QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+  QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                   this, &MainWindow::actionsProcessReadOutput);
+  QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                   this, &MainWindow::actionsProcessFinished);
+  QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                   this, &MainWindow::actionsProcessRaisedError);
 
   QString command = QStringLiteral("env ASSUME_ALWAYS_YES=yes ") + ctn_PKG_BIN + QStringLiteral(" update -f");
   m_unixCommand->executeCommand(command);
@@ -644,13 +644,13 @@ void MainWindow::doLock()
       disableTransactionActions();
       m_unixCommand = new UnixCommand(this);
 
-      QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                       this, SLOT( actionsProcessReadOutput() ));
-      QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                       this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                       this, SLOT( actionsProcessRaisedError() ));
+      QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+      QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                       this, &MainWindow::actionsProcessReadOutput);
+      QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                       this, &MainWindow::actionsProcessFinished);
+      QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                       this, &MainWindow::actionsProcessRaisedError);
 
       QString command = ctn_PKG_BIN + " lock -y " + package->name;
       m_unixCommand->executeCommand(command);
@@ -674,13 +674,13 @@ void MainWindow::doUnlock()
       disableTransactionActions();
       m_unixCommand = new UnixCommand(this);
 
-      QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                       this, SLOT( actionsProcessReadOutput() ));
-      QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                       this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-      QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                       this, SLOT( actionsProcessRaisedError() ));
+      QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+      QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                       this, &MainWindow::actionsProcessReadOutput);
+      QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                       this, &MainWindow::actionsProcessFinished);
+      QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                       this, &MainWindow::actionsProcessRaisedError);
 
       QString command = ctn_PKG_BIN + " unlock -y " + package->name;
       m_unixCommand->executeCommand(command);
@@ -702,13 +702,13 @@ void MainWindow::prepareSystemUpgrade()
 
   m_unixCommand = new UnixCommand(this);
 
-  QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                   this, SLOT( actionsProcessReadOutput() ));
-  QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                   this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-  QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                   this, SLOT( actionsProcessRaisedError() ));
+  QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+  QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                   this, &MainWindow::actionsProcessReadOutput);
+  QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                   this, &MainWindow::actionsProcessFinished);
+  QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                   this, &MainWindow::actionsProcessRaisedError);
 
   disableTransactionActions();
 }
@@ -721,8 +721,8 @@ void MainWindow::prepareTargetUpgradeList(const QString& pkgName, CommandExecuti
   QFuture<TransactionInfo> f;
   f = QtConcurrent::run(getTargetUpgradeList, pkgName);
 
-  disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doInstall()));
-  disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doRemoveAndInstall()));
+  disconnect(&g_fwTargetUpgradeList, &QFutureWatcherBase::finished, this, &MainWindow::doInstall);
+  disconnect(&g_fwTargetUpgradeList, &QFutureWatcherBase::finished, this, &MainWindow::doRemoveAndInstall);
   disconnect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doSystemUpgrade()));
 
   if (type == ectn_INSTALL)
@@ -731,7 +731,7 @@ void MainWindow::prepareTargetUpgradeList(const QString& pkgName, CommandExecuti
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
 
-    connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doInstall()));
+    connect(&g_fwTargetUpgradeList, &QFutureWatcherBase::finished, this, &MainWindow::doInstall);
   }
   else if (type == ectn_REMOVE_INSTALL)
   {
@@ -739,7 +739,7 @@ void MainWindow::prepareTargetUpgradeList(const QString& pkgName, CommandExecuti
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
 
-    connect(&g_fwTargetUpgradeList, SIGNAL(finished()), this, SLOT(doRemoveAndInstall()));
+    connect(&g_fwTargetUpgradeList, &QFutureWatcherBase::finished, this, &MainWindow::doRemoveAndInstall);
   }
   else if (type == ectn_SYSTEM_UPGRADE)
   {
@@ -990,13 +990,13 @@ void MainWindow::doRemoveAndInstall()
 
     m_unixCommand = new UnixCommand(this);
 
-    QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                     this, SLOT( actionsProcessReadOutput() ));
-    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                     this, SLOT( actionsProcessRaisedError() ));
+    QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                     this, &MainWindow::actionsProcessReadOutput);
+    QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                     this, &MainWindow::actionsProcessFinished);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                     this, &MainWindow::actionsProcessRaisedError);
 
     disableTransactionActions();
 
@@ -1078,13 +1078,13 @@ void MainWindow::doRemove()
 
     m_unixCommand = new UnixCommand(this);
 
-    QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                     this, SLOT( actionsProcessReadOutput() ));
-    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                     this, SLOT( actionsProcessRaisedError() ));
+    QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                     this, &MainWindow::actionsProcessReadOutput);
+    QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                     this, &MainWindow::actionsProcessFinished);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                     this, &MainWindow::actionsProcessRaisedError);
 
     disableTransactionActions();
 
@@ -1191,13 +1191,13 @@ void MainWindow::doInstall()
     disableTransactionActions();
     m_unixCommand = new UnixCommand(this);
 
-    QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                     this, SLOT( actionsProcessReadOutput() ));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                     this, SLOT( actionsProcessRaisedError() ));
+    QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+    QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                     this, &MainWindow::actionsProcessFinished);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                     this, &MainWindow::actionsProcessReadOutput);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                     this, &MainWindow::actionsProcessRaisedError);
 
     if (result == QDialogButtonBox::Yes)
     {
@@ -1274,13 +1274,13 @@ void MainWindow::doInstallLocalPackages()
     disableTransactionActions();
     m_unixCommand = new UnixCommand(this);
 
-    QObject::connect(m_unixCommand, SIGNAL( started() ), this, SLOT( actionsProcessStarted()));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardOutput()),
-                     this, SLOT( actionsProcessReadOutput() ));
-    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
-    QObject::connect(m_unixCommand, SIGNAL( readyReadStandardError() ),
-                     this, SLOT( actionsProcessRaisedError() ));
+    QObject::connect(m_unixCommand, &UnixCommand::started, this, &MainWindow::actionsProcessStarted);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardOutput,
+                     this, &MainWindow::actionsProcessReadOutput);
+    QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                     this, &MainWindow::actionsProcessFinished);
+    QObject::connect(m_unixCommand, &UnixCommand::readyReadStandardError,
+                     this, &MainWindow::actionsProcessRaisedError);
 
     if (result == QDialogButtonBox::Yes)
     {
@@ -1310,8 +1310,8 @@ void MainWindow::doCleanCache()
     m_commandExecuting = ectn_CLEAN_CACHE;
     m_unixCommand = new UnixCommand(this);
 
-    QObject::connect(m_unixCommand, SIGNAL( finished ( int, QProcess::ExitStatus )),
-                     this, SLOT( actionsProcessFinished(int, QProcess::ExitStatus) ));
+    QObject::connect(m_unixCommand, qOverload<int, QProcess::ExitStatus>(&UnixCommand::finished),
+                     this, &MainWindow::actionsProcessFinished);
 
     clearTabOutput();
     writeToTabOutputExt("<b>" + StrConstants::getCleaningPackageCache() + "</b>");
@@ -1393,10 +1393,10 @@ void MainWindow::toggleTransactionActions(const bool value)
   ui->actionSearchByDescription->setEnabled(value);
 
   m_leFilterPackage->setEnabled(value);
-  disconnect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
+  disconnect(ui->twProperties, &QTabWidget::currentChanged, this, &MainWindow::changedTabIndex);
   ui->twProperties->setTabEnabled(ctn_TABINDEX_INFORMATION, value);
   ui->twProperties->setTabEnabled(ctn_TABINDEX_FILES, value);
-  connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
+  connect(ui->twProperties, &QTabWidget::currentChanged, this, &MainWindow::changedTabIndex);
 
   //We have to toggle the combobox groups as well
   if (m_initializationCompleted) ui->twGroups->setEnabled(value);
@@ -1582,7 +1582,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
           m_leFilterPackage->clear();
           refreshDistroNews(true, false);
           metaBuildPackageList();
-          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+          connect(this, &MainWindow::buildPackageListDone, this, &MainWindow::resetTransaction);
         }
       }
       else if (m_commandExecuting == ectn_SYSTEM_UPGRADE ||
@@ -1601,7 +1601,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           m_leFilterPackage->clear();
           metaBuildPackageList();
-          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+          connect(this, &MainWindow::buildPackageListDone, this, &MainWindow::resetTransaction);
         }
       }
       else
@@ -1619,7 +1619,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
         {
           m_leFilterPackage->clear();
           metaBuildPackageList();
-          connect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+          connect(this, &MainWindow::buildPackageListDone, this, &MainWindow::resetTransaction);
         }
       }
     }
@@ -1642,7 +1642,7 @@ void MainWindow::resetTransaction()
   m_unixCommand->removeTemporaryFile();
   delete m_unixCommand;
   m_commandExecuting = ectn_NONE;
-  disconnect(this, SIGNAL(buildPackageListDone()), this, SLOT(resetTransaction()));
+  disconnect(this, &MainWindow::buildPackageListDone, this, &MainWindow::resetTransaction);
 }
 
 /*
