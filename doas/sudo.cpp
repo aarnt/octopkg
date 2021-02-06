@@ -279,11 +279,13 @@ void Sudo::child()
   switch (mBackend)
   {
   case BACK_SUDO:
-    /*preserve_env_param = "--preserve-env=";
+    if (program == sudo_prog.toStdString())
+    {
+      preserve_env_param = "--preserve-env=";
+      preserve_env_param += env_workarounds();
+      *(param_arg++) = preserve_env_param.c_str(); //preserve environment
+    }
 
-    preserve_env_param += env_workarounds();
-
-    *(param_arg++) = preserve_env_param.c_str();*/ //preserve environment
     *(param_arg++) = "/bin/sh";
     break;
   case BACK_SU:
