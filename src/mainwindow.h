@@ -358,7 +358,7 @@ private slots:
   void doPreInstall();
   void doInstall();
   void doCleanCache();
-  void doSyncDatabase();
+  void doCheckUpdates();
   void doLock();
   void doUnlock();
   void disableTransactionActions();

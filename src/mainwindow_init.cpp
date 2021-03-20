@@ -265,7 +265,7 @@ void MainWindow::initToolBar()
       ui->mainToolBar->setIconSize(QSize(22, 22));
   }
 
-  ui->mainToolBar->addAction(ui->actionSyncPackages);
+  ui->mainToolBar->addAction(ui->actionCheckUpdates);
   ui->mainToolBar->addAction(ui->actionSystemUpgrade);
 
   if (m_outdatedStringList->count() > 0)
@@ -668,7 +668,7 @@ void MainWindow::initActions()
   connect(ui->actionRemoveTransactionItem, &QAction::triggered, this, &MainWindow::onPressDelete);
   connect(ui->actionRemoveTransactionItems, &QAction::triggered, this, &MainWindow::onPressDelete);
   connect(ui->actionExit, &QAction::triggered, this, &MainWindow::close);
-  connect(ui->actionSyncPackages, &QAction::triggered, this, &MainWindow::doSyncDatabase);
+  connect(ui->actionCheckUpdates, &QAction::triggered, this, &MainWindow::doCheckUpdates);
   connect(ui->actionSystemUpgrade, &QAction::triggered, this, &MainWindow::doPreSystemUpgrade);
   connect(ui->actionRemove, &QAction::triggered, this, &MainWindow::insertIntoRemovePackage);
   connect(ui->actionInstall, &QAction::triggered, this, &MainWindow::insertIntoInstallPackage);
@@ -695,7 +695,7 @@ void MainWindow::initActions()
   connect(ui->actionOpenTerminal, &QAction::triggered, this, &MainWindow::openTerminal);
 
   // Use theme icons for QActions
-  ui->actionSyncPackages->setIcon(IconHelper::getIconSyncDatabase());
+  ui->actionCheckUpdates->setIcon(IconHelper::getIconSyncDatabase());
   ui->actionCommit->setIcon(IconHelper::getIconCommit());
   ui->actionCancel->setIcon(IconHelper::getIconRollback());
   ui->actionExit->setIcon(IconHelper::getIconExit());

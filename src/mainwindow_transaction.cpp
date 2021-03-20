@@ -60,7 +60,7 @@ void MainWindow::changeTransactionActionsState()
   bool state = isThereAPendingTransaction();
   ui->actionCommit->setEnabled(state);
   ui->actionCancel->setEnabled(state);
-  ui->actionSyncPackages->setEnabled(!state);
+  ui->actionCheckUpdates->setEnabled(!state);
 
   if (state == false && m_outdatedStringList->count() > 0)
     ui->actionSystemUpgrade->setEnabled(true);
@@ -610,9 +610,9 @@ bool MainWindow::isSUAvailable()
 /*
  * Does a repository sync with "pkg update -f" !
  */
-void MainWindow::doSyncDatabase()
+void MainWindow::doCheckUpdates()
 {
-  m_commandExecuting = ectn_SYNC_DATABASE;
+  m_commandExecuting = ectn_CHECK_UPDATES;
   disableTransactionActions();
   m_unixCommand = new UnixCommand(this);
 
@@ -1348,7 +1348,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(true);
     ui->actionCancel->setEnabled(true);
     m_actionSwitchToRemoteSearch->setEnabled(true);
-    ui->actionSyncPackages->setEnabled(false);
+    ui->actionCheckUpdates->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
   }
   else if (value == true && state == false)
@@ -1356,7 +1356,7 @@ void MainWindow::toggleTransactionActions(const bool value)
     ui->actionCommit->setEnabled(false);
     ui->actionCancel->setEnabled(false);
     m_actionSwitchToRemoteSearch->setEnabled(true);
-    ui->actionSyncPackages->setEnabled(true);
+    ui->actionCheckUpdates->setEnabled(true);
 
     if (value == true && m_outdatedStringList->count() > 0)
       ui->actionSystemUpgrade->setEnabled(true);
@@ -1364,7 +1364,7 @@ void MainWindow::toggleTransactionActions(const bool value)
   else if (value == false && state == false)
   {
     m_actionSwitchToRemoteSearch->setEnabled(false);
-    ui->actionSyncPackages->setEnabled(false);
+    ui->actionCheckUpdates->setEnabled(false);
     ui->actionSystemUpgrade->setEnabled(false);
   }
 
@@ -1413,11 +1413,11 @@ void MainWindow::toggleSystemActions(const bool value)
 
   if (isRemoteSearchSelected() && !state)
   {
-    ui->actionSyncPackages->setEnabled(true);
+    ui->actionCheckUpdates->setEnabled(true);
   }
   else if ((value == true && !state) || value == false)
   {
-    ui->actionSyncPackages->setEnabled(value);
+    ui->actionCheckUpdates->setEnabled(value);
   }
 
   ui->actionInstallLocalPackage->setEnabled(value);
@@ -1480,9 +1480,9 @@ void MainWindow::actionsProcessStarted()
 
   //First we output the name of action we are starting to execute!
 
-  if (m_commandExecuting == ectn_SYNC_DATABASE)
+  if (m_commandExecuting == ectn_CHECK_UPDATES)
   {
-    writeToTabOutput("<b>" + StrConstants::getSyncDatabases() + "</b><br><br>");
+    writeToTabOutput("<b>" + StrConstants::getCheckUpdates() + "</b><br><br>");
   }
   else if (m_commandExecuting == ectn_SYSTEM_UPGRADE || m_commandExecuting == ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL)
   {
@@ -1564,7 +1564,7 @@ void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitS
       clearTransactionTreeView();
 
       //After the command, we can refresh the package list, so any change can be seem.
-      if (m_commandExecuting == ectn_SYNC_DATABASE)
+      if (m_commandExecuting == ectn_CHECK_UPDATES)
       {
         //Retrieves the RSS News from respective Distro site...
         if (isRemoteSearchSelected())

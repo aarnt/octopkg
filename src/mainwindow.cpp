@@ -142,7 +142,7 @@ void MainWindow::show()
     // Maybe this system has never run a pacman -Syy
     else
     {
-      doSyncDatabase();
+      doCheckUpdates();
     }
   }
   else

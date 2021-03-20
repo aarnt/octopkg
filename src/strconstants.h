@@ -101,7 +101,7 @@ public:
   static QString getSyncing();
   static QString getPressAnyKey();
   static QString getSyncDatabase();
-  static QString getSyncDatabases();
+  static QString getCheckUpdates();
   static QString getIsUpToDate();
   static QString getLockingPackage();
   static QString getUnlockingPackage();

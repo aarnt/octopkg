@@ -326,8 +326,8 @@ QString StrConstants::getSyncDatabase(){
   return QObject::tr("Sync database");
 }
 
-QString StrConstants::getSyncDatabases(){
-  return QObject::tr("Synchronizing databases...");
+QString StrConstants::getCheckUpdates(){
+  return QObject::tr("Checking for updates...");
 }
 
 QString StrConstants::getIsUpToDate(){

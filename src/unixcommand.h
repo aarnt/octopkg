@@ -33,7 +33,7 @@
 const QString ctn_MIRROR_CHECK_APP("mirror-check");
 
 enum CommandExecuting { ectn_NONE, ectn_CLEAN_CACHE, ectn_MIRROR_CHECK,
-                        ectn_SYNC_DATABASE, ectn_SYSTEM_UPGRADE, ectn_INSTALL,
+                        ectn_CHECK_UPDATES, ectn_SYSTEM_UPGRADE, ectn_INSTALL,
                         ectn_REMOVE, ectn_REMOVE_INSTALL,
                         ectn_LOCK, ectn_UNLOCK,
                         ectn_RUN_SYSTEM_UPGRADE_IN_TERMINAL,

@@ -116,7 +116,7 @@ void MainWindow::initTabHelpUsage()
 
      tr("Control+key sequences:") +
   QString("<ul><li>") +
-     tr("Ctrl+D or 'File/Check updates' to search for latest package updates") +
+     tr("Ctrl+K or 'File/Check updates' to search for latest package updates") +
   QString("</li><li>") +
      tr("Ctrl+U or 'File/Install updates' to install available package updates") +
   QString("</li><li>") +
