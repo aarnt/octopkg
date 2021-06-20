@@ -5,69 +5,60 @@
     <name>PasswordDialog</name>
     <message>
         <location filename="../passworddialog.ui" line="6"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="171"/>
         <source>LXQt sudo</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="42"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="173"/>
         <source>Copy command to clipboard</source>
-        <translation>Parancsok másolása vágólapra</translation>
+        <translation>Parancs másolása vágólapra</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="45"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="175"/>
         <source>&amp;Copy</source>
         <translation>&amp;Másolás</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="83"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="176"/>
         <source>The requested action needs administrative privileges.&lt;br&gt;Please enter your password.</source>
-        <translation>A kért művelethez rendszergazdai jogosultság szükséges. &lt;br&gt;Írja be a jelszavát.</translation>
+        <translation>A kért művelethez adminisztrátori jogosultság szükséges. &lt;br&gt;Írja be a jelszavát.</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="106"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="178"/>
         <source>LXQt sudo backend</source>
-        <translation type="unfinished">LXQt sudo felület</translation>
+        <translation>LXQt sudo backend</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="109"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="181"/>
         <source>A program LXQt sudo calls in background to elevate privileges.</source>
-        <translation type="unfinished">A program a háttérben  szerzi meg a jogosultságokat.</translation>
+        <translation>Az LXQt sudo program a háttérben megszerzi a jogosultságokat.</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="119"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="183"/>
         <source>Command:</source>
         <translation>Parancs:</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="126"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="184"/>
         <source>Password:</source>
         <translation>Jelszó:</translation>
     </message>
     <message>
         <location filename="../passworddialog.ui" line="133"/>
-        <location filename="../obj-x86_64-linux-gnu/lxqt-sudo_autogen/include/ui_passworddialog.h" line="186"/>
         <source>Enter password</source>
-        <translation>Adja meg a jelszót</translation>
+        <translation>Adjon meg jelszót</translation>
     </message>
     <message>
         <location filename="../passworddialog.cpp" line="60"/>
         <source>Attempt #%1</source>
         <translatorcomment>Próba #%1</translatorcomment>
-        <translation>Próba #%1</translation>
+        <translation>%1. próbálkozás</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../sudo.cpp" line="69"/>
+        <location filename="../sudo.cpp" line="75"/>
         <source>Usage: %1 option [command [arguments...]]
 
 GUI frontend for %2/%3
@@ -88,17 +79,17 @@ A %2/%3 grafikus felhasználói felülete
 
 paraméterek:
   Opciók:
-    -h|--help      Ez a segítő szöveg.
-    -v|--version   Verziószám.
-    -s|--su        %3(1) a végrehajtó.
-    -d|--sudo      %2(8) a végrehajtó.
+    -h|--help      Kiírja ezt a szöveget..
+    -v|--version   Kiírja a verziószámot..
+    -s|--su        %3(1) használata backendként.
+    -d|--sudo      %2(8) használata backendként.
   parancs           A végrehajtandó parancs.
-  paraméterek        Választható paraméterek.
+  argumentumok        Választható argumentumok a parancshoz.
 
 </translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="86"/>
+        <location filename="../sudo.cpp" line="92"/>
         <source>%1 version %2
 </source>
         <translation>%1 verzió %2
@@ -108,55 +99,55 @@ paraméterek:
 <context>
     <name>Sudo</name>
     <message>
-        <location filename="../sudo.cpp" line="189"/>
+        <location filename="../sudo.cpp" line="195"/>
         <source>%1: no command to run provided!</source>
         <translation>%1: nincs végrehajtandó parancs!</translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="196"/>
+        <location filename="../sudo.cpp" line="202"/>
         <source>%1: no backend chosen!</source>
-        <translation>%1: nincs végrehajtó választva!</translation>
+        <translation>%1: nincs backend kiválasztva!</translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="213"/>
+        <location filename="../sudo.cpp" line="219"/>
         <source>Syscall error, failed to fork: %1</source>
-        <translation type="unfinished">Rendszerhívás hiba, nem történt elágazás: %1</translation>
+        <translation>Rendszerhívás hiba, nem sikerült forkot létrehozni: %1</translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="240"/>
+        <location filename="../sudo.cpp" line="246"/>
         <source>unset</source>
         <extracomment>shouldn&apos;t be actually used but keep as short as possible in translations just in case.</extracomment>
         <translation type="unfinished">nincs</translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="289"/>
+        <location filename="../sudo.cpp" line="295"/>
         <source>%1: Detected attempt to inject privileged command via LC_ALL env(%2). Exiting!
 </source>
-        <translation type="unfinished">%1: Észlelt próbálkozás, hogy egy kiemelt parancsot próbált futtatni az LC_ALL env(%2). Bezárás!
+        <translation>%1: Észlelt próbálkozás, hogy egy kiemelt parancsot próbált futtatni ezzel: LC_ALL env(%2). Bezárás!
 </translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="331"/>
+        <location filename="../sudo.cpp" line="337"/>
         <source>Syscall error, failed to bring pty to non-block mode: %1</source>
         <translation type="unfinished">Rendszerhívás hiba, nem sikerült megnyitni a pszeudoterminált non-block módban: %1</translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="339"/>
+        <location filename="../sudo.cpp" line="345"/>
         <source>Syscall error, failed to fdopen pty: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="308"/>
+        <location filename="../sudo.cpp" line="314"/>
         <source>%1: Failed to exec &apos;%2&apos;: %3
 </source>
-        <translation>%1: A(z)  %2:%3 végrehajtása sikertelen
+        <translation>%1: A(z) &apos;%2&apos;:%3 végrehajtása sikertelen
 </translation>
     </message>
     <message>
-        <location filename="../sudo.cpp" line="370"/>
+        <location filename="../sudo.cpp" line="376"/>
         <source>Child &apos;%1&apos; process failed!
 %2</source>
-        <translation>A &apos;%1&apos; alfolyamat végrehajtása nem sikerült!
+        <translation>A(z) &apos;%1&apos; gyermekfolyamat végrehajtása nem sikerült!
 %2</translation>
     </message>
 </context>
