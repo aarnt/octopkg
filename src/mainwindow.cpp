@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent) :
   m_lockedPackageList = NULL;
   m_unrequiredPackageList = NULL;
   m_foreignPackageList = NULL;
+  m_unixCommand = nullptr;
 
   retrieveLockedPackageList();
   retrieveUnrequiredPackageList();

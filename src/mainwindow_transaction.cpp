@@ -1639,8 +1639,14 @@ void MainWindow::resetTransaction()
   enableTransactionActions();
   //if (m_commandExecuting != ectn_MIRROR_CHECK && bRefreshGroups)
   //  refreshGroupsWidget();
-  m_unixCommand->removeTemporaryFile();
-  delete m_unixCommand;
+
+  if (m_unixCommand != nullptr)
+  {
+    m_unixCommand->removeTemporaryFile();
+    delete m_unixCommand;
+    m_unixCommand = nullptr;
+  }
+
   m_commandExecuting = ectn_NONE;
   disconnect(this, &MainWindow::buildPackageListDone, this, &MainWindow::resetTransaction);
 }
