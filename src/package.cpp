@@ -1148,6 +1148,12 @@ QString Package::getDependencies(const QString &pkgName)
 
   for(QString dependency: pkgList)
   {
+    if (dependency.at(0) == "\"")
+    {
+      dependency.remove(dependency.size()-1, 1);
+      dependency.remove(0, 1);
+    }
+
     res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
   }
 
