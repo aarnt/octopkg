@@ -153,7 +153,7 @@ void MainWindow::insertRemovePackageIntoTransaction(const QString &pkgName)
     siRemoveParent->appendRow(siPackageToRemove);
   }
 
-  ui->twProperties->setCurrentIndex(ctn_TABINDEX_TRANSACTION);
+  //ui->twProperties->setCurrentIndex(ctn_TABINDEX_TRANSACTION);
   tvTransaction->expandAll();
   changeTransactionActionsState();
 }
@@ -186,7 +186,7 @@ void MainWindow::insertInstallPackageIntoTransaction(const QString &pkgName)
     siInstallParent->appendRow(siPackageToInstall);
   }
 
-  ui->twProperties->setCurrentIndex(ctn_TABINDEX_TRANSACTION);
+  //ui->twProperties->setCurrentIndex(ctn_TABINDEX_TRANSACTION);
   tvTransaction->expandAll();
   changeTransactionActionsState();
 }
@@ -261,7 +261,7 @@ QString MainWindow::getTobeInstalledPackages()
 void MainWindow::insertIntoRemovePackage()
 {
   qApp->processEvents();
-  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  //ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
   //First, let's see if we are dealing with a package group
@@ -292,7 +292,7 @@ void MainWindow::insertIntoRemovePackage()
  */
 void MainWindow::insertGroupIntoRemovePackage()
 {
-  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  //ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   insertRemovePackageIntoTransaction(getSelectedCategory());
 }
 
@@ -303,7 +303,7 @@ void MainWindow::insertGroupIntoRemovePackage()
 void MainWindow::insertIntoInstallPackage()
 {
   qApp->processEvents();
-  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  //ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   QModelIndexList selectedRows = ui->tvPackages->selectionModel()->selectedRows();
 
   for(QModelIndex item: selectedRows)
@@ -465,7 +465,7 @@ bool MainWindow::isPackageInRemoveTransaction(const QString &pkgName)
  */
 void MainWindow::insertGroupIntoInstallPackage()
 {
-  ensureTabVisible(ctn_TABINDEX_TRANSACTION);
+  //ensureTabVisible(ctn_TABINDEX_TRANSACTION);
   insertInstallPackageIntoTransaction(getSelectedCategory());
 }
 
@@ -538,6 +538,26 @@ void MainWindow::tvTransactionRowsChanged(const QModelIndex& parent)
       tvTransactionAdjustItemText(itemInstall);
     }
     else itemInstall->setText(StrConstants::getTransactionInstallText());
+  }
+
+  int lToInstall=itemInstall->rowCount();
+  int lToRemove=itemRemove->rowCount();
+
+  if (lToInstall > 0 || lToRemove > 0)
+  {
+    QString newText=StrConstants::getTabTransactionName() + QLatin1String(" (");
+
+    if (lToInstall > 0)
+      newText += QLatin1String("+") + QString::number(lToInstall);
+    if (lToRemove > 0)
+      newText += QLatin1String("-") + QString::number(lToRemove);
+
+    newText += QLatin1String(")");
+    ui->twProperties->setTabText(ctn_TABINDEX_TRANSACTION, newText);
+  }
+  else
+  {
+    ui->twProperties->setTabText(ctn_TABINDEX_TRANSACTION, StrConstants::getTabTransactionName());
   }
 }
 
@@ -2079,12 +2099,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       {
         newMsg = "<b><font color=\"#FF8040\">" + newMsg + "</font></b>"; //ORANGE
       }
-      else if(/*newMsg.contains(QRegularExpression("REINSTALLED")) ||
-              newMsg.contains(QRegularExpression("INSTALLED")) ||
-              newMsg.contains(QRegularExpression("UPGRADED")) ||
-              newMsg.contains(QRegularExpression("UPDATED")) ||
-              newMsg.contains(QRegularExpression("[Cc]hecking")) ||*/
-              newMsg.contains(QRegularExpression("[Rr]einstalling")) ||
+      else if(newMsg.contains(QRegularExpression("[Rr]einstalling")) ||
               newMsg.contains(QRegularExpression("[Ii]nstalling")) ||
               newMsg.contains(QRegularExpression("[Uu]pgrading")) ||
               newMsg.contains(QRegularExpression("[Ll]oading")) ||
