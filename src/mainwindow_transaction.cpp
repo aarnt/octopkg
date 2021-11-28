@@ -2083,12 +2083,13 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       if(newMsg.contains(QRegularExpression("REMOVED")) ||
          newMsg.contains(QRegularExpression("removing ")) ||
          newMsg.contains(QRegularExpression("could not ")) ||
-         newMsg.contains(QRegularExpression("error")) ||
+         newMsg.contains(QRegularExpression("error:")) ||
          newMsg.contains(QRegularExpression("failed")) ||
          newMsg.contains(QRegularExpression("is not synced")) ||
          newMsg.contains(QRegularExpression("[Rr]emoving")) ||
          newMsg.contains(QRegularExpression("[Dd]einstalling")) ||
          newMsg.contains(QRegularExpression("[Dd]eleting")) ||
+         newMsg.contains(StrConstants::getCommandFinishedWithErrors()) ||
          newMsg.contains(QRegularExpression("could not be found")))
       {
         newMsg = "<b><font color=\"#E55451\">" + newMsg + "&nbsp;</font></b>"; //RED
