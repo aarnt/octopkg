@@ -991,19 +991,19 @@ void MainWindow::doRemoveAndInstall()
       params << UnixCommand::getShell();
       params << "-c";
       params << "bectl create " + beName + "; " +
-        ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets + "; " +
+        ctn_PKG_BIN + " remove -y " + listOfRemoveTargets + "; " +
         ctn_PKG_BIN + " install -f -y " + listOfInstallTargets;
     }
     else
     {
       params << UnixCommand::getShell();
       params << "-c";
-      params << ctn_PKG_BIN + " remove -f -y " + listOfRemoveTargets + "; " +
+      params << ctn_PKG_BIN + " remove -y " + listOfRemoveTargets + "; " +
         ctn_PKG_BIN + " install -f -y " + listOfInstallTargets;
     }
 
     m_lastCommandList.clear();
-    m_lastCommandList.append(ctn_PKG_BIN + " remove -f " + listOfRemoveTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " remove " + listOfRemoveTargets + ";");
     m_lastCommandList.append(ctn_PKG_BIN + " install -f " + listOfInstallTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
@@ -1084,15 +1084,15 @@ void MainWindow::doRemove()
       QString beName = QDateTime::currentDateTime().toString(QLatin1String("yyMMdd-hhmmss"));
       params << UnixCommand::getShell();
       params << "-c";
-      params << "bectl create " + beName + "; " + ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
+      params << "bectl create " + beName + "; " + ctn_PKG_BIN + " remove -R -y " + listOfTargets;
     }
     else
     {
-      command = ctn_PKG_BIN + " remove -R -f -y " + listOfTargets;
+      command = ctn_PKG_BIN + " remove -R -y " + listOfTargets;
     }
 
     m_lastCommandList.clear();
-    m_lastCommandList.append(ctn_PKG_BIN + " remove -R -f " + listOfTargets + ";");
+    m_lastCommandList.append(ctn_PKG_BIN + " remove -R " + listOfTargets + ";");
     m_lastCommandList.append("echo -e;");
     m_lastCommandList.append("read -n1 -p \"" + StrConstants::getPressAnyKey() + "\"");
 
