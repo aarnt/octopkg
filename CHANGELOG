@@ -3,7 +3,7 @@
   BugFix: Test also if doas.conf is available at startup.
   BugFix: Disable Info/Files tab refresh while typing in filter/search line edit.
   BugFix: Updated FreeBSD rss url.
-  Synced octopkg-doas with LXQt-sudo 0.17.0 version.
+  Synced octopkg-doas with LXQt-sudo 1.0.0 version.
   Changed "Sync database" option name to "Check updates".
   Actions tab shows a counter feedback for inserts (with a plus signal) and 
     removals (with a minus signal) and does not steal focus anymore. 
