@@ -599,6 +599,8 @@ void MainWindow::buildRemotePackageList()
   {
     m_leFilterPackage->initStyleSheet();
     QString search = Package::parseSearchString(m_leFilterPackage->text());
+    search.remove(QLatin1Char('^'));
+    search.remove(QLatin1Char('$'));
     m_packageModel->applyFilter(search);
 
     ui->tvPackages->selectionModel()->clear();
@@ -628,7 +630,7 @@ void MainWindow::buildRemotePackageList()
   //refreshStatusBarToolButtons();
 
   //If we found no packages, let's make another search, this time 'by name'...
-  if (!m_leFilterPackage->text().isEmpty() &&
+  /*if (!m_leFilterPackage->text().isEmpty() &&
       (!m_leFilterPackage->text().contains(QRegularExpression("\\s"))) &&
       m_packageModel->getPackageCount() == 0 &&
       ui->actionSearchByDescription->isChecked())
@@ -641,7 +643,7 @@ void MainWindow::buildRemotePackageList()
 
     ui->actionSearchByName->setChecked(true);
     metaBuildPackageList();
-  }
+  }*/
 
   emit buildPackageListDone();
 }

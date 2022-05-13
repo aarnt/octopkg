@@ -632,13 +632,17 @@ QList<PackageListData> * Package::parsePackageTuple(const QStringList &packageTu
 QList<PackageListData> * Package::getRemotePackageList(const QString& searchString)
 {
   QList<PackageListData> * res = new QList<PackageListData>();
+  QList<PackageListData> * resName = new QList<PackageListData>();
   QList<PackageListData> * resComment = new QList<PackageListData>();
   QStringList packageCache;
 
   if (searchString.isEmpty())
     return res;
 
-  QString pkgList = UnixCommand::getRemotePackageList(searchString, false);
+  QString auxSearchString=searchString;
+  auxSearchString.remove(QLatin1Char('^'));
+  auxSearchString.remove(QLatin1Char('$'));
+  QString pkgList = UnixCommand::getRemotePackageList(auxSearchString, false);
   
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
@@ -646,8 +650,22 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
   QStringList packageTuples = pkgList.split(QRegularExpression("\\n"), Qt::SkipEmptyParts);
 #endif
 
-  res = parsePackageTuple(packageTuples, packageCache);
-  QString pkgListComment = UnixCommand::getRemotePackageList(searchString, true);
+  QRegularExpression re(searchString);
+  QRegularExpressionMatch match;
+  resName = parsePackageTuple(packageTuples, packageCache);
+
+  for(PackageListData pld: *resName)
+  {
+    if (searchString.at(0) == QLatin1Char('^') || searchString.at(searchString.length()-1) == QLatin1Char('$'))
+    {
+      match = re.match(pld.name);
+      if (match.hasMatch()) res->append(pld);
+    }
+    else
+      res->append(pld);
+  }
+
+  QString pkgListComment = UnixCommand::getRemotePackageList(auxSearchString, true);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList packageTuplesComment = pkgListComment.split(QRegularExpression("\\n"), QString::SkipEmptyParts);
@@ -659,7 +677,13 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
 
   for(PackageListData pld: *resComment)
   {
-    res->append(pld);
+    if (searchString.at(0) == QLatin1Char('^') || searchString.at(searchString.length()-1) == QLatin1Char('$'))
+    {
+      match = re.match(pld.name);
+      if (match.hasMatch()) res->append(pld);
+    }
+    else
+      res->append(pld);
   }
 
   return res;
