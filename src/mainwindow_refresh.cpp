@@ -1322,6 +1322,10 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
  */
 void MainWindow::reapplyPackageFilter()
 {
+  clearTabsInfoOrFiles();
+  disconnect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MainWindow::invalidateTabs);
+
   if (m_actionSwitchToRemoteSearch->isChecked())
   {
     if (m_leFilterPackage->text() == "")
@@ -1361,7 +1365,7 @@ void MainWindow::reapplyPackageFilter()
     QModelIndex mi = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
     ui->tvPackages->setCurrentIndex(mi);
     ui->tvPackages->scrollTo(mi);
-    clearTabsInfoOrFiles();
+    //clearTabsInfoOrFiles();
   }
   //If we are using "Search By file...
   else
@@ -1376,6 +1380,9 @@ void MainWindow::reapplyPackageFilter()
 
     connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
   }
+
+  connect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MainWindow::invalidateTabs);
 }
 
 /*
