@@ -640,6 +640,7 @@ QList<PackageListData> * Package::getRemotePackageList(const QString& searchStri
     return res;
 
   QString auxSearchString=searchString;
+  auxSearchString.replace(QLatin1String("+"), QLatin1String("\\+"));
   auxSearchString.remove(QLatin1Char('^'));
   auxSearchString.remove(QLatin1Char('$'));
   QString pkgList = UnixCommand::getRemotePackageList(auxSearchString, false);
@@ -1297,6 +1298,7 @@ QString Package::parseSearchString(QString searchStr, bool exactMatch)
     else searchStr.append("$");
   }
 
+  searchStr.replace(QLatin1String("+"), QLatin1String("\\+"));
   searchStr.replace("?", ".");
   return searchStr;
 }
