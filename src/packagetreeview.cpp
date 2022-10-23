@@ -46,14 +46,14 @@ void PackageTreeView::init()
   setSelectionMode(QAbstractItemView::ExtendedSelection);
   setEditTriggers(QAbstractItemView::NoEditTriggers);
   setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
-  setAllColumnsShowFocus( true );
-  setSortingEnabled( true );
-  setIndentation( 0 );
+  setAllColumnsShowFocus(true);
+  setSortingEnabled(true);
+  setIndentation(0);
   header()->setSortIndicatorShown(true);
   header()->setSectionsClickable(true);
   header()->setSectionsMovable(false);
   header()->setSectionResizeMode(QHeaderView::Interactive);
-  header()->setDefaultAlignment( Qt::AlignLeft );
+  header()->setDefaultAlignment(Qt::AlignLeft);
 }
 
 /*
@@ -82,4 +82,15 @@ void PackageTreeView::mouseReleaseEvent(QMouseEvent *event)
   {
     emit customContextMenuRequested(event->pos());
   }
+}
+
+void PackageTreeView::focusInEvent(QFocusEvent *event)
+{
+  Q_UNUSED(event)
+
+  QModelIndex maux = currentIndex();
+  //setCurrentIndex(maux);
+  scrollTo(maux, QAbstractItemView::PositionAtCenter);
+  setCurrentIndex(maux);
+  emit activated(maux);
 }

@@ -53,7 +53,7 @@ const QString ctn_KEY_SYNC_DB_HOUR("SyncDbHour");
 const QString ctn_KEEP_NUM_INSTALLED("Keep_Num_Installed");
 const QString ctn_KEEP_NUM_UNINSTALLED("Keep_Num_Uninstalled");
 
-enum SaveSettingsReason { ectn_PackageList, ectn_CurrentTabIndex, ectn_NORMAL=30,
+enum SaveSettingsReason { ectn_PACKAGELIST, ectn_CURRENTTABINDEX, ectn_NORMAL=30,
                           ectn_MAXIMIZE_PACKAGES=40, ectn_MAXIMIZE_PROPERTIES=50, ectn_GROUPS=5 };
 
 class SettingsManager

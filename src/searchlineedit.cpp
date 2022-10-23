@@ -18,23 +18,25 @@
 #include <QRegularExpressionValidator>
 #include <QCompleter>
 #include <QStringListModel>
-#include <QDebug>
+#include <QKeyEvent>
+//#include <QDebug>
 
 SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
   QLineEdit(parent){
 
   m_hasLocate = hasSLocate;
-
   m_completerModel = new QStringListModel(this);
   m_completer = new QCompleter(m_completerModel, this);
   m_completer->setCaseSensitivity(Qt::CaseInsensitive);
-  m_completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
+  m_completer->setCompletionMode(QCompleter::PopupCompletion);
   m_completer->setCompletionColumn(0);
   m_completer->setMaxVisibleItems(10);
+
   setCompleter(m_completer);
 
   // Create the search button and set its icon, cursor, and stylesheet
   this->m_SearchButton = new QToolButton(this);
+  this->m_SearchButton->setFocusPolicy(Qt::NoFocus);
 
   // Increase button size a bit for kde
   if (WMHelper::isKDERunning())
@@ -55,9 +57,9 @@ SearchLineEdit::SearchLineEdit(QWidget *parent, bool hasSLocate) :
   QObject::connect(this, SIGNAL(textChanged(QString)), SLOT(updateSearchButton(QString)));
 
   // Some stylesheet and size corrections for the text box
-  //this->setPlaceholderText(StrConstants::getFind());
-
+  this->setPlaceholderText(StrConstants::getFind());
   this->setStyleSheet(this->styleSheetForCurrentState());
+  this->setFocusPolicy(Qt::StrongFocus);
 }
 
 /*
@@ -104,7 +106,19 @@ void SearchLineEdit::refreshCompleterData()
 void SearchLineEdit::resizeEvent(QResizeEvent *event)
 {
   Q_UNUSED(event);
-  this->m_SearchButton->move(5, (this->rect().height() - this->m_SearchButton->height()) / 2);
+    this->m_SearchButton->move(5, (this->rect().height() - this->m_SearchButton->height()) / 2);
+}
+
+void SearchLineEdit::keyPressEvent(QKeyEvent *event)
+{
+  if (event->key() == Qt::Key_U && event->modifiers() == Qt::ControlModifier)
+  {
+    event->ignore();
+  }
+  else
+  {
+    return QLineEdit::keyPressEvent(event);
+  }
 }
 
 void SearchLineEdit::updateSearchButton(const QString &text)

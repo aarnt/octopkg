@@ -25,7 +25,6 @@ class SearchLineEdit : public QLineEdit
 private:
   bool m_hasLocate;
   QStringListModel *m_completerModel;
-
   QCompleter *m_completer;
   QValidator *m_defaultValidator;
   QValidator *m_aurValidator;
@@ -38,7 +37,8 @@ private slots:
   void updateSearchButton(const QString &text);
 
 protected:
-  void resizeEvent(QResizeEvent *event);
+  virtual void resizeEvent(QResizeEvent *event);
+  virtual void keyPressEvent(QKeyEvent *event);
 
 public:
   explicit SearchLineEdit(QWidget *parent = NULL, bool hasSLocate = false);

@@ -41,6 +41,7 @@
 #include <QFutureWatcher>
 #include <QClipboard>
 #include <QtConcurrent/QtConcurrentRun>
+#include <QDebug>
 
 /*
  * Before we close the application, let's confirm if there is a pending transaction...
@@ -163,6 +164,18 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
+  else if(ke->key() == Qt::Key_Tab)
+  {
+    if (m_leFilterPackage->hasFocus())
+    {
+      qDebug() << "Focus IN...\n";
+      ui->tvPackages->setFocus();
+      QModelIndex maux = ui->tvPackages->currentIndex();
+      ui->tvPackages->setCurrentIndex(maux);
+      ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
+      ui->tvPackages->setCurrentIndex(maux);
+    }
+  }
   else if(ke->key() == Qt::Key_Escape)
   {
     if(m_leFilterPackage->hasFocus())
@@ -276,12 +289,18 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
-  else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
+  /*else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
     if (m_commandExecuting != ectn_NONE) return;
 
     //The user wants to know which packages have no description!
     showPackagesWithNoDescription();
+  }*/
+  else if (ke->key() == Qt::Key_U && ke->modifiers() == Qt::ControlModifier)
+  {
+    if (m_commandExecuting != ectn_NONE) return;
+
+    if (ui->actionSystemUpgrade->isEnabled()) doPreSystemUpgrade();
   }
   else if(ke->key() == Qt::Key_G && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
@@ -307,17 +326,13 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
  */
 void MainWindow::keyReleaseEvent(QKeyEvent* ke)
 {
-  /*if ((ui->tvPackages->hasFocus()) && (
-      ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
-      ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
-      ke->key() == Qt::Key_PageUp || ke->key() == Qt::Key_PageDown))
+  if(ui->tvPackages->hasFocus() && (ke->key() == Qt::Key_Up || ke->key() == Qt::Key_Down ||
+                                    ke->key() == Qt::Key_Home || ke->key() == Qt::Key_End ||
+                                    ke->key() == Qt::Key_PageUp || ke->key() == Qt::Key_PageDown))
   {
-    if (ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION)
-    {
-      refreshTabInfo(false, true);
-      ui->tvPackages->setFocus();
-    }
-  }*/
+    clearTabsInfoOrFiles();
+    ui->tvPackages->setFocus();
+  }
   if (ui->tvPackages->hasFocus() && ke->key() == Qt::Key_Space)
   {
     invalidateTabs();

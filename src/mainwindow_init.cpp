@@ -91,7 +91,7 @@ void MainWindow::loadPanelSettings(){
  */
 void MainWindow::saveSettings(SaveSettingsReason saveSettingsReason){
   switch(saveSettingsReason){
-    case ectn_CurrentTabIndex:
+    case ectn_CURRENTTABINDEX:
       SettingsManager::instance()->setCurrentTabIndex(ui->twProperties->currentIndex());
       break;
 
@@ -109,7 +109,7 @@ void MainWindow::saveSettings(SaveSettingsReason saveSettingsReason){
       SettingsManager::instance()->setShowGroupsPanel(1); //And also show Groups panel!
       break;
 
-    case ectn_PackageList:
+    case ectn_PACKAGELIST:
       SettingsManager::instance()->setPackageListOrderedCol(ui->tvPackages->header()->sortIndicatorSection());
       SettingsManager::instance()->setPackageListSortOrder(ui->tvPackages->header()->sortIndicatorOrder());
       break;
@@ -442,8 +442,7 @@ void MainWindow::initPackageTreeView()
 
   connect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
           this, &MainWindow::tvPackagesSelectionChanged);
-  //connect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(changedTabIndex()));
-  //connect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(changedTabIndex()));
+  connect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshInfoAndFileTabs()));
   connect(ui->tvPackages->header(), &QHeaderView::sortIndicatorChanged, this,
           &MainWindow::headerViewPackageListSortIndicatorClicked);
   connect(ui->tvPackages, &QWidget::customContextMenuRequested, this,
@@ -455,8 +454,8 @@ void MainWindow::removePackageTreeViewConnections()
 {
   disconnect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
           this, &MainWindow::tvPackagesSelectionChanged);
-  //disconnect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(changedTabIndex()));
-  //disconnect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(changedTabIndex()));
+  disconnect(ui->tvPackages, SIGNAL(activated(QModelIndex)), this, SLOT(refreshInfoAndFileTabs()));
+  disconnect(ui->tvPackages, SIGNAL(clicked(QModelIndex)), this, SLOT(refreshInfoAndFileTabs()));
   disconnect(ui->tvPackages->header(), &QHeaderView::sortIndicatorChanged, this,
           &MainWindow::headerViewPackageListSortIndicatorClicked);
   disconnect(ui->tvPackages, &QWidget::customContextMenuRequested, this,
@@ -662,8 +661,8 @@ void MainWindow::initActions()
   ui->actionOpenDirectory->setIcon(IconHelper::getIconFolder());
 
   connect(ui->actionCleanLocalCache, &QAction::triggered, this, &MainWindow::doCleanCache);
-  connect(ui->tvPackages->selectionModel(), &QItemSelectionModel::selectionChanged,
-          this, &MainWindow::invalidateTabs);
+  //connect(ui->tvPackages->selectionModel(), SIGNAL(&QItemSelectionModel::selectionChanged,
+  //        this, &MainWindow::invalidateTabs);
   //connect(ui->actionInstallLocalPackage, SIGNAL(triggered()), this, SLOT(installLocalPackage()));
   connect(ui->actionRemoveTransactionItem, &QAction::triggered, this, &MainWindow::onPressDelete);
   connect(ui->actionRemoveTransactionItems, &QAction::triggered, this, &MainWindow::onPressDelete);
