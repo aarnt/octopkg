@@ -180,7 +180,7 @@ void MainWindow::deferredInitAppIcon()
   if (m_numberOfOutdatedPackages > 0)
   {
     m_packageRepo.markOutdatedPackages(*m_outdatedStringList);
-    QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
+    QModelIndex maux = m_packageModel->index(0, PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
     ui->tvPackages->setCurrentIndex(maux);
     ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
     ui->tvPackages->setCurrentIndex(maux);

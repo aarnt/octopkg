@@ -30,7 +30,6 @@
 #include "uihelper.h"
 #include "searchbar.h"
 #include "globals.h"
-//#include "terminal.h"
 
 #include <QCloseEvent>
 #include <QMessageBox>
@@ -164,18 +163,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
-  else if(ke->key() == Qt::Key_Tab)
-  {
-    if (m_leFilterPackage->hasFocus())
-    {
-      qDebug() << "Focus IN...\n";
-      ui->tvPackages->setFocus();
-      QModelIndex maux = ui->tvPackages->currentIndex();
-      ui->tvPackages->setCurrentIndex(maux);
-      ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
-      ui->tvPackages->setCurrentIndex(maux);
-    }
-  }
   else if(ke->key() == Qt::Key_Escape)
   {
     if(m_leFilterPackage->hasFocus())
@@ -253,7 +240,12 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   else if (ke->key() == Qt::Key_P && ke->modifiers() == Qt::ControlModifier)
   {
     if (!ui->tvPackages->hasFocus())
+    {
       ui->tvPackages->setFocus();
+      QModelIndex mi = m_packageModel->index(ui->tvPackages->currentIndex().row(), PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
+      ui->tvPackages->setCurrentIndex(mi);
+      ui->tvPackages->scrollTo(mi);
+    }
   }
   else if(ke->key() == Qt::Key_L && ke->modifiers() == Qt::ControlModifier)
   {
@@ -291,10 +283,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   }
   /*else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
-    if (m_commandExecuting != ectn_NONE) return;
 
-    //The user wants to know which packages have no description!
-    showPackagesWithNoDescription();
   }*/
   else if (ke->key() == Qt::Key_U && ke->modifiers() == Qt::ControlModifier)
   {
@@ -337,6 +326,15 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
   {
     invalidateTabs();
     ui->tvPackages->setFocus();
+  }
+  else if(ke->key() == Qt::Key_Tab)
+  {
+    if (ui->tvPackages->hasFocus())
+    {
+      ui->tvPackages->setFocus();
+      QModelIndex mi = m_packageModel->index(ui->tvPackages->currentIndex().row(), PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
+      ui->tvPackages->setCurrentIndex(mi);
+      ui->tvPackages->scrollTo(mi);    }
   }
   else if(ke->key() == Qt::Key_Home && ke->modifiers() == Qt::AltModifier)
   {
