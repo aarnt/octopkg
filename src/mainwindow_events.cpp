@@ -333,7 +333,7 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
     clearTabsInfoOrFiles();
     ui->tvPackages->setFocus();
   }
-  if (ui->tvPackages->hasFocus() && ke->key() == Qt::Key_Space)
+  else if (ui->tvPackages->hasFocus() && ke->key() == Qt::Key_Space)
   {
     invalidateTabs();
     ui->tvPackages->setFocus();

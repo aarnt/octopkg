@@ -856,6 +856,8 @@ void MainWindow::buildPackageList()
       QApplication::restoreOverrideCursor();
       doInstallLocalPackages();
     }
+
+    reapplyPackageFilter();
   }
 
   //ui->tvPackages->setColumnWidth(PackageModel::ctn_PACKAGE_SIZE_COLUMN, 10);

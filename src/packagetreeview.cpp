@@ -84,13 +84,14 @@ void PackageTreeView::mouseReleaseEvent(QMouseEvent *event)
   }
 }
 
+/*
+ * Whenever focus enters this widget
+ */
 void PackageTreeView::focusInEvent(QFocusEvent *event)
 {
   Q_UNUSED(event)
 
   QModelIndex maux = currentIndex();
-  //setCurrentIndex(maux);
   scrollTo(maux, QAbstractItemView::PositionAtCenter);
   setCurrentIndex(maux);
-  emit activated(maux);
 }
