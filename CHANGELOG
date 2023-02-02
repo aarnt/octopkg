@@ -1,3 +1,6 @@
+0.3.3 (dev)
+  BugFix: openFile always left a running file manager even after program close.
+
 0.3.2 (2022/12/31)
   BugFix: WM testing code now uses ps -aux. 
   BugFix: Test also if doas.conf is available at startup.
