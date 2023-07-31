@@ -21,8 +21,8 @@
 #include "package.h"
 #include "unixcommand.h"
 #include "stdlib.h"
-#include "strconstants.h"
-#include "constants.h"
+//#include "strconstants.h"
+//#include "constants.h"
 #include <iostream>
 
 #include <QTextStream>
@@ -40,21 +40,21 @@
  */
 QString Package::getBaseName( const QString& p )
 {
-	QString packageBaseName="";
-	QString aux(p);
-	int numberOfSegments = p.count('-')+1;
-	int nameSegment = numberOfSegments-3;
-	int a;
+  QString packageBaseName="";
+  QString aux(p);
+  int numberOfSegments = p.count('-')+1;
+  int nameSegment = numberOfSegments-3;
+  int a;
 
-	for (int i=1; i<= nameSegment; i++){
-		a=aux.indexOf("-");
-		packageBaseName += aux.left(a);
-		if (i<nameSegment) packageBaseName += "-";
-		aux = aux.mid(a+1);
-	}
+  for (int i=1; i<= nameSegment; i++){
+    a=aux.indexOf("-");
+    packageBaseName += aux.left(a);
+    if (i<nameSegment) packageBaseName += "-";
+    aux = aux.mid(a+1);
+  }
 
-	if (packageBaseName == "") packageBaseName += p.left(p.indexOf("-"));
-	return packageBaseName;
+  if (packageBaseName == "") packageBaseName += p.left(p.indexOf("-"));
+  return packageBaseName;
 }
 
 /*

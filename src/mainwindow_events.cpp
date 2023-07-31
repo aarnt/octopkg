@@ -26,7 +26,7 @@
 #include "searchlineedit.h"
 #include "mainwindow.h"
 #include "strconstants.h"
-#include "wmhelper.h"
+//#include "wmhelper.h"
 #include "uihelper.h"
 #include "searchbar.h"
 #include "globals.h"

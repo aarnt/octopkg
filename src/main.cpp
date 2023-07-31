@@ -22,7 +22,7 @@
 #include "argumentlist.h"
 #include "strconstants.h"
 #include "unixcommand.h"
-#include "wmhelper.h"
+//#include "wmhelper.h"
 #include <iostream>
 
 #include "QtSolutions/qtsingleapplication.h"

@@ -20,7 +20,7 @@
 #include "transactiondialog.h"
 #include "uihelper.h"
 #include "strconstants.h"
-#include "unixcommand.h"
+//#include "unixcommand.h"
 
 #include <QMessageBox>
 #include <QPushButton>

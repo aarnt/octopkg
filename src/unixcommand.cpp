@@ -19,9 +19,8 @@
 */
 
 #include "unixcommand.h"
-#include "strconstants.h"
+//#include "strconstants.h"
 #include "wmhelper.h"
-//#include "terminal.h"
 #include "constants.h"
 #include <iostream>
 

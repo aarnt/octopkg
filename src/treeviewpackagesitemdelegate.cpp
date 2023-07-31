@@ -20,9 +20,9 @@
 
 #include "treeviewpackagesitemdelegate.h"
 #include "globals.h"
-#include "package.h"
-#include "mainwindow.h"
-#include "strconstants.h"
+//#include "package.h"
+//#include "mainwindow.h"
+//#include "strconstants.h"
 #include "uihelper.h"
 #include <iostream>
 

@@ -22,8 +22,7 @@
 #include "wmhelper.h"
 #include "unixcommand.h"
 #include "strconstants.h"
-#include "settingsmanager.h"
-//#include "terminal.h"
+//#include "settingsmanager.h"
 #include <iostream>
 
 #include <QApplication>

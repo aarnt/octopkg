@@ -25,11 +25,11 @@
 #include "package.h"
 #include "uihelper.h"
 #include "wmhelper.h"
-#include "treeviewpackagesitemdelegate.h"
+//#include "treeviewpackagesitemdelegate.h"
 #include "searchbar.h"
 #include "utils.h"
 #include "globals.h"
-#include "constants.h"
+//#include "constants.h"
 #include <iostream>
 
 #include <QStandardItemModel>

@@ -27,7 +27,7 @@
 #include "mainwindow.h"
 #include "strconstants.h"
 #include "searchbar.h"
-#include "uihelper.h"
+//#include "uihelper.h"
 #include "globals.h"
 
 #include <QTextBrowser>

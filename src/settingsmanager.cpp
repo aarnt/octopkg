@@ -24,7 +24,7 @@
  */
 
 #include "settingsmanager.h"
-#include "unixcommand.h"
+//#include "unixcommand.h"
 #include "uihelper.h"
 
 #include <QString>
