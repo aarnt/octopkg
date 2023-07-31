@@ -1,1 +1,5 @@
 build
+qmake_qmake_qm_files.*
+ui_passworddialog.h
+.qmake
+.qtc_clangd/

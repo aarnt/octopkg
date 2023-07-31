@@ -192,7 +192,10 @@ void MainWindow::initTabNews()
   QWidget *tabNews = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabNews);
   gridLayoutX->setSpacing(0);
-  //gridLayoutX->setMargin(0);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  gridLayoutX->setMargin(0);
+#endif
 
   QTextBrowser *text = new QTextBrowser(tabNews);
   text->setObjectName("textBrowser");

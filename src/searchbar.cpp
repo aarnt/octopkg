@@ -49,7 +49,10 @@ void SearchBar::init()
   setObjectName("searchbar");
   QHBoxLayout *layout = new QHBoxLayout(this);
   layout->setSpacing(0);
-  //layout->setMargin(4);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  layout->setMargin(4);
+#endif
 
   setStyleSheet("QWidget#searchbar{"
                 "border-top-width: .6px;"

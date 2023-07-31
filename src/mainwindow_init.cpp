@@ -375,7 +375,10 @@ void MainWindow::initTabTransaction()
   QWidget *tabTransaction = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabTransaction);
   gridLayoutX->setSpacing(0);
-  //gridLayoutX->setMargin(0);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  gridLayoutX->setMargin(0);
+#endif
 
   QTreeView *tvTransaction = new QTreeView(tabTransaction);
   tvTransaction->setObjectName("tvTransaction");
@@ -472,7 +475,10 @@ void MainWindow::initTabInfo(){
   QWidget *tabInfo = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout ( tabInfo );
   gridLayoutX->setSpacing ( 0 );
-  //gridLayoutX->setMargin ( 0 );
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  gridLayoutX->setMargin(0);
+#endif
 
   QTextBrowser *text = new QTextBrowser(tabInfo);
   text->setObjectName("textBrowser");
@@ -510,7 +516,11 @@ void MainWindow::initTabFiles()
   QWidget *tabPkgFileList = new QWidget(this);
   QGridLayout *gridLayoutX = new QGridLayout ( tabPkgFileList );
   gridLayoutX->setSpacing ( 0 );
-  //gridLayoutX->setMargin ( 0 );
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  gridLayoutX->setMargin(0);
+#endif
+
   QStandardItemModel *modelPkgFileList = new QStandardItemModel(this);
   QTreeView *tvPkgFileList = new QTreeView(tabPkgFileList);
   tvPkgFileList->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -559,7 +569,10 @@ void MainWindow::initTabOutput()
   QWidget *tabOutput = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabOutput);
   gridLayoutX->setSpacing ( 0 );
-  //gridLayoutX->setMargin ( 0 );
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  gridLayoutX->setMargin(0);
+#endif
 
   QTextBrowser *text = new QTextBrowser(tabOutput);
   text->setObjectName("textBrowser");
