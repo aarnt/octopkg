@@ -42,7 +42,7 @@ void MainWindow::initTabHelpUsage()
   QWidget *tabHelpUsage = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabHelpUsage);
   gridLayoutX->setSpacing(0);
-  gridLayoutX->setMargin(0);
+  //gridLayoutX->setMargin(0);
 
   QTextBrowser *text = new QTextBrowser(tabHelpUsage);
   text->setObjectName("textBrowser");

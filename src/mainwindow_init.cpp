@@ -33,6 +33,7 @@
 #include <iostream>
 #include <cassert>
 
+#include <QGridLayout>
 #include <QLabel>
 #include <QStandardItemModel>
 #include <QTextBrowser>
@@ -46,6 +47,7 @@
 #include <QToolButton>
 #include <QScreen>
 #include <QDebug>
+#include <QActionGroup>
 
 /*
  * Loads various application settings configured in ~/.config/octopkg/octopkg.conf
@@ -81,9 +83,9 @@ void MainWindow::loadPanelSettings(){
   }
 
   //Do we have to show or hide the Groups panel?
-  if (!SettingsManager::getShowGroupsPanel()){
+  /*if (!SettingsManager::getShowGroupsPanel()){
     hideGroupsWidget();
-  }
+  }*/
 }
 
 /*
@@ -345,12 +347,12 @@ void MainWindow::changeTabWidgetPropertiesIndex(const int newIndex)
       refreshTabFiles();
     }
 
-    ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
+    //ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
   }
   else
   {
     //For any other tab... just doing the following is enough
-    ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
+    //ui->twProperties->currentWidget()->childAt(1,1)->setFocus();
   }
 }
 
@@ -373,7 +375,7 @@ void MainWindow::initTabTransaction()
   QWidget *tabTransaction = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabTransaction);
   gridLayoutX->setSpacing(0);
-  gridLayoutX->setMargin(0);
+  //gridLayoutX->setMargin(0);
 
   QTreeView *tvTransaction = new QTreeView(tabTransaction);
   tvTransaction->setObjectName("tvTransaction");
@@ -470,7 +472,7 @@ void MainWindow::initTabInfo(){
   QWidget *tabInfo = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout ( tabInfo );
   gridLayoutX->setSpacing ( 0 );
-  gridLayoutX->setMargin ( 0 );
+  //gridLayoutX->setMargin ( 0 );
 
   QTextBrowser *text = new QTextBrowser(tabInfo);
   text->setObjectName("textBrowser");
@@ -508,7 +510,7 @@ void MainWindow::initTabFiles()
   QWidget *tabPkgFileList = new QWidget(this);
   QGridLayout *gridLayoutX = new QGridLayout ( tabPkgFileList );
   gridLayoutX->setSpacing ( 0 );
-  gridLayoutX->setMargin ( 0 );
+  //gridLayoutX->setMargin ( 0 );
   QStandardItemModel *modelPkgFileList = new QStandardItemModel(this);
   QTreeView *tvPkgFileList = new QTreeView(tabPkgFileList);
   tvPkgFileList->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -557,7 +559,7 @@ void MainWindow::initTabOutput()
   QWidget *tabOutput = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabOutput);
   gridLayoutX->setSpacing ( 0 );
-  gridLayoutX->setMargin ( 0 );
+  //gridLayoutX->setMargin ( 0 );
 
   QTextBrowser *text = new QTextBrowser(tabOutput);
   text->setObjectName("textBrowser");

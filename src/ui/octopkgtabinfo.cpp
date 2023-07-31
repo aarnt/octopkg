@@ -140,8 +140,9 @@ QString OctopkgTabInfo::formatTabInfo(const PackageRepository::PackageData& pack
     html += "<tr><td>" + architecture + "</td><td>" + pid.arch + "</td></tr>";
 
   QString dependenciesList = Package::getDependencies(package.name);
+
   if ( !dependenciesList.isEmpty())
-  {
+  {    
     html += "<br><tr><td>" + dependencies + "</td><td>" + dependenciesList + "</td></tr>";
     if (! pid.options.isEmpty()) html += "<br>";
   }

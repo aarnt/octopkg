@@ -108,7 +108,7 @@ void MainWindow::showDistroNews(QString distroRSSXML, bool searchForLatestNews)
 {
   QString html;
 
-  if (distroRSSXML.count() >= 200)
+  if (distroRSSXML.length() >= 200)
   {
     if (distroRSSXML.at(0)=='*')
     {
@@ -192,7 +192,7 @@ void MainWindow::initTabNews()
   QWidget *tabNews = new QWidget();
   QGridLayout *gridLayoutX = new QGridLayout(tabNews);
   gridLayoutX->setSpacing(0);
-  gridLayoutX->setMargin(0);
+  //gridLayoutX->setMargin(0);
 
   QTextBrowser *text = new QTextBrowser(tabNews);
   text->setObjectName("textBrowser");

@@ -45,7 +45,7 @@ enum Language { ectn_LANG_ENGLISH, ectn_LANG_USER_DEFINED };
 
 //Forward class declarations.
 class QString;
-class QStringList;
+//class QStringList;
 class Terminal;
 
 class UnixCommand : public QObject{

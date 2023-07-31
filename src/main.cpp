@@ -32,7 +32,9 @@
 
 int main(int argc, char *argv[])
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
 
   ArgumentList *argList = new ArgumentList(argc, argv);
   QString packagesToInstall;
@@ -41,28 +43,32 @@ int main(int argc, char *argv[])
   if (app.isRunning())
   {    
     app.sendMessage("RAISE");
+    delete argList;
     return 0;
   }
 
   if(!QFile::exists("/bin/sh"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoSHFound());
+    delete argList;
     return 1;
   }
 
   bool doas = (QFile::exists(QStringLiteral("/usr/local/bin/doas")) &&
-      QFile::exists(QStringLiteral("/usr/local/etc/doas.conf")));
+    QFile::exists(QStringLiteral("/usr/local/etc/doas.conf")));
   bool sudo = QFile::exists(QStringLiteral("/usr/local/bin/sudo"));
 
   if (!doas && !sudo)
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorNoDoasSudoFound());
+    delete argList;
     return 1;
   }
 
   if(!QFile::exists("/usr/local/lib/octopkg/octopkg-doas"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
+    delete argList;
     return 1;
   }
 
@@ -76,16 +82,19 @@ int main(int argc, char *argv[])
 
   if (argList->getSwitch("-help")){
     std::cout << StrConstants::getApplicationCliHelp().toLatin1().data() << std::endl;
+    delete argList;
     return(0);
   }
   else if (argList->getSwitch("-version")){
     std::cout << "\n" << StrConstants::getApplicationName().toLatin1().data() <<
                  " " << StrConstants::getApplicationVersion().toLatin1().data() << "\n" << std::endl;
+    delete argList;
     return(0);
   }
 
   if (UnixCommand::isRootRunning()){
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getErrorRunningWithRoot());
+    delete argList;
     return (-2);
   }
 
@@ -102,13 +111,7 @@ int main(int argc, char *argv[])
   if (!packagesToInstall.isEmpty())
   {
     QStringList packagesToInstallList =
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-        packagesToInstall.split(",", QString::SkipEmptyParts);
-#else
-        packagesToInstall.split(",", Qt::SkipEmptyParts);
-#endif
-
+      packagesToInstall.split(",", Qt::SkipEmptyParts);
     w.setPackagesToInstallList(packagesToInstallList);
   }
 
@@ -116,4 +119,5 @@ int main(int argc, char *argv[])
   QResource::registerResource("./resources.qrc");
 
   return app.exec();
+  delete argList;
 }

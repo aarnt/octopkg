@@ -216,6 +216,7 @@ class Package{
     static QString kbytesToSize(float Bytes );
     static double strToKBytes(QString size);
     static double strToKBytes2(QString size);
+    static QString makeAnchorOfDependencies(const QString &deps);
     static QString makeURLClickable(const QString &information);
     static QString getBaseName( const QString& pkgName );
     static QString parseSearchString( QString searchStr, bool exactMatch = false );

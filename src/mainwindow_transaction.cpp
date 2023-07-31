@@ -941,7 +941,7 @@ void MainWindow::doRemoveAndInstall()
   QStringList *installTargets = ti.packages;
   QString ds = ti.sizeToDownload;
 
-  if (ti.sizeToDownload == 0) ds = "0.00 Bytes";
+  if (ti.sizeToDownload == "0") ds = "0.00 Bytes";
 
   QString installList;
 
@@ -1160,7 +1160,7 @@ void MainWindow::doInstall()
   QString list;
   QString ds = ti.sizeToDownload;
 
-  if (ti.sizeToDownload == 0) ds = "0.00 Bytes";
+  if (ti.sizeToDownload == "0") ds = "0.00 Bytes";
 
   TransactionDialog question(this);
 
@@ -1685,7 +1685,7 @@ void MainWindow::actionsProcessReadOutputErrorMirrorCheck()
   msg.remove("[00;31m");
   msg.remove("\n");
 
-  if (msg.contains("Checking"), Qt::CaseInsensitive)
+  if (msg.contains("Checking", Qt::CaseInsensitive))
     msg += "<br>";
 
   writeToTabOutputExt(msg, ectn_DONT_TREAT_URL_LINK);
@@ -1968,7 +1968,7 @@ bool MainWindow::splitOutputStrings(const QString &output)
           aux = aux.trimmed();
           if (!aux.isEmpty())
           {
-            if (aux.at(aux.count()-1).isDigit())
+            if (aux.at(aux.length()-1).isDigit())
             {
               aux += "%";
             }

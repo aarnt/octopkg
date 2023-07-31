@@ -58,6 +58,66 @@ QString Package::getBaseName( const QString& p )
 }
 
 /*
+ * Parses optional package deps list and returns anchors for them
+ */
+QString Package::makeAnchorOfDependencies(const QString &deps)
+{
+  QString newDeps;
+  QString newDep;
+  QString name;
+  QStringList ldeps = deps.split(QStringLiteral("<br>"), Qt::SkipEmptyParts);
+
+  for(auto dep: ldeps)
+  {
+    int colon = dep.indexOf(QLatin1String(":"));
+    if (colon != -1)
+    {
+      name = dep.left(colon).trimmed();
+
+      newDep = QLatin1String("<a href=\"goto:") + name + QLatin1String("\">") + name + QLatin1String("</a> ") + dep.right(dep.length()-colon);
+      newDeps += newDep + QLatin1String("<br>");
+    }
+    else
+    {
+      newDep = QLatin1String("<a href=\"goto:") + dep + QLatin1String("\">") + dep + QLatin1String("</a> ");
+      newDeps += newDep + QLatin1String("<br>");
+    }
+  }
+
+  newDeps.remove(QRegularExpression(QStringLiteral("<br>$")));
+  return newDeps;
+}
+
+/*
+ * Retrieves the dependencies list of packages for the given pkgName
+ */
+QString Package::getDependencies(const QString &pkgName)
+{
+  QStringList pkgList;
+  QString res;
+  QString aux = UnixCommand::getDependenciesList(pkgName);
+
+  pkgList = aux.split("\n", Qt::SkipEmptyParts);
+  pkgList.sort();
+
+  for(QString dependency: pkgList)
+  {
+    dependency = dependency.remove("\\");
+    dependency = dependency.remove("\"");
+
+    if (dependency.at(0) == QChar::fromLatin1('\\'))
+    {
+      dependency.remove(dependency.length()-1, 1);
+      dependency.remove(0, 1);
+    }
+
+    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
+  }
+
+  return res.trimmed();
+}
+
+/*
  * Given a QString, this method searches for a link pattern and inserts an URL html/ftp link tag
  * Returns the modified (or not) QString
  */
@@ -66,20 +126,22 @@ QString Package::makeURLClickable( const QString &s )
   if (s.trimmed().isEmpty() || s == "UNKNOWN" || s == "unknown") return s;
 
   QString sb = s;
-  QRegExp rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
+  QRegularExpression rx("((ht|f)tp(s?))://(\\S)+[^\"|)|(|.|\\s|\\n]");
 
-  rx.setCaseSensitivity( Qt::CaseInsensitive );
+  rx.setPatternOptions(QRegularExpression::CaseInsensitiveOption);
   int search = 0;
   int ini = 0;
 
   //First we search for the 1st pattern: rx
-  while ( (ini = rx.indexIn( sb, search )) != -1 ){
-    QString s1 = rx.cap();
+  QRegularExpressionMatch match = rx.match(sb);
+  while ( match.hasMatch() ){
+    QString s1 = match.captured();
     QString ns;
 
     ns = "<a href=\"" + s1 + "\">" + s1 + "</a>";
     sb.replace( ini, s1.length(), ns);
     search = ini + (2*s1.length()) + 15;
+    match = rx.match(sb, search);
   }
 
   return sb;
@@ -1152,37 +1214,6 @@ QString Package::getInformationInstalledSize(const QString &pkgName, bool foreig
 {
   QString pkgInfo = UnixCommand::getPackageInformation(pkgName, foreignPackage);
   return kbytesToSize(getInstalledSize(pkgInfo));
-}
-
-/*
- * Retrieves the dependencies list of packages for the given pkgName
- */
-QString Package::getDependencies(const QString &pkgName)
-{
-  QStringList pkgList;
-  QString res;
-  QString aux = UnixCommand::getDependenciesList(pkgName);
-
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
-  pkgList = aux.split("\n", QString::SkipEmptyParts);
-#else
-  pkgList = aux.split("\n", Qt::SkipEmptyParts);
-#endif
-
-  pkgList.sort();
-
-  for(QString dependency: pkgList)
-  {
-    if (dependency.at(0) == "\"")
-    {
-      dependency.remove(dependency.size()-1, 1);
-      dependency.remove(0, 1);
-    }
-
-    res += "<a href=\"goto:" + dependency + "\">" + dependency + "</a> ";
-  }
-
-  return res.trimmed();
 }
 
 /*
