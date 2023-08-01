@@ -288,8 +288,6 @@ void MainWindow::positionInPackageList(const QString &pkgName)
  */
 void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
 {
-  qDebug() << "Link is: " << link.toString();
-
   if (link.toString().contains("goto:"))
   {
     QString pkgName = link.toString().mid(5);
