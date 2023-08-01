@@ -49,10 +49,7 @@ void SearchBar::init()
   setObjectName("searchbar");
   QHBoxLayout *layout = new QHBoxLayout(this);
   layout->setSpacing(0);
-
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-  layout->setMargin(4);
-#endif
+  layout->setContentsMargins(4, 4, 4, 4);
 
   setStyleSheet("QWidget#searchbar{"
                 "border-top-width: .6px;"
@@ -89,8 +86,8 @@ void SearchBar::init()
   tbClose->setToolTip(tr("Close"));
   tbClose->setShortcut(Qt::Key_Escape);
 
-  layout->addWidget(tbClose, 1, Qt::AlignLeft);
-  layout->addSpacing(3);
+  layout->addWidget(tbClose, 0, Qt::AlignLeft);
+  layout->addSpacing(4);
   layout->addWidget(m_searchLineEdit, 0, Qt::AlignLeft);
   layout->addSpacing(2);
   layout->addWidget(m_previousButton, 1, Qt::AlignLeft);

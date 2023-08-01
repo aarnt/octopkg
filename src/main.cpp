@@ -22,7 +22,6 @@
 #include "argumentlist.h"
 #include "strconstants.h"
 #include "unixcommand.h"
-//#include "wmhelper.h"
 #include <iostream>
 
 #include "QtSolutions/qtsingleapplication.h"
@@ -119,5 +118,4 @@ int main(int argc, char *argv[])
   QResource::registerResource("./resources.qrc");
 
   return app.exec();
-  delete argList;
 }
