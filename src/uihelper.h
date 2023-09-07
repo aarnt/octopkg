@@ -48,6 +48,7 @@ public:
   static QIcon getIconUnlock(){ return QIcon(QStringLiteral(":/resources/images/unlock.png")); }
   static QIcon getIconForeignGreen(){ return QIcon(QStringLiteral(":/resources/images/foreign_green.png")); }
   static QIcon getIconForeignRed(){ return QIcon(QStringLiteral(":/resources/images/foreign_red.png")); }
+  static QIcon getIconStop(){ return QIcon(QStringLiteral(":/resources/images/stop_small_red.png")); }
 
   static QIcon getIconHardDrive(){
     if (WMHelper::isKDERunning())

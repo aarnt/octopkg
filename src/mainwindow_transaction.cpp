@@ -780,6 +780,14 @@ void MainWindow::doPreSystemUpgrade()
 }
 
 /*
+ * Issues a killall pkg command to stop the running pkg process
+ */
+void MainWindow::stopTransaction()
+{
+  m_unixCommand->cancelProcess();
+}
+
+/*
  * Does a system upgrade with "pacman -Su" !
  */
 void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
@@ -1548,6 +1556,8 @@ void MainWindow::actionsProcessStarted()
  */
 void MainWindow::actionsProcessFinished(int exitCode, QProcess::ExitStatus exitStatus)
 {
+  m_toolButtonStopTransaction->setVisible(false);
+
   //bool bRefreshGroups = true;
   m_progressWidget->close();
   ui->twProperties->setTabText(ctn_TABINDEX_OUTPUT, StrConstants::getTabOutputName());
@@ -1734,7 +1744,12 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   if(msg.indexOf(progressEnd) != -1)
   {
     perc = "100%";
-    if (!m_progressWidget->isVisible()) m_progressWidget->show();
+    if (!m_progressWidget->isVisible())
+    {
+      m_progressWidget->show();
+      m_toolButtonStopTransaction->setVisible(true);
+    }
+
     m_progressWidget->setValue(100);
     continueTesting = true;
   }
@@ -1795,7 +1810,11 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     if(!perc.isEmpty() && perc.indexOf("%") > 0)
     {
       int percentage = perc.left(perc.size()-1).toInt();
-      if (!m_progressWidget->isVisible()) m_progressWidget->show();
+      if (!m_progressWidget->isVisible()){
+        m_progressWidget->show();
+        m_toolButtonStopTransaction->setVisible(true);
+      }
+
       m_progressWidget->setValue(percentage);
     }
   }

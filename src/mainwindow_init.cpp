@@ -307,6 +307,13 @@ void MainWindow::initStatusBar()
   ui->statusBar->addWidget(m_lblSelCounter);
   ui->statusBar->addWidget(m_lblTotalCounters);
   ui->statusBar->addPermanentWidget(m_progressWidget);
+
+  m_toolButtonStopTransaction = new QToolButton(this);
+  m_toolButtonStopTransaction->setFocusPolicy(Qt::NoFocus);
+  m_toolButtonStopTransaction->setDefaultAction(m_actionStopTransaction);
+  m_toolButtonStopTransaction->setVisible(false);
+  m_toolButtonStopTransaction->setAutoRaise(true);
+  ui->statusBar->addPermanentWidget(m_toolButtonStopTransaction);
 }
 
 /*
@@ -646,6 +653,11 @@ void MainWindow::initActions()
   m_actionShowGroups->setChecked(true);
   m_actionShowGroups->setShortcut(QKeySequence(Qt::Key_F9));
   connect(m_actionShowGroups, &QAction::triggered, this, &MainWindow::hideGroupsWidget);
+
+  m_actionStopTransaction = new QAction(this);
+  m_actionStopTransaction->setIcon(IconHelper::getIconStop());
+  m_actionStopTransaction->setText(StrConstants::getStop());
+  connect(m_actionStopTransaction, SIGNAL(triggered()), this, SLOT(stopTransaction()));
 
   m_actionCopyFullPath = new QAction(this);
   m_actionCopyFullPath->setText(StrConstants::getCopyFullPath());

@@ -160,6 +160,7 @@ private:
   QLabel *m_lblTotalCounters; //Holds the total number of packages
   QProgressBar *m_progressWidget;
   QToolButton *m_toolButtonPacman;
+  QToolButton *m_toolButtonStopTransaction;
   QMenu *m_menuToolButtonPacman;
 
   //This is a means for measuring the program's speed at some tasks
@@ -176,6 +177,7 @@ private:
   QAction *m_actionPackageInfo;
   QAction *m_actionLockPackage;
   QAction *m_actionUnlockPackage;
+  QAction *m_actionStopTransaction;
 
   //Toggles use of Remote package search
   QActionGroup *m_actionGroupSearch;
@@ -425,6 +427,7 @@ private slots:
   void outputTextBrowserAnchorClicked(const QUrl & link);
   void execToolTip();
   void doPreSystemUpgrade();
+  void stopTransaction();
 
 public slots:
   void doSystemUpgrade(SystemUpgradeOptions sysUpgradeOption = ectn_NO_OPT);

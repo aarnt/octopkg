@@ -632,6 +632,11 @@ QString StrConstants::getForeignToolGroup(){
   return "NONE";
 }
 
+QString StrConstants::getStop()
+{
+  return QObject::tr("Stop");
+}
+
 //Style Sheets ---------------------------------
 
 QString StrConstants::getToolBarCSS(){

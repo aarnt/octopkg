@@ -48,5 +48,6 @@
         <file>resources/images/show_groups.png</file>
         <file>resources/images/mirror-check.png</file>
         <file>resources/images/cachecleaner.png</file>
+        <file>resources/images/stop_small_red.png</file>
     </qresource>
 </RCC>

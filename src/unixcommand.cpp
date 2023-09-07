@@ -120,11 +120,13 @@ QByteArray UnixCommand::performQuery(const QString &args)
 int UnixCommand::cancelProcess()
 {
   QProcess pkg;
-  QString pCommand = QLatin1String("killall pkg");
-
   QStringList sl;
-  sl << pCommand;
+
+  sl << ctn_OCTOPKG_DOAS_PARAMS;
+  sl << "killall";
+  sl << "pkg";
   pkg.start(WMHelper::getSUCommand(), sl);
+
   pkg.waitForFinished(-1);
   return pkg.exitCode();
 }
