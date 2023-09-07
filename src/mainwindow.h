@@ -117,7 +117,7 @@ private:
   bool m_hasSLocate;
 
   //Controls if this Linux box has the mirror-check tool
-  bool m_hasMirrorCheck;
+  //bool m_hasMirrorCheck;
 
   //Controls if the NewsTab must be showed
   bool m_gotoNewsTab;
@@ -168,7 +168,7 @@ private:
   QAction *m_dummyAction;
   QAction *m_actionInstallPkgUpdates;
   QAction *m_actionShowGroups;
-  QAction *m_actionMirrorCheck;
+  //QAction *m_actionMirrorCheck;
   QAction *m_actionMenuRepository;
   QAction *m_actionRepositoryAll;  
   QAction *m_actionCopyFullPath;
@@ -380,8 +380,8 @@ private slots:
   void actionsProcessStarted();
   void actionsProcessFinished(int exitCode, QProcess::ExitStatus);
   void actionsProcessReadOutput();
-  void actionsProcessReadOutputErrorMirrorCheck();
-  void actionsProcessReadOutputMirrorCheck();
+  //void actionsProcessReadOutputErrorMirrorCheck();
+  //void actionsProcessReadOutputMirrorCheck();
   void actionsProcessRaisedError();
   void insertIntoRemovePackage();
   void insertIntoInstallPackage();

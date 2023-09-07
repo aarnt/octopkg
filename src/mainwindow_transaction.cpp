@@ -1672,50 +1672,6 @@ void MainWindow::resetTransaction()
 }
 
 /*
- * This SLOT is called whenever Mirror-check process has something to output to Standard ERROR out
- */
-void MainWindow::actionsProcessReadOutputErrorMirrorCheck()
-{
-  QString msg = m_unixCommand->readAllStandardError();
-
-  msg.remove("[01;33m");
-  msg.remove("\033[01;37m");
-  msg.remove("\033[00m");
-  msg.remove("\033[00;32m");
-  msg.remove("[00;31m");
-  msg.remove("\n");
-
-  if (msg.contains("Checking", Qt::CaseInsensitive))
-    msg += "<br>";
-
-  writeToTabOutputExt(msg, ectn_DONT_TREAT_URL_LINK);
-}
-
-/*
- * This SLOT is called whenever Mirror-check process has something to output to Standard out
- */
-void MainWindow::actionsProcessReadOutputMirrorCheck()
-{
-  QString msg = m_unixCommand->readAllStandardOutput();
-
-  msg.remove("[01;33m");
-  msg.remove("\033[01;37m");
-  msg.remove("\033[00m");
-  msg.remove("\033[00;32m");
-  msg.remove("[00;31m");
-  msg.replace("[", "'");
-  msg.replace("]", "'");
-  msg.remove("\n");
-
-  if (msg.contains("Checking", Qt::CaseInsensitive))
-  {
-    msg += "<br>";
-  }
-
-  writeToTabOutputExt(msg, ectn_DONT_TREAT_URL_LINK);
-}
-
-/*
  * This SLOT is called whenever Pacman's process has something to output to Standard out
  */
 void MainWindow::actionsProcessReadOutput()
@@ -1797,13 +1753,6 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     QRegularExpression regex;
     QRegularExpressionMatch match;
 
-    /*
-      Updating pcbsd-major repository catalogue...
-      Fetching <>:
-      Processing entries:
-      pcbsd-major repository update completed. 24141 packages processed.
-    */
-
     if (msg.contains("Fetching") && !msg.contains(QRegularExpression("B/s")))
     {
       int p = msg.indexOf(":");
@@ -1836,6 +1785,10 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       if(!textInTabOutput(target))
         writeToTabOutputExt("Processing " + target + "...");
         //writeToTabOutputExt("<b><font color=\"#4BC413\">Processing " + target + "</font></b>"); //GREEN
+    }
+    else if (msg.contains("Extracting") && perc == "100%")
+    {
+      writeToTabOutputExt(msg);
     }
 
     //Here we print the transaction percentage updating
@@ -1880,13 +1833,13 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("qt5ct: using qt5ct plugin"));
 
     //Gksu buggy strings
-    msg.remove(QRegularExpression("couldn't lock.+"));
+    /*msg.remove(QRegularExpression("couldn't lock.+"));
     msg.remove(QRegularExpression("you should recompile libgtop and dependent applications.+"));
     msg.remove(QRegularExpression("This libgtop was compiled on.+"));
     msg.remove(QRegularExpression("If you see strange problems caused by it.+"));
     msg.remove(QRegularExpression("LibGTop-Server.+"));
     msg.remove(QRegularExpression("received eof.+"));
-    msg.remove(QRegularExpression("pid [0-9]+"));
+    msg.remove(QRegularExpression("pid [0-9]+"));*/
     msg = msg.trimmed();
 
     //std::cout << "debug: " << msg.toLatin1().data() << std::endl;
@@ -1909,7 +1862,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
         QString pkgName = msg.mid(9).trimmed();
 
         const PackageRepository::PackageData*const package = m_packageRepo.getFirstPackageByName(pkgName);
-        if (pkgName.indexOf("...") != -1 && //TODO: maybe && was meant ?, what does pacman actually do here ?
+        if (pkgName.indexOf("...") != -1 &&
             (package != NULL && package->installed()))
         {
           writeToTabOutputExt("<b><font color=\"#E55451\">" + msg + "</font></b>"); //RED
@@ -2043,6 +1996,8 @@ void MainWindow::writeToTabOutput(const QString &msg, TreatURLLinks treatURLLink
  */
 void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLLinks)
 {
+  bool cancelTransaction = false;
+
   //std::cout << "To print: " << msg.toLatin1().data() << std::endl;
   QTextBrowser *text = ui->twProperties->widget(ctn_TABINDEX_OUTPUT)->findChild<QTextBrowser*>("textBrowser");
   if (text)
@@ -2050,7 +2005,8 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
     //If the msg waiting to being print is from curl status OR any other unwanted string...
     if ((msg.contains(QRegularExpression("\\(\\d")) &&
          (!msg.contains("target", Qt::CaseInsensitive)) &&
-         (!msg.contains("package", Qt::CaseInsensitive))) ||
+         (!msg.contains("package", Qt::CaseInsensitive)) &&
+         (!msg.contains("conflicting", Qt::CaseInsensitive))) ||
 
         (msg.contains(QRegularExpression("\\d\\)")) &&
         (!msg.contains("target", Qt::CaseInsensitive)) &&
@@ -2058,7 +2014,7 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
 
         msg.indexOf("Enter a selection", Qt::CaseInsensitive) == 0 ||
         msg.indexOf("Proceed with", Qt::CaseInsensitive) == 0 ||
-        msg.indexOf("%") != -1 ||
+        (msg.indexOf("%") != -1 && (!msg.contains("xtracting"))) ||
         msg.indexOf("---") != -1 ||
         msg == "[1/")
     {
@@ -2134,9 +2090,23 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
       newMsg = "<br><B>" + newMsg + "</B><br><br>";
     }
 
-    if (!newMsg.contains(QRegularExpression("<br"))) //It was an else!
+    if (!newMsg.contains(QRegularExpression("<br")) && !newMsg.contains("hecking integrity"))
     {
       newMsg += "<br>";
+    }
+
+    if (newMsg.contains(QRegularExpression("done \\(\\d+ conflicting\\)")))
+    {
+      //if (!newMsg.contains("0 conflicting"))
+      //  cancelTransaction = true;
+
+      newMsg = "&nbsp;" + newMsg;
+    }
+
+    if (newMsg.contains("xtracting"))
+    {
+      int f=newMsg.indexOf(":");
+      newMsg = newMsg.mid(0, f).trimmed() + "...<br>";
     }
 
     if (treatURLLinks == ectn_TREAT_URL_LINK)
@@ -2146,5 +2116,8 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
 
     //std::cout << "Printed: " << msg.toLatin1().data() << std::endl;
     text->ensureCursorVisible();
+
+    //if (cancelTransaction)
+    //  m_unixCommand->cancelProcess();
   }
 }

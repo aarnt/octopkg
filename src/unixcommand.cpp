@@ -115,6 +115,21 @@ QByteArray UnixCommand::performQuery(const QString &args)
 }
 
 /*
+ * Cancels the running process. Returns octopi-sudo exit code.
+ */
+int UnixCommand::cancelProcess()
+{
+  QProcess pkg;
+  QString pCommand = QLatin1String("killall pkg");
+
+  QStringList sl;
+  sl << pCommand;
+  pkg.start(WMHelper::getSUCommand(), sl);
+  pkg.waitForFinished(-1);
+  return pkg.exitCode();
+}
+
+/*
  * Returns a string containing all AUR packages given a searchString parameter
  */
 QByteArray UnixCommand::getRemotePackageList(const QString &searchString, bool useCommentSearch)

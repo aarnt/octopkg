@@ -72,6 +72,7 @@ public:
 
   static QByteArray performQuery(const QStringList args);
   static QByteArray performQuery(const QString &args);
+  static int cancelProcess();
   static QByteArray getRemotePackageList(const QString &searchString, bool useCommentSearch = true);
   static QByteArray getLockedPackageList();
   static QByteArray getUnrequiredPackageList();

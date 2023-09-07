@@ -34,7 +34,7 @@ const QString ctn_KEY_TRANSACTION_WINDOW_SIZE("Transaction_Window_Size");
 const QString ctn_KEY_PANEL_ORGANIZING("Panel_Organizing");
 const QString ctn_KEY_PACKAGE_LIST_ORDERED_COL("PackageList_Ordered_Col");
 const QString ctn_KEY_PACKAGE_LIST_SORT_ORDER("PackageList_Sort_Order");
-const QString ctn_KEY_SKIP_MIRRORCHECK_ON_STARTUP("Skip_Mirror_Check_At_Startup");
+//const QString ctn_KEY_SKIP_MIRRORCHECK_ON_STARTUP("Skip_Mirror_Check_At_Startup");
 const QString ctn_KEY_SPLITTER_HORIZONTAL_STATE("Splitter_Horizontal_State");
 const QString ctn_KEY_SHOW_GROUPS_PANEL("Show_Groups_Panel");
 const QString ctn_KEY_PACKAGE_ICON_COLUMN_WIDTH("Package_Icon_Column_Width");
@@ -95,7 +95,7 @@ class SettingsManager
     static int getSyncDbInterval();
     static QDateTime getLastSyncDbTime();
 
-    static bool getSkipMirrorCheckAtStartup();
+    //static bool getSkipMirrorCheckAtStartup();
     static bool getShowGroupsPanel();
     static QByteArray getWindowSize();
     static QByteArray getTransactionWindowSize();

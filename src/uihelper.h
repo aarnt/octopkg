@@ -192,12 +192,12 @@ public:
       return QIcon(QStringLiteral(":/resources/images/find.png"));
   }
 
-  static QIcon getIconMirrorCheck(){
+  /*static QIcon getIconMirrorCheck(){
     if (WMHelper::isKDERunning())
       return QIcon::fromTheme("svn-update", QIcon(QStringLiteral(":/resources/images/mirror-check.png")));
     else
       return QIcon(QStringLiteral(":/resources/images/mirror-check.png"));
-  }
+  }*/
 
   static QIcon getIconShowGroups(){
     if (WMHelper::isKDERunning())

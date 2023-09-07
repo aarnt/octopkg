@@ -596,7 +596,7 @@ void MainWindow::initTabOutput()
 void MainWindow::initActions()
 {
   m_hasSLocate = true; //UnixCommand::hasTheExecutable("slocate");
-  m_hasMirrorCheck = false;
+  //m_hasMirrorCheck = false;
   m_actionSysInfo = new QAction(this);
   m_actionPackageInfo = new QAction(this);
   m_actionPackageInfo->setText(StrConstants::getTabInfoName());
