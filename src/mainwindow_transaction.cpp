@@ -1996,8 +1996,6 @@ void MainWindow::writeToTabOutput(const QString &msg, TreatURLLinks treatURLLink
  */
 void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLLinks)
 {
-  bool cancelTransaction = false;
-
   //std::cout << "To print: " << msg.toLatin1().data() << std::endl;
   QTextBrowser *text = ui->twProperties->widget(ctn_TABINDEX_OUTPUT)->findChild<QTextBrowser*>("textBrowser");
   if (text)
@@ -2097,9 +2095,6 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
 
     if (newMsg.contains(QRegularExpression("done \\(\\d+ conflicting\\)")))
     {
-      //if (!newMsg.contains("0 conflicting"))
-      //  cancelTransaction = true;
-
       newMsg = "&nbsp;" + newMsg;
     }
 
@@ -2116,8 +2111,5 @@ void MainWindow::writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLL
 
     //std::cout << "Printed: " << msg.toLatin1().data() << std::endl;
     text->ensureCursorVisible();
-
-    //if (cancelTransaction)
-    //  m_unixCommand->cancelProcess();
   }
 }
