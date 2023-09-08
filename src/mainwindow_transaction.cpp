@@ -1747,7 +1747,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     if (!m_progressWidget->isVisible())
     {
       m_progressWidget->show();
-      m_toolButtonStopTransaction->setVisible(true);
+      if (m_commandExecuting != ectn_CHECK_UPDATES)
+        m_toolButtonStopTransaction->setVisible(true);
     }
 
     m_progressWidget->setValue(100);
@@ -1812,7 +1813,9 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       int percentage = perc.left(perc.size()-1).toInt();
       if (!m_progressWidget->isVisible()){
         m_progressWidget->show();
-        m_toolButtonStopTransaction->setVisible(true);
+
+        if (m_commandExecuting != ectn_CHECK_UPDATES)
+            m_toolButtonStopTransaction->setVisible(true);
       }
 
       m_progressWidget->setValue(percentage);
