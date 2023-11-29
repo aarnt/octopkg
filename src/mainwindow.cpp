@@ -274,13 +274,13 @@ void MainWindow::positionInPackageList(const QString &pkgName)
       changeTabWidgetPropertiesIndex(ctn_TABINDEX_INFORMATION);
     }
   }
-  if (foundItems.count() == 0 || !proxyIndex.isValid())
+  /*if (foundItems.count() == 0 || !proxyIndex.isValid())
   {
     refreshTabInfo(pkgName);
     disconnect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
     ensureTabVisible(ctn_TABINDEX_INFORMATION);
     connect(ui->twProperties, SIGNAL(currentChanged(int)), this, SLOT(changedTabIndex()));
-  }
+  }*/
 }
 
 /*
@@ -297,6 +297,9 @@ void MainWindow::outputTextBrowserAnchorClicked(const QUrl &link)
     {
       bool indIncremented = false;
       QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
+
+      if (selectionModel->selectedRows().count() <= 0) return;
+
       QModelIndex item = selectionModel->selectedRows(PackageModel::ctn_PACKAGE_NAME_COLUMN).first();
       const PackageRepository::PackageData*const selectedPackage = m_packageModel->getData(item);
       //qDebug() << "Testing with index: " << m_indOfVisitedPackage;
