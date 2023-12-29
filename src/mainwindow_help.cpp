@@ -210,7 +210,7 @@ void MainWindow::onHelpAbout()
   aboutText += QStringLiteral("<b>pkgng</b><br>");
   aboutText += StrConstants::getVersion() + QLatin1String(": ") + UnixCommand::getPkgNGVersion() + QStringLiteral("<br>");
   aboutText += StrConstants::getURL() + QLatin1String(": ") +
-    QStringLiteral("<a href=\"https://wiki.freebsd.org/pkgng/\">https://wiki.freebsd.org/pkgng</a><br>");
+    QStringLiteral("<a href=\"https://wiki.freebsd.org/pkg/\">https://wiki.freebsd.org/pkg</a><br>");
   aboutText += QStringLiteral("&copy; FreeBSD");
 
   QMessageBox::about(this, StrConstants::getHelpAbout(), aboutText);
