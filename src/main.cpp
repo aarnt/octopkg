@@ -22,6 +22,7 @@
 #include "argumentlist.h"
 #include "strconstants.h"
 #include "unixcommand.h"
+#include "constants.h"
 #include <iostream>
 
 #include "QtSolutions/qtsingleapplication.h"
@@ -64,7 +65,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  if(!QFile::exists("/usr/local/bin/qt-sudo"))
+  if(!QFile::exists(ctn_OCTOPKG_DOAS))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
     delete argList;
