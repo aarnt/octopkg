@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     return 1;
   }
 
-  if(!QFile::exists("/usr/local/lib/octopkg/octopkg-doas"))
+  if(!QFile::exists("/usr/local/bin/qt-sudo"))
   {
     QMessageBox::critical( 0, StrConstants::getApplicationName(), StrConstants::getOctoPKGDoasNotFound());
     delete argList;

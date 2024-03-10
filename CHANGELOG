@@ -2,7 +2,7 @@
   BugFix: When clicking on a outdated pkg inside Output tab, do not go to the Info
     tab if the pkg is not shown in the list.
   BugFix: Update FreeBSD pkg wiki site (thanks to eduardo).
-  Synced octopkg-doas with LXQt-sudo 1.4.0 version.
+  Now using the unified qt-sudo project (https://github.com/aarnt/qt-sudo) for privilege escalation.
 
 0.3.3 (2023/09/08)
   BugFix: openFile always left a running file manager even after program close.

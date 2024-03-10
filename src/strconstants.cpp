@@ -463,11 +463,11 @@ QString StrConstants::getErrorNoSuCommand(){
 }
 
 QString StrConstants::getYoullNeedSuFrontend(){
-  return QObject::tr("You'll need to install octopkg-doas.");
+  return QObject::tr("You'll need to install qt-sudo.");
 }
 
 QString StrConstants::getOctoPKGDoasNotFound(){
-  return QObject::tr("\"/usr/lib/octopkg/octopkg-doas\" was not found!");
+  return QObject::tr("\"/usr/local/bin/qt-sudo\" was not found!");
 }
 
 QString StrConstants::getErrorNoPkgFound(){

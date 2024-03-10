@@ -3,7 +3,7 @@
 ![Main window](https://raw.githubusercontent.com/aarnt/octopkg/master/octopkg-mainwindow.png)
 
 **OctoPkg** is a Qt based GUI front end to the [pkg](https://wiki.freebsd.org/pkg) package manager, derived from [Octopi](http://tintaescura.com/projects/octopi).
-It consists of a lxqt-sudo clone called [octopkg-doas](https://github.com/aarnt/octopkg/tree/master/doas) used to gain root privileges and a package browser application used
+It consists of a lxqt-sudo clone called [qt-sudo](https://github.com/aarnt/qt-sudo/) used to gain root privileges and a package browser application used
 to search, install, remove and update packages.
 The project is compatible with [FreeBSD](https://www.freebsd.org/), [DragonFly BSD](https://www.dragonflybsd.org/), [GhostBSD](https://ghostbsd.org/) and [HardenedBSD](https://hardenedbsd.org/).
 
@@ -17,11 +17,7 @@ The project is compatible with [FreeBSD](https://www.freebsd.org/), [DragonFly B
 
 ```
 $ git clone https://github.com/aarnt/octopkg
-$ cd octopkg/doas
-$ /usr/local/lib/qt5/bin/qmake
-$ make
-# make install
-$ cd ..
+$ cd octopkg
 $ /usr/local/lib/qt5/bin/qmake
 $ make
 # make install

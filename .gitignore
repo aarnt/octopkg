@@ -1,3 +1,4 @@
+bin/octopkg
 build
 qmake_qmake_qm_files.*
 ui_passworddialog.h
