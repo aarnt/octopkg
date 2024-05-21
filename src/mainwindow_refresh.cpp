@@ -900,34 +900,7 @@ void MainWindow::horizontalSplitterMoved(int pos, int index)
  */
 void MainWindow::refreshToolBar()
 {
-  /*m_hasAURTool =
-      UnixCommand::hasTheExecutable(StrConstants::getForeignRepositoryToolName()) && !UnixCommand::isRootRunning();
-
-  if (m_hasAURTool)
-  {
-    if (!ui->mainToolBar->actions().contains(m_actionSwitchToPkgSearch))
-    {
-      ui->mainToolBar->insertAction(m_dummyAction, m_actionSwitchToPkgSearch);
-      m_separatorForActionPkgSearch = ui->mainToolBar->insertSeparator(m_actionSwitchToPkgSearch);
-    }
-  }
-  else
-  {
-    if (ui->mainToolBar->actions().contains(m_actionSwitchToPkgSearch))
-    {
-      bool wasChecked = (m_actionSwitchToPkgSearch->isChecked());
-
-      ui->mainToolBar->removeAction(m_actionSwitchToPkgSearch);
-      ui->mainToolBar->removeAction(m_separatorForActionPkgSearch);
-
-      if (wasChecked)
-      {
-        m_actionSwitchToPkgSearch->setChecked(false);
-        ui->twGroups->setEnabled(true);
-        groupItemSelected();
-      }
-    }
-  }*/
+//
 }
 
 /*
@@ -1315,6 +1288,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     tvPkgFileList->setModel(modelPkgFileList);
     tvPkgFileList->header()->setDefaultAlignment( Qt::AlignCenter );
     modelPkgFileList->setHorizontalHeaderLabels( QStringList() << StrConstants::getContentsOf().arg(pkgName));
+    if (counter > 0) tvPkgFileList->expandAll();
   }
 
   m_cachedPackageInFiles = package->repository+"#"+package->name+"#"+package->version;
