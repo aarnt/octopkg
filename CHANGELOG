@@ -2,6 +2,7 @@
   BugFix: When clicking on a outdated pkg inside Output tab, do not go to the Info
     tab if the pkg is not shown in the list.
   BugFix: Update FreeBSD pkg wiki site (thanks to eduardo).
+  BugFix: Show "Installed on" column while searching for remote pkgs.
   Now using the unified qt-sudo project (https://github.com/aarnt/qt-sudo) for privilege escalation.
 
 0.3.3 (2023/09/08)

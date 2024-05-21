@@ -553,12 +553,17 @@ void MainWindow::buildRemotePackageList()
   m_progressWidget->setValue(0);
   int counter=0;
   int installedCount = 0;
-  QList<PackageListData>::const_iterator it = list->begin();
+  QList<PackageListData>::iterator it = list->begin();
 
   while(it != list->end())
   {
     if (isPackageInstalled(it->name)) {
       ++installedCount;
+      auto pkgData = m_packageRepo.getFirstPackageByName(it->name);
+      if (pkgData != nullptr)
+      {
+        it->installedOn = pkgData->installedOn;
+      }
     }
     counter++;
     m_progressWidget->setValue(counter);

@@ -74,12 +74,14 @@ int PackageModel::rowCount(const QModelIndex &parent) const
 
 int PackageModel::columnCount(const QModelIndex &parent) const
 {
-  if (!parent.isValid() && m_showColumnInstalledOn==true) {
+  /*if (!parent.isValid() && m_showColumnInstalledOn==true) {
     return 5;
   }
   else if (!parent.isValid() && m_showColumnInstalledOn==false)
     return 4;
-  else return 0;
+  else return 0;*/
+
+  return 5;
 }
 
 QVariant PackageModel::data(const QModelIndex &index, int role) const
