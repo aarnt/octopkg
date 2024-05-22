@@ -207,7 +207,6 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
   else if(ke->key() == Qt::Key_F5)
   {
     if (m_commandExecuting != ectn_NONE) return;
-
     metaBuildPackageList();
   }
   else if(ke->key() == Qt::Key_F6)
@@ -281,10 +280,35 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       }
     }
   }
-  /*else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
+  //TESTING CODE - COMMENT!!!
+/*  else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
+    m_leFilterPackage->setText("free");
 
-  }*/
+    int c=1;
+    do{
+      if (c%3 == 0)
+      {
+        if (!m_actionSwitchToRemoteSearch->isChecked())
+        {
+          if (m_leFilterPackage->text() == "bat")
+            m_leFilterPackage->setText("free");
+          else
+            m_leFilterPackage->setText("bat");
+        }
+      }
+
+      qApp->processEvents();
+      sleep(1);
+      qApp->processEvents();
+      m_actionSwitchToRemoteSearch->trigger();
+      sleep(1);
+      qApp->processEvents();
+
+      c++;
+    } while (c <= 50);
+  }
+  //TESTING CODE - COMMENT!!!*/
   else if (ke->key() == Qt::Key_U && ke->modifiers() == Qt::ControlModifier)
   {
     if (m_commandExecuting != ectn_NONE) return;
@@ -334,7 +358,8 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
       ui->tvPackages->setFocus();
       QModelIndex mi = m_packageModel->index(ui->tvPackages->currentIndex().row(), PackageModel::ctn_PACKAGE_NAME_COLUMN, QModelIndex());
       ui->tvPackages->setCurrentIndex(mi);
-      ui->tvPackages->scrollTo(mi);    }
+      ui->tvPackages->scrollTo(mi);
+    }
   }
   else if(ke->key() == Qt::Key_Home && ke->modifiers() == Qt::AltModifier)
   {

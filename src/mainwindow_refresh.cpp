@@ -140,10 +140,11 @@ void MainWindow::remoteSearchClicked()
   else if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)
     m_refreshPackageLists = true;
 
-  metaBuildPackageList();
   m_cachedPackageInInfo = "";
   m_cachedPackageInFiles = "";
-  invalidateTabs();
+  metaBuildPackageList();
+  //clearTabsInfoOrFiles();
+  //invalidateTabs();
 
   if (m_commandExecuting == ectn_LOCAL_PKG_REFRESH)
   {
@@ -315,6 +316,7 @@ void MainWindow::preBuildLockedPackageList()
  */
 void MainWindow::preBuildUnrequiredPackageList()
 {
+  if (m_unrequiredPackageList != nullptr) m_unrequiredPackageList->clear();
   m_unrequiredPackageList = g_fwUnrequiredPacman.result();
 
   if(m_debugInfo)
@@ -327,6 +329,7 @@ void MainWindow::preBuildUnrequiredPackageList()
  */
 void MainWindow::preBuildPackageList()
 {
+  if (m_listOfPackages != nullptr) m_listOfPackages->clear();
   m_listOfPackages.reset(g_fwPkg.result());
 
   if(m_debugInfo)
@@ -439,31 +442,6 @@ void MainWindow::metaBuildPackageList()
       std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
                  "Time elapsed building pkgs from 'ALL group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
   }
-  /*
-  else //pkg category clicked!
-  {
-    ui->actionSearchByFile->setEnabled(false);
-    toggleSystemActions(false);
-    disconnect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    connect(m_leFilterPackage, SIGNAL(textChanged(QString)), this, SLOT(reapplyPackageFilter()));
-    reapplyPackageFilter();
-    disconnect(&g_fwPacmanGroup, SIGNAL(finished()), this, SLOT(preBuildPackagesFromGroupList()));
-
-    QEventLoop el;
-    QFuture<GroupMemberPair> f;
-    f = QtConcurrent::run(searchPacmanPackagesFromGroup, getSelectedCategory());
-    connect(&g_fwPacmanGroup, SIGNAL(finished()), this, SLOT(preBuildPackagesFromGroupList()));
-    disconnect(this, SIGNAL(buildPackagesFromGroupListDone()), &el, SLOT(quit()));
-    connect(this, SIGNAL(buildPackagesFromGroupListDone()), &el, SLOT(quit()));
-
-    g_fwPacmanGroup.setFuture(f);
-    el.exec();
-
-    if(m_debugInfo)
-      std::cout << m_packageModel->getPackageCount() << " pkgs => " <<
-                 "Time elapsed building pkgs from '" << getSelectedCategory().toLatin1().data() << " group' list: " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
-  }
-  */
 }
 
 /*
@@ -580,7 +558,7 @@ void MainWindow::buildRemotePackageList()
     initPackageTreeView();
   }
 
-  if (list->count() > 0)
+  /*if (list->count() > 0)
   {
     QModelIndex maux = m_packageModel->index(0, 0, QModelIndex());
     ui->tvPackages->setCurrentIndex(maux);
@@ -594,12 +572,13 @@ void MainWindow::buildRemotePackageList()
     {
       ui->tvPackages->setFocus();
     }
-  }
+  }*/
 
   list->clear();
 
   //Refresh counters
   m_numberOfInstalledPackages = installedCount;
+  m_progressWidget->close();
 
   if (isRemoteSearchSelected())
   {
@@ -628,28 +607,11 @@ void MainWindow::buildRemotePackageList()
 
   counter = list->count();
   m_progressWidget->setValue(counter);
-  m_progressWidget->close();
 
   //ui->tvPackages->setColumnHidden(PackageModel::ctn_PACKAGE_REPOSITORY_COLUMN, true);
 
   refreshToolBar();
   //refreshStatusBarToolButtons();
-
-  //If we found no packages, let's make another search, this time 'by name'...
-  /*if (!m_leFilterPackage->text().isEmpty() &&
-      (!m_leFilterPackage->text().contains(QRegularExpression("\\s"))) &&
-      m_packageModel->getPackageCount() == 0 &&
-      ui->actionSearchByDescription->isChecked())
-  {
-    if (m_cic != NULL)
-    {
-      delete m_cic;
-      m_cic = 0;
-    }
-
-    ui->actionSearchByName->setChecked(true);
-    metaBuildPackageList();
-  }*/
 
   emit buildPackageListDone();
 }
@@ -659,6 +621,7 @@ void MainWindow::buildRemotePackageList()
  */
 void MainWindow::showPackagesWithNoDescription()
 {
+/*
   bool printHeader = false;
   QList<PackageListData> *list = Package::getPackageList();
   QList<PackageListData>::const_iterator it = list->begin();
@@ -680,6 +643,7 @@ void MainWindow::showPackagesWithNoDescription()
 
     ++it;
   }
+*/
 }
 
 /*
@@ -723,10 +687,12 @@ void MainWindow::buildPackageList()
 
     m_numberOfOutdatedPackages = m_outdatedStringList->count();
 
+    m_lockedPackageList->clear();
     delete m_lockedPackageList;
     m_lockedPackageList = NULL;
     m_lockedPackageList = Package::getLockedPackageList();
 
+    m_unrequiredPackageList->clear();
     delete m_unrequiredPackageList;
     m_unrequiredPackageList = NULL;
     m_unrequiredPackageList = Package::getUnrequiredPackageList();   
@@ -816,10 +782,10 @@ void MainWindow::buildPackageList()
   ui->tvPackages->scrollTo(maux, QAbstractItemView::PositionAtCenter);
   ui->tvPackages->setCurrentIndex(maux);
 
-  if (m_initializationCompleted)
+  /*if (m_initializationCompleted)
   {
     invalidateTabs();
-  }
+  }*/
 
   if (isPackageTreeViewVisible())
   {
@@ -1109,6 +1075,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 
   QModelIndex item = selectionModel->selectedRows(PackageModel::ctn_PACKAGE_NAME_COLUMN).first();
   const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+  //qDebug() << "Selected package now: " << package->name;
 
   if (package == NULL) {
     assert(false);
@@ -1278,7 +1245,6 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
 
       counter++;
       m_progressWidget->setValue(counter);
-      //qApp->processEvents();
     }
 
     m_progressWidget->close();
@@ -1291,6 +1257,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     if (counter > 0) tvPkgFileList->expandAll();
   }
 
+  //qApp->processEvents();
   m_cachedPackageInFiles = package->repository+"#"+package->name+"#"+package->version;
 
   if (neverQuit)
@@ -1310,7 +1277,7 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
  */
 void MainWindow::reapplyPackageFilter()
 {
-  clearTabsInfoOrFiles();
+  clearTabsInfoOrFilesExt();
 
   if (m_actionSwitchToRemoteSearch->isChecked())
   {

@@ -354,6 +354,7 @@ private slots:
   void changedTabIndex();
   void refreshInfoAndFileTabs();
   void clearTabsInfoOrFiles();
+  void clearTabsInfoOrFilesExt();
   void invalidateTabs(); //This method clears the current information showed on tab.
 
   void doPreRemoveAndInstall();

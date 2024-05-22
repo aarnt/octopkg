@@ -68,6 +68,7 @@ void PackageRepository::setData(const QList<PackageListData>*const listOfPackage
   for (TListOfPackages::const_iterator it = m_listOfPackages.begin(); it != m_listOfPackages.end(); ++it) {
     if (*it != NULL) delete *it;
   }
+
   m_listOfAURPackages.clear();
   m_listOfPackages.clear();
 

@@ -1102,12 +1102,26 @@ void MainWindow::clearTabsInfoOrFiles()
 {
   if(ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION) //This is TabInfo
   {
+    refreshTabInfo(false, false);
+    return;
+  }
+  else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
+  {
+    refreshTabFiles();
+    return;
+  }
+}
+
+void MainWindow::clearTabsInfoOrFilesExt()
+{
+  if(ui->twProperties->currentIndex() == ctn_TABINDEX_INFORMATION) //This is TabInfo
+  {
     refreshTabInfo(true, false);
     return;
   }
   else if(ui->twProperties->currentIndex() == ctn_TABINDEX_FILES) //This is TabFiles
   {
-    refreshTabFiles(true, false);
+    refreshTabFiles(true);
     return;
   }
 }
