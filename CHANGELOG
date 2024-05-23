@@ -5,6 +5,7 @@
   BugFix: Show "Installed on" column while searching for remote pkgs.
   BugFix: Files tab expand all items by default.
   BugFix: Files tab was not being refreshed when switching to remote search.
+  Updated license to LGPL 2.1.
   Now using the unified qt-sudo project (https://github.com/aarnt/qt-sudo) for privilege escalation.
 
 0.3.3 (2023/09/08)
