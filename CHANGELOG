@@ -1,4 +1,4 @@
-0.4.0 (dev)
+0.4.0 (2024/05/23)
   BugFix: When clicking on a outdated pkg inside Output tab, do not go to the Info
     tab if the pkg is not shown in the list.
   BugFix: Update FreeBSD pkg wiki site (thanks to eduardo).
