@@ -281,7 +281,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
     }
   }
   //TESTING CODE - COMMENT!!!
-/*  else if(ke->key() == Qt::Key_D && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
+/*  else if(ke->key() == Qt::Key_Z && ke->modifiers() == (Qt::ShiftModifier|Qt::ControlModifier))
   {
     m_leFilterPackage->setText("free");
 
@@ -308,7 +308,7 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       c++;
     } while (c <= 50);
   }
-  //TESTING CODE - COMMENT!!!*/
+  //TESTING CODE - COMMENT!!! */
   else if (ke->key() == Qt::Key_U && ke->modifiers() == Qt::ControlModifier)
   {
     if (m_commandExecuting != ectn_NONE) return;
