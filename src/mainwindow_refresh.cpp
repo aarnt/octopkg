@@ -1136,6 +1136,8 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     m_progressWidget->setValue(0);
     m_progressWidget->show();
 
+    m_time->start();
+
     //Now we cache fullPath to avoid recomputation
     QHash<QStandardItem*, QString> fullPathCache;
 
@@ -1254,6 +1256,9 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
       lastItem = item;
       first = false;
     }
+
+    if(m_debugInfo)
+        std::cout << "Time elapsed building contents of " << pkgName.toLatin1().data() << ": " << m_time->elapsed() << " mili seconds." << std::endl << std::endl;
 
     m_progressWidget->close();
     root = fakeRoot;

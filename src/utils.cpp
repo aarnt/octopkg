@@ -26,10 +26,8 @@
 
 #include "utils.h"
 #include "strconstants.h"
-//#include "constants.h"
 #include "package.h"
 #include "unixcommand.h"
-#include <iostream>
 
 #include <QStandardItemModel>
 #include <QModelIndex>
@@ -45,7 +43,7 @@
 /*
  * Returns the full path of a tree view item (normaly a file in a directory tree)
  */
-QString utils::showFullPathOfItem( const QModelIndex &index ){
+/*QString utils::showFullPathOfItem( const QModelIndex &index ){
   QString str;
   if (!index.isValid()) return str;
 
@@ -74,6 +72,37 @@ QString utils::showFullPathOfItem( const QModelIndex &index ){
     QFileInfo fileInfo(str);
     if (fileInfo.isDir())
     {
+      str += QDir::separator();
+    }
+  }
+
+  return str;
+}*/
+
+/*
+ * Returns the full path of a tree view item (normaly a file in a directory tree)
+ */
+QString utils::showFullPathOfItem(const QModelIndex &index) {
+  QString str;
+  if (!index.isValid()) return str;
+
+  const QStandardItemModel *sim = qobject_cast<const QStandardItemModel*>(index.model());
+  if (sim)
+  {
+    QModelIndex nindex = index;
+    QStandardItem *item;
+
+    while (nindex.isValid())
+    {
+      item = sim->itemFromIndex(nindex);
+      if (item) {
+        str = QDir::separator() + item->text() + str;
+      }
+      nindex = sim->parent(nindex);
+    }
+
+    QFileInfo fileInfo(str);
+    if (fileInfo.isDir()) {
       str += QDir::separator();
     }
   }
@@ -348,7 +377,6 @@ QString utils::parseDistroNews()
   }
 
   html += "</ul><br>";
-  //html = html.replace("<a href=", "<a style=\"color:'" + hyperlinkColor + "'\" href=");
 
   return html;
 }
