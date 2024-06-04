@@ -1129,122 +1129,130 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     //Let's wait before we get the pkg file list from the other thread...
     el.exec();
     fileList = fwPackageContents.result();
-    QString fullPath;
-    bool isSymLinkToDir = false;
 
+    QString fullPath;
     int counter = 0;
     m_progressWidget->setRange(0, fileList.count());
     m_progressWidget->setValue(0);
     m_progressWidget->show();
 
-    for ( QString file: fileList )
+    //Now we cache fullPath to avoid recomputation
+    QHash<QStandardItem*, QString> fullPathCache;
+
+    for (const QString& file: fileList)
     {
-      bool isDir = file.endsWith('/');
-      isSymLinkToDir = false;
+      bool isDir = file.endsWith(QLatin1Char('/'));
+      bool isSymLinkToDir = false;
       QString baseFileName = extractBaseFileName(file);
 
-      //Let's test if it is not a symbolic link to a dir
-      if(!isDir)
+      //Test if it is not a symbolic link to a dir
+      if (!isDir)
       {
         QFileInfo fiTestForSymLink(file);
-        if(fiTestForSymLink.isSymLink())
+        if (fiTestForSymLink.isSymLink())
         {
           QFileInfo fiTestForDir(fiTestForSymLink.symLinkTarget());
           isSymLinkToDir = fiTestForDir.isDir();
         }
       }
 
-      if(isDir){
-        if ( first == true ){
-          item = new QStandardItem ( IconHelper::getIconFolder(), baseFileName );
-          item->setAccessibleDescription("directory " + item->text());
-          fakeRoot->appendRow ( item );
+      if (isDir)
+      {
+        if (first)
+        {
+          item = new QStandardItem(IconHelper::getIconFolder(), baseFileName);
+          item->setAccessibleDescription(QLatin1String("directory ") + item->text());
+          fakeRoot->appendRow(item);
         }
-        else{
-          fullPath = utils::showFullPathOfItem(lastDir->index());
-          //std::cout << "Testing if " << file.toLatin1().data() << " contains " << fullPath.toLatin1().data() << std::endl;
-          if ( file.contains ( fullPath )) {
-            //std::cout << "It contains !!! So " << fullPath.toLatin1().data() << " is its parent." << std::endl;
-            item = new QStandardItem ( IconHelper::getIconFolder(), baseFileName );
-            item->setAccessibleDescription("directory " + item->text());
-            lastDir->appendRow ( item );
+        else
+        {
+          fullPath = fullPathCache.value(lastDir, utils::showFullPathOfItem(lastDir->index()));
+
+          if (file.contains(fullPath))
+          {
+            item = new QStandardItem(IconHelper::getIconFolder(), baseFileName);
+            item->setAccessibleDescription(QLatin1String("directory ") + item->text());
+            lastDir->appendRow(item);
           }
-          else{
-            //std::cout << "It doens't contain..." << std::endl;
+          else
+          {
             parent = lastItem->parent();
-            if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
+            if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
 
-            do{
-              //if (parent != 0) std::cout << "Testing if " << file.toLatin1().data() << " contains " << fullPath.toLatin1().data() << std::endl;
-              if ( parent == 0 || file.contains ( fullPath )) break;
-              parent = parent->parent();
-              if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
-            }
-            while ( parent != fakeRoot );
-
-            item = new QStandardItem ( IconHelper::getIconFolder(), baseFileName );
-            item->setAccessibleDescription("directory " + item->text());
-
-            if ( parent != 0 )
+            while (parent != nullptr && !file.contains(fullPath))
             {
-              //std::cout << item->text().toLatin1().data() << " is son of " << fullPath.toLatin1().data() << std::endl;
-              parent->appendRow ( item );
+              parent = parent->parent();
+              if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
+            }
+
+            item = new QStandardItem(IconHelper::getIconFolder(), baseFileName);
+            item->setAccessibleDescription(QLatin1String("directory ") + item->text());
+
+            if (parent != nullptr)
+            {
+              parent->appendRow(item);
             }
             else
             {
-              //std::cout << item->text().toLatin1().data() << " is son of <FAKEROOT>" << std::endl;
-              fakeRoot->appendRow ( item );
+              fakeRoot->appendRow(item);
             }
           }
         }
 
         lastDir = item;
-      }            
+      }
       else if (isSymLinkToDir)
       {
-        item = new QStandardItem ( IconHelper::getIconFolder(), baseFileName );
-        item->setAccessibleDescription("directory " + item->text());
+        item = new QStandardItem(IconHelper::getIconFolder(), baseFileName);
+        item->setAccessibleDescription(QLatin1String("directory ") + item->text());
         parent = lastDir;
-        if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
+        if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
 
-        do{
-          if ( parent == 0 || file.contains ( fullPath )) break;
-          parent = parent->parent();
-          if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
-        }
-        while ( parent != fakeRoot );
-
-        if (parent != 0)
+        while (parent != nullptr && !file.contains(fullPath))
         {
-          parent->appendRow ( item );
+          parent = parent->parent();
+          if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
+        }
+
+        if (parent != nullptr)
+        {
+          parent->appendRow(item);
         }
         else
         {
-          fakeRoot->appendRow ( item );
+          fakeRoot->appendRow(item);
         }
       }
       else
       {
-        item = new QStandardItem ( IconHelper::getIconBinary(), baseFileName );
-        item->setAccessibleDescription("file " + item->text());
+        item = new QStandardItem(IconHelper::getIconBinary(), baseFileName);
+        item->setAccessibleDescription(QLatin1String("file ") + item->text());
         parent = lastDir;
-        if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
+        if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
 
-        do{
-          if ( parent == 0 || file.contains ( fullPath )) break;
+        while (parent != nullptr && !file.contains(fullPath))
+        {
           parent = parent->parent();
-          if (parent != 0) fullPath = utils::showFullPathOfItem(parent->index());
+          if (parent != nullptr) fullPath = fullPathCache.value(parent, utils::showFullPathOfItem(parent->index()));
         }
-        while ( parent != fakeRoot );
 
-        parent->appendRow ( item );
+        if (parent != nullptr)
+        {
+          parent->appendRow(item);
+        }
+        else
+        {
+          fakeRoot->appendRow(item);
+        }
       }
 
-      lastItem = item;
-      first = false;
+      //Cache fullPath for the current item
+      fullPathCache[item] = utils::showFullPathOfItem(item->index());
 
       counter++;
       m_progressWidget->setValue(counter);
+      lastItem = item;
+      first = false;
     }
 
     m_progressWidget->close();
@@ -1252,12 +1260,11 @@ void MainWindow::refreshTabFiles(bool clearContents, bool neverQuit)
     fakeModelPkgFileList->sort(0);
     modelPkgFileList = fakeModelPkgFileList;
     tvPkgFileList->setModel(modelPkgFileList);
-    tvPkgFileList->header()->setDefaultAlignment( Qt::AlignCenter );
-    modelPkgFileList->setHorizontalHeaderLabels( QStringList() << StrConstants::getContentsOf().arg(pkgName));
+    tvPkgFileList->header()->setDefaultAlignment(Qt::AlignCenter);
+    modelPkgFileList->setHorizontalHeaderLabels(QStringList() << StrConstants::getContentsOf().arg(pkgName));
     if (counter > 0) tvPkgFileList->expandAll();
   }
 
-  //qApp->processEvents();
   m_cachedPackageInFiles = package->repository+"#"+package->name+"#"+package->version;
 
   if (neverQuit)

@@ -1,3 +1,6 @@
+0.4.1 (dev)
+  Significant improvement in tree view generation of file contents (Files tab).
+
 0.4.0 (2024/05/23)
   BugFix: When clicking on a outdated pkg inside Output tab, do not go to the Info
     tab if the pkg is not shown in the list.

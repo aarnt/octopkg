@@ -259,7 +259,7 @@ QByteArray UnixCommand::getPackageContentsUsingPkg(const QString& pkgName)
   QByteArray res = performQuery(params);
 
   //if the pkg is more than a MEGABYTE big, let's abort it!
-  if (res.size() > 1048576) return "";
+  if (res.size() > 2097152) return "";
   else return res;
 }
 
