@@ -43,45 +43,6 @@
 /*
  * Returns the full path of a tree view item (normaly a file in a directory tree)
  */
-/*QString utils::showFullPathOfItem( const QModelIndex &index ){
-  QString str;
-  if (!index.isValid()) return str;
-
-  const QStandardItemModel *sim = qobject_cast<const QStandardItemModel*>( index.model() );
-
-  if (sim)
-  {
-    QStringList sl;
-    QModelIndex nindex;
-    sl << sim->itemFromIndex( index )->text();
-
-    nindex = index;
-
-    while (1){
-      nindex = sim->parent( nindex );
-      if ( nindex != sim->invisibleRootItem()->index() ) sl << sim->itemFromIndex( nindex )->text();
-      else break;
-    }
-    str = QDir::separator() + str;
-
-    for ( int i=sl.count()-1; i>=0; i-- ){
-      if ( i < sl.count()-1 ) str += QDir::separator();
-      str += sl[i];
-    }
-
-    QFileInfo fileInfo(str);
-    if (fileInfo.isDir())
-    {
-      str += QDir::separator();
-    }
-  }
-
-  return str;
-}*/
-
-/*
- * Returns the full path of a tree view item (normaly a file in a directory tree)
- */
 QString utils::showFullPathOfItem(const QModelIndex &index) {
   QString str;
   if (!index.isValid()) return str;
