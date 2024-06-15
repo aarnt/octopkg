@@ -610,16 +610,22 @@ void UnixCommand::runCommandInTerminal(const QStringList& commandList){
 void UnixCommand::executeCommand(const QString &pCommand, Language lang)
 {
   QString command;
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.remove("LANG");
+  env.remove("LC_MESSAGES");
 
   if (lang == ectn_LANG_USER_DEFINED)
   {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.remove("LANG");
-    env.remove("LC_MESSAGES");
     env.insert("LANG", QLocale::system().name() + ".UTF-8");
     env.insert("LC_MESSAGES", QLocale::system().name() + ".UTF-8");
-    m_process->setProcessEnvironment(env);
   }
+  else
+  {
+    env.insert("LANG", "C.UTF-8");
+    env.insert("LC_MESSAGES", "C.UTF-8");
+  }
+
+  m_process->setProcessEnvironment(env);
 
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
   QStringList params = pCommand.split(QStringLiteral(" "), QString::SkipEmptyParts);
