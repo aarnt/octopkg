@@ -1731,6 +1731,7 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
   msg.remove("[m");
   msg.remove("[m");
   msg.remove("[32m");
+  msg.remove("[33m");
   msg.remove(";37m");
   msg.remove("[c");
   msg.remove("[mo");
