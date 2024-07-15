@@ -850,7 +850,7 @@ BSDFlavour UnixCommand::getBSDFlavour()
       {
         ret = ectn_DRAGONFLYBSD;
       }
-      else if (out.contains("NomadBSD"))
+      else if (out.contains("NomadBSD", Qt::CaseInsensitive))
       {
         ret = ectn_NOMADBSD;
       }
