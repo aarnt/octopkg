@@ -838,7 +838,11 @@ BSDFlavour UnixCommand::getBSDFlavour()
       p.waitForFinished();
       QString out = p.readAllStandardOutput();
 
-      if (out.contains("FreeBSD HBSD"))
+      if (out.contains("NomadBSD", Qt::CaseInsensitive))
+      {
+        ret = ectn_NOMADBSD;
+      }
+      else if (out.contains("FreeBSD HBSD"))
       {
         ret = ectn_HARDENEDBSD;
       }
@@ -849,10 +853,6 @@ BSDFlavour UnixCommand::getBSDFlavour()
       else if (out.contains("DragonFly"))
       {
         ret = ectn_DRAGONFLYBSD;
-      }
-      else if (out.contains("NomadBSD", Qt::CaseInsensitive))
-      {
-        ret = ectn_NOMADBSD;
       }
       else
       {
