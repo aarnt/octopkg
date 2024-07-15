@@ -39,6 +39,7 @@ const QString ctn_PKGNG_FREEBSD_CORE_DB_FILE = "/var/db/pkg/repo-FreeBSD.sqlite"
 const QString ctn_PKGNG_HARDENEDBSD_CORE_DB_FILE = "/var/db/pkg/repo-HardenedBSD.sqlite";
 const QString ctn_PKGNG_GHOSTBSD_CORE_DB_FILE = "/var/db/pkg/repo-GhostBSD.sqlite";
 const QString ctn_PKGNG_PCBSD_CORE_DB_FILE = "/var/db/pkg/repo-pcbsd-major.sqlite";
+const QString ctn_PKGNG_NOMADBSD_CORE_DB_FILE = "/var/db/pkg/local.sqlite";
 const QString ctn_PKGNG_FAKE_REPOSITORY = "_WWW";
 
 enum PackageStatus { ectn_LOCKED, ectn_INSTALLED, ectn_NON_INSTALLED, ectn_OUTDATED, ectn_NEWER };

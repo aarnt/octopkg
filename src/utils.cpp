@@ -131,7 +131,7 @@ QString utils::retrieveDistroNews(bool searchForLatestNews)
     //QString curlCommand = "curl -k %1 -o %2";
     QStringList params;
 
-    if (bsd == ectn_FREEBSD)
+    if (bsd == ectn_FREEBSD || bsd == ectn_NOMADBSD)
     {
       params << QStringLiteral("-k");
       params << ctn_FREEBSD_RSS_URL;
@@ -242,7 +242,7 @@ QString utils::parseDistroNews()
   QString html;
   BSDFlavour bsd = UnixCommand::getBSDFlavour();
 
-  if (bsd == ectn_FREEBSD)
+  if (bsd == ectn_FREEBSD || bsd == ectn_NOMADBSD)
   {
     html = "<p align=\"center\"><h2>" + StrConstants::getFreeBSDNews() + "</h2></p><ul>";
   }

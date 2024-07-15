@@ -21,8 +21,6 @@
 #include "package.h"
 #include "unixcommand.h"
 #include "stdlib.h"
-//#include "strconstants.h"
-//#include "constants.h"
 #include <iostream>
 
 #include <QTextStream>
@@ -1365,6 +1363,11 @@ bool Package::hasPkgNGDatabase()
     else if (UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
     {
       QFile f(ctn_PKGNG_HARDENEDBSD_CORE_DB_FILE);
+      answer = f.exists();
+    }
+    else if (UnixCommand::getBSDFlavour() == ectn_NOMADBSD)
+    {
+      QFile f(ctn_PKGNG_NOMADBSD_CORE_DB_FILE);
       answer = f.exists();
     }
     else

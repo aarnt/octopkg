@@ -850,6 +850,10 @@ BSDFlavour UnixCommand::getBSDFlavour()
       {
         ret = ectn_DRAGONFLYBSD;
       }
+      else if (out.contains("NomadBSD"))
+      {
+        ret = ectn_NOMADBSD;
+      }
       else
       {
         ret = ectn_UNKNOWN;
