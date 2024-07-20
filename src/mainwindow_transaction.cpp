@@ -738,6 +738,11 @@ void MainWindow::prepareSystemUpgrade()
  */
 void MainWindow::prepareTargetUpgradeList(const QString& pkgName, CommandExecuting type)
 {
+  clearTabOutput();
+  writeToTabOutput(QLatin1String("<b>") + StrConstants::getCollectingTransactionData() +
+                       QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+  qApp->processEvents();
+
   QFuture<TransactionInfo> f;
   f = QtConcurrent::run(getTargetUpgradeList, pkgName);
 
@@ -869,6 +874,10 @@ void MainWindow::doSystemUpgrade(SystemUpgradeOptions systemUpgradeOptions)
     question.setDetailedText(list);
 
     m_systemUpgradeDialog = true;
+
+    writeToTabOutput(QLatin1String("<b>") + StrConstants::getCommandFinishedOK() +
+                         QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+
     int result = question.exec();
 
     if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
@@ -985,6 +994,10 @@ void MainWindow::doRemoveAndInstall()
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(allLists);
   question.uncheckBootEnv();
+
+  writeToTabOutput(QLatin1String("<b>") + StrConstants::getCommandFinishedOK() +
+                       QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
@@ -1051,7 +1064,12 @@ void MainWindow::doRemoveAndInstall()
  */
 void MainWindow::doRemove()
 {
-  QString listOfTargets = getTobeRemovedPackages();  
+  clearTabOutput();
+  writeToTabOutput(QLatin1String("<b>") + StrConstants::getCollectingTransactionData() +
+                       QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+  qApp->processEvents();
+
+  QString listOfTargets = getTobeRemovedPackages();
   QStringList *_targets = Package::getTargetRemovalList(listOfTargets);
   listOfTargets = "";
   QString list;
@@ -1080,6 +1098,10 @@ void MainWindow::doRemove()
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(list);
   question.uncheckBootEnv();
+
+  writeToTabOutput(QLatin1String("<b>") + StrConstants::getCommandFinishedOK() +
+                       QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)
@@ -1190,6 +1212,10 @@ void MainWindow::doInstall()
   question.setInformativeText(StrConstants::getConfirmationQuestion());
   question.setDetailedText(list);
   question.uncheckBootEnv();
+
+  writeToTabOutput(QLatin1String("<b>") + StrConstants::getCommandFinishedOK() +
+                       QLatin1String("</b><br>"), ectn_DONT_TREAT_URL_LINK);
+
   int result = question.exec();
 
   if(result == QDialogButtonBox::Yes || result == QDialogButtonBox::AcceptRole)

@@ -1,6 +1,8 @@
 0.4.1 (dev)
   BugFix: Added C.UTF-8 default language set for executeCommand function.
   Added support to NomadBSD.
+  Improvement: Show a "Collecting transaction data..." msg before presenting the transaction 
+    dialog, as it can be quite slow on some systems.
 
 0.4.0 (2024/05/23)
   BugFix: When clicking on a outdated pkg inside Output tab, do not go to the Info

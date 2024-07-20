@@ -110,6 +110,7 @@ public:
   static QString getRemovingPackages();
   static QString getRemovingAndInstallingPackages();
   static QString getChooseATerminal();
+  static QString getCollectingTransactionData();
   static QString getRunningCommandInTerminal();
   static QString getCommandFinishedOK();
   static QString getCommandFinishedWithErrors();

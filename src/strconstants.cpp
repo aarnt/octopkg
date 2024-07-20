@@ -364,6 +364,10 @@ QString StrConstants::getChooseATerminal(){
   return QObject::tr("Choose a terminal");
 }
 
+QString StrConstants::getCollectingTransactionData(){
+  return QObject::tr("Collecting transaction data...");
+}
+
 QString StrConstants::getRunningCommandInTerminal(){
   return QObject::tr("Running command in terminal...");
 }
