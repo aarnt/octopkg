@@ -411,8 +411,13 @@ void MainWindow::metaBuildPackageList()
     {
       m_listOfRemotePackages = new QList<PackageListData>();
       buildRemotePackageList();
-      delete m_cic;
-      m_cic = 0;
+
+      if (m_cic)
+      {
+        delete m_cic;
+        m_cic = 0;
+      }
+
       m_leFilterPackage->setFocus();
     }
   }
