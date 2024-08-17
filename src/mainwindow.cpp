@@ -685,7 +685,8 @@ void MainWindow::execContextMenuPackages(QPoint point)
       if (UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD ||
           UnixCommand::getBSDFlavour() == ectn_FREEBSD ||
           UnixCommand::getBSDFlavour() == ectn_GHOSTBSD ||
-          UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
+          UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD ||
+          UnixCommand::getBSDFlavour() == ectn_NOMADBSD)
       {
         if (package->outdated()) numberOfOutdated++;
         if (package->status == ectn_LOCKED)
