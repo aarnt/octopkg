@@ -1357,8 +1357,16 @@ bool Package::hasPkgNGDatabase()
     }
     else if (UnixCommand::getBSDFlavour() == ectn_DRAGONFLYBSD)
     {
-      QFile f(ctn_PKGNG_DRAGONFLYBSD_CORE_DB_FILE);
-      answer = f.exists();
+      //Search for any repo-XYZ.sqlite
+      QDir d;
+      QStringList nameFilters;
+      d.setPath("/var/db/pkg");
+      nameFilters << "repo-*.sqlite";
+      QFileInfoList qfil = d.entryInfoList(nameFilters,QDir::Files);     
+      answer = (qfil.size() > 0);
+
+      //QFile f(ctn_PKGNG_DRAGONFLYBSD_CORE_DB_FILE);
+      //answer = f.exists();
     }
     else if (UnixCommand::getBSDFlavour() == ectn_HARDENEDBSD)
     {
