@@ -5,7 +5,7 @@
 **OctoPkg** is a Qt based GUI front end to the [pkg](https://wiki.freebsd.org/pkg) package manager, derived from [Octopi](http://tintaescura.com/projects/octopi).
 It consists of a lxqt-sudo clone called [qt-sudo](https://github.com/aarnt/qt-sudo/) used to gain root privileges and a package browser application used
 to search, install, remove and update packages.
-The project is compatible with [FreeBSD](https://www.freebsd.org/), [DragonFly BSD](https://www.dragonflybsd.org/), [GhostBSD](https://ghostbsd.org/) and [HardenedBSD](https://hardenedbsd.org/).
+The project is compatible with [FreeBSD](https://www.freebsd.org/), [DragonFly BSD](https://www.dragonflybsd.org/), [GhostBSD](https://ghostbsd.org/), [HardenedBSD](https://hardenedbsd.org/) and [NomadBSD](https://nomadbsd.org/).
 
 ### You can use pkg to install the latest OctoPkg version available in your BSD:
 
