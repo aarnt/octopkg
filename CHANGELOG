@@ -1,5 +1,6 @@
-0.4.1 (dev)
+.4.1 (dev)
   BugFix: Added C.UTF-8 default language set for executeCommand function.
+  BugFix: Modified code to find pkg db in DragonFlyBSD.
   Added support to NomadBSD.
   Improvement: Show a "Collecting transaction data..." msg before presenting the transaction 
     dialog, as it can be quite slow on some systems.
