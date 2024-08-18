@@ -61,7 +61,7 @@ void MainWindow::initTabHelpUsage()
     tr("licensed under the terms of") + " ";
 
   html +=
-      QString("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a>.</p></h3>") +
+      QString("<a href=\"https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html\">LGPL v2.1</a>.</p></h3>") +
       QString("<h4><p>") + strForMoreInfo + " " +
       QString("<a href=\"https://tintaescura.com/projects/octopkg\">https://tintaescura.com/projects/octopkg</a>.</p></h4><br>");
 
@@ -205,7 +205,7 @@ void MainWindow::onHelpAbout()
   aboutText += StrConstants::getURL() + QLatin1String(": ") +
     QStringLiteral("<a href=\"https://tintaescura.com/projects/octopkg/\">https://tintaescura.com/projects/octopkg</a><br>");
   aboutText += StrConstants::getLicenses() + QLatin1String(": ") +
-      QStringLiteral("<a href=\"http://www.gnu.org/licenses/gpl-2.0.html\">GPL v2</a><br>");
+      QStringLiteral("<a href=\"https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html\">LGPL v2.1</a><br>");
   aboutText += QStringLiteral("&copy; Alexandre Albuquerque Arnt<br><br>");
   aboutText += QStringLiteral("<b>pkgng</b><br>");
   aboutText += StrConstants::getVersion() + QLatin1String(": ") + UnixCommand::getPkgNGVersion() + QStringLiteral("<br>");
