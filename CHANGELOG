@@ -1,5 +1,7 @@
 0.4.1 (2024/08/18)
   BugFix: Added C.UTF-8 default language set for executeCommand function.
+  BugFix: Clean the local cache always produced a postponed crash after some
+    specific install transactions.
   BugFix: Modified code to find pkg db in DragonFlyBSD.
   BugFix: Added reference to new LGPL v2.1 license.
   Added support to NomadBSD.
