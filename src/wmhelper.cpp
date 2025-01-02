@@ -250,9 +250,11 @@ void WMHelper::openFile(const QString& fileName){
   QProcess *p = new QProcess(qApp->activeWindow());
   QStringList s;
 
-  if (isXFCERunning() && UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
-    s << fileToOpen;
-    p->start( ctn_XFCE_FILE_MANAGER, s );
+  if (isXFCERunning()){
+    if (UnixCommand::hasTheExecutable(ctn_XDG_OPEN)){
+      s << fileToOpen;
+      p->start( ctn_XDG_OPEN, s );
+    }
   }
   else if (isKDERunning() && UnixCommand::hasTheExecutable(ctn_KDE_FILE_MANAGER)){
     s << "exec";
@@ -296,10 +298,10 @@ void WMHelper::openFile(const QString& fileName){
     s << fileToOpen;
     p->start( ctn_LXDE_FILE_MANAGER, s );
   }
-  else if (UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
+  /*else if (UnixCommand::hasTheExecutable(ctn_XFCE_FILE_MANAGER)){
     s << fileToOpen;
     p->start( ctn_XFCE_FILE_MANAGER, s );
-  }
+  }*/
   else if (UnixCommand::hasTheExecutable(ctn_GNOME_FILE_MANAGER)){
     s << fileToOpen;
     if (isTextFile)
