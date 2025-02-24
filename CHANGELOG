@@ -1,4 +1,6 @@
 0.4.2 (dev)
+  BugFix: The act of moving the mouse over the package list was triggering many
+    pkg executions.
   BugFix: Use xdg-open to open files when available if user is running XFCE.
 
 0.4.1 (2024/08/18)

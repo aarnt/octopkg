@@ -74,6 +74,8 @@ int PackageModel::rowCount(const QModelIndex &parent) const
 
 int PackageModel::columnCount(const QModelIndex &parent) const
 {
+  Q_UNUSED(parent)
+
   /*if (!parent.isValid() && m_showColumnInstalledOn==true) {
     return 5;
   }
