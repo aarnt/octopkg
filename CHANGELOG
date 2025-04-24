@@ -2,6 +2,7 @@
   BugFix: The act of moving the mouse over the package list was triggering many
     pkg executions.
   BugFix: Use xdg-open to open files when available if user is running XFCE.
+  BugFix: Remote pkg search was not finding all entries (thanks to bsduck).
 
 0.4.1 (2024/08/18)
   BugFix: Added C.UTF-8 default language set for executeCommand function.

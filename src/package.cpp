@@ -584,7 +584,7 @@ QList<PackageListData> * Package::parsePackageTuple(const QStringList &packageTu
 
   for(QString packageTuple: packageTuples)
   {
-    if (packageTuple.at(0).isLower())
+    if (!packageTuple.contains(":"))
     {
       //TODO We have to search for the pkg to discover its status
       PackageListData pld;
