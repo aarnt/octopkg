@@ -274,6 +274,7 @@ private:
   void ensureTabVisible(const int index);
   bool isPropertiesTabWidgetVisible();
   bool isSUAvailable();
+  bool isInternetAvailable();
   void writeToTabOutput(const QString &msg, TreatURLLinks treatURLLinks = ectn_TREAT_URL_LINK);
   void writeToTabOutputExt(const QString &msg, TreatURLLinks treatURLLinks = ectn_TREAT_URL_LINK);
   void initTabOutput();

@@ -627,6 +627,10 @@ QString StrConstants::getSetInterval(){
   return QObject::tr("Set interval...");
 }
 
+QString StrConstants::getError(){
+  return QObject::tr("Error");
+}
+
 QString StrConstants::getForeignToolGroup(){
   /*QString tool = getForeignRepositoryToolName();
     tool[0] = tool[0].toUpper();

@@ -44,6 +44,8 @@
  */
 void MainWindow::refreshDistroNews(bool searchForLatestNews, bool gotoNewsTab)
 {
+  if (!isHidden() && !isInternetAvailable()) return;
+
   ui->actionGetNews->setEnabled(false);
   m_gotoNewsTab = gotoNewsTab;
 

@@ -174,6 +174,7 @@ public:
   static QString getOnceEvery();
   static QString getOnceEveryDesc();
   static QString getSetInterval();
+  static QString getError();
   static QString getForeignToolGroup();
   static QString getStop();
 
