@@ -1380,8 +1380,14 @@ bool Package::hasPkgNGDatabase()
     }
     else
     {
-      QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
+      QFile f(ctn_PKGNG_FREEBSD_DEFAULT_CORE_DB_FILE);
       answer = f.exists();
+
+      if (!answer)
+      {
+        QFile f(ctn_PKGNG_FREEBSD_CORE_DB_FILE);
+        answer = f.exists();
+      }
     }
 
     done = true;

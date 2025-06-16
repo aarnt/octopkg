@@ -3,6 +3,7 @@
     pkg executions.
   BugFix: Use xdg-open to open files when available if user is running XFCE.
   BugFix: Remote pkg search was not finding all entries (thanks to bsduck).
+  BugFix: Search also for local.sqlite pkg database on FreeBSD. 
   Added internet check before pkg actions.
 
 0.4.1 (2024/08/18)
