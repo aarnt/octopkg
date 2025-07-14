@@ -4,6 +4,8 @@
   BugFix: Use xdg-open to open files when available if user is running XFCE.
   BugFix: Remote pkg search was not finding all entries (thanks to bsduck).
   Added internet check before pkg actions.
+  Enhancement: Hotkey for marking package for removal (-) & installation (+) when selected.
+  Enhancement: Hitting enter on a highlighted package in the package list opens Info tab.
 
 0.4.1 (2024/08/18)
   BugFix: Added C.UTF-8 default language set for executeCommand function.
