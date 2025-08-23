@@ -55,6 +55,7 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
     if (si != NULL)
     {
       gPoint = tvPackages->mapToGlobal(event->pos());
+      //qDebug() << "MaptoGlobal: " << gPoint.rx() << " : " << gPoint.ry();
 
       if (lastShownPackage != si->name)
       {
@@ -105,7 +106,7 @@ bool TreeViewPackagesItemDelegate::helpEvent ( QHelpEvent *event, QAbstractItemV
         QToolTip::hideText();
       }
 
-      lastShownPackage = pkgName;
+      lastShownPackage = si->text();
     }
   }
 
