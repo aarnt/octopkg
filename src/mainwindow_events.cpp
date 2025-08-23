@@ -148,8 +148,12 @@ void MainWindow::keyPressEvent(QKeyEvent* ke)
       g_fwPackageOwnsFile.setFuture(f);
       connect(&g_fwPackageOwnsFile, SIGNAL(finished()), this, SLOT(positionInPkgListSearchByFile()));
     }
+    else if (ui->tvPackages->hasFocus())
+    {
+      refreshTabInfo(false, true);
+    }
     //We are probably inside 'Files' tab...
-    else
+    else if (ui->twProperties->currentIndex() == ctn_TABINDEX_FILES)
     {
       QTreeView *tvPkgFileList =
           ui->twProperties->widget(ctn_TABINDEX_FILES)->findChild<QTreeView*>("tvPkgFileList");
@@ -350,6 +354,39 @@ void MainWindow::keyReleaseEvent(QKeyEvent* ke)
   {
     invalidateTabs();
     ui->tvPackages->setFocus();
+  }
+  else if(ui->tvPackages->hasFocus() && ke->key() == Qt::Key_Minus)
+  {
+    const QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
+    QModelIndexList selectedRows = selectionModel->selectedRows();
+
+    foreach(QModelIndex item, selectedRows)
+    {
+      const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+
+      if (package->installed() == true && !Package::isForbidden(package->name))
+      {
+        insertRemovePackageIntoTransaction(package->name);
+      }
+    }
+  }
+  else if(ke->key() == Qt::Key_Minus)
+  {
+    onPressDelete();
+  }
+  else if(ui->tvPackages->hasFocus() && ke->key() == Qt::Key_Plus)
+  {
+    const QItemSelectionModel*const selectionModel = ui->tvPackages->selectionModel();
+    QModelIndexList selectedRows = selectionModel->selectedRows();
+
+    foreach(QModelIndex item, selectedRows)
+    {
+      const PackageRepository::PackageData*const package = m_packageModel->getData(item);
+      //if (!package->installed())
+      {
+        insertInstallPackageIntoTransaction(package->name);
+      }
+    }
   }
   else if(ke->key() == Qt::Key_Tab)
   {
