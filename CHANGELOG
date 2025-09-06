@@ -4,6 +4,7 @@
   BugFix: Use xdg-open to open files when available if user is running XFCE.
   BugFix: Remote pkg search was not finding all entries (thanks to bsduck).
   BugFix: Search also for local.sqlite pkg database on FreeBSD. 
+  BugFix: Use system theme folder icon in Files tab.
   Added internet check before pkg actions.
   Enhancement: Hotkey for marking package for removal (-) & installation (+) when selected.
   Enhancement: Hitting enter on a highlighted package in the package list opens Info tab.

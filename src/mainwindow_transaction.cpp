@@ -1884,6 +1884,9 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("org\\.kde\\."));
     msg.remove(QRegularExpression("QCommandLineParser"));
     msg.remove(QRegularExpression("QCoreApplication.+"));
+    msg.remove(QRegularExpression("Detected locale.+"));
+    msg.remove(QRegularExpression("Qt depends on a UTF-8 locale.+"));
+    msg.remove(QRegularExpression("^for more information\\."));
     msg.remove(QRegularExpression("Fontconfig warning.+"));
     msg.remove(QRegularExpression("reading configurations from.+"));
     msg.remove(QRegularExpression(".+annot load library.+"));
