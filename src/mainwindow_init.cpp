@@ -423,6 +423,19 @@ void MainWindow::initTabTransaction()
   ui->twProperties->insertTab(ctn_TABINDEX_TRANSACTION, tabTransaction, QApplication::translate (
                                 "MainWindow", aux.toUtf8(), 0/*, QApplication::UnicodeUTF8*/ ));
 
+  QToolButton *btn1 = new QToolButton(this);
+  btn1->setIconSize(QSize(16, 16));
+  btn1->setDefaultAction(ui->actionCommit);
+  btn1->setAutoRaise(true);
+
+  QToolButton *btn2 = new QToolButton(this);
+  btn2->setIconSize(QSize(16, 16));
+  btn2->setAutoRaise(true);
+  btn2->setDefaultAction(ui->actionCancel);
+
+  ui->twProperties->tabBar()->setTabButton(2, QTabBar::LeftSide, btn1);
+  ui->twProperties->tabBar()->setTabButton(2, QTabBar::RightSide, btn2);
+
   connect(tvTransaction, &QWidget::customContextMenuRequested, this, &MainWindow::execContextMenuTransaction);
   connect(tvTransaction->selectionModel(), &QItemSelectionModel::selectionChanged,
           this, &MainWindow::tvTransactionSelectionChanged);
