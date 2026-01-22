@@ -1815,12 +1815,15 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
       if (p == -1) return; //Guard!
 
       target = msg.left(p).remove("Fetching").trimmed();
+      //qDebug() << "TARGET: " << target;
       pName = target;
-      regex.setPattern("\\[\\d+/\\d+\\]\\s\\s(.*)");
+
+      regex.setPattern("\\[\\s*\\d+/\\d+\\]\\s\\s(.*)");
       match = regex.match(target);
       if (match.hasMatch())
       {
         pName = match.captured(1);
+        //qDebug() << "MATCH: " << pName;
       }
 
       if(!textInTabOutput(pName))

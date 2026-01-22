@@ -1344,7 +1344,11 @@ bool MainWindow::textInTabOutput(const QString& findText)
   if (text)
   {
     positionTextEditCursorAtEnd();
+
+    //QTextCursor cursor = text->document()->find(QRegularExpression(findText), text->textCursor(), QTextDocument::FindBackward);
+    //res = cursor.isNull();
     res = text->find(findText, QTextDocument::FindBackward | QTextDocument::FindWholeWords);
+
     positionTextEditCursorAtEnd();
   }
 
