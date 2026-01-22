@@ -1896,6 +1896,8 @@ void MainWindow::parsePkgProcessOutput(const QString &pMsg)
     msg.remove(QRegularExpression("QXcbConnection: XCB error.+"));
     msg.remove(QRegularExpression("qt.qpa.xcb:.+"));
     msg.remove(QRegularExpression("qt5ct: using qt5ct plugin"));
+    msg.remove(QRegularExpression("Call for getting org.freedesktop.+"));
+    msg.remove(QRegularExpression("Call to org.freedesktop.+"));
 
     //Gksu buggy strings
     /*msg.remove(QRegularExpression("couldn't lock.+"));
