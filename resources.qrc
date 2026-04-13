@@ -49,5 +49,8 @@
         <file>resources/images/mirror-check.png</file>
         <file>resources/images/cachecleaner.png</file>
         <file>resources/images/stop_small_red.png</file>
+        <file>resources/images/octopi_yellow-big.png</file>
+        <file>resources/images/octopi_red-big.png</file>
+        <file>resources/images/octopi_green-big.png</file>
     </qresource>
 </RCC>

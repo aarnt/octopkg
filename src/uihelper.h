@@ -36,9 +36,9 @@
 class IconHelper{
 public:
   static QIcon getIconOctopiTransparent(){ return QIcon(QStringLiteral(":/resources/images/octopi_transparent.png")); }
-  static QIcon getIconOctopiRed(){ return QIcon(QStringLiteral(":/resources/images/octopi_red.png")); }
-  static QIcon getIconOctopiYellow(){ return QIcon(QStringLiteral(":/resources/images/octopi_yellow.png")); }
-  static QIcon getIconOctopiGreen(){ return QIcon(QStringLiteral(":/resources/images/octopi_green.png")); }
+  static QIcon getIconOctopiRed(){ return QIcon(QStringLiteral(":/resources/images/octopi_red-big.png")); }
+  static QIcon getIconOctopiYellow(){ return QIcon(QStringLiteral(":/resources/images/octopi_yellow-big.png")); }
+  static QIcon getIconOctopiGreen(){ return QIcon(QStringLiteral(":/resources/images/octopi_green-big.png")); }
   static QIcon getIconInstalled(){ return QIcon(QStringLiteral(":/resources/images/installed.png")); }
   static QIcon getIconNonInstalled(){ return QIcon(QStringLiteral(":/resources/images/noninstalled.png")); }
   static QIcon getIconOutdated(){ return QIcon(QStringLiteral(":/resources/images/outdated.png")); }
@@ -183,13 +183,6 @@ public:
     else
       return QIcon(QStringLiteral(":/resources/images/find.png"));
   }
-
-  /*static QIcon getIconMirrorCheck(){
-    if (WMHelper::isKDERunning())
-      return QIcon::fromTheme("svn-update", QIcon(QStringLiteral(":/resources/images/mirror-check.png")));
-    else
-      return QIcon(QStringLiteral(":/resources/images/mirror-check.png"));
-  }*/
 
   static QIcon getIconShowGroups(){
     if (WMHelper::isKDERunning())
