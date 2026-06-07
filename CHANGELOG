@@ -9,6 +9,7 @@
   Added internet check before pkg actions.
   Enhancement: Hotkey for marking package for removal (-) & installation (+) when selected.
   Enhancement: Hitting enter on a highlighted package in the package list opens Info tab.
+  Reworked tab Files refresh code.
 
 0.4.1 (2024/08/18)
   BugFix: Added C.UTF-8 default language set for executeCommand function.
